@@ -1,5 +1,5 @@
 # db_routers.py
-class PrimaryReplicaRouter:
+class MasterSlaveRouter:
     def db_for_read(self, model, **hints):
         return 'replica'
     def db_for_write(self, model, **hints):

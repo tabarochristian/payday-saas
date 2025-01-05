@@ -1,2 +1,2 @@
-from core.models import Role
-count = Role.objects.filter().count()
+from core.models import Group
+count = Group.objects.filter().count()

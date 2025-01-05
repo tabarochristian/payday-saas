@@ -1,9 +1,8 @@
-from django.utils.translation import gettext as _
-from django.db import models
 from crispy_forms.layout import Layout, Row, Column
+from django.utils.translation import gettext as _
 from django.template import Context, Template
-
 from core.models import fields, Base
+from django.db import models
 
 class BootstrapColumn(models.TextChoices):
     COL_1 = 'col-md-1 col-xs-12', _('1/12')

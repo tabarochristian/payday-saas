@@ -1,10 +1,9 @@
 from django.utils.translation import gettext as _
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
+from django.db import models
 
 from crispy_forms.layout import Layout
-
 from core.models import Base, fields
 
 class Notification(Base):

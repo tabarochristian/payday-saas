@@ -4,8 +4,8 @@ from crispy_forms.layout import Layout
 from autoslug import AutoSlugField
 from django.db import models
 
-from core.models import fields
 from core.utils import upload_directory_file
+from core.models import fields
 
 slugify = lambda value: value.replace(' ', '_').lower()
 default_logo = lambda: "assets/images/logo/logo.svg"

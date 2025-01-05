@@ -83,7 +83,7 @@ def base(request):
             'description': _('Gérez les utilisateurs de votre organisation.')
         }, {
             'title': _('Roles'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'role'}),
+            'href': reverse_lazy('core:list', kwargs={'app': 'auth', 'model': 'group'}),
             'permission': 'auth.view_group',
             'description': _('Gérez les roles de votre organisation.')
         }, {

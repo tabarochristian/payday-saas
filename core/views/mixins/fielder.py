@@ -34,6 +34,9 @@ class FielderMixin:
         return formsets
 
     def filter_form(self, form):
+        # find a way to limit level field
+        return form
+        """
         if self.request.user.is_superuser: 
             return form
 
@@ -55,6 +58,7 @@ class FielderMixin:
             form.fields[field].widget.attrs['class'] = 'bg-dark'
 
         return form
+        """
 
     def get_form_fields(self, model=None):
         model = model or self.get_model()

@@ -1,8 +1,7 @@
 from crispy_forms.layout import Layout, Row, Column
 from django.urls import reverse_lazy
 
-from django.contrib.auth.models import AbstractBaseUser
-from core.models.mixins import PermissionsMixin
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 from django.db.models import Q
 from django.db import models
@@ -11,10 +10,7 @@ from core.models.managers import UserManager
 from core.models import fields
 from django.apps import apps
 
-from functools import reduce
-from operator import or_
-
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractUser):
     first_name, last_name, username = None, None, None
 
     organization = fields.ModelSelectField(
@@ -41,34 +37,44 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_index=True, 
         verbose_name=_('email')
     )
-    password = fields.CharField(
-        verbose_name=_('mot de passe'), 
-        max_length=128, 
-        blank=True
+
+    groups = fields.ModelSelect2Multiple(
+        "core.group",
+        verbose_name=_("groups"),
+        blank=True,
+        help_text=_(
+            "The groups this user belongs to. A user will get all permissions "
+            "granted to each of their groups."
+        ),
+        related_name="user_set",
+        related_query_name="user",
     )
 
-    is_active = models.BooleanField(
-        _("active"),
-        default=True,
-        help_text=_(
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
-        )
+    user_permissions = fields.ModelSelect2Multiple(
+        "auth.permission",
+        verbose_name=_("user permissions"),
+        blank=True,
+        help_text=_("Specific permissions for this user."),
+        related_name="user_set",
+        related_query_name="user"
     )
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ()
-
     objects = UserManager()
+    REQUIRED_FIELDS = ()
     
-    inlines = ('core.permission', 'core.rowlevelsecurity',)
+    inlines = ('core.fieldpermission', 'core.rowlevelsecurity')
     list_display = ('id', 'email', 'is_active')
+    
     search_fields = ('id', 'email',)
     list_filter = ('is_active',)
     
     layout = Layout(
         Column('email'),
-        Column('roles'),
+        Row(
+            Column('groups'),
+            Column('user_permissions')
+        ),
         Row(
             Column('is_staff'),
             Column('is_active'),
@@ -95,12 +101,10 @@ class User(AbstractBaseUser, PermissionsMixin):
             return {}
         
         rowlevelsecurity = apps.get_model('core', 'rowlevelsecurity')
-        roles = self.roles.all().values_list('id', flat=True)
         rls = rowlevelsecurity.objects.filter(
             content_type__app_label = app,
             content_type__model = model
-        ).filter(Q(role__id__in=roles) | Q(user=self))\
-            .filter(*args, **kwargs).values('field', 'value')
+        ).filter(user=self, *args, **kwargs).values('field', 'value')
         return {item['field']: item['value'] for item in rls}
 
     def get_absolute_url(self):

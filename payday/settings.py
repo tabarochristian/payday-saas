@@ -45,13 +45,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
 
-    "storages",
-
+   
     "dal",
     "dal_select2",
     "widget_tweaks",
 
     "tinymce",
+    "storages",
     "mathfilters",
     "crispy_forms",
     "django_filters",
@@ -60,11 +60,11 @@ INSTALLED_APPS = [
     "django_json_widget",
 
     "djmoney",
-    "qr_code",
     "django_ace",
-    "phonenumber_field",
     "corsheaders",
+    "phonenumber_field",
     "django_extensions",
+
     "django_htmx",
     "djcelery_email",
     "simple_history",
@@ -91,7 +91,6 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
     "core.middleware.OrganizationMiddleware",
-    # "core.middleware.CoreMiddleware"
 ]
 
 if DEBUG:
@@ -125,13 +124,11 @@ ASGI_APPLICATION = "payday.asgi.application"
 
 DATABASE_URL = 'sqlite:///db.sqlite3'
 DATABASES = {'default': None}
-TEST = {'NAME': DATABASE_URL}
 
 # Default database
 MASTER_DATABASE_URL = os.getenv('MASTER_DATABASE_URL', default=DATABASE_URL)
 DATABASES['default'] = dj_database_url.parse(MASTER_DATABASE_URL)
 
-# DATABASES['default']['TEST'] = TEST
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
 
@@ -142,7 +139,7 @@ if SLAVE_DATABASE_URL:
     DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
 
     # Database router
-    DATABASE_ROUTERS = ['payday.db_routers.PrimaryReplicaRouter']
+    DATABASE_ROUTERS = ['payday.db_routers.MasterSlaveRouter']
 
 # Redis settings
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -161,19 +158,16 @@ CACHES = {
     }
 }
 
-# Channels settings
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
-
 # Default user model and authentication
 LOGIN_URL = os.getenv("LOGIN_URL", 'login')
 AUTH_USER_MODEL = os.getenv("AUTH_USER_MODEL", 'core.user')
+AUTH_GROUP_MODEL = os.getenv("AUTH_GROUP_MODEL", 'core.group')
 LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT_URL", 'login')
 LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", 'core:home')
 
+#AUTHENTICATION_BACKENDS = [
+#    "django.contrib.auth.backends.ModelBackend",
+#]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -197,12 +191,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "fr"
-
-TIME_ZONE = "UTC"
+TIME_ZONE = os.getenv("TIME_ZONE", "Africa/Kinshasa")
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "fr-cd")
 
 USE_I18N = True
-
 USE_TZ = True
 
 LOCALE_PATHS = [BASE_DIR / 'locale']
@@ -215,8 +207,7 @@ LANGUAGES = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_URL = os.getenv("STATIC_URL", STATIC_URL)
+STATIC_URL = os.getenv("STATIC_URL", 'static/')
 # STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.getenv("STATIC_ROOT", STATIC_URL.replace('/', ''))
 
@@ -240,9 +231,10 @@ DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE', default=DEFAULT_FILE_ST
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_STORAGE = os.getenv("STATICFILES_STORAGE", STATICFILES_STORAGE)
 
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = os.getenv("MEDIA_URL", 'media/')
-PUBLIC_MEDIA_LOCATION = os.getenv('PUBLIC_MEDIA_LOCATION', default='media')
+MEDIA_FOLDER = 'media'
+MEDIA_ROOT = BASE_DIR / MEDIA_FOLDER
+MEDIA_URL = os.getenv("MEDIA_URL", f'{MEDIA_FOLDER}/')
+PUBLIC_MEDIA_LOCATION = os.getenv('PUBLIC_MEDIA_LOCATION', default=MEDIA_FOLDER)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -252,7 +244,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Email settings
 # EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL', 0)))
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', None)
 EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_TLS', 0)))
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
@@ -271,27 +263,16 @@ REST_FRAMEWORK = {
 }
 
 # Django Crispy Forms settings
+CRISPY_ALLOWED_TEMPLATE_PACKS = ['bootstrap', 'bootstrap5']
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
-CRISPY_ALLOWED_TEMPLATE_PACKS = ['bootstrap', 'bootstrap5', 'uni_form']
 
 # Django JSON Widget settings
 JSON_WIDGET_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.0.0/jsoneditor.min.css'
 JSON_WIDGET_JS = 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.0.0/jsoneditor.min.js'
 
 # Django Money settings
-DEFAULT_CURRENCY = 'CDF'
-CURRENCIES = ('USD', 'CDF')
-CURRENCY_CHOICES = [(currency, currency) for currency in CURRENCIES]
-
-# Django QR Code settings
-QR_CODE_FOREGROUND = 'black'
-QR_CODE_BACKGROUND = 'white'
-QR_CODE_MODULE_SIZE = 5
-QR_CODE_VERSION = 1
-QR_CODE_ERROR_CORRECTION = 'L'
-QR_CODE_IMAGE_FORMAT = 'PNG'
-QR_CODE_CACHE_TIMEOUT = 3600
-QR_CODE_CACHE_PREFIX = 'qr_code'
+DEFAULT_CURRENCY = os.getenv('DEFAULT_CURRENCY', 'CDF')
+CURRENCY_CHOICES = [(currency, currency) for currency in ('USD', 'CDF')]
 
 # Django Ace settings
 ACE_DEFAULT_THEME = 'chrome'
@@ -332,25 +313,12 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 # Django Select2 settings
-SELECT2_JS = 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js'
 SELECT2_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css'
+SELECT2_JS = 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js'
 SELECT2_I18N = 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/fr.js'
 
-# Django Math Filters settings
-MATHJAX = {
-    'url': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
-    'config': 'TeX-AMS_HTML',
-    'TeX': {'extensions': ['AMSmath.js', 'AMSsymbols.js']},
-}
-
-# Django Filters settings
-FILTERS_HELP_TEXT_FILTER = False
-FILTERS_HELP_TEXT_EXCLUDE = False
-
 # Django Debug Toolbar settings
-INTERNAL_IPS = [
-    'localhost',
-]
+INTERNAL_IPS = os.getenv("INTERNAL_IPS", "localhost,".split(',')) 
 
 # Django Celery settings
 CELERY_RESULT_EXTENDED = True
@@ -366,7 +334,4 @@ SENTRY_DSN = "https://61630e2ac1f3c024ffa6a3d4a7207f57@o4505861077204992.ingest.
 SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 
 import sentry_sdk
-sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0,)
-
-# cors header
-CORS_ALLOW_ALL_ORIGINS = True
+sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)

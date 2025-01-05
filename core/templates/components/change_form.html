@@ -35,7 +35,7 @@
                 {% for formset in formsets %}
                     <li class="nav-item" role="presentation">
                         <a class="nav-link"
-                            data-bs-toggle="tab" href="#{{ formset.model|getattr:'_meta'|getattr:'alias' }}">
+                            data-bs-toggle="tab" href="#{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
                             {{ formset.model|getattr:'_meta'|getattr:'verbose_name_plural'|title }}
                         </a>
                     </li>
@@ -50,7 +50,7 @@
                 </div>
 
                 {% for formset in formsets %}
-                <div class="tab-pane fade" id="{{ formset.model|getattr:'_meta'|getattr:'alias' }}">
+                <div class="tab-pane fade" id="{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
                     <div class="mt-2 pt-2" id="formset-{{ forloop.counter }}">
                         {{ formset.non_form_errors }}
                         {% crispy formset self.inline_formset_helper %}

@@ -9,14 +9,14 @@ class RowLevelSecurity(Base):
         'core.user',
         verbose_name=_("utilisateur"),
         related_name='rows',
-        inline=False
+        inline=False,
+        help_text=_("L'utilisateur auquel cette règle de sécurité s'applique."),  # Help text
     )
 
-    role = fields.ModelSelectField(
-        'core.role',
-        verbose_name=_("rôle"),
-        related_name='rows',
-        inline=False
+    group = fields.ModelSelectField(
+        "core.group",
+        verbose_name=_('roles'),  # French verbose name
+        help_text=_('Le groupe auquel cette permission est attribuée.'),  # Help text
     )
 
     content_type = fields.ForeignKey(
@@ -26,24 +26,31 @@ class RowLevelSecurity(Base):
             'app_label__in': ['core', 'employee', 'payroll']
         },
         related_name='rows',
-        inline=True
+        inline=True,
+        help_text=_("Le modèle auquel cette règle de sécurité est associée."),  # Help text
     )
 
     field = fields.CharField(
         verbose_name=_("champ"),
         max_length=255,
         inline=True,
-        level=1
+        level=1,
+        help_text=_("Le champ auquel cette règle de sécurité s'applique."),  # Help text
     )
 
     value = fields.CharField(
         verbose_name=_("valeur"),
         max_length=255,
-        inline=True
+        inline=True,
+        help_text=_("La valeur du champ à laquelle cette règle de sécurité s'applique."),  # Help text
     )
+
+    list_display = ('user', 'content_type', 'field', 'value')
+    list_filter = ('content_type', 'group')
 
     layout = Layout(
         CrispyRow(
+            Column('group'),
             Column('user'),
             Column('content_type'),
         ),

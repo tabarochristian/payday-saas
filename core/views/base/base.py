@@ -5,12 +5,11 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.conf import settings
 
-from core.mixins import FielderMixin, LoggerMixin
+from core.views.mixins import FielderMixin, LoggerMixin
 from django.views import View
 from django.apps import apps
-
-from django.conf import settings
 
 class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, LoggerMixin, View):
     actions = []

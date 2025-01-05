@@ -1,7 +1,7 @@
-from django import forms
-from django.forms.widgets import Widget, FileInput
 from django.utils.safestring import mark_safe
+from django.forms.widgets import Widget
 from django.db import models
+from django import forms
 
 class CaptureWidget(Widget):
     allow_multiple_selected = False

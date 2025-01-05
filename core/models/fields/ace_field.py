@@ -12,14 +12,12 @@ class AceField(models.TextField):
         self.mode = mode
         self.level = kwargs.pop('level', 0)
         self.inline = kwargs.pop('inline', False)
-        
 
         help_text =_(
             'press "Ctrl+Space" to get code completion'
             'press "Ctrl+M" to toggle in modal mode'
         )
         kwargs['help_text'] = kwargs.get('help_text', help_text)
-        
         super().__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
@@ -27,7 +25,6 @@ class AceField(models.TextField):
             'mode': self.mode,
             'theme': 'twilight',
             'width': '100% !important',
-            # 'height': '150px !important',
             'showprintmargin': False,
             'toolbar': True,
             'showgutter': True,

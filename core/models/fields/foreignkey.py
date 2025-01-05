@@ -9,9 +9,7 @@ class ForeignKey(models.ForeignKey):
         self.on_delete = kwargs.pop('on_delete', self.on_delete)
         self.default = kwargs.pop('default', self.default)
         self.null = kwargs.pop('null', self.null)
-        self.level = kwargs.pop('level', 0)
-        
-        
         self.inline = kwargs.pop('inline', False)
+        self.level = kwargs.pop('level', 0)
 
         super().__init__(null=self.null, on_delete=self.on_delete, default=self.default, *args, **kwargs)

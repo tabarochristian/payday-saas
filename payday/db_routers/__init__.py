@@ -1,1 +1,1 @@
-from .primary_replica_router import PrimaryReplicaRouter
+from .master_slave_router import MasterSlaveRouter

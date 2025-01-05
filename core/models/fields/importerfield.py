@@ -34,8 +34,8 @@ class ImporterField(models.FileField):
         return super().formfield(**defaults)
 
     def __init__(self, *args, **kwargs):
-        self.level = kwargs.pop('level', 0)
         self.inline = kwargs.pop('inline', False)
         self.validators = self.default_validators
+        self.level = kwargs.pop('level', 0)
         super().__init__(*args, **kwargs)
 
