@@ -34,31 +34,18 @@ class FielderMixin:
         return formsets
 
     def filter_form(self, form):
-        # find a way to limit level field
-        return form
-        """
-        if self.request.user.is_superuser: 
-            return form
-
-        level, add = 0, True
         form = form() if isinstance(form, type) else form
-        permissions = self.request.user.get_user_permissions(**{
-            'content_type__app_label': form.Meta.model._meta.app_label,
-            'content_type__model': form.Meta.model._meta.model_name
-        }).values_list('level', 'add').distinct() or [(level, add)]
+        fields = self.request.user.get_user_field_permission(**{
+            'app': form.Meta.model._meta.app_label,
+            'model': form.Meta.model._meta.model_name
+        })
 
-        level, add = zip(*((perm[0], perm[1]) for perm in permissions))
-        level, add = min(level), any(add)
-
-        for field in form.fields:
-            _field = form.Meta.model._meta.get_field(field)
-            _level = getattr(_field, 'level', 0)
-            if all([add, _level <= level]): continue
+        for field, permission in fields.items():
+            if permission: continue
             form.fields[field].widget.attrs['readonly'] = True
             form.fields[field].widget.attrs['class'] = 'bg-dark'
 
         return form
-        """
 
     def get_form_fields(self, model=None):
         model = model or self.get_model()

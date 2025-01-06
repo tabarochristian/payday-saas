@@ -8,40 +8,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-<div class="page-heading">
-    <div class="card">
-        <div class="card-body" id="list-idenfication-card">
-            <div class="row">
-                <div class="col text-start">
-                    <h3 class="m-0">{{ model|getattr:'_meta'|getattr:'verbose_name_plural'|title }}</h3>
-                    {% include 'components/breadcrumb.html' %}
-                </div>
-
-                <div class="col text-end">
-                    <div class="btn-group mb-1">
-                        {% with self.documents as documents %}
-                            {% if documents %}
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownDocumentBtn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {% trans "Documents" %}
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownDocumentBtn">
-                                    {% for document in documents %}
-                                        <a target="_blank" class="dropdown-item btn-actor" href="{% url 'core:print' document.id app model|getattr:'_meta'|getattr:'model_name' %}">{{ document.name }}(s)</a>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endwith %}
-                        <a href="{% url 'core:create' app model|getattr:'_meta'|getattr:'model_name' %}" class="btn btn-light-success">{% trans 'Ajouter' %}</a>
-                        <a 
-                            class="btn btn-light-danger selected"
-                            href="{% url 'core:delete' app model|getattr:'_meta'|getattr:'model_name' %}">{% trans "Delete" %}</a>
-                        <a href="{% url 'core:exporter' app model|getattr:'_meta'|getattr:'model_name' %}?{{ request.GET.urlencode }}" class="btn btn-light-primary btn-actor">{% trans 'Exporter' %}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% include 'components/change/heading.html' %}
 
 <div class="page-content">
     {% if self.widgets %}
@@ -223,7 +190,7 @@
     
         // Initial Steps for IntroJS
         steps = [{
-            element: '#list-idenfication-card',
+            element: '.page-heading',
             intro: '{% trans "Il s agit de la fiche d identification d une page. Elle contient le titre de la page ainsi que le chemin" %}',
         }, {
             element: '.btn-group',

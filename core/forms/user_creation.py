@@ -2,7 +2,6 @@ from django.forms import EmailField, ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import forms
 
-
 class UserCreationForm(forms.UserCreationForm):
     
     def clean_email(self):

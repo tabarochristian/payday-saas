@@ -10,7 +10,6 @@ class AceField(models.TextField):
 
     def __init__(self, mode='python', *args: Any, **kwargs: Any) -> None:
         self.mode = mode
-        self.level = kwargs.pop('level', 0)
         self.inline = kwargs.pop('inline', False)
 
         help_text =_(

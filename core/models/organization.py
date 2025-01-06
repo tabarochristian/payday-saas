@@ -14,20 +14,24 @@ class Organization(models.Model):
     updated_by = CurrentUserField(
         verbose_name=_('mis à jour par'),
         related_name='%(app_label)s_%(class)s_updated_by',
-        on_update=True
+        on_update=True,
+        editable=False
     )
     created_by = CurrentUserField(
         verbose_name=_('créé par'),
-        related_name='%(app_label)s_%(class)s_created_by'
+        related_name='%(app_label)s_%(class)s_created_by',
+        editable=False
     )
 
     updated_at = fields.DateTimeField(
         verbose_name=_('mis à jour le/à'),
-        auto_now=True
+        auto_now=True,
+        editable=False
     )
     created_at = fields.DateTimeField(
         verbose_name=_('créé le/à'),
-        auto_now_add=True
+        auto_now_add=True,
+        editable=False
     )
 
     logo = fields.ImageField(
@@ -45,9 +49,8 @@ class Organization(models.Model):
         max_length=100
     )
     
-    list_display = ('name', 'national_id', 'commercial_register_number')
-    layout = Layout('name', 'subdomain_prefix', 'logo')
-    search_fields = ('name', 'national_id')
+    layout = Layout('logo', 'name', 'subdomain_prefix')
+    list_display = ('name', 'subdomain_prefix')
 
     def __str__(self) -> str:
         return self.name

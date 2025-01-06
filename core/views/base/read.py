@@ -18,23 +18,34 @@ class Read(BaseView):
         obj = self._get_object()
         kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
 
-        _action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
-        _action_buttons = [Button(**button) for button in _action_buttons]
+        action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
+        action_buttons = [Button(**button) for button in action_buttons]
 
         return [
             Button(**{
-                'text': _('Cancel'),
+                'text': _('Annuler'),
                 'tag': 'a',
                 'url': reverse_lazy('core:list', kwargs=kwargs),
                 'classes': 'btn btn-light-danger'
             }), 
             Button(**{
-                'text': _('Delete'),
+                'text': _('Supprimer'),
                 'tag': 'a',
                 'url': reverse_lazy('core:delete', kwargs=kwargs)+f'?pk__in={obj.pk}',
-                'classes': 'btn btn-danger'
-            })
-        ] + _action_buttons
+                'classes': 'btn btn-danger',
+                'permission': f'{kwargs['app']}.delete_{kwargs['model']}'
+            }),
+            Button(**{
+                'text': _('Sauvegarder'),
+                'tag': 'button',
+                'classes': 'btn btn-success',
+                'permission': f'{kwargs['app']}.change_{kwargs['model']}',
+                'attrs': {
+                    'type': 'submit',
+                    'form': f'form-{kwargs["model"]}'
+                }
+            }),
+        ] + action_buttons
     
     def _get_object(self):
         model = self.get_model()

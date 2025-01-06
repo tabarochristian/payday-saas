@@ -78,6 +78,3 @@ class Widget(Base):
     class Meta:
         verbose_name = _('widget')
         verbose_name_plural = _('widgets')
-
-from simple_history import register
-register(Widget)

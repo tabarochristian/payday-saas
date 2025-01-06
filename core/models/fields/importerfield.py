@@ -1,8 +1,8 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from django import forms
 from django.core.validators import FileExtensionValidator
+from django import forms
 
 class ImporterWidget(forms.ClearableFileInput):
     class Media:
@@ -36,6 +36,5 @@ class ImporterField(models.FileField):
     def __init__(self, *args, **kwargs):
         self.inline = kwargs.pop('inline', False)
         self.validators = self.default_validators
-        self.level = kwargs.pop('level', 0)
         super().__init__(*args, **kwargs)
 

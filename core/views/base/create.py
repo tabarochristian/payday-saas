@@ -24,16 +24,16 @@ class Create(BaseView):
         kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
         return [
             Button(**{
-                'text': _('Cancel'),
+                'text': _('Annuler'),
                 'tag': 'a',
                 'url': reverse_lazy('core:list', kwargs=kwargs),
                 'classes': 'btn btn-light-danger',
                 'permission': 'delete'
             }), Button(**{
-                'text': _('Submit'),
+                'text': _('Sauvegarder'),
                 'tag': 'button',
                 'classes': 'btn btn-success',
-                'permission': 'add',
+                'permission': f'{kwargs['app']}.add_{kwargs['model']}',
                 'attrs': {
                     'type': 'submit',
                     'form': f'form-{kwargs["model"]}'

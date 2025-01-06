@@ -33,20 +33,24 @@ class Base(models.Model):
     updated_by = CurrentUserField(
         verbose_name=_('mis à jour par'), 
         related_name='%(app_label)s_%(class)s_updated_by', 
-        on_update=True
+        on_update=True,
+        editable=False
     )
     created_by = CurrentUserField(
         verbose_name=_('créé par'), 
-        related_name='%(app_label)s_%(class)s_created_by'
+        related_name='%(app_label)s_%(class)s_created_by',
+        editable=False
     )
 
     updated_at = fields.DateTimeField(
         verbose_name=_('mis à jour le/à'), 
-        auto_now=True
+        auto_now=True,
+        editable=False
     )
     created_at = fields.DateTimeField(
         verbose_name=_('créé le/à'), 
-        auto_now_add=True
+        auto_now_add=True,
+        editable=False
     )
 
     list_display = ('id', 'name')
@@ -68,15 +72,6 @@ class Base(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('core:change', args=[self._meta.app_label, self._meta.model_name, self.pk])
-
-    def notify(self, subject, message, _from=None, _to=None):
-        Notification = apps.get_model('core', 'notification')
-        return Notification.objects.create(
-            subject=subject,
-            message=message,
-            _from=_from,
-            _to=_to
-        )
 
     def __str__(self):
         return str(self.name) if self.name else super().__str__()

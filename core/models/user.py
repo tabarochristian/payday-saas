@@ -3,7 +3,6 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
-from django.db.models import Q
 from django.db import models
 
 from core.models.managers import UserManager
@@ -45,9 +44,7 @@ class User(AbstractUser):
         help_text=_(
             "The groups this user belongs to. A user will get all permissions "
             "granted to each of their groups."
-        ),
-        related_name="user_set",
-        related_query_name="user",
+        )
     )
 
     user_permissions = fields.ModelSelect2Multiple(
@@ -55,8 +52,6 @@ class User(AbstractUser):
         verbose_name=_("user permissions"),
         blank=True,
         help_text=_("Specific permissions for this user."),
-        related_name="user_set",
-        related_query_name="user"
     )
     
     USERNAME_FIELD = 'email'
@@ -100,12 +95,25 @@ class User(AbstractUser):
         if self.is_superuser:
             return {}
         
+        groups = self.groups.all()
         rowlevelsecurity = apps.get_model('core', 'rowlevelsecurity')
         rls = rowlevelsecurity.objects.filter(
             content_type__app_label = app,
             content_type__model = model
-        ).filter(user=self, *args, **kwargs).values('field', 'value')
+        ).filter(user=self, group__in=groups, *args, **kwargs).values('field', 'value').distinct()
         return {item['field']: item['value'] for item in rls}
+    
+    def get_user_field_permission(self, app, model, *args, **kwargs):
+        if self.is_superuser:
+            return {}
+        
+        groups = self.groups.all()
+        fieldpermission = apps.get_model('core', 'fieldpermission')
+        fields = fieldpermission.objects.filter(
+            content_type__app_label = app,
+            content_type__model = model
+        ).filter(user=self, group__in=groups, *args, **kwargs).values('field', 'can_view', 'can_edit').distinct()
+        return {item['field']: all([item['can_view'], item['can_edit']]) for item in fields}
 
     def get_absolute_url(self):
         return reverse_lazy(
@@ -113,5 +121,5 @@ class User(AbstractUser):
             kwargs={'app': self._meta.app_label, 'model': self._meta.model_name, 'pk': self.pk}
         )
 
-from simple_history import register
-register(User)
+#from simple_history import register
+#register(User)

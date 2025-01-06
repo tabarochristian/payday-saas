@@ -8,8 +8,6 @@ from core.utils import upload_directory_file
 from core.models import fields, Base
 from django.urls import reverse_lazy
 
-
-
 class ImporterStatus(models.TextChoices):
     """Enumeration for Importer statuses."""
     PROCESSING = 'processing', _('en cours')
@@ -25,6 +23,7 @@ class Importer(Base):
         verbose_name=_('status'),
         choices=ImporterStatus.choices,
         default=ImporterStatus.PENDING,
+        editable=False
     )
 
     content_type = fields.ForeignKey(
@@ -48,6 +47,7 @@ class Importer(Base):
         blank=True,
         null=True,
         default=None,
+        editable=False
     )
 
     document = fields.ImporterField(

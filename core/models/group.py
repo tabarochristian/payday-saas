@@ -1,5 +1,4 @@
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import GroupManager
 from crispy_forms.layout import Layout
 from core.models import fields
 from django.db import models
@@ -20,9 +19,9 @@ class Group(models.Model):
     do special things to those users -- such as giving them access to a
     members-only portion of your site, or sending them members-only email
     messages.
-    """
+    """    
 
-    name = models.CharField(
+    name = fields.CharField(
         _("name"), 
         max_length=150, 
         unique=True
@@ -31,10 +30,10 @@ class Group(models.Model):
     permissions = fields.ModelSelect2Multiple(
         "auth.permission",
         verbose_name=_("permissions"),
-        blank=True
+        blank=True,
+        related_name="groups"
     )
 
-    objects = GroupManager()
 
     inlines = ('core.fieldpermission', 'core.rowlevelsecurity')
     layout = Layout('name', 'permissions')

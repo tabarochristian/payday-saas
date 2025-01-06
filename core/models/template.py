@@ -33,6 +33,3 @@ class Template(Base):
     class Meta:
         verbose_name = _('modèle de document')
         verbose_name_plural = _('modèles de documents')
-
-from simple_history import register
-register(Template)

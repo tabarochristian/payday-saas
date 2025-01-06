@@ -1,7 +1,7 @@
+from core.models import Menu, Preference, Notification
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
-from core.models import Menu
-from django.apps import apps
+import json
 
 def base(request):
     if not request.user.is_authenticated: return {'organization': request.organization}
@@ -83,7 +83,7 @@ def base(request):
             'description': _('Gérez les utilisateurs de votre organisation.')
         }, {
             'title': _('Roles'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'auth', 'model': 'group'}),
+            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'group'}),
             'permission': 'auth.view_group',
             'description': _('Gérez les roles de votre organisation.')
         }, {
@@ -117,10 +117,8 @@ def base(request):
     return {'menus': menu, 'organization': request.organization}
 
 def notifications(request):
-    return {'count': 0}
     if not request.user.is_authenticated: return {}
-    model = apps.get_model('core', 'notification')
-    notifications = model.objects.filter(**{
+    notifications = Notification.objects.filter(**{
         '_to': request.user,
         'viewed': False
     }).count()

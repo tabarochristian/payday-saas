@@ -69,16 +69,4 @@
 </{{ form.form_tag }}>
 
 {{ self.keywords|json_script:"keywords" }}
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-{% url 'core:change' app alias pk|default:0 as changer %}
-
-{% if changer == request.path and pk %}
-<script>
-    const api_change_url = "{% url 'api:detail' app alias pk %}";
-</script>
-{% endif %}
-
-
-<script src="{% static 'js/script.js' %}"></script>
 {% endwith %}

@@ -1,7 +1,6 @@
 from django.utils.translation import gettext as _
 from django import forms
 
-
 def form_factory(model, fields):
     attrs = {'models': model}
     if fields: attrs['fields'] = fields

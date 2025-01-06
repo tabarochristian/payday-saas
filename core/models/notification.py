@@ -11,31 +11,37 @@ class Notification(Base):
         get_user_model(), 
         verbose_name=_('de'), 
         related_name='sent_notifications', 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        editable=False
     )
     _to = fields.ModelSelectField(
         get_user_model(), 
         verbose_name=_('à'), 
         related_name='notifications', 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        editable=False
     )
 
     redirect = fields.CharField(
         verbose_name=_('rediriger vers'), 
         max_length=255, 
         blank=True, 
-        null=True
+        null=True,
+        editable=False
     )
     subject = fields.CharField(
         verbose_name=_('sujet'), 
-        max_length=255
+        max_length=255,
+        editable=False
     )
     viewed = fields.BooleanField(
         verbose_name=_('vu'), 
-        default=False
+        default=False,
+        editable=False
     )
     message = fields.TextField(
-        verbose_name=_('message')
+        verbose_name=_('message'),
+        editable=False
     )
 
     list_display = ('viewed', 'subject', '_from', 'message', 'updated_at')

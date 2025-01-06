@@ -3,13 +3,14 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 
 from core.forms.button import Button
-from django.urls import reverse_lazy
 from django.contrib import messages
-from django.apps import apps
 
 from core.forms import modelform_factory, InlineFormSetHelper
 from django.contrib.admin.models import CHANGE
+from django.urls import reverse_lazy
 from django.db import transaction
+
+from core.models import Preference
 from .base import BaseView
 import copy
 
@@ -20,44 +21,63 @@ class Change(BaseView):
     template_name = "change.html"
     inline_formset_helper = InlineFormSetHelper()
 
-    def get_action_buttons(self):
-        obj = self._get_object()
-        kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
+    def safe_eval(self, key, value):
+        allowed_names = {'int': int, 'float': float, 'str': str, 'bool': bool, 'list': list}
+        try:
+            return eval(f'{key}("{value}")', {"__builtins__": allowed_names}, {})
+        except:
+            return value
 
-        _action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
-        _action_buttons = [Button(**button) for button in _action_buttons]
+    def preferences(self):
+        prefs = Preference.objects.all().values('key', 'value')
+        return {
+            pref.get('key').split(':')[0].lower(): self.safe_eval(pref.get('key').split(':')[-1].lower(), pref.get('value'))
+            for pref in prefs
+        }
 
-        return [
-            Button(**{
-                'text': _('Cancel'),
-                'tag': 'a',
-                'url': reverse_lazy('core:list', kwargs=kwargs),
-                'classes': 'btn btn-light-danger'
-            }), 
-            Button(**{
-                'text': _('Delete'),
-                'tag': 'a',
-                'url': reverse_lazy('core:delete', kwargs=kwargs)+f'?pk__in={obj.pk}',
-                'classes': 'btn btn-danger'
-            }),
-            Button(**{
-                'text': _('Submit'),
-                'tag': 'button',
-                'classes': 'btn btn-success',
-                'permission': 'add',
-                'attrs': {
-                    'type': 'submit',
-                    'form': f'form-{kwargs["model"]}'
-                }
-            }),
-        ] + _action_buttons
-    
+
     def _get_object(self):
         model = self.get_model()
         pk = self.kwargs.get('pk', None)
         if not pk:
             raise Http404(_('Aucun identifiant n\'a été fourni'))
         return self.get_queryset().filter(**{model._meta.pk.name: pk}).first()
+
+    def get_action_buttons(self):
+        obj = self._get_object()
+        kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
+
+        action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
+        action_buttons = [Button(**button) for button in action_buttons]
+
+        action_buttons = [
+            Button(**{
+                'text': _('Annuler'),
+                'tag': 'a',
+                'url': reverse_lazy('core:list', kwargs=kwargs),
+                'classes': 'btn btn-light-danger'
+            }), 
+            Button(**{
+                'text': _('Supprimer'),
+                'tag': 'a',
+                'url': reverse_lazy('core:delete', kwargs=kwargs)+f'?pk__in={obj.pk}',
+                'classes': 'btn btn-danger',
+                'permission': f'{kwargs['app']}.delete_{kwargs['model']}'
+            }),
+            Button(**{
+                'text': _('Sauvegarder'),
+                'tag': 'button',
+                'classes': 'btn btn-success',
+                'permission': f'{kwargs['app']}.change_{kwargs['model']}',
+                'attrs': {
+                    'type': 'submit',
+                    'form': f'form-{kwargs["model"]}'
+                }
+            }),
+        ] + action_buttons
+
+        # make sure the user has the permission to see the button
+        return [button for button in action_buttons if self.request.user.has_perm(button.permission)]
 
     def get(self, request, app, model, pk):
         model = self.get_model()

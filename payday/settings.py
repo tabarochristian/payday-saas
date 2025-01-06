@@ -124,6 +124,7 @@ ASGI_APPLICATION = "payday.asgi.application"
 
 DATABASE_URL = 'sqlite:///db.sqlite3'
 DATABASES = {'default': None}
+DATABASE_ROUTERS = []
 
 # Default database
 MASTER_DATABASE_URL = os.getenv('MASTER_DATABASE_URL', default=DATABASE_URL)
@@ -132,14 +133,14 @@ DATABASES['default'] = dj_database_url.parse(MASTER_DATABASE_URL)
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
 
+
 # Replica database
 SLAVE_DATABASE_URL = os.getenv('SLAVE_DATABASE_URL', default=None)
 if SLAVE_DATABASE_URL:
     DATABASES['replica'] = dj_database_url.parse(SLAVE_DATABASE_URL)
+    DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
     DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
-
-    # Database router
-    DATABASE_ROUTERS = ['payday.db_routers.MasterSlaveRouter']
+    
 
 # Redis settings
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -165,9 +166,10 @@ AUTH_GROUP_MODEL = os.getenv("AUTH_GROUP_MODEL", 'core.group')
 LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT_URL", 'login')
 LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", 'core:home')
 
-#AUTHENTICATION_BACKENDS = [
-#    "django.contrib.auth.backends.ModelBackend",
-#]
+# Backend
+AUTHENTICATION_BACKENDS = [
+    "payday.backends.AuthBackend"
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

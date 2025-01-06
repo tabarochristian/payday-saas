@@ -6,7 +6,9 @@
         <div class="card-body">
             <div class="row">
                 <div class="col text-start">
-                    <h3 class="m-0">{{ model|getattr:'_meta'|getattr:'verbose_name'|title }} #{{ obj.id }}</h3>
+                    <h3 class="m-0">{{ model|getattr:'_meta'|getattr:'verbose_name'|title }}
+                        {% if obj %}#{{ obj.id }}{% endif %}
+                    </h3>
                     {% include 'components/breadcrumb.html' %}
                 </div>
 
@@ -28,7 +30,6 @@
                         {% for button in self.get_action_buttons %}
                             {{ button.render }}
                         {% endfor %}
-
                     </div>
                 </div>
             </div>

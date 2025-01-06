@@ -2,9 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from crispy_forms.layout import Layout, Row, Column
 from django.utils.translation import gettext as _
 
-from .fields import ModelSelect2Multiple
 from core.models import fields, Base
-from django.db import models
 import glob
 
 class Menu(Base):

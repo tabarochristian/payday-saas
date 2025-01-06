@@ -7,10 +7,11 @@ from django.shortcuts import render
 from .base.base import BaseView
 from django.apps import apps
 import pandas as pd
-
+import re
 
 
 get_name_of_fields = lambda _list: list(map(lambda x: x.name, _list))
+remove_special_chars = lambda x: re.sub(r'[^a-zA-Z0-9\s]', ' ', x) if isinstance(x, str) else x
 
 class Exporter(BaseView):
     action = ["view"]
@@ -67,6 +68,7 @@ class Exporter(BaseView):
 
         df = pd.DataFrame.from_records(data).astype(str)
         df.rename(columns=fields, inplace=True)
+        df = df.applymap(remove_special_chars)
         df.astype(str)
         
         filename = f"{slugify(model._meta.verbose_name)}.xlsx"

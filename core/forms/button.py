@@ -26,6 +26,7 @@ class Button:
         classes: str = '',
         attrs: Optional[Dict[str, Any]] = None,
         is_disabled: bool = False,
+        permission: Optional[str] = None,
         *args,
         **kwargs
     ):
@@ -35,6 +36,7 @@ class Button:
         self.classes = classes
         self.attrs = attrs or {}
         self.is_disabled = is_disabled
+        self.permission = permission
         
         # Validate tag
         if self.tag not in self.VALID_TAGS:

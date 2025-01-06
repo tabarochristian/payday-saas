@@ -79,20 +79,9 @@ def table(qs, *args):
             <table>""".format(header=headers, body=rows)
     return mark_safe(table)
 
-@register.filter(name="atmQrcode")
-def atmQrcode(operation, product):
-    factory = qrcode.image.svg.SvgImage
-    content = "{'next':'atm', 'operation': %d, 'product': %d}" % (operation, product)
-    img = qrcode.make(content, image_factory=factory, box_size=20)
-    stream = BytesIO()
-    img.save(stream)
-    base64_image = base64.b64encode(stream.getvalue()).decode()
-    return 'data:image/svg+xml;utf8;base64,' + base64_image
-
 @register.filter(name="addDays")
 def addDays(date, days):
     return date + timedelta(days=days)
-
 
 @register.filter(name='qs_sum_of')
 def qs_sum_of(qs, field):

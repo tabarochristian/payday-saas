@@ -1,5 +1,4 @@
 from django.utils.translation import gettext as _
-from django.db.models.signals import post_migrate
 from django.core.cache import cache
 from django.apps import AppConfig
 
@@ -12,9 +11,6 @@ class CoreConfig(AppConfig):
 
     def ready(self):
         """Method called when the app is ready."""
-        from django.contrib.auth.management import create_permissions
-        post_migrate.disconnect(create_permissions, dispatch_uid="django.contrib.auth.management.create_permissions")
-
         import core.signals  # Import signals to ensure they are registered
         self.sync_preferences()
 
@@ -22,7 +18,7 @@ class CoreConfig(AppConfig):
     def sync_preferences(self):
         """Sync application preferences with the cache."""
         PREFERENCES = [
-            ('AUTO_SAVE_FORM:BOOL', _('Sauvegarde automatique du formulaire').upper()),
+            ('AUTO_SAVE_FORM:INT', _('Sauvegarde automatique du formulaire').upper()),
             ('DEFAULT_USER_PASSWORD:STR', _('Mot de passe par défaut').upper()),
             ('DEFAULT_USER_ROLE:STR', _('Groupe par défaut').upper()),
         ]
