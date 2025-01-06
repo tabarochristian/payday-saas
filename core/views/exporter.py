@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.shortcuts import render
 
 from .base.base import BaseView
+from core.models import Base
 from django.apps import apps
 import pandas as pd
 import re
@@ -16,6 +17,12 @@ remove_special_chars = lambda x: re.sub(r'[^a-zA-Z0-9\s]', ' ', x) if isinstance
 class Exporter(BaseView):
     action = ["view"]
     template_name = "export.html"
+
+    def get_fields(self):
+        model = self.get_model()
+        excluded_fields = [field.name for field in Base._meta.fields]
+        return [field for field in model._meta.fields 
+                if field.editable and field.name not in excluded_fields]
     
     def get_field_verbose(self, model, field):
         fields = field.split('__')

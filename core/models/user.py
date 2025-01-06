@@ -37,6 +37,12 @@ class User(AbstractUser):
         verbose_name=_('email')
     )
 
+    password = models.CharField(
+        _("password"), 
+        max_length=128,
+        editable=False
+    )
+
     groups = fields.ModelSelect2Multiple(
         "core.group",
         verbose_name=_("groups"),
