@@ -35,17 +35,19 @@ DEBUG = bool(int(os.getenv('DEBUG', 1)))
 ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOSTS', '*').split(','))
 
 # Application definition
+SHARED_APPS = (
+    "django_tenants",
+    "tenant",
 
-INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    # "django.contrib.admin",
+
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "django.contrib.auth",
 
-   
     "dal",
     "dal_select2",
     "widget_tweaks",
@@ -69,14 +71,18 @@ INSTALLED_APPS = [
     "djcelery_email",
     "simple_history",
 
-    "core",
     "api",
+    "core",
+)
 
-    #"employee",
-    #"payroll"
-]
+TENANT_APPS = (
+    "employee",
+)
+
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
+    "django_tenants.middleware.main.TenantMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -89,8 +95,7 @@ MIDDLEWARE = [
     "django_currentuser.middleware.ThreadLocalUserMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
-    "simple_history.middleware.HistoryRequestMiddleware",
-    "core.middleware.OrganizationMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware"
 ]
 
 if DEBUG:
@@ -122,13 +127,15 @@ ASGI_APPLICATION = "payday.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASE_URL = 'sqlite:///db.sqlite3'
+# DATABASE_URL = 'sqlite:///db.sqlite3'
+DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
+DATABASE_ROUTERS = ["django_tenants.routers.TenantSyncRouter"]
 DATABASES = {'default': None}
-DATABASE_ROUTERS = []
 
 # Default database
 MASTER_DATABASE_URL = os.getenv('MASTER_DATABASE_URL', default=DATABASE_URL)
 DATABASES['default'] = dj_database_url.parse(MASTER_DATABASE_URL)
+DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
@@ -141,6 +148,10 @@ if SLAVE_DATABASE_URL:
     DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
     DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
     
+
+# Multi Tenant
+TENANT_DOMAIN_MODEL = "tenant.domain"
+TENANT_MODEL = "tenant.client"
 
 # Redis settings
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -156,13 +167,15 @@ CACHES = {
     "default": {
         "LOCATION": CACHE_LOCATION,
         "BACKEND": CACHE_BACKEND,
+        'KEY_FUNCTION': 'django_tenants.cache.make_key',
+        'REVERSE_KEY_FUNCTION': 'django_tenants.cache.reverse_key',
     }
 }
 
 # Default user model and authentication
 LOGIN_URL = os.getenv("LOGIN_URL", 'login')
 AUTH_USER_MODEL = os.getenv("AUTH_USER_MODEL", 'core.user')
-AUTH_GROUP_MODEL = os.getenv("AUTH_GROUP_MODEL", 'core.group')
+
 LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT_URL", 'login')
 LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", 'core:home')
 
@@ -331,9 +344,11 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', REDIS_URL)
 CELERY_BROKER_TRANSPORT_URL=os.getenv('CELERY_BROKER_TRANSPORT_URL', REDIS_URL)
 
 
+"""
 # Sentry settings
 SENTRY_DSN = "https://61630e2ac1f3c024ffa6a3d4a7207f57@o4505861077204992.ingest.us.sentry.io/4507582424612864"
 SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 
 import sentry_sdk
 sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
+"""

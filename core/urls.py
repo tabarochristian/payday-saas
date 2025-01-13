@@ -1,5 +1,3 @@
-from django.views.decorators.cache import cache_page
-from django.conf.urls.i18n import set_language
 from django.contrib.auth import views
 from django.urls import path
 from core.views import *
@@ -19,8 +17,6 @@ class LogoutView(views.LogoutView):
 urlpatterns = [
     path('', Home.as_view(), name='home'),
     path('logout', LogoutView.as_view(), name='logout'),
-
-    path('create-organization', CreateOrganization.as_view(), name='create-organization'),
     path('password/change', PasswordChange.as_view(), name='password-change'),
 
     path('list/<str:app>/<str:model>', List.as_view(), name='list'),

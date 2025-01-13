@@ -1,7 +1,8 @@
 from crispy_forms.layout import Column, Fieldset, Layout, Row as CrispyRow
-from django.core.cache import cache
 from django.utils.translation import gettext as _
+from django.contrib.auth import get_user_model
 from core.models import Base, fields
+from django.core.cache import cache
 
 
 class RowLevelSecurity(Base):
@@ -11,7 +12,7 @@ class RowLevelSecurity(Base):
     updated_by, created_by = None, None
 
     user = fields.ModelSelectField(
-        'core.user',
+        get_user_model(),
         verbose_name=_("utilisateur"),
         related_name='rows',
         inline=False,

@@ -1,14 +1,14 @@
-from core.models import Menu, Preference, Notification
 from django.utils.translation import gettext as _
+from core.models import Menu, Notification
 from django.urls import reverse_lazy
-import json
+
 
 def base(request):
-    if not request.user.is_authenticated: return {'organization': request.organization}
+    if not request.user.is_authenticated: return {}
     modules = Menu.objects.filter().order_by('created_at')
     
     menu = [{
-        'class': 'module active',
+        'class': 'active',
         'title': module.name,
         'href': f'#{module.name}',
         'icon': f'bi-{module.icon}',

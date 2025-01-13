@@ -247,14 +247,6 @@
             }
          });
 
-         if (localStorage.getItem(window.location.pathname) !== null) {
-            $('[id^="menu-item-"]').each(function() {
-               if (!$(this).find('ul.module').length) {
-                  $(this).find('ul').removeClass('active');
-               }
-            });
-         }
-
          // Change the language
          $('.lang-item').click(function() {
             $.ajax({
@@ -281,6 +273,5 @@
       });
 
    </script>
-
 
 </html>

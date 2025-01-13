@@ -1,6 +1,5 @@
 from django.utils.translation import gettext as _
-from django.contrib.admin.models import LogEntry
-from django.shortcuts import render
+#from django.contrib.admin.models import LogEntry
 from .base import List
 
 class ActivityLog(List):
@@ -13,7 +12,7 @@ class ActivityLog(List):
     def get_list_filter(self):
         return ['content_type', 'action_flag', 'action_time']
 
-    def get(self, request):
-        self.kwargs['app'] = LogEntry._meta.app_label
-        self.kwargs['model'] = LogEntry._meta.model_name
-        return super().get(request, LogEntry._meta.app_label, LogEntry._meta.model_name)
+    #def get(self, request):
+        #self.kwargs['app'] = LogEntry._meta.app_label
+        #self.kwargs['model'] = LogEntry._meta.model_name
+        #return super().get(request, LogEntry._meta.app_label, LogEntry._meta.model_name)

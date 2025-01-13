@@ -6,10 +6,10 @@ from core.forms.button import Button
 from django.contrib import messages
 
 from core.forms import modelform_factory, InlineFormSetHelper
-from django.contrib.admin.models import CHANGE
 from django.urls import reverse_lazy
 from django.db import transaction
 
+#from django.contrib.admin.models import CHANGE
 from core.models import Preference
 from .base import BaseView
 import copy
@@ -116,7 +116,7 @@ class Change(BaseView):
         [formset.save() for formset in formsets]
 
         message = _('Le {model} #{pk} a été mis à jour avec succès')
-        self.log(model, form, action=CHANGE, change_message=self.generate_change_message(instance, form.instance))
+        # self.log(model, form, action=CHANGE, change_message=self.generate_change_message(instance, form.instance))
         messages.add_message(request, messages.SUCCESS,  message=message.format(**{'model': model._meta.model_name, 'pk': pk}))
 
         redirect_to = reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name})

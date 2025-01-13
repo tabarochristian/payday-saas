@@ -11,16 +11,6 @@ from django.apps import apps
 
 class User(AbstractUser):
     first_name, last_name, username = None, None, None
-
-    organization = fields.ModelSelectField(
-        'core.organization', 
-        verbose_name=_('organisation'), 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True, 
-        default=None, 
-        editable=False
-    )
     
     updated_at = fields.DateTimeField(
         verbose_name=_('mis à jour le/à'), 
@@ -44,7 +34,7 @@ class User(AbstractUser):
     )
 
     groups = fields.ModelSelect2Multiple(
-        "core.group",
+        "auth.group",
         verbose_name=_("groups"),
         blank=True,
         help_text=_(

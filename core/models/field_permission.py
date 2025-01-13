@@ -1,9 +1,8 @@
 from crispy_forms.layout import Column, Fieldset, Layout, Row as CrispyRow
-from django.contrib.auth import get_user_model
-from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
 from core.models import Base, fields
-
+from django.core.cache import cache
 
 class FieldPermission(Base):
     """

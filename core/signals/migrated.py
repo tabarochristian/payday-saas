@@ -61,7 +61,7 @@ def create_widgets_from_defaults():
         except ObjectDoesNotExist:
             logger.error(f"ContentType not found for app_label={app_label}, model={model}")
             continue
-
+        
         # Create or update the widget
         widget, created = Widget.objects.get_or_create(
             template=html_content,
