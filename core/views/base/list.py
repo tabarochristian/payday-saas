@@ -84,7 +84,7 @@ class List(BaseView):
         filter = filter(request.GET, queryset=qs)
         qs = filter.hard_filter()
 
-        paginator = Paginator(qs.order_by('-id'), 100)
+        paginator = Paginator(qs.order_by(f'-{model._meta.pk.name}'), 100)
         qs = paginator.page(int(request.GET.dict().get('page', 1)))
 
         template = self.get_template_name()

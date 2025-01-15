@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('chaining/', include('smart_selects.urls')),
     #path('payroll/', include('payroll.urls')),
-    #path('employee/', include('employee.urls')),
+    path('employee/', include('employee.urls')),
 ]
 
 if settings.DEBUG:

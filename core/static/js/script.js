@@ -1,12 +1,4 @@
 $(document).ready(() => {
-    toastr.options = {
-        positionClass: "toast-bottom-right",
-        extendedTimeOut: 1000,
-        timeOut: 1500,
-        closeButton: true,
-        progressBar: true,
-    };
-
     // Transform DELETE inputs into checkboxes
     $('input[id*="DELETE"]').each(function () {
         $(this).prop('type', 'checkbox').addClass('checkboxinput form-check-input');

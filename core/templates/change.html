@@ -48,7 +48,6 @@
 
 {% if self.preferences.auto_save_form %}
 <script>const api_change_url = "{% url 'api:detail' app model|getattr:'_meta'|getattr:'model_name' pk %}";</script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="{% static 'js/script.js' %}"></script>
 {% endif %}
 

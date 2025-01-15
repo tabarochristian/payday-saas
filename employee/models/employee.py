@@ -10,12 +10,33 @@ from django.apps import apps
 from employee.utils import *
 
 class Employee(BaseEmployee):
-    user = fields.OneToOneField('core.user', verbose_name=_('utilisateur'), blank=True, null=True, on_delete=models.SET_NULL, default=None, editable=False)
-    registration_number = fields.CharField(_('matricule'), max_length=50, unique=True, default=default_registration_number)
-    email = fields.EmailField(_('email'), blank=True, null=True, default=None)
+    user = fields.OneToOneField(
+        'core.user', 
+        verbose_name=_('utilisateur'), 
+        blank=True, 
+        null=True, 
+        on_delete=models.SET_NULL, 
+        default=None, 
+        editable=False
+    )
+
+    registration_number = fields.CharField(
+        _('matricule'), 
+        max_length=50, 
+        primary_key=True, 
+        unique=True, 
+        default=default_registration_number
+    )
+
+    email = fields.EmailField(
+        _('email'), 
+        blank=True, 
+        null=True, 
+        default=None
+    )
 
     list_display = ('registration_number', 'last_name', 'middle_name', 'branch', 'designation', 'grade', 'status')
-    inlines = ['employee.child', 'employee.document', 'payroll.specialemployeeitem']
+    inlines = ['employee.child']#, 'payroll.specialemployeeitem']
 
     layout = Layout(
         'photo',

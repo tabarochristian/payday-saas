@@ -3,7 +3,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html>
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -192,6 +192,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" referrerpolicy="no-referrer"></script>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css" />
    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
    
    <script>
@@ -207,6 +208,14 @@
 
       $(document).ready(() => {
          let isModified = false;
+
+         toastr.options = {
+            positionClass: "toast-bottom-right",
+            extendedTimeOut: 1000,
+            timeOut: 1500,
+            closeButton: true,
+            progressBar: true,
+        };
 
          $('form :input').on('input', () => isModified = true);
 
@@ -270,7 +279,26 @@
          }).oncomplete(() => {
             localStorage.setItem(window.location.pathname, true);
          }).start();
+
+         // Ajax from attribute
+         $('.ajax-request').click(function() {
+            var url = $(this).data('url');
+            var json = $(this).data('json');
+            var method = $(this).data('method');
+
+            $.ajax({
+               url: url,
+               method: method,
+               data: JSON.parse(json),
+               contentType: "application/json",
+               error: () => toastr.error('Error action'),
+               success: () => toastr.info('Action successfully'),
+            });
+        });
+
       });
+
+      
 
    </script>
 

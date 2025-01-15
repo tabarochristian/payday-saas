@@ -1,5 +1,6 @@
 from phonenumber_field.modelfields import PhoneNumberField
 from crispy_forms.layout import Layout, Row, Column, Div
+from smart_selects.db_fields import ChainedForeignKey
 from django.utils.translation import gettext as _
 from crispy_forms.bootstrap import PrependedText
 
@@ -25,9 +26,10 @@ class Employee(Base):
     designation = fields.ModelSelectField('employee.designation', verbose_name=_('position'), blank=True, null=True, on_delete=models.SET_NULL)
     grade = fields.ModelSelectField('employee.grade', verbose_name=_('grade'), blank=True, null=True, on_delete=models.SET_NULL)
 
+    # linked field
     sub_direction = fields.ModelSelectField('employee.subdirection', verbose_name=_('sous-direction'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
+    direction = fields.ModelSelectField('employee.direction', verbose_name=_('direction'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
     service = fields.ModelSelectField('employee.service', verbose_name=_('service'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
-    direction = fields.ModelSelectField('employee.direction', verbose_name=_('direction'), null=True, on_delete=models.SET_NULL, default=None)
 
     middle_name = fields.CharField(_('post-nom'), max_length=100, blank=True, null=True, default=None)
     first_name = fields.CharField(_('prénom'), max_length=100, blank=True, null=True, default=None)
@@ -61,7 +63,7 @@ class Employee(Base):
                     'branch__name', 'payment_account', 'comment')
     list_display = ('registration_number', 'last_name', 'middle_name', 'designation', 'branch', 'status')
 
-    inlines = ['employee.child', 'employee.document']
+    inlines = ['employee.child',]
 
     layout = Layout(
         'photo',

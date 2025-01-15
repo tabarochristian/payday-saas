@@ -12,7 +12,7 @@ from celery import Celery
 load_dotenv()
 
 # Configuration
-WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://webhook-test.com/72789d7d81fbbce5e2e54c51cc7f0303")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost/employee/device")
 BROKER_URL = os.getenv("BROKER_URL", "redis://localhost:6379/0")
 AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
 
@@ -20,7 +20,7 @@ AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
 app = FastAPI()
 
 # Initialize Celery
-celery_app = Celery("payday", broker=BROKER_URL, backend=BROKER_URL)
+#celery_app = Celery("payday", broker=BROKER_URL, backend=BROKER_URL)
 
 # Logger Configuration
 logging.basicConfig(level=logging.INFO)
@@ -30,8 +30,8 @@ logger = logging.getLogger("WebSocketApp")
 connected_clients = {}
 
 # Helper Functions
-@celery_app.task(bind=True, default_retry_delay=300)
-def send_to_webhook(self, data: dict):
+#@celery_app.task(bind=True, default_retry_delay=300)
+def send_to_webhook(data: dict):
     """
     Celery task to send data to a webhook. Retries on failure.
 
@@ -63,8 +63,15 @@ async def forward_command_to_device(sn: str, command: dict):
         logger.warning(f"Device {sn} not connected.")
         raise HTTPException(status_code=404, detail=f"Device {sn} not connected.")
 
+def ack(data):
+    cmd = data.get("cmd")
+    return {
+        "ret": cmd,
+        "result": True,
+        "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+    }
 
-async def handle_message_from_device(sn: str, message: str):
+async def handle_message_from_device(websocket: WebSocket, sn: str, message: str):
     """
     Processes messages received from a WebSocket device.
 
@@ -73,14 +80,15 @@ async def handle_message_from_device(sn: str, message: str):
     """
     try:
         data = json.loads(message)
-        send_to_webhook.delay(data)  # Enqueue the task for Celery
+        websocket.send_text(json.dumps(ack(data)))
+        send_to_webhook(data)#.delay(data)  # Enqueue the task for Celery
         logger.info(f"Message received from {sn}: {data}")
     except json.JSONDecodeError:
         logger.warning(f"Invalid JSON received from {sn}: {message}")
 
 
 # HTTP Endpoints
-@app.post("/send-command/")
+@app.post("/send-command")
 async def send_command(request: Request):
     """
     Accepts a command via HTTP and forwards it to a WebSocket device.
@@ -101,7 +109,6 @@ async def send_command(request: Request):
     except Exception as e:
         logger.error(f"Error sending command: {e}")
         raise HTTPException(status_code=500, detail=f"Error sending command: {str(e)}")
-
 
 # WebSocket Endpoint
 @app.websocket("/pub/chat")
@@ -132,22 +139,26 @@ async def websocket_endpoint(websocket: WebSocket):
         response = {
             "ret": "reg",
             "result": True,
+            "nosenduser": True,
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }
         await websocket.send_text(json.dumps(response))
-        send_to_webhook.delay(register_data)  # Enqueue the registration data for webhook processing
+        send_to_webhook(register_data)#.delay(register_data)  # Enqueue the registration data for webhook processing
 
         # Handle incoming messages
         while True:
             try:
                 message = await websocket.receive_text()
-                await handle_message_from_device(sn, message)
+                await handle_message_from_device(websocket, sn, message)
             except WebSocketDisconnect:
+                send_to_webhook({"cmd": "disconnected", "sn": sn})
                 logger.info(f"Device {sn} disconnected.")
                 connected_clients.pop(sn, None)
                 break
             except Exception as e:
                 logger.error(f"Error handling message from {sn}: {e}")
+                send_to_webhook({"cmd": "disconnected", "sn": sn})
                 break
     except Exception as e:
+        send_to_webhook({"cmd": "disconnected", "sn": sn})
         logger.error(f"WebSocket connection error: {e}")

@@ -36,13 +36,13 @@ ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOSTS', '*').split(','))
 
 # Application definition
 SHARED_APPS = (
-    "django_tenants",
-    "tenant",
+    #"django_tenants",
+    #"tenant",
 
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    # "django.contrib.admin",
+    "django.contrib.admin",
 
     "django.contrib.staticfiles",
     "django.contrib.humanize",
@@ -70,6 +70,7 @@ SHARED_APPS = (
     "django_htmx",
     "djcelery_email",
     "simple_history",
+    "smart_selects",
 
     "api",
     "core",
@@ -82,7 +83,7 @@ TENANT_APPS = (
 INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
-    "django_tenants.middleware.main.TenantMainMiddleware",
+    # "django_tenants.middleware.main.TenantMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -127,25 +128,24 @@ ASGI_APPLICATION = "payday.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASE_URL = 'sqlite:///db.sqlite3'
-DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
-DATABASE_ROUTERS = ["django_tenants.routers.TenantSyncRouter"]
+DATABASE_URL = 'sqlite:///db.sqlite3'
+# DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
+# DATABASE_ROUTERS = ["django_tenants.routers.TenantSyncRouter"]
 DATABASES = {'default': None}
 
 # Default database
 MASTER_DATABASE_URL = os.getenv('MASTER_DATABASE_URL', default=DATABASE_URL)
 DATABASES['default'] = dj_database_url.parse(MASTER_DATABASE_URL)
-DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
+# DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
-
 
 # Replica database
 SLAVE_DATABASE_URL = os.getenv('SLAVE_DATABASE_URL', default=None)
 if SLAVE_DATABASE_URL:
     DATABASES['replica'] = dj_database_url.parse(SLAVE_DATABASE_URL)
-    DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
+    # DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
     DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
     
 
@@ -167,8 +167,8 @@ CACHES = {
     "default": {
         "LOCATION": CACHE_LOCATION,
         "BACKEND": CACHE_BACKEND,
-        'KEY_FUNCTION': 'django_tenants.cache.make_key',
-        'REVERSE_KEY_FUNCTION': 'django_tenants.cache.reverse_key',
+        #"KEY_FUNCTION": "django_tenants.cache.make_key",
+        #"REVERSE_KEY_FUNCTION": "django_tenants.cache.reverse_key",
     }
 }
 

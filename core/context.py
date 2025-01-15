@@ -114,7 +114,7 @@ def base(request):
             'description': _('Déconnectez-vous de votre compte.')
         }]
     }))
-    return {'menus': menu, 'organization': request.organization}
+    return {'menus': menu}
 
 def notifications(request):
     if not request.user.is_authenticated: return {}

@@ -47,10 +47,11 @@ class Change(BaseView):
         obj = self._get_object()
         kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
 
-        action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
-        action_buttons = [Button(**button) for button in action_buttons]
+        action_buttons = getattr(self.get_model(), 'get_action_buttons', None)
+        if action_buttons and callable(action_buttons):
+            action_buttons = [Button(**button) for button in action_buttons(obj)]
 
-        action_buttons = [
+        action_buttons = action_buttons + [
             Button(**{
                 'text': _('Annuler'),
                 'tag': 'a',
@@ -74,7 +75,7 @@ class Change(BaseView):
                     'form': f'form-{kwargs["model"]}'
                 }
             }),
-        ] + action_buttons
+        ]
 
         # make sure the user has the permission to see the button
         return [button for button in action_buttons if self.request.user.has_perm(button.permission)]
