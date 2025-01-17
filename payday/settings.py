@@ -224,6 +224,12 @@ AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_SECURE_URLS = int(os.getenv('AWS_S3_SECURE', default=0))
 AWS_S3_URL_PROTOCOL = os.getenv('AWS_S3_URL_PROTOCOL', default='http:')
 
+# Optional: Define S3 file URLs 
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_FILE_OVERWRITE = False
+AWS_QUERYSTRING_AUTH = False
+
+
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE', default=DEFAULT_FILE_STORAGE)
 

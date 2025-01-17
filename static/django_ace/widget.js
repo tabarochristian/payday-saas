@@ -245,10 +245,10 @@ var completers = {
         });
 
         editor.commands.addCommand({
-            name: 'Full screen',
+            name: 'Show modal',
             bindKey: {win: 'Ctrl-F11',  mac: 'Command-F11'},
             exec: function(editor) {
-                // showModal(widget, main_block, editor);
+                showModal(widget, main_block, editor);
                 // minimizeMaximize(widget, main_block, editor);
             },
             readOnly: true // false if this command should not apply in readOnly mode

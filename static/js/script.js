@@ -1,54 +1,56 @@
-$(function() {
-    toastr.options = {
-        "positionClass": "toast-bottom-right",
-        "extendedTimeOut": "1000",
-        "timeOut": "1500",
-        "closeButton": true,
-        "progressBar": true
-    };
-
+$(document).ready(() => {
     // Transform DELETE inputs into checkboxes
-    $('input[id*="DELETE"]').each(function() {
-        $(this).attr('type', 'checkbox').addClass('checkboxinput form-check-input');
+    $('input[id*="DELETE"]').each(function () {
+        $(this).prop('type', 'checkbox').addClass('checkboxinput form-check-input');
     });
 
     // Debounce function to limit the rate of function execution
-    function debounce(func, delay) {
+    const debounce = (func, delay) => {
         let timeout;
-        return function(...args) {
+        return (...args) => {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), delay);
         };
-    }
+    };
+
+    // Function to get cookie value by name
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+        const cookie = cookies.find(cookie => cookie.startsWith(`${name}=`));
+        return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
+    };
 
     // Function to handle saving changes
-    function saveChanges(event) {
-        // Make sure the api_change_url variable is defined
-        if(typeof api_change_url === 'undefined') return;
-
+    const saveChanges = (event) => {
+        if (typeof api_change_url === 'undefined') return;
 
         console.log('Saving changes...');
         const field = $(event.target);
         const fieldValue = field.val();
         const fieldName = field.attr('name');
-        
-        if (fieldName === '_metadata' || fieldName === undefined) return;
 
-        const data = {};
-        data[fieldName] = fieldValue;
+        if (fieldName === '_metadata' || !fieldName) return;
+
         $.ajax({
             url: api_change_url,
-            method: 'PUT', // or 'PATCH'
+            method: 'PATCH',
+            crossDomain: true,
             contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: (response) => toastr.info('Changes saved successfully'),
-            error: (error) => toastr.error('Error saving changes')
+            data: JSON.stringify({ [fieldName]: fieldValue }),
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            xhrFields: {
+                withCredentials: true,
+            },
+            success: () => toastr.info('Changes saved successfully'),
+            error: () => toastr.error('Error saving changes'),
         });
-    }
+    };
 
     // Create a debounced version of the saveChanges function
-    const debounced = debounce(saveChanges, 1000);
+    const debouncedSaveChanges = debounce(saveChanges, 1000);
 
     // Attach the debounced saveChanges function to form fields
-    $('form').on('blur', 'input, select, textarea', debounced);
-})
+    $('form').on('blur', 'input, select, textarea', debouncedSaveChanges);
+});
