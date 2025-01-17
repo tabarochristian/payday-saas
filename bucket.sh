@@ -11,7 +11,10 @@ echo "MinIO is ready. Creating buckets..."
 # Configure MinIO Client
 mc alias set local http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 
-# Create buckets
+# Create the bucket
 mc mb local/$MINIO_BUCKET_NAME
 
-echo "Buckets created successfully."
+# Set the bucket policy to public (read-only)
+mc policy set download local/$MINIO_BUCKET_NAME
+
+echo "Bucket '$MINIO_BUCKET_NAME' created and set to public."

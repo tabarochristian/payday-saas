@@ -5,8 +5,8 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))
 
     # reCAPTCHA keys
-    RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '6LeCurkqAAAAAIaZUOOExwl2Cs7UOSpV4zJiMXEK')
     RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '6LeCurkqAAAAAOA1ntdvPLcJyBier54MdFfUoVCs')
+    RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '6LeCurkqAAAAAIaZUOOExwl2Cs7UOSpV4zJiMXEK')
 
     # Babel configuration for localization
     BABEL_DEFAULT_LOCALE = os.getenv('BABEL_DEFAULT_LOCALE', 'fr')
@@ -19,11 +19,3 @@ class Config:
     # Celery configuration for background tasks
     CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
     CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
-
-    # Flask-Mail configuration
-    MAIL_SERVER = os.getenv('EMAIL_HOST', 'smtp.example.com')
-    MAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'True').lower() in ('true', '1', 't')
-    MAIL_USERNAME = os.getenv('EMAIL_HOST_USER', 'your-email@example.com')
-    MAIL_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-email-password')
-    MAIL_DEFAULT_SENDER = os.getenv('EMAIL_HOST_USER', 'your-email@example.com')

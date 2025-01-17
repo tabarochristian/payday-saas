@@ -32,10 +32,8 @@ def home():
     db.session.commit()
     
     # run the command async
-    create_organization_schema(organization.to_dict())
+    create_organization_schema.delay(organization.to_dict())
     flash('Organization created successfully!', 'success')
     
-    tenant = organization.slugify()
+    tenant = organization.tenant()
     return redirect(f"http://{tenant}.payday.cd")
-
-    #return redirect(url_for('main.home'))

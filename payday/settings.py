@@ -137,7 +137,6 @@ if SLAVE_DATABASE_URL:
     DATABASES['replica'] = dj_database_url.parse(SLAVE_DATABASE_URL)
     # DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
     DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
-    
 
 # Redis settings
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -207,8 +206,8 @@ LANGUAGES = [
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = os.getenv("STATIC_URL", 'static/')
-# STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.getenv("STATIC_ROOT", STATIC_URL.replace('/', ''))
+STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static')]
+# STATIC_ROOT = os.getenv("STATIC_ROOT", STATIC_URL.replace('/', ''))
 
 AWS_LOCATION = os.getenv('AWS_LOCATION', default='')
 AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL', default='public-read')
@@ -245,7 +244,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', None)
 EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_TLS', 0)))
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'support@localhost')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
 EMAIL_PORT = os.getenv('EMAIL_PORT', 1025)
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER

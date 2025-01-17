@@ -1,0 +1,11 @@
+<!-- templates/emails/welcome_email.html -->
+<p>Hello {{ user.email }},</p>
+<p>Welcome to {{ site_name }}! You have been added as a master user for the tenant <strong>{{ schema }}</strong>.</p>
+
+<p>To get started, please set your password by clicking the link below:</p>
+<p><a href="{{ protocol }}://{{ schema }}.{{ domain }}{% url 'password_reset' %}">Set Password</a></p>
+
+<p>If you have any questions, feel free to contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+<p>Thanks,</p>
+
+<p>The PayDay Team</p>

@@ -17,3 +17,6 @@ class Organization(db.Model):
     
     def slugify(self):
         return slugify(self.name)
+    
+    def tenant(self):
+        return self.slugify()

@@ -1,9 +1,10 @@
 services:
-  # Flask application service
-  payday:
+  # Tenant service
+  tenant:
     build:
       context: .
       dockerfile: tenant/Dockerfile
+    container_name: payday-tenant
     ports:
       - "5000:5000"
     volumes:
@@ -15,10 +16,10 @@ services:
     env_file:
       - prod.env
 
-  # Django application service
-  web:
+  # Saas service
+  saas:
     build: .
-    container_name: web
+    container_name: payday-saas
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate && python manage.py collectstatic --noinput &&
@@ -31,6 +32,7 @@ services:
       - "8000:8000"
     depends_on:
       - minio-init
+      - tenant
       - redis
     env_file:
       - prod.env
@@ -44,6 +46,7 @@ services:
   worker:
     build: .
     restart: unless-stopped
+    container_name: payday-worker
     command: celery -A payday worker -l INFO -E
     volumes:
       - .:/app
@@ -61,6 +64,7 @@ services:
   beat:
     build: .
     restart: unless-stopped
+    container_name: payday-beat
     command: celery -A payday beat -l INFO
     volumes:
       - .:/app
@@ -79,6 +83,7 @@ services:
 
   # PostgreSQL master service
   master:
+    container_name: payday-master
     image: bitnami/postgresql
     restart: always
     ports:
@@ -103,6 +108,7 @@ services:
 
   # PostgreSQL slave service
   slave:
+    container_name: payday-slave
     image: bitnami/postgresql
     restart: always
     ports:
@@ -129,8 +135,8 @@ services:
 
   # Redis service
   redis:
+    container_name: payday-redis
     image: redis:latest
-    container_name: redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -145,12 +151,13 @@ services:
     build:
       context: .
       dockerfile: device/Dockerfile
+    container_name: payday-device
     restart: unless-stopped
     volumes:
       - .:/app
     environment:
       - WEBHOOK_URL=http://web:8000/api/v1/hook/device/
-      - AUTHORIZATION_TOKEN=${AUTHORIZATION_TOKEN}
+      # - AUTHORIZATION_TOKEN=${AUTHORIZATION_TOKEN}
       - BROKER_URL=redis://redis:6379/0
     ports:
       - "7788:7788"
@@ -162,6 +169,7 @@ services:
 
   # MinIO service
   minio:
+    container_name: payday-minio
     image: minio/minio:latest
     restart: unless-stopped
     ports:
@@ -186,6 +194,7 @@ services:
     build:
       context: .
       dockerfile: Miniofile
+    container_name: payday-minio-init
     depends_on:
       - minio
     environment:
@@ -197,6 +206,7 @@ services:
   nginx:
     image: nginx:latest
     restart: unless-stopped
+    container_name: payday-nginx
     ports:
       - "80:80"
     volumes:
@@ -211,6 +221,7 @@ services:
 
   # Pubsub service
   pubsub:
+    container_name: payday-pubsub
     build: ./pubsub
     depends_on:
       - redis

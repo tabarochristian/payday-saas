@@ -1,0 +1,66 @@
+ERROR 2025-01-17 13:20:12,808 forms Failed to send password reset email to 1
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/transport/__init__.py", line 63, in resolve_transport
+    transport = TRANSPORT_ALIASES[transport]
+                ~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/forms.py", line 424, in send_mail
+    email_message.send()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/mail/message.py", line 301, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/djcelery_email/backends.py", line 17, in send_messages
+    result_tasks.append(send_emails.delay(chunk_messages, self.init_kwargs))
+                        ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/task.py", line 444, in delay
+    return self.apply_async(args, kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/task.py", line 594, in apply_async
+    return app.send_task(
+           ~~~~~~~~~~~~~^
+        self.name, args, kwargs, task_id=task_id, producer=producer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **options
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 797, in send_task
+    with self.producer_or_acquire(producer) as P:
+         ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 932, in producer_or_acquire
+    producer, self.producer_pool.acquire, block=True,
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 1354, in producer_pool
+    return self.amqp.producer_pool
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/amqp.py", line 591, in producer_pool
+    self.app.connection_for_write()]
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 829, in connection_for_write
+    return self._connection(url or self.conf.broker_write_url, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 880, in _connection
+    return self.amqp.Connection(
+           ~~~~~~~~~~~~~~~~~~~~^
+        url,
+        ^^^^
+    ...<16 lines>...
+        ),
+        ^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/connection.py", line 201, in __init__
+    if not get_transport_cls(transport).can_parse_url:
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/transport/__init__.py", line 91, in get_transport_cls
+    _transport_cache[transport] = resolve_transport(transport)
+                                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/transport/__init__.py", line 72, in resolve_transport
+    raise KeyError(f'No such transport: {transport}')
+KeyError: 'No such transport: '

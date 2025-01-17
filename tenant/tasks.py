@@ -20,17 +20,17 @@ def create_organization_schema(obj):
     client = docker.from_env()
 
     # Get the Django container
-    container = client.containers.get("web")
+    container = client.containers.get("payday-saas")
 
     # Run the migrate command
-    tenant = organization.slugify()
-    cmd = f"python manage.py tenant {tenant}"
+    tenant = organization.tenant()
+    email = organization.email
+
+    cmd = f"python manage.py tenant {tenant} {email}"
     result = container.exec_run(cmd)
 
     # Decode the output
     output = result.output.decode("utf-8")
-
-    print(output)
 
     # Return the output as a JSON response
     return {"output": output}
