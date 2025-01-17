@@ -9,3 +9,4 @@ docker
 celery
 python-slugify
 bootstrap-flask
+email_validator
