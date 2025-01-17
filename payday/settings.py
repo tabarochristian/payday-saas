@@ -76,7 +76,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "core.middleware.TenantMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -89,6 +88,9 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware"
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 if DEBUG:
     INSTALLED_APPS += ["debug_toolbar"]
@@ -205,9 +207,13 @@ LANGUAGES = [
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 # Static URL (URL prefix for static files)
+STATICFILES_LOCATION = "static/"
 STATIC_URL = os.getenv("STATIC_URL", 'static/')
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(BASE_DIR, 'static'))
+
+AWS_IS_GZIPPED = True
+AWS_EXPIREY = 60 * 60 * 24 * 14
 
 AWS_LOCATION = os.getenv('AWS_LOCATION', default='')
 AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL', default='public-read')
@@ -228,17 +234,26 @@ AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
 
-
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE', default=DEFAULT_FILE_STORAGE)
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_STORAGE = os.getenv("STATICFILES_STORAGE", STATICFILES_STORAGE)
 
-MEDIA_FOLDER = 'media'
-MEDIA_ROOT = BASE_DIR / MEDIA_FOLDER
-MEDIA_URL = os.getenv("MEDIA_URL", f'{MEDIA_FOLDER}/')
-PUBLIC_MEDIA_LOCATION = os.getenv('PUBLIC_MEDIA_LOCATION', default=MEDIA_FOLDER)
+STORAGES = {
+    "default": {
+        "BACKEND": DEFAULT_FILE_STORAGE
+    },
+    "staticfiles": {
+        "BACKEND": STATICFILES_STORAGE
+    },
+}
+
+MEDIAFILES_LOCATION = "media"
+MEDIA_ROOT = BASE_DIR / MEDIAFILES_LOCATION
+
+MEDIA_URL = os.getenv("MEDIA_URL", f'{MEDIAFILES_LOCATION}/')
+PUBLIC_MEDIA_LOCATION = os.getenv('PUBLIC_MEDIA_LOCATION', default=MEDIAFILES_LOCATION)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
