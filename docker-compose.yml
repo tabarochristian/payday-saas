@@ -101,8 +101,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    profiles:
-      - no_auto_start
 
   # PostgreSQL slave service
   slave:
@@ -129,8 +127,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    profiles:
-      - no_auto_start
 
   # Redis service
   redis:
