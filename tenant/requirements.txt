@@ -6,8 +6,8 @@ Flask-WTF
 Flask-Bootstrap
 WTForms
 docker
-celery
 python-slugify
 bootstrap-flask
 email_validator
 psycopg2-binary
+flask-executor

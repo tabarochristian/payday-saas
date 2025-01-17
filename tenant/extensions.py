@@ -1,11 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap5
 from flask_babel import Babel
-from celery import Celery
+from flask_executor import Executor
 
 db = SQLAlchemy()
 babel = Babel()
 bootstrap = Bootstrap5()
-
-# Initialize Celery
-celery = Celery(__name__)
+executor = Executor()

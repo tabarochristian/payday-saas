@@ -1,12 +1,9 @@
 # celery_worker.py
 from models import Organization
 from extensions import db
-
-from extensions import celery
 import docker
 
 # Define a sample task
-@celery.task
 def create_organization_schema(obj):
     _id = obj.get('id', None)
     if not _id: 

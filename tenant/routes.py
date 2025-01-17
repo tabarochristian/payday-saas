@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, flash #, url_for
 from tasks import create_organization_schema
 from forms import OrganizationForm
 from models import Organization
-from extensions import db
+from extensions import db, executor
 
 main_bp = Blueprint('main', __name__)
 
@@ -31,8 +31,12 @@ def home():
     db.session.add(organization)
     db.session.commit()
     
-    # run the command async
-    create_organization_schema.delay(organization.to_dict())
+
+    # Run the task in a separate process
+    args = organization.to_dict()
+    #Thread(target=create_organization_schema, args=(args,)).start()
+    executor.submit(create_organization_schema, args)
+
     flash('Organization created successfully!', 'success')
     
     tenant = organization.tenant()
