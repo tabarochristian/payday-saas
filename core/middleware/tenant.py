@@ -1,5 +1,5 @@
-from core.utils import set_schema, reset_schema
 from django.http import HttpResponseRedirect
+from core.utils import set_schema
 
 class TenantMiddleware:
     def __init__(self, get_response):
