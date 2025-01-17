@@ -1,6 +1,6 @@
-from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap5
+from flask_babel import Babel
 from celery import Celery
 
 db = SQLAlchemy()
