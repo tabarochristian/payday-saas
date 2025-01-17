@@ -205,9 +205,10 @@ LANGUAGES = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# Static URL (URL prefix for static files)
 STATIC_URL = os.getenv("STATIC_URL", 'static/')
-STATICFILES_DIRS =[os.path.join(BASE_DIR, 'static')]
-# STATIC_ROOT = os.getenv("STATIC_ROOT", STATIC_URL.replace('/', ''))
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(BASE_DIR, 'staticfiles'))
 
 AWS_LOCATION = os.getenv('AWS_LOCATION', default='')
 AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL', default='public-read')
