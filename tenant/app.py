@@ -1,5 +1,5 @@
 from flask import Flask
-from extensions import db, babel, bootstrap, mail, celery
+from extensions import db, babel, bootstrap, celery
 
 def create_app():
     app = Flask(__name__)
@@ -11,7 +11,6 @@ def create_app():
     db.init_app(app)
     babel.init_app(app)
     bootstrap.init_app(app)
-    mail.init_app(app)
 
     # Initialize Celery
     celery.conf.update(app.config)
