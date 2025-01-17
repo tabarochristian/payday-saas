@@ -10,3 +10,4 @@ celery
 python-slugify
 bootstrap-flask
 email_validator
+psycopg2-binary
