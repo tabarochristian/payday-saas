@@ -67,7 +67,6 @@ INSTALLED_APPS = [
     "django_htmx",
     "djcelery_email",
     "simple_history",
-    "smart_selects",
 
     "api",
     "core",

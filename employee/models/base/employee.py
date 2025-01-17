@@ -1,6 +1,5 @@
 from phonenumber_field.modelfields import PhoneNumberField
 from crispy_forms.layout import Layout, Row, Column, Div
-from smart_selects.db_fields import ChainedForeignKey
 from django.utils.translation import gettext as _
 from crispy_forms.bootstrap import PrependedText
 
