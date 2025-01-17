@@ -8,4 +8,4 @@ babel = Babel()
 bootstrap = Bootstrap5()
 
 # Initialize Celery
-celery = Celery()
+celery = Celery(__name__)
