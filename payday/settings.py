@@ -207,8 +207,8 @@ LANGUAGES = [
 
 # Static URL (URL prefix for static files)
 STATIC_URL = os.getenv("STATIC_URL", 'static/')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(BASE_DIR, 'static'))
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(BASE_DIR, 'static'))
 
 AWS_LOCATION = os.getenv('AWS_LOCATION', default='')
 AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL', default='public-read')
