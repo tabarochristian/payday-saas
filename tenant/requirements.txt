@@ -8,3 +8,4 @@ WTForms
 docker
 celery
 python-slugify
+bootstrap-flask
