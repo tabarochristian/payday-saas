@@ -280,7 +280,7 @@
             localStorage.setItem(window.location.pathname, true);
          }).start();
 
-         // Ajax from attribute
+         {% comment %}
          $('.ajax-request').click(function() {
             var url = $(this).data('url');
             var json = $(this).data('json');
@@ -295,6 +295,7 @@
                success: () => toastr.info('Action successfully'),
             });
         });
+        {% endcomment %}
 
       });
 

@@ -1,8 +1,25 @@
 version: '3.8'
 
 services:
+  # Flask application service
+  payday:
+    build:
+      context: .
+      dockerfile: tenant/Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./tenant:/app
+    depends_on:
+      - master
+      - redis
+    env_file:
+      - prod.env
+
+  # Django application service
   web:
     build: .
+    container_name: web
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate && python manage.py collectstatic --noinput &&
@@ -24,6 +41,7 @@ services:
       timeout: 10s
       retries: 3
 
+  # Celery worker service
   worker:
     build: .
     restart: unless-stopped
@@ -40,6 +58,7 @@ services:
       timeout: 10s
       retries: 3
 
+  # Celery beat service
   beat:
     build: .
     restart: unless-stopped
@@ -56,7 +75,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    profiles:
+      - no_auto_start
 
+  # PostgreSQL master service
   master:
     image: bitnami/postgresql
     restart: always
@@ -79,12 +101,17 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    profiles:
+      - no_auto_start
 
+  # PostgreSQL slave service
   slave:
     image: bitnami/postgresql
     restart: always
     ports:
       - '5433:5432'
+    volumes:
+      - slave_data:/bitnami/postgresql
     depends_on:
       - master
     environment:
@@ -102,7 +129,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-  
+    profiles:
+      - no_auto_start
+
+  # Redis service
   redis:
     image: redis:latest
     container_name: redis
@@ -115,8 +145,11 @@ services:
       timeout: 10s
       retries: 3
 
+  # Device service
   device:
-    image: python:3.10-slim
+    build:
+      context: .
+      dockerfile: device/Dockerfile
     restart: unless-stopped
     volumes:
       - .:/app
@@ -126,14 +159,13 @@ services:
       - BROKER_URL=redis://redis:6379/0
     ports:
       - "7788:7788"
-    command: >
-      sh -c "
-      pip install --no-cache-dir fastapi uvicorn celery redis httpx python-dotenv &&
-      uvicorn device:app --host 0.0.0.0 --port 7788 --workers 4
-      "
+    command: uvicorn device:app --host 0.0.0.0 --port 7788 --workers 4
     depends_on:
       - web
+    profiles:
+      - no_auto_start
 
+  # MinIO service
   minio:
     image: minio/minio:latest
     restart: unless-stopped
@@ -154,6 +186,7 @@ services:
       timeout: 10s
       retries: 3
 
+  # MinIO initialization service
   minio-init:
     build:
       context: .
@@ -165,6 +198,7 @@ services:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
 
+  # Nginx service
   nginx:
     image: nginx:latest
     restart: unless-stopped
@@ -179,7 +213,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-  
+
+  # Pubsub service
   pubsub:
     build: ./pubsub
     depends_on:
@@ -191,8 +226,10 @@ services:
       - SERVER_PORT=8001
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+    profiles:
+      - no_auto_start
 
 volumes:
-  metabase_data:
   master_data:
+  slave_data:
   minio_data:

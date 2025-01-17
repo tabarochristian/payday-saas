@@ -1,11 +1,11 @@
 require('dotenv').config();
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 
-const express = require('express');
-const http = require('http');
 const bodyParser = require('body-parser');
-const redis = require('redis');
 const ioredis = require('socket.io-redis');
+const express = require('express');
+const redis = require('redis');
+const http = require('http');
 
 // Load environment variables
 const PUBLISHER_KEY = process.env.AUTH_TOKEN || '123456';

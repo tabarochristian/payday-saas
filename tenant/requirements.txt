@@ -1,0 +1,10 @@
+gunicorn
+Flask
+Flask-Babel
+Flask-SQLAlchemy
+Flask-WTF
+Flask-Bootstrap
+WTForms
+docker
+celery
+python-slugify

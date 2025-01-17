@@ -35,10 +35,7 @@ DEBUG = bool(int(os.getenv('DEBUG', 1)))
 ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOSTS', '*').split(','))
 
 # Application definition
-SHARED_APPS = (
-    #"django_tenants",
-    #"tenant",
-
+INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -74,16 +71,11 @@ SHARED_APPS = (
 
     "api",
     "core",
-)
-
-TENANT_APPS = (
     "employee",
-)
-
-INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
+]
 
 MIDDLEWARE = [
-    # "django_tenants.middleware.main.TenantMainMiddleware",
+    "core.middleware.TenantMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -129,14 +121,12 @@ ASGI_APPLICATION = "payday.asgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASE_URL = 'sqlite:///db.sqlite3'
-# DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
-# DATABASE_ROUTERS = ["django_tenants.routers.TenantSyncRouter"]
+DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
 DATABASES = {'default': None}
 
 # Default database
 MASTER_DATABASE_URL = os.getenv('MASTER_DATABASE_URL', default=DATABASE_URL)
 DATABASES['default'] = dj_database_url.parse(MASTER_DATABASE_URL)
-# DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
@@ -148,10 +138,6 @@ if SLAVE_DATABASE_URL:
     # DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
     DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
     
-
-# Multi Tenant
-TENANT_DOMAIN_MODEL = "tenant.domain"
-TENANT_MODEL = "tenant.client"
 
 # Redis settings
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -167,8 +153,6 @@ CACHES = {
     "default": {
         "LOCATION": CACHE_LOCATION,
         "BACKEND": CACHE_BACKEND,
-        #"KEY_FUNCTION": "django_tenants.cache.make_key",
-        #"REVERSE_KEY_FUNCTION": "django_tenants.cache.reverse_key",
     }
 }
 
@@ -265,6 +249,8 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
 EMAIL_PORT = os.getenv('EMAIL_PORT', 1025)
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+ADMINS = [('support', DEFAULT_FROM_EMAIL)]
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
@@ -343,12 +329,51 @@ CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', REDIS_URL)
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', REDIS_URL)
 CELERY_BROKER_TRANSPORT_URL=os.getenv('CELERY_BROKER_TRANSPORT_URL', REDIS_URL)
 
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django_error.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
+}
 
-"""
 # Sentry settings
 SENTRY_DSN = "https://61630e2ac1f3c024ffa6a3d4a7207f57@o4505861077204992.ingest.us.sentry.io/4507582424612864"
 SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 
-import sentry_sdk
-sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
-"""
+if not DEBUG:
+    import sentry_sdk
+    sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
