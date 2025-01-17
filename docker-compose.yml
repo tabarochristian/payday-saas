@@ -51,7 +51,7 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - web
+      - saas
     env_file:
       - prod.env
     healthcheck:
@@ -163,7 +163,7 @@ services:
       - "7788:7788"
     command: uvicorn device:app --host 0.0.0.0 --port 7788 --workers 4
     depends_on:
-      - web
+      - saas
     profiles:
       - no_auto_start
 
@@ -212,7 +212,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - web
+      - saas
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
       interval: 30s
