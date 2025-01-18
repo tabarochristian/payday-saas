@@ -149,8 +149,10 @@ services:
   # MinIO initialization service
   minio-init:
     build:
-      context: .
+      context: ./minio
       dockerfile: minio/Miniofile
+    volumes:
+      - ./minio:/app
     container_name: payday-minio-init
     depends_on:
       - minio
