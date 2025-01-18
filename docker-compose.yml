@@ -4,7 +4,7 @@ services:
   # landlord service (Flask)
   landlord:
     build:
-      context: ./landlord
+      context: .
       dockerfile: landlord/Dockerfile
     container_name: payday-landlord
     command: >
@@ -23,7 +23,7 @@ services:
   # SaaS service (Django)
   saas:
     build:
-      context: ./payday
+      context: .
       dockerfile: payday/Dockerfile
     container_name: payday-saas
     restart: unless-stopped
@@ -149,7 +149,7 @@ services:
   # MinIO initialization service
   minio-init:
     build:
-      context: ./minio
+      context: .
       dockerfile: minio/Miniofile
     volumes:
       - ./minio:/app
