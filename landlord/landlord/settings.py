@@ -154,37 +154,16 @@ LANGUAGES = [
 
 # Static URL (URL prefix for static files)
 STATICFILES_LOCATION = "static/"
-STATIC_URL = os.getenv("STATIC_URL", 'static/')
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_URL = os.getenv("STATIC_URL", STATICFILES_LOCATION)
 STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(BASE_DIR, 'static'))
-
-AWS_IS_GZIPPED = True
-AWS_EXPIREY = 60 * 60 * 24 * 14
-
-AWS_LOCATION = os.getenv('AWS_LOCATION', default='')
-AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL', default='public-read')
-AWS_QUERYSTRING_AUTH= os.getenv('AWS_QUERYSTRING_AUTH', default=False)
-
-AWS_S3_REGION = os.getenv('AWS_S3_REGION')
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL')
-AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_SECURE_URLS = int(os.getenv('AWS_S3_SECURE', default=0))
-AWS_S3_URL_PROTOCOL = os.getenv('AWS_S3_URL_PROTOCOL', default='http:')
 
 # Optional: Define S3 file URLs 
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
 
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE', default=DEFAULT_FILE_STORAGE)
-
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATICFILES_STORAGE = os.getenv("STATICFILES_STORAGE", STATICFILES_STORAGE)
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 STORAGES = {
     "default": {
@@ -197,9 +176,7 @@ STORAGES = {
 
 MEDIAFILES_LOCATION = "media"
 MEDIA_ROOT = BASE_DIR / MEDIAFILES_LOCATION
-
 MEDIA_URL = os.getenv("MEDIA_URL", f'{MEDIAFILES_LOCATION}/')
-PUBLIC_MEDIA_LOCATION = os.getenv('PUBLIC_MEDIA_LOCATION', default=MEDIAFILES_LOCATION)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
