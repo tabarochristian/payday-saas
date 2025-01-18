@@ -15,3 +15,6 @@ COPY landlord/ .
 
 # Expose the port the app runs on
 EXPOSE 5000
+
+# Command to run the application
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "landlord.wsgi:application"]

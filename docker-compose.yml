@@ -1,22 +1,18 @@
 version: '3.8'
 
 services:
-  # Tenant service (Flask)
+  # landlord service (Flask)
   landlord:
     build:
       context: .
       dockerfile: landlord/Dockerfile
     container_name: payday-landlord
-    restart: unless-stopped
-    command: >
-      sh -c "gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
     ports:
       - "5000:5000"
     volumes:
       - ./landlord:/app
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
-      - minio
       - master
       - redis
     env_file:
@@ -32,6 +28,7 @@ services:
     #        gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     command: >
       sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
+      
     volumes:
       - .:/app
     expose:
