@@ -47,7 +47,6 @@ INSTALLED_APPS = [
 
 
     "crispy_forms",
-    "rest_framework",
     "crispy_bootstrap5",
     "phonenumber_field",
 
@@ -57,7 +56,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -65,10 +63,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
 ]
-
-if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]
-    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 ROOT_URLCONF = "landlord.urls"
 
@@ -99,7 +93,7 @@ DATABASES = {'default': None}
 
 # Default database
 DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
-DATABASES['default']['OPTIONS']['options'] = '-c search_path=landlord'
+# DATABASES['default']['OPTIONS']['options'] = '-c search_path=landlord'
 
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
