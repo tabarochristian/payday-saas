@@ -2,17 +2,21 @@ version: '3.8'
 
 services:
   # Tenant service (Flask)
-  tenant:
+  landlord:
     build:
       context: .
-      dockerfile: tenant/Dockerfile
-    container_name: payday-tenant
+      dockerfile: landlord/Dockerfile
+    container_name: payday-landlord
+    restart: unless-stopped
+    command: >
+      sh -c "gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
     ports:
       - "5000:5000"
     volumes:
-      - ./tenant:/app
+      - ./landlord:/app
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
+      - minio
       - master
       - redis
     env_file:
@@ -34,7 +38,7 @@ services:
       - "8000:8000"
     depends_on:
       - minio-init
-      - tenant
+      - landlord
       - redis
     env_file:
       - prod.env
@@ -50,7 +54,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - saas
-      - tenant
+      - landlord
 
   # PostgreSQL master service
   master:

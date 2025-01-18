@@ -1,0 +1,8 @@
+django
+gunicorn
+docker
+psycopg2-binary
+django-crispy-forms
+crispy-bootstrap4
+crispy-bootstrap5
+django-phonenumber-field

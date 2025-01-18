@@ -62,7 +62,7 @@ class TenantMiddleware:
         """
         try:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id FROM public.organization WHERE schema = %s", [schema])
+                cursor.execute("SELECT id FROM landlord.organization WHERE schema = %s", [schema])
                 if cursor.fetchone():
                     set_schema(schema)
                     return True

@@ -1,0 +1,191 @@
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>PayDay</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'app.css' %}">
+    <link rel="stylesheet" href="{% static 'auth.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/logo/favicon.png' %}" type="image/png">
+    <link rel="shortcut icon" href="{% static 'images/logo/favicon.svg' %}" type="image/x-icon">
+
+    <style>
+        body, html {
+            font-size: 12px;
+            height: 100%;
+            margin: 0;
+        }
+        .full-height {
+            height: 100vh;
+        }
+        #auth #auth-left .auth-logo img {
+            height: 3rem !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="auth">
+        <div class="row h-100">
+            <div class="col-lg-5 col-12">
+                <div id="auth-left">
+                    <div class="auth-logo mb-3">
+                        <img src="{% static 'images/logo/logo.png' %}" alt="payday-logo">
+                    </div>
+                    {% if not form.is_valid %}
+                        <h1 class="auth-title">Starts here!</h1>
+                        <p class="auth-subtitle mb-5">
+                            Sign up now and discover how we can transform your organization
+                        </p>
+                        {% crispy form %}
+                        <small class="text-muted">
+                            En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale.
+                        </small>
+                    {% else %}
+                        <h1 class="auth-title mt-5 text-primary">{{ form.instance.first_name }},</h1>
+                        <p class="auth-subtitle mb-5">
+                            We're creating your <b class="text-primary">organization’s</b> account.
+                        </p>
+                        <div class="text-center">
+                            <l-bouncy size="256" speed="1.75" color="#435ebe"></l-bouncy>
+                        </div>
+                        <div class="text-center mt-5">
+                            <span class="h4" id="animatedText">
+                                ...
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    <div class="mt-5 text-center">
+                        <p>
+                            Need assistance? Let’s talk! We’re just a message away.
+                        </p>
+                        <a href="mailto:contact@payday.cd">contact@payday.cd</a>
+                        <a href="telto:+243825012792">+243 82 50 12 702</a>
+                        <p>18 - 20 Immeuble SNDE, GOMBE/KINSHASA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 d-none d-lg-block">
+                <div id="auth-right"></div>
+            </div>
+        </div>
+    </div>
+
+    {% if form.is_valid %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/bouncy.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Text animation logic
+            const textList = [
+                "Hang tight! Your account is being created as we speak.",
+                "You’ll receive a welcome email shortly.",
+                "We’re setting up everything so you can start.",
+            ];
+            let index = 0;
+        
+            const animateText = () => {
+                const animatedText = document.getElementById('animatedText');
+                if (!animatedText) return; // Exit if the element doesn't exist
+        
+                // Fade in the text
+                anime({
+                    targets: animatedText,
+                    opacity: [0, 1],
+                    duration: 500,
+                    easing: 'easeInOutSine',
+                    complete: () => {
+                        // Wait 2 seconds, then fade out
+                        setTimeout(() => {
+                            anime({
+                                targets: animatedText,
+                                opacity: [1, 0],
+                                duration: 2000,
+                                easing: 'easeInOutSine',
+                                complete: () => {
+                                    // Update text and restart animation
+                                    index = (index + 1) % textList.length;
+                                    animatedText.textContent = textList[index];
+                                    animateText();
+                                },
+                            });
+                        }, 500);
+                    },
+                });
+            };
+        
+            // Start the text animation
+            animateText();
+        
+            // Polling logic for account creation status
+            const bouncyElement = document.querySelector('l-bouncy');
+            if (bouncyElement) {
+                const pollAccountCreationStatus = async () => {
+                    try {
+                        const response = await fetch('{% url 'tenant:tenant' form.instance.pk %}', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+        
+                        const data = await response.json();
+                        if (data.schema) {
+                            // Redirect if the account is ready
+                            window.location.href = `http://${data.schema}.payday.cd`;
+                        }
+                    } catch (error) {
+                        console.error('Error polling account status:', error);
+                        // Display error message to the user
+                        const resultElement = document.getElementById('result');
+                        if (resultElement) {
+                            resultElement.innerHTML = `<p>Error: ${error.message}</p>`;
+                        }
+                    }
+                };
+        
+                // Poll every 2 seconds
+                const pollingInterval = setInterval(pollAccountCreationStatus, 2000);
+        
+                // Optionally, stop polling after a certain number of attempts
+                const maxAttempts = 30; // 30 attempts = 1 minute
+                let attempts = 0;
+        
+                const stopPolling = () => {
+                    clearInterval(pollingInterval);
+                    console.log('Polling stopped.');
+                };
+        
+                const checkAttempts = () => {
+                    attempts++;
+                    if (attempts >= maxAttempts) {
+                        stopPolling();
+                        const resultElement = document.getElementById('result');
+                        if (resultElement) {
+                            resultElement.innerHTML = `<p>Account creation is taking longer than expected. Please try again later.</p>`;
+                        }
+                    }
+                };
+        
+                // Check attempts on each poll
+                setInterval(checkAttempts, 2000);
+            }
+        });
+    </script>
+
+    {% endif %}
+</body>
+</html>
