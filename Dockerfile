@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Copy the .env file to the working directory
-COPY .env /app/.env
+# COPY .env /app/.env
 
 # Collect static files
 # RUN python manage.py collectstatic --noinput
@@ -28,4 +28,4 @@ COPY .env /app/.env
 # RUN python manage.py makemigrations
 
 # Run migrations and start the Django application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "payday.wsgi:application"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:80", "payday.wsgi:application"]
