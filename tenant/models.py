@@ -3,12 +3,15 @@ from extensions import db
 
 class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    is_created = db.Column(db.Boolean(), default=False)
+    is_active = db.Column(db.Boolean(), default=False)
 
     schema = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     name = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(20), nullable=False)
+
+    # created_at
+    # updated_at
 
     def __repr__(self):
         return self.name

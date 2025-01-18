@@ -30,6 +30,7 @@ class OrganizationForm(FlaskForm):
     employee_range = SelectField(
         'Number of Employees', 
         choices=[
+            (None, '-'),
             ('1-10', '1-10'), 
             ('11-50', '11-50'), 
             ('51-200', '51-200'), 
@@ -43,4 +44,4 @@ class OrganizationForm(FlaskForm):
     )
 
     # recaptcha = Recaptcha()
-    submit = SubmitField('Sign Up')
+    submit = SubmitField('Create')

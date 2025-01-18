@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, flash
+from flask import Blueprint, render_template, flash, jsonify, request, url_for
 from tasks import create_organization_schema
 from extensions import db, executor
 from forms import OrganizationForm
@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 @main_bp.route('/', methods=['GET', 'POST'])
 def home():
+    organization = None
     form = OrganizationForm()
 
     if form.validate_on_submit():
@@ -31,7 +32,7 @@ def home():
             email=form.email.data,
             phone=form.phone.data,
             schema=slugify(form.name.data),
-            is_created=False
+            is_active=False
         )
 
         try:
@@ -56,9 +57,26 @@ def home():
             flash('An error occurred while scheduling the background task. Please contact support.', 'warning')
 
         # Notify the user and redirect to the tenant's subdomain
-        flash('Organization created successfully!', 'success')
-        tenant = organization.schema
-        return redirect(f"http://{tenant}.payday.cd")
+        flash('Please while we are creating your organization', 'success')
 
     # Render the form template for GET requests or invalid form submissions
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, organization=organization)
+
+@main_bp.route('/organization', methods=['GET', 'POST'])
+def organization():
+    # Get the organization name or ID from the query parameters
+    organization_id = request.args.get('id')
+
+    if not organization_id:
+        return jsonify({"error": "Please provide either 'id' as a query parameter"}), 400
+
+    # Query the database to check if the organization exists
+    organization = Organization.query.get(organization_id)
+    if not organization:
+        return jsonify({"code":404, "error": "Organization does not exist"}), 404
+    
+    if not organization.is_active:
+        return jsonify({"code":404, "error": "Organization is not active"}), 400
+
+    # Return a JSON response
+    return jsonify(organization.to_dict()), 200

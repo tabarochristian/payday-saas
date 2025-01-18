@@ -10,8 +10,6 @@ def create_organization_schema(obj):
         return
     
     organization = Organization.query.get(_id)
-    organization.is_created = True
-    db.session.commit()
 
     # Initialize Docker client
     client = docker.from_env()
@@ -25,6 +23,10 @@ def create_organization_schema(obj):
 
     cmd = f"python manage.py tenant {tenant} {email}"
     result = container.exec_run(cmd)
+
+    # Update the organization status
+    organization.is_active = True
+    db.session.commit()
 
     # Decode the output
     output = result.output.decode("utf-8")
