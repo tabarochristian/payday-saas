@@ -28,4 +28,4 @@ COPY . /app/
 # RUN python manage.py makemigrations
 
 # Run migrations and start the Django application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "payday.wsgi:application"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:80", "payday.wsgi:application"]
