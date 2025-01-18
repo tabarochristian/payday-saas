@@ -20,7 +20,7 @@ def create_organization_schema(obj):
     container = client.containers.get("payday-saas")
 
     # Run the migrate command
-    tenant = organization.tenant()
+    tenant = organization.schema
     email = organization.email
 
     cmd = f"python manage.py tenant {tenant} {email}"
