@@ -57,7 +57,7 @@ def home():
 
         # Notify the user and redirect to the tenant's subdomain
         flash('Organization created successfully!', 'success')
-        tenant = organization.tenant()
+        tenant = organization.schema
         return redirect(f"http://{tenant}.payday.cd")
 
     # Render the form template for GET requests or invalid form submissions
