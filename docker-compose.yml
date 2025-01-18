@@ -17,11 +17,6 @@ services:
       - redis
     env_file:
       - prod.env
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   # SaaS service (Django)
   saas:
@@ -43,11 +38,6 @@ services:
       - redis
     env_file:
       - prod.env
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   # Nginx service
   nginx:
@@ -61,11 +51,6 @@ services:
     depends_on:
       - saas
       - tenant
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   # PostgreSQL master service
   master:
