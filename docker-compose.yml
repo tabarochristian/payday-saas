@@ -22,7 +22,9 @@ services:
 
   # SaaS service (Django)
   saas:
-    build: .
+    build:
+      context: .
+      dockerfile: payday/Dockerfile
     container_name: payday-saas
     restart: unless-stopped
     #command: >
@@ -32,7 +34,7 @@ services:
       sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
       
     volumes:
-      - .:/app
+      - ./payday:/app
     expose:
       - "8000"
     ports:
@@ -137,7 +139,7 @@ services:
     command: server /data --address :9000 --console-address ":9001"
     volumes:
       - minio_data:/data
-      - ./bucket.sh:/docker-entrypoint-init.d/bucket.sh
+      - ./minio/bucket.sh:/docker-entrypoint-init.d/bucket.sh
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
@@ -148,7 +150,7 @@ services:
   minio-init:
     build:
       context: .
-      dockerfile: Miniofile
+      dockerfile: minio/Miniofile
     container_name: payday-minio-init
     depends_on:
       - minio
@@ -204,7 +206,7 @@ services:
     container_name: payday-device
     restart: unless-stopped
     volumes:
-      - .:/app
+      - ./device:/app
     environment:
       - WEBHOOK_URL=http://web:8000/api/v1/hook/device/
       - BROKER_URL=redis://redis:6379/0
