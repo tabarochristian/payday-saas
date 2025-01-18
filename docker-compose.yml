@@ -163,12 +163,14 @@ services:
 
   # Celery worker service
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: payday/Dockerfile
     restart: unless-stopped
     container_name: payday-worker
     command: celery -A payday worker -l INFO -E
     volumes:
-      - .:/app
+      - ./payday:/app
     depends_on:
       - saas
     env_file:
@@ -181,12 +183,14 @@ services:
 
   # Celery beat service
   beat:
-    build: .
+    build:
+      context: .
+      dockerfile: payday/Dockerfile
     restart: unless-stopped
     container_name: payday-beat
     command: celery -A payday beat -l INFO
     volumes:
-      - .:/app
+      - ./payday:/app
     depends_on:
       - master
       - redis
