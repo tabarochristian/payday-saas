@@ -8,8 +8,8 @@ services:
       dockerfile: landlord/Dockerfile
     container_name: payday-landlord
     restart: unless-stopped
-    command: >
-      sh -c "gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
+    #command: >
+    #  sh -c "gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
     ports:
       - "5000:5000"
     volumes:
