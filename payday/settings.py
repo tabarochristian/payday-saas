@@ -394,6 +394,6 @@ LOGGING = {
 SENTRY_DSN = "https://61630e2ac1f3c024ffa6a3d4a7207f57@o4505861077204992.ingest.us.sentry.io/4507582424612864"
 SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 
-if not DEBUG:
-    import sentry_sdk
-    sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
+#if not DEBUG:
+#import sentry_sdk
+#sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)

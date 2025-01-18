@@ -21,9 +21,12 @@ services:
     build: .
     container_name: payday-saas
     restart: unless-stopped
+    #command: >
+    #  sh -c "python manage.py migrate && python manage.py collectstatic --noinput &&
+    #         gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     command: >
-      sh -c "python manage.py migrate && python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
+      sh -c "python manage.py collectstatic --noinput &&
+            gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     volumes:
       - .:/app
     expose:
