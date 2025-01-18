@@ -27,11 +27,11 @@ services:
       dockerfile: payday/Dockerfile
     container_name: payday-saas
     restart: unless-stopped
-    #command: >
-    #  sh -c "python manage.py collectstatic --noinput &&
-    #        gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     command: >
-      sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
+      sh -c "python manage.py collectstatic --noinput &&
+            gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
+    #command: >
+    #  sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
       
     volumes:
       - ./payday:/app
