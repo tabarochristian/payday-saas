@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from employee.models import Employee
 
-from employee.task import setuserinfo
+from employee.tasks import setuserinfo
 from core.models import Preference
 
 User = get_user_model()
