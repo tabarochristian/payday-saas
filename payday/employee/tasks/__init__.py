@@ -1,1 +1,1 @@
-from .device import DeviceTask
+from .device import *
