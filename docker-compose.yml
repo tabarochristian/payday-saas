@@ -33,7 +33,6 @@ services:
             gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     #command: >
     #  sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
-      
     volumes:
       - ./payday:/app
     expose:
@@ -43,7 +42,6 @@ services:
     depends_on:
       - minio-init
       - landlord
-      - redis
     env_file:
       - prod.env
 
@@ -58,7 +56,6 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - saas
-      - landlord
 
   # PostgreSQL master service
   master:
@@ -193,8 +190,7 @@ services:
     volumes:
       - ./payday:/app
     depends_on:
-      - master
-      - redis
+      - worker
     env_file:
       - prod.env
     healthcheck:
