@@ -122,7 +122,7 @@ ASGI_APPLICATION = "payday.asgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASE_URL = 'sqlite:///db.sqlite3'
-DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
+# DATABASE_URL = "postgresql://payday:payday@localhost:5432/payday"
 DATABASES = {'default': None}
 
 # Default database
