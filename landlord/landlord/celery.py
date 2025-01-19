@@ -16,12 +16,12 @@ def is_redis_url_with_ssl(redis_url):
     return redis_url.startswith('rediss://')
 
 # Create the Celery app.
-app = Celery("landlord")
+app = Celery("payday")
 
 # Check if the REDIS_URL starts with `rediss://`. If it does, set the `broker_use_ssl`
 # and `redis_backend_use_ssl` variables accordingly.
 if is_redis_url_with_ssl(REDIS_URL_WITH_SSL):
-    app = Celery("landlord", broker_use_ssl=BROKER_USE_SSL_CONFIG,
+    app = Celery("payday", broker_use_ssl=BROKER_USE_SSL_CONFIG,
                  redis_backend_use_ssl=REDIS_BACKEND_USE_SSL_CONFIG,
                  broker_connection_retry_on_startup=True)
 
