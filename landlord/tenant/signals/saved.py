@@ -16,9 +16,9 @@ def saved(sender, instance, created, **kwargs):
     try:
         job = Parallel(n_jobs=1)
         delayer = delayed(create_tenant_schema)
-        job(delayer(instance.id))
         
         # Log success
+        job([delayer(instance.id)])
         logger.info(f"Task for tenant {instance.id} started successfully.")
     except Exception as e:
         # Log any errors
