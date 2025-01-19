@@ -93,7 +93,8 @@ DATABASES = {'default': None}
 
 # Default database
 DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
-DATABASES['default']['OPTIONS']['options'] = '-c search_path=landlord'
+print(DATABASE_URL)
+DATABASES['default']['OPTIONS']['options'] = "-c search_path=landlord"
 
 CONN_MAX_AGE = int(os.getenv('CONN_MAX_AGE', 0))
 DATABASES['default']['CONN_MAX_AGE'] = CONN_MAX_AGE
