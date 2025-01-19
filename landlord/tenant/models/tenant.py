@@ -90,7 +90,7 @@ class Tenant(models.Model):
         return super().save()
 
     class Meta:
-        db_table = 'organization'
+        db_table = 'tenant'
         verbose_name = _('tenant')
         unique_together = ('name', 'phone')
         verbose_name_plural = _('tenant(s)')
