@@ -1,11 +1,7 @@
 from tenant.models import Tenant
 import docker
 
-def create_tenant_schema(obj):
-    _id = obj.get('id', None)
-    if not _id: 
-        return
-    
+def create_tenant_schema(_id):
     tenant = Tenant.objects.filter(id=_id)
     tenant = tenant.first()
 
