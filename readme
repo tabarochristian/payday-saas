@@ -55,7 +55,7 @@ DATABASE_URL=postgres://payday:13615c0d20e345681bc1472793e8c055@pgbouncer:6432/p
 
 # Files
 DEFAULT_FILE_STORAGE=storages.backends.s3boto3.S3Boto3Storage
-AWS_S3_ENDPOINT_URL=http://onatra.payday.cd:9000
+AWS_S3_ENDPOINT_URL=http://xyz.payday.cd:9000
 AWS_SECRET_ACCESS_KEY=minioadmin
 AWS_STORAGE_BUCKET_NAME=payday
 AWS_ACCESS_KEY_ID=minioadmin
@@ -96,7 +96,7 @@ This section describes the necessary environment variables required for the `pay
 
 #### File Storage Configuration
 - `DEFAULT_FILE_STORAGE`: Backend for file storage. Set to `storages.backends.s3boto3.S3Boto3Storage`.
-- `AWS_S3_ENDPOINT_URL`: Endpoint URL for S3, e.g., `http://onatra.payday.cd:9000`.
+- `AWS_S3_ENDPOINT_URL`: Endpoint URL for S3, e.g., `http://xyz.payday.cd:9000`.
 - `AWS_SECRET_ACCESS_KEY`: Secret access key for AWS.
 - `AWS_STORAGE_BUCKET_NAME`: Name of the S3 bucket, e.g., `payday`.
 - `AWS_ACCESS_KEY_ID`: Access key ID for AWS.

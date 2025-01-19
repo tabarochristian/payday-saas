@@ -15,6 +15,6 @@ mc alias set local http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 mc mb local/$MINIO_BUCKET_NAME
 
 # Set the bucket policy to public (read-only)
-mc policy set download local/$MINIO_BUCKET_NAME
+mc policy set public local/$MINIO_BUCKET_NAME
 
 echo "Bucket '$MINIO_BUCKET_NAME' created and set to public."
