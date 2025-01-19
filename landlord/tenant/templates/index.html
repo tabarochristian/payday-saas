@@ -9,11 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{% static 'app.css' %}">
-    <link rel="stylesheet" href="{% static 'auth.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/main/app.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/main/auth.css' %}">
 
-    <link rel="shortcut icon" href="{% static 'images/logo/favicon.png' %}" type="image/png">
-    <link rel="shortcut icon" href="{% static 'images/logo/favicon.svg' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/png">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.svg' %}" type="image/x-icon">
 
     <style>
         body, html {
@@ -36,7 +36,7 @@
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo mb-3">
-                        <img src="{% static 'images/logo/logo.png' %}" alt="payday-logo">
+                        <img src="{% static 'assets/images/logo/logo.png' %}" alt="payday-logo">
                     </div>
                     {% if not form.is_valid %}
                         <h1 class="auth-title">Starts here!</h1>
