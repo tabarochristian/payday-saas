@@ -5,7 +5,7 @@ import re
 
 def clean_string(input_string):
     cleaned_string = re.sub(r'[^A-Za-z\s]', '', input_string)
-    cleaned_string = cleaned_string.lower()
+    cleaned_string = cleaned_string.lower().replace(' ','')
     return cleaned_string
 
 

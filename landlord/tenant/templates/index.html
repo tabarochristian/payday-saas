@@ -143,7 +143,7 @@
                         }
         
                         const data = await response.json();
-                        if (data.schema) {
+                        if (data.schema && data.is_active) {
                             // Redirect if the account is ready
                             window.location.href = `http://${data.schema}.payday.cd`;
                         }
