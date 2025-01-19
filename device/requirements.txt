@@ -1,0 +1,22 @@
+# FastAPI and related dependencies
+fastapi
+uvicorn
+
+# WebSocket and HTTP client
+websockets
+httpx
+
+# Environment variables
+python-dotenv
+
+# JSON handling
+python-dateutil
+
+# Logging
+loguru
+
+# Redis (for Celery or other background tasks, if needed)
+redis
+
+# Optional: For production deployment
+uvicorn

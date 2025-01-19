@@ -13,6 +13,10 @@ class TenantMiddleware:
         self.cache_timeout = 60 * 60  # Cache timeout in seconds (1 hour)
 
     def __call__(self, request):
+        if getattr(settings, "DEBUG", True):
+            response = self.get_response(request)
+            return response
+            
         schema = self.extract_schema_from_host(request.get_host())
 
         if not self.is_valid_schema(schema):

@@ -5,7 +5,5 @@ app_name = 'employee'
 
 urlpatterns = [
     path('change/<str:pk>', Employee.as_view(), name='change'),
-    path('sheet/<str:pk>', Sheet.as_view(), name='sheet'),
-
-    path('device', DeviceView.as_view(), name='device'),    
+    path('device', DeviceAPIView.as_view(), name='device'),    
 ]

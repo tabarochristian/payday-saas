@@ -1,15 +1,16 @@
 from employee.models import Device, Attendance
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from rest_framework import status
 
 from collections import defaultdict
 from django.utils import timezone
+from celery import shared_task
 from dateutil import parser
 
-class DeviceView(APIView):
+class DeviceAPIView(APIView):
 
+    @shared_task
     def reg(self, data):
         sn = data.get("sn")
         obj, created = Device.objects.get_or_create(sn=sn)
@@ -19,14 +20,16 @@ class DeviceView(APIView):
         obj.save()
         return obj.serialized
     
+    @shared_task
     def disconnected(self, data):
-        sn = data.get("sn")
-        Device.objects.filter(sn=sn).update(status="disconnected")
+        Device.objects.filter(sn=data.get("sn")).update(status="disconnected")
         return {"status": "success"}
     
+    @shared_task
     def senduser(self, data):
         return {}
     
+    @shared_task
     def sendlog(self, data):
         today = timezone.now().date()
         sn = data.get("sn")
@@ -76,7 +79,6 @@ class DeviceView(APIView):
         Attendance.objects.bulk_create(attendance_records, ignore_conflicts=True)
         return {"total": len(attendance_records)}
 
-
     def post(self, request):
         data = request.data
         cmd = data.get("cmd")
@@ -89,4 +91,5 @@ class DeviceView(APIView):
         if method is None or not callable(method):
             return Response({"status": "error", "message": "Invalid command"}, status=status.HTTP_400_BAD_REQUEST)
 
+        method.delay(data)
         return Response({"status": "success", "data": method(data)}, status=status.HTTP_200_OK)

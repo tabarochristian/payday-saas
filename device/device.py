@@ -6,7 +6,6 @@ import logging
 import httpx
 import json
 import os
-from celery import Celery
 
 # Load environment variables
 load_dotenv()
@@ -19,9 +18,6 @@ AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
 # FastAPI App Initialization
 app = FastAPI()
 
-# Initialize Celery
-#celery_app = Celery("payday", broker=BROKER_URL, backend=BROKER_URL)
-
 # Logger Configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("WebSocketApp")
@@ -30,7 +26,6 @@ logger = logging.getLogger("WebSocketApp")
 connected_clients = {}
 
 # Helper Functions
-#@celery_app.task(bind=True, default_retry_delay=300)
 def send_to_webhook(data: dict):
     """
     Celery task to send data to a webhook. Retries on failure.
@@ -63,14 +58,6 @@ async def forward_command_to_device(sn: str, command: dict):
         logger.warning(f"Device {sn} not connected.")
         raise HTTPException(status_code=404, detail=f"Device {sn} not connected.")
 
-def ack(data):
-    cmd = data.get("cmd")
-    return {
-        "ret": cmd,
-        "result": True,
-        "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
-    }
-
 async def handle_message_from_device(websocket: WebSocket, sn: str, message: str):
     """
     Processes messages received from a WebSocket device.
@@ -80,8 +67,12 @@ async def handle_message_from_device(websocket: WebSocket, sn: str, message: str
     """
     try:
         data = json.loads(message)
-        websocket.send_text(json.dumps(ack(data)))
-        send_to_webhook(data)#.delay(data)  # Enqueue the task for Celery
+        websocket.send_text(json.dumps({
+            "result": True,
+            "ret": data.get("cmd"),
+            "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        }))
+        send_to_webhook(data)
         logger.info(f"Message received from {sn}: {data}")
     except json.JSONDecodeError:
         logger.warning(f"Invalid JSON received from {sn}: {message}")
@@ -143,7 +134,7 @@ async def websocket_endpoint(websocket: WebSocket):
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }
         await websocket.send_text(json.dumps(response))
-        send_to_webhook(register_data)#.delay(register_data)  # Enqueue the registration data for webhook processing
+        send_to_webhook(register_data)
 
         # Handle incoming messages
         while True:

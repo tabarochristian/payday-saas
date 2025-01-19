@@ -10,10 +10,10 @@ from core.utils import DictToObject
 from core.models import fields
 
 class Base(models.Model):
-    history = HistoricalRecords(
-        verbose_name=_('historique'),
-        verbose_name_plural=_('historiques')
-    )
+    #history = HistoricalRecords(
+    #    verbose_name=_('historique'),
+    #    verbose_name_plural=_('historiques')
+    #)
 
     _metadata = fields.JSONField(
         verbose_name=_('metadata'), 

@@ -47,9 +47,8 @@ class Change(BaseView):
         obj = self._get_object()
         kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
 
-        action_buttons = getattr(self.get_model(), 'get_action_buttons', None)
-        if action_buttons and callable(action_buttons):
-            action_buttons = [Button(**button) for button in action_buttons(obj)]
+        action_buttons = getattr(obj, 'get_action_buttons', [])
+        action_buttons = [Button(**button) for button in action_buttons]
 
         action_buttons = action_buttons + [
             Button(**{

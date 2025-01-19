@@ -1,3 +1,4 @@
 from .employee import Employee
-from .device import DeviceView
-from .sheet import Sheet
+# from .sheet import Sheet
+
+from .device import DeviceAPIView

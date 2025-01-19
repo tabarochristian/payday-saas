@@ -3,7 +3,6 @@ from django.utils.html import escapejs
 from crispy_forms.layout import Layout
 from core.models import fields, Base
 from django.db import models
-
 import json
 
 class DeviceStatus(models.TextChoices):
@@ -25,22 +24,7 @@ class Device(Base):
     layout = Layout("branch", "name", "_metadata")
 
     def get_action_buttons(self):
-        host = "localhost"
-        return [
-            {
-                'tag': 'button',
-                'text': _('Actualiser'),
-                'classes': 'btn btn-light-success ajax-request',
-                'attrs': {
-                    'data-url': "http://localhost:7788/send-command",
-                    'data-method': "POST",
-                    'data-json': escapejs(json.dumps({
-                        "cmd": "getnewlog",
-                        "stn": True,
-                    })),
-                }
-            },
-        ]
+        return []
 
     class Meta:
         verbose_name_plural = _("terminals")

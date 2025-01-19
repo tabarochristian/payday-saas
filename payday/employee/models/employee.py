@@ -1,5 +1,6 @@
 from employee.models.base import Employee as BaseEmployee
 from crispy_forms.layout import Layout, Row, Column, Div
+
 from django.utils.translation import gettext as _
 from crispy_forms.bootstrap import PrependedText
 from django.urls import reverse_lazy
@@ -18,6 +19,12 @@ class Employee(BaseEmployee):
         on_delete=models.SET_NULL, 
         default=None, 
         editable=False
+    )
+
+    devices = fields.ModelSelect2Multiple(
+        'employee.device',
+        verbose_name=_('terminaux'),
+        help_text=_('Veuillez choisir les terminaux de présence que l\'agent utilisera pour pointer.')
     )
 
     registration_number = fields.CharField(
@@ -85,8 +92,12 @@ class Employee(BaseEmployee):
             Column('payer_name'),
             Column('payment_account'),
         ),
-        'comment',
-        'status'
+        Div(
+            'comment',
+            'status',
+            'devices',
+            css_class='bg-dark p-4 rounded'
+        )
     )
 
     def payslips(self):
@@ -100,8 +111,9 @@ class Employee(BaseEmployee):
     def get_action_buttons(self):
         return [{
             'url': reverse_lazy('core:list', kwargs={'app': 'payroll', 'model': 'payslip'}) + '?employee__registration_number=' + self.registration_number,
-            'text': _('bulletins de paie'),
+            'permission': 'payroll.view_payslip',
             'classes': 'btn btn-light-info',
+            'text': _('bulletins de paie').title(),
             'tag': 'a',
         }]
     
