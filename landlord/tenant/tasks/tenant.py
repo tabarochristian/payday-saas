@@ -1,8 +1,6 @@
 from tenant.models import Tenant
-from celery import shared_task
 import docker
 
-@shared_task(name="create_tenant_schema")
 def create_tenant_schema(obj):
     _id = obj.get('id', None)
     if not _id: 
