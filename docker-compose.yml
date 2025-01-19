@@ -211,7 +211,7 @@ services:
     volumes:
       - ./device:/app
     environment:
-      - WEBHOOK_URL=http://web:8000/api/v1/hook/device/
+      - WEBHOOK_URL=http://saas:8000/api/v1/hook/device/
       - BROKER_URL=redis://redis:6379/0
     ports:
       - "7788:7788"

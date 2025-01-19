@@ -12,7 +12,6 @@ load_dotenv()
 
 # Configuration
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost/employee/device")
-BROKER_URL = os.getenv("BROKER_URL", "redis://localhost:6379/0")
 AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
 
 # FastAPI App Initialization
