@@ -27,7 +27,7 @@ connected_clients = {}
 host_connected_clients = {}
 
 # Helper Functions
-def send_to_webhook(data: dict):
+def send_to_webhook(webhook: str, data: dict):
     """
     Celery task to send data to a webhook. Retries on failure.
 
@@ -63,7 +63,7 @@ async def forward_command_to_device(sn: str, command: dict):
         logger.warning(f"Device {sn} not connected.")
         raise HTTPException(status_code=404, detail=f"Device {sn} not connected.")
 
-async def handle_message_from_device(websocket: WebSocket, sn: str, message: str):
+async def handle_message_from_device(websocket: WebSocket, webhook:str, sn: str, message: str):
     """
     Processes messages received from a WebSocket device.
 
@@ -77,7 +77,7 @@ async def handle_message_from_device(websocket: WebSocket, sn: str, message: str
             "ret": data.get("cmd"),
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }))
-        send_to_webhook(data)
+        send_to_webhook(webhook=webhook, data)
         logger.info(f"Message received from {sn}: {data}")
     except json.JSONDecodeError:
         logger.warning(f"Invalid JSON received from {sn}: {message}")
@@ -155,22 +155,22 @@ async def websocket_endpoint(websocket: WebSocket):
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }
         await websocket.send_text(json.dumps(response))
-        send_to_webhook(register_data)
+        send_to_webhook(webhook=webhook, register_data)
 
         # Handle incoming messages
         while True:
             try:
                 message = await websocket.receive_text()
-                await handle_message_from_device(websocket, sn, message)
+                await handle_message_from_device(websocket, webhook, sn, message)
             except WebSocketDisconnect:
-                send_to_webhook({"cmd": "disconnected", "sn": sn})
+                send_to_webhook(webhook=webhook, {"cmd": "disconnected", "sn": sn})
                 logger.info(f"Device {sn} disconnected.")
                 connected_clients.pop(sn, None)
                 break
             except Exception as e:
                 logger.error(f"Error handling message from {sn}: {e}")
-                send_to_webhook({"cmd": "disconnected", "sn": sn})
+                send_to_webhook(webhook=webhook, {"cmd": "disconnected", "sn": sn})
                 break
     except Exception as e:
-        send_to_webhook({"cmd": "disconnected", "sn": sn})
+        send_to_webhook(webhook=webhook, {"cmd": "disconnected", "sn": sn})
         logger.error(f"WebSocket connection error: {e}")
