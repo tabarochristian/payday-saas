@@ -99,5 +99,5 @@ class DeviceAPIView(APIView):
         if method is None or not callable(method):
             return Response({"status": "error", "message": "Invalid command"}, status=status.HTTP_400_BAD_REQUEST)
 
-        method.delay(request.tenant, data)
+        method.delay(request.tenant, request.data)
         return Response({"status": "success", "data": method(data)}, status=status.HTTP_200_OK)
