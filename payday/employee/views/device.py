@@ -80,6 +80,8 @@ class DeviceAPIView(APIView):
         return {"total": len(attendance_records)}
 
     def post(self, request):
+        print(request.data)
+        print(request.POST.dict())
         if not request.data:
             return Response({"status": "error", "message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
