@@ -105,7 +105,7 @@ def host_name(websocket: WebSocket):
     return host
 
 def url_from_host_name(host_name):
-    return f"http://{host_name}/api/v1/hook/device/"
+    return f"http://{host_name}/api/v1/employee/device"
 
 # WebSocket Endpoint
 @app.websocket("/pub/chat")
