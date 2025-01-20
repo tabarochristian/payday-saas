@@ -26,6 +26,7 @@ class TenantMiddleware:
         if not self.set_schema_from_cache_or_db(schema):
             return self.redirect_to_default()
 
+        set_schema(schema)
         response = self.get_response(request)
         return response
 
