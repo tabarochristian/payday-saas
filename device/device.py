@@ -109,7 +109,7 @@ async def websocket_endpoint(websocket: WebSocket):
     :param websocket: The WebSocket connection object
     """
     logger.info("WebSocket connection initiated.")
-    print(websocket.headers)
+    logger.info(str(websocket.headers))
     await websocket.accept()
 
     try:
