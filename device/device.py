@@ -125,9 +125,8 @@ async def websocket_endpoint(websocket: WebSocket):
     :param websocket: The WebSocket connection object
     """
     logger.info("WebSocket connection initiated.")
-    host = host_name(websocket)
-    WEBHOOK_URL = url_from_host_name(host)
-
+    WEBHOOK_URL = url_from_host_name(host_name(websocket))
+    logger.info(f"Webhook URL: {WEBHOOK_URL}")
     await websocket.accept()
 
     try:
@@ -144,9 +143,9 @@ async def websocket_endpoint(websocket: WebSocket):
         connected_clients[sn] = websocket
         logger.info(f"Device {sn} registered.")
 
-        if host not in host_connected_clients:
-            host_connected_clients[host] = []
-        host_connected_clients[host].append(sn)
+        # if host not in host_connected_clients:
+        #    host_connected_clients[host] = []
+        # host_connected_clients[host].append(sn)
 
         # Acknowledge registration
         response = {
