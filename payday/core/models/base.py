@@ -49,6 +49,7 @@ class Base(models.Model):
     layout = Layout()
     list_filter = ()
 
+    @property
     def get_action_buttons(self):
         return list()
 
