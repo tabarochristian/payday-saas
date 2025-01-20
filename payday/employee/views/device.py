@@ -100,4 +100,4 @@ class DeviceAPIView(APIView):
             return Response({"status": "error", "message": "Invalid command"}, status=status.HTTP_400_BAD_REQUEST)
 
         method.delay('self', request.tenant, request.data)
-        return Response({"status": "success", "data": method(data)}, status=status.HTTP_200_OK)
+        return Response({"status": "success"}, status=status.HTTP_200_OK)

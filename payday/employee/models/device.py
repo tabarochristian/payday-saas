@@ -23,9 +23,6 @@ class Device(Base):
     list_display = ("name", "sn", "status")
     layout = Layout("branch", "name", "_metadata")
 
-    def get_action_buttons(self):
-        return []
-
     class Meta:
         verbose_name_plural = _("terminals")
         verbose_name = _("terminal")
