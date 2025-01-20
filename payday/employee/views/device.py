@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from collections import defaultdict
+from core.utils import set_schema
 from django.utils import timezone
 from celery import shared_task
 from dateutil import parser
@@ -11,8 +12,10 @@ from dateutil import parser
 class DeviceAPIView(APIView):
 
     @shared_task
-    def reg(self, data):
+    def reg(self, schema, data):
         sn = data.get("sn")
+        set_schema(schema)
+
         obj, created = Device.objects.get_or_create(sn=sn, name=sn)
         if created: print("Device created")
         obj.status = "connected"
@@ -21,18 +24,21 @@ class DeviceAPIView(APIView):
         return obj.serialized
     
     @shared_task
-    def disconnected(self, data):
+    def disconnected(self, schema, data):
+        set_schema(schema)
         Device.objects.filter(sn=data.get("sn")).update(status="disconnected")
         return {"status": "success"}
     
     @shared_task
-    def senduser(self, data):
+    def senduser(self, schema, data):
+        set_schema(schema)
         return {}
     
     @shared_task
-    def sendlog(self, data):
+    def sendlog(self, schema, data):
         today = timezone.now().date()
         sn = data.get("sn")
+        set_schema(schema)
 
         # Fetch the device in a single query
         try:
@@ -80,8 +86,6 @@ class DeviceAPIView(APIView):
         return {"total": len(attendance_records)}
 
     def post(self, request):
-        print(request.data)
-        print(request.POST.dict())
         if not request.data:
             return Response({"status": "error", "message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -95,5 +99,5 @@ class DeviceAPIView(APIView):
         if method is None or not callable(method):
             return Response({"status": "error", "message": "Invalid command"}, status=status.HTTP_400_BAD_REQUEST)
 
-        method.delay(data)
+        method.delay(request.tenant, data)
         return Response({"status": "success", "data": method(data)}, status=status.HTTP_200_OK)
