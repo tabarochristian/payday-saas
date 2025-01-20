@@ -20,7 +20,6 @@ class Employee(Base):
 
     agreement = fields.ModelSelectField('employee.agreement', verbose_name=_('type de contrat'), on_delete=models.CASCADE)
     date_of_join = fields.DateField(_('date d\'engagement'), help_text='YYYY-MM-DD', null=True, default=None)
-    photo = fields.CaptureField(_('photo'), upload_to=upload_directory_file, blank=True, null=True)
 
     designation = fields.ModelSelectField('employee.designation', verbose_name=_('position'), blank=True, null=True, on_delete=models.SET_NULL)
     grade = fields.ModelSelectField('employee.grade', verbose_name=_('grade'), blank=True, null=True, on_delete=models.SET_NULL)

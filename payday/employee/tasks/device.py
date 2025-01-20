@@ -11,7 +11,6 @@ import numpy as np
 import base64
 import cv2
 
-
 class DeviceTask:
     """
     A helper class to handle image processing and device communication.
@@ -101,7 +100,7 @@ class DeviceTask:
         cropped_image = self.crop_face(image)
 
         # Encode the cropped image to base64
-        return self.encode_image_to_base64(cropped_image)
+        return self.encode_image_to_base64(image)
 
     def send_to_device(self, device, employee, base64_image):
         """

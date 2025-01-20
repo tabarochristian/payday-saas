@@ -3,6 +3,7 @@ from crispy_forms.layout import Layout, Row, Column, Div
 
 from django.utils.translation import gettext as _
 from crispy_forms.bootstrap import PrependedText
+from core.utils import upload_directory_file
 from django.urls import reverse_lazy
 
 from core.models import fields
@@ -21,10 +22,18 @@ class Employee(BaseEmployee):
         editable=False
     )
 
+    photo = fields.PhotoPreviewField(
+        _('photo'), 
+        upload_to=upload_directory_file, 
+        blank=True, 
+        null=True
+    )
+
     devices = fields.ModelSelect2Multiple(
         'employee.device',
         verbose_name=_('terminaux'),
-        help_text=_('Veuillez choisir les terminaux de présence que l\'agent utilisera pour pointer.')
+        help_text=_('Veuillez choisir les terminaux de présence que l\'agent utilisera pour pointer.'),
+        blank=True
     )
 
     registration_number = fields.CharField(

@@ -1865,3 +1865,95 @@ Traceback (most recent call last):
     return [button for button in action_buttons if self.request.user.has_perm(button.permission)]
                                                                               ^^^^^^^^^^^^^^^^^
 AttributeError: 'dict' object has no attribute 'permission'
+ERROR 2025-01-20 10:43:01,099 log Internal Server Error: /employee/change/1
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/employee/views/employee.py", line 32, in post
+    return super().post(request, self.kwargs['app'], self.kwargs['model'], pk)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/change.py", line 111, in post
+    if not all(formset.is_valid() for formset in [form] + formsets):
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/change.py", line 111, in <genexpr>
+    if not all(formset.is_valid() for formset in [form] + formsets):
+               ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._post_clean()
+    ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1618, in full_clean
+    self.clean_fields(exclude=exclude)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1673, in clean_fields
+    setattr(self, f.attname, f.clean(raw_value, self))
+                             ~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 832, in clean
+    self.run_validators(value)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 784, in run_validators
+    v(value)
+    ~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/models/fields/photopreviewfield.py", line 10, in validate_image_dimensions
+    width, height = image.size
+    ^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable int object
+ERROR 2025-01-20 11:08:04,887 log Internal Server Error: /employee/change/1
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/employee/views/employee.py", line 27, in get
+    return super().get(request, self.kwargs['app'], self.kwargs['model'], pk)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/change.py", line 91, in get
+    form = modelform_factory(model, fields=self.get_form_fields())
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/forms/modelform_factory.py", line 29, in modelform_factory
+    return type(form_class_name, (forms.ModelForm,), form_class_attrs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 312, in __new__
+    fields = fields_for_model(
+        opts.model,
+    ...<11 lines>...
+        form_declared_fields=new_class.declared_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 237, in fields_for_model
+    formfield = f.formfield(**kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/models/fields/photopreviewfield.py", line 39, in formfield
+    return super().formfield(**defaults)
+                               ^^^^^^^^
+NameError: name 'defaults' is not defined
