@@ -11,7 +11,7 @@ import os
 load_dotenv()
 
 # Configuration
-WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost/employee/device")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost:8000/api/v1/hook/device/")
 AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
 
 # FastAPI App Initialization
