@@ -13,7 +13,7 @@ class DeviceAPIView(APIView):
     @shared_task
     def reg(self, data):
         sn = data.get("sn")
-        obj, created = Device.objects.get_or_create(sn=sn)
+        obj, created = Device.objects.get_or_create(sn=sn, name=sn)
         if created: print("Device created")
         obj.status = "connected"
         obj._metadata = data

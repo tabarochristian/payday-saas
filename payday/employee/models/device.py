@@ -33,11 +33,6 @@ class Device(Base):
     def __str__(self):
         return self.sn
 
-    def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = self.sn
-        super().save(*args, **kwargs)
-
     @property
     def is_connected(self):
         return self.status == DeviceStatus.CONNECTED
