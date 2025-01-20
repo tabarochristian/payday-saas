@@ -32,6 +32,11 @@ def send_to_webhook(webhook: str, data: dict):
     :param self: Reference to the Celery task instance
     :param data: The data to send to the webhook
     """
+    
+    if not data:
+        logger.warning("No data to send to webhook.")
+        return
+        
     headers = {"Content-Type": "application/json"}
     response = httpx.post(webhook, json=data, headers=headers)
     logger.info(f"Webhook success: {response.status_code} | Data: {data}")
