@@ -102,7 +102,7 @@ class DeviceTask:
                 data={
                     "sn": device.sn,
                     "cmd": "setuserinfo",
-                    "enrollid": employee.registration_number,
+                    "enrollid": int(employee.registration_number),
                     "name": employee.full_name,
                     "backupnum": 50,
                     "record": base64_image,

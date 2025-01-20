@@ -71,7 +71,7 @@ async def handle_message_from_device(websocket: WebSocket, sn: str, message: str
             "ret": data.get("cmd"),
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }))
-        send_to_webhook(data)
+        # send_to_webhook(data)
         logger.info(f"Message received from {sn}: {data}")
     except json.JSONDecodeError:
         logger.warning(f"Invalid JSON received from {sn}: {message}")
@@ -109,6 +109,7 @@ async def websocket_endpoint(websocket: WebSocket):
     :param websocket: The WebSocket connection object
     """
     logger.info("WebSocket connection initiated.")
+    print(websocket.headers)
     await websocket.accept()
 
     try:
@@ -133,7 +134,7 @@ async def websocket_endpoint(websocket: WebSocket):
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }
         await websocket.send_text(json.dumps(response))
-        send_to_webhook(register_data)
+        # send_to_webhook(register_data)
 
         # Handle incoming messages
         while True:
@@ -141,14 +142,14 @@ async def websocket_endpoint(websocket: WebSocket):
                 message = await websocket.receive_text()
                 await handle_message_from_device(websocket, sn, message)
             except WebSocketDisconnect:
-                send_to_webhook({"cmd": "disconnected", "sn": sn})
+                # send_to_webhook({"cmd": "disconnected", "sn": sn})
                 logger.info(f"Device {sn} disconnected.")
                 connected_clients.pop(sn, None)
                 break
             except Exception as e:
                 logger.error(f"Error handling message from {sn}: {e}")
-                send_to_webhook({"cmd": "disconnected", "sn": sn})
+                # send_to_webhook({"cmd": "disconnected", "sn": sn})
                 break
     except Exception as e:
-        send_to_webhook({"cmd": "disconnected", "sn": sn})
+        # send_to_webhook({"cmd": "disconnected", "sn": sn})
         logger.error(f"WebSocket connection error: {e}")
