@@ -11,8 +11,9 @@ import os
 load_dotenv()
 
 # Configuration
-WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost:8000/api/v1/hook/device/")
+# WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost:8000/api/v1/hook/device/")
 AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
+WEBHOOK_URL = None
 
 # FastAPI App Initialization
 app = FastAPI()
@@ -23,6 +24,7 @@ logger = logging.getLogger("WebSocketApp")
 
 # Tracks connected devices by serial number (sn)
 connected_clients = {}
+host_connected_clients = {}
 
 # Helper Functions
 def send_to_webhook(data: dict):
@@ -32,6 +34,10 @@ def send_to_webhook(data: dict):
     :param self: Reference to the Celery task instance
     :param data: The data to send to the webhook
     """
+    if WEBHOOK_URL is None:
+        logger.warning("Webhook URL not set.")
+        return
+
     headers = {"Content-Type": "application/json"}
     if AUTHORIZATION_TOKEN:
         headers["Authorization"] = AUTHORIZATION_TOKEN
@@ -100,6 +106,16 @@ async def send_command(request: Request):
         logger.error(f"Error sending command: {e}")
         raise HTTPException(status_code=500, detail=f"Error sending command: {str(e)}")
 
+def host_name(websocket: WebSocket):
+    host = websocket.headers.get("host").split(":")[0]
+    host = host.split('.')
+    host.remove('device')
+    host = '.'.join(host)
+    return host
+
+def url_from_host_name(host_name):
+    return f"http://{host_name}/api/v1/hook/device/"
+
 # WebSocket Endpoint
 @app.websocket("/pub/chat")
 async def websocket_endpoint(websocket: WebSocket):
@@ -109,7 +125,9 @@ async def websocket_endpoint(websocket: WebSocket):
     :param websocket: The WebSocket connection object
     """
     logger.info("WebSocket connection initiated.")
-    logger.info(str(websocket.headers))
+    host = host_name(websocket)
+    WEBHOOK_URL = url_from_host_name(host)
+
     await websocket.accept()
 
     try:
@@ -123,8 +141,12 @@ async def websocket_endpoint(websocket: WebSocket):
             return
 
         sn = register_data["sn"]
-        logger.info(f"Device {sn} registered.")
         connected_clients[sn] = websocket
+        logger.info(f"Device {sn} registered.")
+
+        if host not in host_connected_clients:
+            host_connected_clients[host] = []
+        host_connected_clients[host].append(sn)
 
         # Acknowledge registration
         response = {
