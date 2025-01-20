@@ -13,7 +13,7 @@ load_dotenv()
 # Configuration
 # WEBHOOK_URL = os.getenv("WEBHOOK_URL", "http://localhost:8000/api/v1/hook/device/")
 AUTHORIZATION_TOKEN = os.getenv("AUTHORIZATION_TOKEN")
-WEBHOOK_URL = None
+webhook = None
 
 # FastAPI App Initialization
 app = FastAPI()
@@ -34,7 +34,7 @@ def send_to_webhook(data: dict):
     :param self: Reference to the Celery task instance
     :param data: The data to send to the webhook
     """
-    if WEBHOOK_URL is None:
+    if webhook is None:
         logger.warning("Webhook URL not set.")
         return
 
@@ -42,7 +42,7 @@ def send_to_webhook(data: dict):
     if AUTHORIZATION_TOKEN:
         headers["Authorization"] = AUTHORIZATION_TOKEN
 
-    response = httpx.post(WEBHOOK_URL, json=data, headers=headers)
+    response = httpx.post(webhook, json=data, headers=headers)
     logger.info(f"Webhook success: {response.status_code} | Data: {data}")
     response.raise_for_status()
 
@@ -125,8 +125,8 @@ async def websocket_endpoint(websocket: WebSocket):
     :param websocket: The WebSocket connection object
     """
     logger.info("WebSocket connection initiated.")
-    WEBHOOK_URL = url_from_host_name(host_name(websocket))
-    logger.info(f"Webhook URL: {WEBHOOK_URL}")
+    webhook = url_from_host_name(host_name(websocket))
+    logger.info(f"Webhook URL: {webhook}")
     await websocket.accept()
 
     try:
