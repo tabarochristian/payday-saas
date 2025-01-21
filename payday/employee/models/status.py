@@ -12,11 +12,11 @@ class Status(Base):
         unique=True
     )
 
-    is_active = fields.BooleanField(
-        verbose_name=_('est actif'), 
-        help_text=_("Considered as active or not employee's status"), 
-        default=True
-    )
+    #is_active = fields.BooleanField(
+    #    verbose_name=_('est actif'), 
+    #    help_text=_("Considered as active or not employee's status"), 
+    #    default=True
+    #)
 
     list_display = ('id', 'name')
     layout = Layout('name',)
