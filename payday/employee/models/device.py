@@ -19,9 +19,9 @@ class Device(Base):
     branch = fields.ModelSelectField('employee.branch', verbose_name=_("site"), blank=True, null=True)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)
 
-    list_filter = ("status",)
-    list_display = ("name", "sn", "status")
+    list_filter = ("status", "branch")
     layout = Layout("branch", "name", "_metadata")
+    list_display = ("branch", "name", "sn", "status")
 
     class Meta:
         verbose_name_plural = _("terminals")

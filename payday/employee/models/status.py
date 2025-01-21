@@ -6,7 +6,17 @@ from core.models import Base
 
 
 class Status(Base):
-    name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    name = fields.CharField(
+        verbose_name=_('nom'), 
+        max_length=100, 
+        unique=True
+    )
+
+    is_active = fields.BooleanField(
+        verbose_name=_('est actif'), 
+        help_text=_("Considered as active or not employee's status"), 
+        default=True
+    )
 
     list_display = ('id', 'name')
     layout = Layout('name',)
