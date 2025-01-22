@@ -29,7 +29,7 @@ class Employee(BaseEmployee):
         editable=False
     )
 
-    photo = fields.PhotoPreviewField(
+    photo = fields.ImageField(
         _('photo'), 
         upload_to=upload_directory_file, 
         blank=True, 
