@@ -3,10 +3,15 @@ version: '3.8'
 services:
   # Thumbor service
   thumbor:
-    image: minimalcompact/thumbor:latest
+    image: minimalcompact/thumbor:6.7.5
     container_name: payday-thumbor
     ports:
       - "8888:80"
+    environment:
+      - THUMBOR_LOG_LEVEL=DEBUG
+      - THUMBOR_SECURITY_KEY=MY_SECURE_KEY
+      - THUMBOR_DETECTORS=['thumbor.detectors.face_detector', 'thumbor.detectors.feature_detector']
+      - THUMBOR_FACE_DETECTOR_CASCADE_FILE=/usr/local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml
     volumes:
       - ./thumbor/storage:/app/storage
     restart: unless-stopped
