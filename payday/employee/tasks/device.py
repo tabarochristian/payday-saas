@@ -90,7 +90,7 @@ class DeviceTask:
         """
         try:
             response = requests.post(
-                "http://46.101.92.215:7788/send-command/",
+                "http://46.101.92.215:7788/send-command",
                 json={
                     "sn": device.sn,
                     "cmd": "setuserinfo",

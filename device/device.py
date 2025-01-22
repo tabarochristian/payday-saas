@@ -60,8 +60,8 @@ async def forward_command_to_device(sn: str, data: dict):
     """
     if sn in connected_clients:
         websocket = connected_clients[sn]
-        await websocket.send_text(json.dumps(data))
         logger.info(f"Command sent to {sn}")
+        await websocket.send_text(json.dumps(data))
     else:
         logger.warning(f"Device {sn} not connected.")
         raise HTTPException(status_code=404, detail=f"Device {sn} not connected.")
@@ -96,6 +96,7 @@ async def send_command(request: Request):
     :return: JSON response indicating success or failure
     """
     data = await request.json()
+    
     sn = data.get("sn")
     cmd = data.get("cmd")
 
