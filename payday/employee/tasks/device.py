@@ -120,7 +120,7 @@ class DeviceTask:
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': settings.CELERY_MAX_RETRIES, 'countdown': settings.CELERY_RETRY_DELAY},
 )
-def setuserinfo(tenant, pk):
+def setuserinfo(self, tenant, pk):
     """
     Celery task to process an employee's photo and send it to associated devices.
     """
