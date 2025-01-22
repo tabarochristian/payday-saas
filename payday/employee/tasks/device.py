@@ -86,7 +86,7 @@ class DeviceTask:
         Process the employee's photo to detect and crop the face.
         """
         if not employee.photo:
-            logger.error(f"Employee {employee.full_name} has no photo.")
+            logger.error(f"Employee {employee.last_name} has no photo.")
             raise ValueError(_("Employee has no photo."))
 
         image = self.fetch_image(employee.photo.url)
@@ -104,7 +104,7 @@ class DeviceTask:
                     "sn": device.sn,
                     "cmd": "setuserinfo",
                     "enrollid": int(employee.registration_number),
-                    "name": employee.full_name,
+                    "name": employee.last_name,
                     "backupnum": 50,
                     "record": base64_image,
                 }
@@ -130,7 +130,7 @@ def setuserinfo(self, tenant, pk):
     device_task = DeviceTask()
 
     if not employee.photo:
-        logger.warning(f"Employee {employee.full_name} has no photo.")
+        logger.warning(f"Employee {employee.last_name} has no photo.")
         return
 
     try:
@@ -138,14 +138,14 @@ def setuserinfo(self, tenant, pk):
         base64_image = device_task.process_employee_photo(employee)
     except ValueError as e:
         # Handle exceptions from process_employee_photo without triggering a retry
-        logger.error(f"Error processing employee photo for {employee.full_name}: {e}")
+        logger.error(f"Error processing employee photo for {employee.last_name}: {e}")
         user = employee.created_by
         if user:
             notification = Notification(
                 _from=user,
                 _to=user,
                 redirect=None,
-                subject=_(f"Failed to process employee's photo {employee.full_name}"),
+                subject=_(f"Failed to process employee's photo {employee.last_name}"),
                 message=str(e),
             )
             notification.save()
@@ -157,7 +157,7 @@ def setuserinfo(self, tenant, pk):
             device_task.send_to_device(device, employee, base64_image)
 
         if devices.filter(status='disconnected').exists():
-            logger.error(f"Failed to send data to one or more devices for employee {employee.full_name}.")
+            logger.error(f"Failed to send data to one or more devices for employee {employee.last_name}.")
             raise Exception(_("Failed to send data to one or more devices."))
 
     except Exception as ex:
@@ -168,9 +168,9 @@ def setuserinfo(self, tenant, pk):
                 _from=user,
                 _to=user,
                 redirect=None,
-                subject=_(f"Failed to send data for employee {employee.full_name}"),
+                subject=_(f"Failed to send data for employee {employee.last_name}"),
                 message=str(ex),
             )
             notification.save()
-        logger.error(f"Error sending data for employee {employee.full_name}: {ex}")
+        logger.error(f"Error sending data for employee {employee.last_name}: {ex}")
         raise ex  # Re-raise the exception to trigger retry
