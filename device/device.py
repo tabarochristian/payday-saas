@@ -160,7 +160,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             try:
                 message = await websocket.receive_text()
-                await handle_message_from_device(websocket, webhook, webhook, sn, message)
+                await handle_message_from_device(websocket, webhook, sn, message)
             except WebSocketDisconnect:
                 send_to_webhook(webhook, {"cmd": "disconnected", "sn": sn})
                 logger.info(f"Device {sn} disconnected.")
