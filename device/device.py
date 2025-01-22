@@ -46,18 +46,22 @@ def send_to_webhook(webhook: str, data: dict):
         logger.error(f"Webhook error: {e}")
 
 
-async def forward_command_to_device(sn: str, data: dict):
+async def forward_command_to_device(sn: str, command: dict):
     """
-    Forwards a data to a connected WebSocket device.
+    Forwards a command to a connected WebSocket device.
 
     :param sn: Serial number of the target device
-    :param data: Command data to send
+    :param command: Command data to send
     :raises HTTPException: If the device is not connected
     """
     if sn in connected_clients:
         websocket = connected_clients[sn]
-        await websocket.send_text(json.dumps(data))
-        logger.info(f"Command sent to {sn}: {data.get('cmd', None)}")
+
+        data = json.dumps(command)
+        await websocket.send_text(data)
+
+        command = command["cmd"] or "unknown"
+        logger.info(f"Command sent to {sn}: {command}")
     else:
         logger.warning(f"Device {sn} not connected.")
         raise HTTPException(status_code=404, detail=f"Device {sn} not connected.")
