@@ -39,11 +39,11 @@ def send_to_webhook(webhook: str, data: dict):
 
     headers = {"Content-Type": "application/json"}
     response = httpx.post(webhook, json=data, headers=headers)
-    logger.info(f"Webhook success: {response.status_code} | Data: {data}")
+    logger.info(f"Webhook success: {response.status_code}")
     try:
         response.raise_for_status()
     except httpx.HTTPStatusError as e:
-        logger.error(f"Webhook error: {e} | Data: {data}")
+        logger.error(f"Webhook error: {e}")
 
 
 async def forward_command_to_device(sn: str, command: dict):
