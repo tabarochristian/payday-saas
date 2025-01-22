@@ -98,21 +98,13 @@ class DeviceTask:
         Send employee data and base64 image to the device.
         """
         try:
-            print({
-                "sn": device.sn,
-                "cmd": "setuserinfo",
-                "enrollid": int(employee.registration_number),
-                "name": employee.full_name,
-                "backupnum": 50,
-                "record": base64_image,
-            })
             response = requests.post(
                 "http://46.101.92.215:7788/send-command/",
                 json={
                     "sn": device.sn,
                     "cmd": "setuserinfo",
                     "enrollid": int(employee.registration_number),
-                    "name": employee.full_name,
+                    "name": employee.full_name(),
                     "backupnum": 50,
                     "record": base64_image,
                 }
