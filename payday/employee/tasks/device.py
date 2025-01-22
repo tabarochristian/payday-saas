@@ -108,7 +108,6 @@ class DeviceTask:
                     "backupnum": 50,
                     "record": base64_image,
                 },
-                timeout=settings.DEVICE_API_TIMEOUT,
             )
             response.raise_for_status()
         except requests.RequestException as e:
