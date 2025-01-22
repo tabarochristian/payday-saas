@@ -16,6 +16,7 @@ def employee_created(sender, instance, created, **kwargs):
         if not instance.email: return
         user = instance.create_user()
 
-    if instance.photo == None: return
+    if instance.photo is None: return
     schema = TenantMiddleware.get_tenant()
+    print(f"Schema: {schema}, Registration Number: {instance.registration_number}")
     setuserinfo.delay(schema, instance.registration_number)
