@@ -123,6 +123,7 @@ def setuserinfo(self, tenant, pk):
         None
     """
     set_schema(tenant)
+    
     employee = get_object_or_404(Employee, pk=pk)
     devices = employee.devices.all()
     device_task = DeviceTask()
