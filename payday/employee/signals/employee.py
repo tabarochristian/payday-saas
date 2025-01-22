@@ -6,6 +6,8 @@ from employee.models import Employee
 from employee.tasks import setuserinfo
 from core.models import Preference
 
+from core.middleware import TenantMiddleware
+
 User = get_user_model()
 
 @receiver(post_save, sender=Employee)
@@ -15,4 +17,6 @@ def employee_created(sender, instance, created, **kwargs):
         user = instance.create_user()
 
     if instance.photo == None: return
-    setuserinfo.delay(instance.id)
+
+    schema = TenantMiddleware.get_tenant()
+    setuserinfo.delay(schema, instance.registration_number)

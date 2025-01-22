@@ -11,6 +11,7 @@ from django.conf import settings
 from employee.models import Employee
 from core.models import Notification
 from celery import shared_task
+from core.utils import set_schema
 
 logger = logging.getLogger(__name__)
 
@@ -120,10 +121,11 @@ class DeviceTask:
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': settings.CELERY_MAX_RETRIES, 'countdown': settings.CELERY_RETRY_DELAY},
 )
-def setuserinfo(self, pk, *args, **kwargs):
+def setuserinfo(self, schema, pk, *args, **kwargs):
     """
     Celery task to process an employee's photo and send it to associated devices.
     """
+    set_schema(schema)
     employee = get_object_or_404(Employee, pk=pk)
     devices = employee.devices.all()
     device_task = DeviceTask()

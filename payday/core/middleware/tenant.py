@@ -4,9 +4,11 @@ from django.conf import settings
 from django.db import connection
 
 from core.utils import set_schema
+import threading
 import logging
 
 logger = logging.getLogger(__name__)
+thread = threading.local()
 
 class TenantMiddleware:
     def __init__(self, get_response):
@@ -28,6 +30,7 @@ class TenantMiddleware:
             return self.redirect_to_default()
 
         set_schema(schema)
+        thread.tenant = schema
         request.tenant = schema
         return self.get_response(request)
 
@@ -85,3 +88,7 @@ class TenantMiddleware:
         """
         redirect_url = getattr(settings, "DEFAULT_TENANT_REDIRECT_URL", "https://payday.cd")
         return HttpResponseRedirect(f"{redirect_url}?message=not-found")
+
+    @staticmethod 
+    def get_tenant(): 
+        return getattr(thread, 'tenant', None)
