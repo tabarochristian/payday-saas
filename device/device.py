@@ -54,7 +54,6 @@ async def forward_command_to_device(sn: str, data: dict):
     :param command: Command data to send
     :raises HTTPException: If the device is not connected
     """
-    print(data)
     if sn in connected_clients:
         websocket = connected_clients[sn]
         await websocket.send_text(json.dumps(data))
@@ -78,9 +77,9 @@ async def handle_message_from_device(websocket: WebSocket, webhook:str, sn: str,
             "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         }))
         send_to_webhook(webhook, data)
-        logger.info(f"Message received from {sn}: {data}")
+        logger.info(f"Message received from {sn}")
     except json.JSONDecodeError:
-        logger.warning(f"Invalid JSON received from {sn}: {message}")
+        logger.warning(f"Invalid JSON received from {sn}")
 
 
 # HTTP Endpoints
