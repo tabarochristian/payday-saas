@@ -1,6 +1,21 @@
 version: '3.8'
 
 services:
+  # Thumbor service
+  thumbor:
+    image: thumbor/thumbor:latest
+    container_name: payday-thumbor
+    ports:
+      - "8888:80"  # Thumbor will be accessible on port 8888
+    environment:
+      - THUMBOR_LOG_LEVEL=DEBUG  # Optional: Set log level
+      - THUMBOR_SECURITY_KEY=MY_SECURE_KEY  # Replace with a secure key for URL signing
+      - THUMBOR_DETECTORS=['thumbor.detectors.face_detector', 'thumbor.detectors.feature_detector']  # Enable face and feature detectors
+      - THUMBOR_FACE_DETECTOR_CASCADE_FILE=/usr/local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml  # Path to OpenCV's face detection model
+    volumes:
+      - ./thumbor/storage:/app/storage  # Optional: Persist storage data locally
+    restart: unless-stopped
+
   # landlord service (Flask)
   landlord:
     build:
@@ -28,9 +43,6 @@ services:
       dockerfile: payday/Dockerfile
     container_name: payday-saas
     restart: unless-stopped
-    #command: >
-    #  sh -c "python manage.py collectstatic --noinput &&
-    #        gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     command: >
       sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     volumes:
