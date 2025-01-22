@@ -121,7 +121,7 @@ class Employee(Base):
 
     @property
     def name(self):
-        return self.short_name()
+        return self.short_name
     
     def get_absolute_url(self):
         return reverse_lazy("employee:change", kwargs={"pk": self.pk})
