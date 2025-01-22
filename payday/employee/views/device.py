@@ -92,7 +92,7 @@ class DeviceAPIView(APIView):
         cmd = request.data.get("cmd")
         sn = request.data.get("sn")
 
-        if not cmd and not sn:
+        if not cmd or not sn:
             return Response({"status": "error", "message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
         
         method = getattr(self, cmd, None)

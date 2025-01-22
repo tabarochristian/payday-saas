@@ -88,14 +88,6 @@ class DeviceTask:
         Raises:
             Exception: If the request to the device fails.
         """
-        print(json.dumps({
-                    "sn": device.sn,
-                    "cmd": "setuserinfo",
-                    "enrollid": int(employee.registration_number),
-                    "name": employee.last_name,
-                    "backupnum": 50,
-                    "record": base64_image,
-                }))
         try:
             response = requests.post(
                 "http://46.101.92.215:7788/send-command/",

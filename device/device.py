@@ -37,6 +37,10 @@ def send_to_webhook(webhook: str, data: dict):
         logger.warning("No data to send to webhook.")
         return
 
+    if "cmd" not in data or "sn" not in data:
+        logger.warning("Invalid data format for webhook.")
+        return
+        
     headers = {"Content-Type": "application/json"}
     response = httpx.post(webhook, json=data, headers=headers)
     logger.info(f"Webhook success: {response.status_code}")
