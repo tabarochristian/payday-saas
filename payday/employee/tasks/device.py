@@ -1,101 +1,92 @@
-import os
-import logging
 import requests
-import json
-import numpy as np
+import logging
+import os
+
 import base64
-import cv2
+import json
+
 from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+
 from employee.models import Employee
 from core.models import Notification
-from celery import shared_task
 from core.utils import set_schema
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
+
+
+def get_thumbor_image_base64(image_url, host="46.101.92.215", port=8888, width=480, height=640):
+    """
+    Generate a Thumbor URL, fetch the processed image, and return it as a base64-encoded string.
+
+    Args:
+        image_url (str): The URL of the source image.
+        host (str): The Thumbor server host (default: "46.101.92.215").
+        port (int): The Thumbor server port (default: 8888).
+        width (int): The width of the output image (default: 480).
+        height (int): The height of the output image (default: 640).
+
+    Returns:
+        str: The base64-encoded string of the processed image.
+    """
+    # Generate the Thumbor URL
+    base_url = f"http://{host}:{port}/unsafe"
+    filters = f"filters:face_detection():crop({width},{height})"
+    thumbor_url = f"{base_url}/{width}x{height}/{filters}/{image_url}"
+
+    # Fetch the processed image
+    response = requests.get(thumbor_url)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Encode the image content as base64
+        return base64.b64encode(response.content).decode("utf-8")
+    else:
+        raise Exception(f"Failed to fetch the image. Status code: {response.status_code}")
+
 
 class DeviceTask:
     """
     A helper class to handle image processing and device communication.
     """
 
-    def __init__(self):
-        # Load the pre-trained face detection model once during initialization
-        self.face_cascade = cv2.CascadeClassifier(
-            cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-        )
-
-    def fetch_image(self, image_url):
-        """
-        Fetch an image from a URL and convert it to a numpy array.
-        """
-        try:
-            response = requests.get(image_url)
-            response.raise_for_status()
-            image_array = np.asarray(bytearray(response.content), dtype=np.uint8)
-            return cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-        except requests.RequestException as e:
-            logger.error(f"Failed to fetch image from URL: {image_url}. Error: {e}")
-            raise ValueError(_("Failed to fetch the image from the URL."))
-
-    def crop_face(self, image):
-        """
-        Detect and crop the largest face in the image to 480x640 pixels.
-        """
-        if image.shape[0] < 640 or image.shape[1] < 480:
-            logger.error("Image is below the required size of 480x640.")
-            raise ValueError(_("Image is below the required size of 480x640."))
-
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        faces = self.face_cascade.detectMultiScale(
-            gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)
-        )
-
-        if len(faces) == 0:
-            logger.error("No face detected in the image.")
-            raise ValueError(_("No face detected in the image."))
-
-        (x, y, w, h) = max(faces, key=lambda f: f[2] * f[3])
-        center_x = x + w // 2
-        center_y = y + h // 2
-        start_x = max(center_x - 240, 0)
-        start_y = max(center_y - 320, 0)
-        end_x = min(start_x + 480, image.shape[1])
-        end_y = min(start_y + 640, image.shape[0])
-        start_x = end_x - 480
-        start_y = end_y - 640
-
-        cropped_image = image[start_y:end_y, start_x:end_x]
-
-        if cropped_image.shape[0] != 640 or cropped_image.shape[1] != 480:
-            logger.error("Failed to crop the image to the required size of 480x640.")
-            raise ValueError(_("Failed to crop the image to the required size of 480x640."))
-
-        return cropped_image
-
-    def encode_image_to_base64(self, image):
-        """
-        Encode an image to a base64 string.
-        """
-        _, buffer = cv2.imencode('.jpg', image)
-        return base64.b64encode(buffer).decode('utf-8')
-
     def process_employee_photo(self, employee):
         """
-        Process the employee's photo to detect and crop the face.
+        Process the employee's photo to detect and crop the face using Thumbor.
+
+        Args:
+            employee (Employee): The employee object.
+
+        Returns:
+            str: The base64-encoded string of the processed image.
+
+        Raises:
+            ValueError: If the employee has no photo or Thumbor processing fails.
         """
         if not employee.photo:
             logger.error(f"Employee {employee.last_name} has no photo.")
             raise ValueError(_("Employee has no photo."))
 
-        image = self.fetch_image(employee.photo.url)
-        cropped_image = self.crop_face(image)
-        return self.encode_image_to_base64(cropped_image)
+        try:
+            # Use Thumbor to process the image
+            return get_thumbor_image_base64(employee.photo.url)
+        except Exception as e:
+            logger.error(f"Failed to process employee photo for {employee.last_name}: {e}")
+            raise ValueError(_("Failed to process the employee's photo."))
 
     def send_to_device(self, device, employee, base64_image):
         """
         Send employee data and base64 image to the device.
+
+        Args:
+            device: The device object.
+            employee (Employee): The employee object.
+            base64_image (str): The base64-encoded image.
+
+        Raises:
+            Exception: If the request to the device fails.
         """
         try:
             response = requests.post(
@@ -123,6 +114,13 @@ class DeviceTask:
 def setuserinfo(self, tenant, pk):
     """
     Celery task to process an employee's photo and send it to associated devices.
+
+    Args:
+        tenant: The tenant schema.
+        pk (int): The primary key of the employee.
+
+    Returns:
+        None
     """
     set_schema(tenant)
     employee = get_object_or_404(Employee, pk=pk)
@@ -134,7 +132,7 @@ def setuserinfo(self, tenant, pk):
         return
 
     try:
-        # Process the employee's photo
+        # Process the employee's photo using Thumbor
         base64_image = device_task.process_employee_photo(employee)
     except ValueError as e:
         # Handle exceptions from process_employee_photo without triggering a retry
