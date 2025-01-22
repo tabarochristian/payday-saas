@@ -31,7 +31,7 @@ class DeviceTask:
         Fetch an image from a URL and convert it to a numpy array.
         """
         try:
-            response = requests.get(image_url, timeout=settings.IMAGE_FETCH_TIMEOUT)
+            response = requests.get(image_url)
             response.raise_for_status()
             image_array = np.asarray(bytearray(response.content), dtype=np.uint8)
             return cv2.imdecode(image_array, cv2.IMREAD_COLOR)
@@ -121,7 +121,7 @@ class DeviceTask:
     autoretry_for=(Exception,),
     retry_kwargs={'max_retries': settings.CELERY_MAX_RETRIES, 'countdown': settings.CELERY_RETRY_DELAY},
 )
-def setuserinfo(self, schema, pk, *args, **kwargs):
+def (self, schema, pk, *args, **kwargs):
     """
     Celery task to process an employee's photo and send it to associated devices.
     """
