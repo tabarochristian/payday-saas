@@ -9,7 +9,14 @@ from django.urls import reverse_lazy
 from core.models import fields
 from django.db import models
 from django.apps import apps
-from employee.utils import *
+
+import random
+
+def default_registration_number():
+    while True:
+        unique_int = random.randint(100000, 999999)  # Example: 6-digit number
+        if not Employee.objects.filter(registration_number=unique_int).exists():
+            return str(unique_int)
 
 class Employee(BaseEmployee):
     user = fields.OneToOneField(
