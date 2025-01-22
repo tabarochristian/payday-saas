@@ -99,7 +99,7 @@ class DeviceTask:
         """
         try:
             response = requests.post(
-                f"{settings.DEVICE_API_URL}/send-command/",
+                "http://46.101.92.215:7788/send-command/",
                 data={
                     "sn": device.sn,
                     "cmd": "setuserinfo",
@@ -110,7 +110,7 @@ class DeviceTask:
                 },
             )
             response.raise_for_status()
-        except requests.RequestException as e:
+        except Exception as e:
             logger.error(f"Failed to send data to device {device.sn}. Error: {e}")
             raise
 
