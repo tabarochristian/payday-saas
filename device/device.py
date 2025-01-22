@@ -57,7 +57,7 @@ async def forward_command_to_device(sn: str, data: dict):
     if sn in connected_clients:
         websocket = connected_clients[sn]
         await websocket.send_text(json.dumps(data))
-        logger.info(f"Command sent to {sn}: {cmd.get('cmd', None)}")
+        logger.info(f"Command sent to {sn}: {data.get('cmd', None)}")
     else:
         logger.warning(f"Device {sn} not connected.")
         raise HTTPException(status_code=404, detail=f"Device {sn} not connected.")
