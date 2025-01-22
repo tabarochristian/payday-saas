@@ -111,9 +111,11 @@ class Employee(Base):
         'status'
     )
 
+    @property
     def full_name(self):
         return f"{self.registration_number} / {self.last_name} {self.middle_name}, {self.first_name}"
     
+    @property
     def short_name(self):
         return f"{self.registration_number} / {self.last_name}"
 

@@ -104,7 +104,7 @@ class DeviceTask:
                     "sn": device.sn,
                     "cmd": "setuserinfo",
                     "enrollid": int(employee.registration_number),
-                    "name": employee.full_name(),
+                    "name": employee.full_name,
                     "backupnum": 50,
                     "record": base64_image,
                 }
