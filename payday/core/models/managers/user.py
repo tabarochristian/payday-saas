@@ -1,14 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext as _
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
-
-    def all(self, *args, **kwargs):
-        subdomain_prefix = kwargs.pop('subdomain_prefix', None)
-        if not subdomain_prefix: return super().all(*args, **kwargs)
-        return  self.all().filter(**{'organization__subdomain_prefix': subdomain_prefix})
 
     def _create_user(self, email, password, **extra_fields):
         if not email:
