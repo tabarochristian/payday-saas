@@ -13,6 +13,7 @@ class Attendance(Base):
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
     list_display = ('device', 'employee', 'checked_at')
     list_filter = ('device', 'checked_at',)
+
     objects = AttendanceManager()
 
     class Meta:
