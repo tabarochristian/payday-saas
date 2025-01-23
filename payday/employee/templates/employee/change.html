@@ -15,19 +15,20 @@
         <div class="card-body p-0 p-4 pb-3">
             <div class="col">
                 <div id="attendances-chart"></div>
-                {{ obj.attendances|json_script:'attendances' }}
+                {{ self.attendancces|json_script:'attendances' }}
                 <script>
-                    const getMonthName = monthNumber => new Date(0, monthNumber - 1).toLocaleString('fr', { month: 'long' });
+                    const getMonthName = monthNumber => new Date(0, monthNumber).toLocaleString('{{ LANGUAGE_CODE }}', { month: 'long' });
                     const attendances = JSON.parse(document.getElementById('attendances').textContent).map((e) => ({
-                        date: new Date(e.date),
-                        count: e.count,
+                        date: new Date(e.checked_at__date),
+                        count: e.attended,
                     }));
+                    console.log(attendances)
     
                     new ApexCharts(document.querySelector('#attendances-chart'), {
-                        series: Array.from({ length: 12 }, (value, index) => index+1).map(function (month){
+                        series: Array.from({ length: 12 }, (value, index) => index).map(function (month) {
                             return {
                                 name: getMonthName(month),
-                                data: Array.from({ length: 31 }, (value, index) => index+1).map(function(day){
+                                data: Array.from({ length: 31 }, (value, index) => index+1).map(function(day) {
                                     let y = attendances.find((item) => item.date.getMonth() === month && item.date.getDate() === day)
                                     return {x: String(day), y: y?y.count:0}
                                 })

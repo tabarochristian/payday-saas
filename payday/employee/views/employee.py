@@ -1,5 +1,6 @@
 from core.forms import modelform_factory
 from crispy_forms.layout import Layout
+from django.utils.timezone import now
 from core.views import Change
 from django.apps import apps
 
@@ -20,6 +21,12 @@ class Employee(Change):
             return None
         modelform = modelform_factory(model, fields=missed_fields, layout=Layout(*missed_fields))
         return modelform()
+
+    def attendancces(self):
+        qs = self._get_object().attendance_set.all().attended(
+            checked_at__year=now().year
+        )
+        return list(qs)
 
     def get(self, request, pk):
         self.kwargs['app'] = 'employee'

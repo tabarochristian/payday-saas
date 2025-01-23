@@ -185,7 +185,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Email settings
 # EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL', 0)))
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+# EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', None)
 EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_TLS', 0)))
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'support@localhost')

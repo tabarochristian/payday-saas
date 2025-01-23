@@ -2,6 +2,7 @@ from core.models.managers import CustomManager, CustomQuerySet
 from django.utils.dateparse import parse_date
 from django.db.models import Q
 from django.db import models
+import json
 
 class AttendanceQuerySet(CustomQuerySet):
     def attended(self, min_attendance=1, *args, **kwargs):
