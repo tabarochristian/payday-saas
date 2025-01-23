@@ -8,7 +8,6 @@ from django.views import View
 class CreateTenantView(View):
     def get(self, request):
         form = crispy_modelform_factory(Tenant, exclude=["is_active"])
-        form = form()
         return render(request, "index.html", locals())
     
     def post(self, request):

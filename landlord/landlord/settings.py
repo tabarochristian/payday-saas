@@ -183,6 +183,7 @@ MEDIA_URL = os.getenv("MEDIA_URL", f'{MEDIAFILES_LOCATION}/')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+"""
 # Email settings
 # EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL', 0)))
 # EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
@@ -195,6 +196,7 @@ EMAIL_PORT = os.getenv('EMAIL_PORT', 1025)
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 ADMINS = [('support', DEFAULT_FROM_EMAIL)]
+"""
 
 # Django Crispy Forms settings
 CRISPY_ALLOWED_TEMPLATE_PACKS = ['bootstrap', 'bootstrap5']
