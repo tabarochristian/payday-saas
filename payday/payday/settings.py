@@ -70,7 +70,7 @@ INSTALLED_APPS = [
 
     "api",
     "core",
-    "employee",
+    "employee"
 ]
 
 MIDDLEWARE = [
