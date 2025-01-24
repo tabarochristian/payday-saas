@@ -9,7 +9,6 @@ from django.db import connection
 from html2text import html2text
 from core import utils
 
-
 User = get_user_model()
 
 class Command(BaseCommand):
@@ -59,12 +58,8 @@ class Command(BaseCommand):
 
         if not created: return
         
-        from django.contrib.contenttypes.models import ContentType
-        content_types = ContentType.objects.filter(app_label__in=['employee', 'payroll'])
-        excluded_models = ['children','itempaid','paidemployee','advancesalary','specialemployeeitem']
-        
-        for content_type in content_types:
-            self.create_or_get_menu(user, content_type.app_label, excluded_models=excluded_models)
+        from core.tasks import new_tenant
+        new_tenant.delay(schema, user.id)
 
         self.stdout.write(self.style.SUCCESS(f'User "{email}" created.'))
         self.send_welcome_email(user, schema)
@@ -89,19 +84,4 @@ class Command(BaseCommand):
         email.send()
 
         self.stdout.write(self.style.SUCCESS(f'Welcome email sent to {user.email}.'))
-
-    def create_or_get_menu(self, user, name, excluded_models=[]):
-        from django.contrib.contenttypes.models import ContentType
-        from core.models import Menu
-        
-        obj, created = Menu.objects.get_or_create(**{
-            'name': name,
-            'created_by': user
-        })
-        if not created: return obj
-        qs = ContentType.objects\
-            .filter(app_label=app_label)\
-                .exclude(model__in=excluded_models)
-        obj.children.set(qs)
-        self.stdout.write(self.style.SUCCESS(f'Menu "{obj.name}" created.'))
 

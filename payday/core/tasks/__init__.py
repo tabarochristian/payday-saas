@@ -4,3 +4,5 @@ from .hourly import *
 from .weekly import *
 from .yearly import *
 from .daily import *
+
+from .tenant import *
