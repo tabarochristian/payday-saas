@@ -31,6 +31,7 @@ def create_tenant_schema(_id):
 
 
 def delete_tenant_schema(_id):
+    print("Deleting tenant schema")
     tenant = Tenant.objects.filter(id=_id)
     tenant = tenant.first()
 
@@ -46,10 +47,6 @@ def delete_tenant_schema(_id):
     # Run the migrate command
     cmd = f"python manage.py tenant {tenant.schema} {tenant.email} --delete"
     result = container.exec_run(cmd)
-
-    # Update the organization status
-    tenant.is_active = False
-    tenant.save()
 
     # Decode the output
     output = result.output.decode("utf-8")

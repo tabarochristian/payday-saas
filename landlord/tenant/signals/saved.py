@@ -1,5 +1,6 @@
-from django.db.models.signals import post_save, post_delete
 from tenant.tasks import create_tenant_schema, delete_tenant_schema
+from django.db.models.signals import post_save, post_delete
+
 from django.dispatch import receiver
 from joblib import Parallel, delayed
 from tenant.models import Tenant
