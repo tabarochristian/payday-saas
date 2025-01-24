@@ -11,17 +11,17 @@ def clean_string(input_string):
 
 class Tenant(models.Model):
     first_name = models.CharField(
-        _('first name'),
+        _('votre prenom'),
         max_length=50
     )
 
     last_name = models.CharField(
-        _('last name'),
+        _('votre nom'),
         max_length=50
     )
 
     name = models.CharField(
-        _('organization\'s name'), 
+        _('nom de l\'organisme'), 
         max_length=50,
         unique=True
     )
@@ -32,13 +32,13 @@ class Tenant(models.Model):
         unique=True
     )
     phone = PhoneNumberField(
-        _('phone'),
+        _('numéro de téléphone mobile'),
         help_text=_('+243 8XX XXX XXX'),
         unique=True
     )
 
     size = models.CharField(
-        _("size of organization"),
+        _("taille de l'organisation"),
         max_length=50,
         choices=(
             (None, '-'),
