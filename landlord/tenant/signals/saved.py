@@ -33,8 +33,8 @@ def deleted(sender, instance, **kwargs):
         delayer = delayed(delete_tenant_schema)
         
         # Log success
-        job([delayer(instance.id)])
-        logger.info(f"Task for tenant {instance.id} started successfully.")
+        job([delayer(schema)])
+        logger.info(f"Task for tenant {schema} started successfully.")
     except Exception as e:
         # Log any errors
         logger.error(f"Error starting task for tenant {instance.id}: {e}")

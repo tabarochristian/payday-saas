@@ -30,14 +30,7 @@ def create_tenant_schema(_id):
     return {"output": output}
 
 
-def delete_tenant_schema(_id):
-    print("Deleting tenant schema")
-    tenant = Tenant.objects.filter(id=_id)
-    tenant = tenant.first()
-
-    if not tenant:
-        return
-
+def delete_tenant_schema(schema):
     # Initialize Docker client
     client = docker.from_env()
 
@@ -45,7 +38,7 @@ def delete_tenant_schema(_id):
     container = client.containers.get("payday-saas")
 
     # Run the migrate command
-    cmd = f"python manage.py tenant {tenant.schema} {tenant.email} --delete"
+    cmd = f"python manage.py tenant {schema} --delete"
     result = container.exec_run(cmd)
 
     # Decode the output
