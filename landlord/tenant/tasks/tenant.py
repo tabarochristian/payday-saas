@@ -38,7 +38,7 @@ def delete_tenant_schema(schema):
     container = client.containers.get("payday-saas")
 
     # Run the migrate command
-    cmd = f"python manage.py tenant {schema} --delete"
+    cmd = f"python manage.py tenant {schema} lorem@ipsum.sit --delete"
     result = container.exec_run(cmd)
 
     # Decode the output
