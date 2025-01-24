@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
+
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
 
@@ -84,7 +86,10 @@ class Command(BaseCommand):
         })
 
         # Use the User model's email_user method to send the email
-        user.email_user(subject, html2text(html_message), html_message=html_message)
+        email = EmailMultiAlternatives(subject, html2text(html_message), settings.DEFAULT_FROM_EMAIL, [user.email])
+        email.attach_alternative(html_message, 'text/html')
+        email.send()
+
         self.stdout.write(self.style.SUCCESS(f'Welcome email sent to {user.email}.'))
 
     def create_or_get_menu(self, user, name, excluded_models=[]):
