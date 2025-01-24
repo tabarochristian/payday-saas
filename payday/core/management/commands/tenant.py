@@ -91,7 +91,9 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Welcome email sent to {user.email}.'))
 
     def create_or_get_menu(self, user, name, excluded_models=[]):
+        from django.contrib.contenttypes.models import ContentType
         from core.models import Menu
+        
         obj, created = Menu.objects.get_or_create(**{
             'name': name,
             'created_by': user
