@@ -89,6 +89,10 @@ class Tenant(models.Model):
         self.schema = clean_string(self.name)
         return super().save()
 
+    def __str__(self):
+        return self.name
+    
+
     class Meta:
         db_table = 'tenant'
         verbose_name = _('tenant')
