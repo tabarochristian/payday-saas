@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.auth",
 
+    "corsheaders",
 
     "crispy_forms",
     "crispy_bootstrap5",
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -245,3 +247,9 @@ SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 #if not DEBUG:
 #import sentry_sdk
 #sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://payday.cd",
+    "http://www.payday.cd"
+]
