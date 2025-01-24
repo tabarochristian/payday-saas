@@ -48,7 +48,6 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Successfully ran migrations for schema "{schema}".'))
 
         # Create or get the user
-        if email is None: return
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
