@@ -2,20 +2,34 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.db import connection
 from core import utils
 
 User = get_user_model()
 
 class Command(BaseCommand):
-    help = 'Run migrations for a specific tenant schema and create a master user'
+    help = 'Run migrations for a specific tenant schema, create a master user, and optionally delete a tenant'
 
     def add_arguments(self, parser):
         parser.add_argument('schema', type=str, help='The schema name to run migrations on')
         parser.add_argument('email', type=str, help='The email to create master user')
+        parser.add_argument('--delete', action='store_true', help='Delete the tenant')
 
     def handle(self, *args, **kwargs):
+        delete = kwargs.get('delete', False)
+        email = kwargs.get('email', None)
         schema = kwargs['schema']
-        email = kwargs['email']
+
+        if schema == 'public':
+            self.stdout.write(self.style.ERROR('You cannot use the public schema.'))
+            return
+
+        if delete:
+            utils.set_schema("public")
+            with connection.cursor() as cursor:
+                cursor.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
+            self.stdout.write(self.style.SUCCESS(f'Tenant "{schema}" deleted successfully'))
+            return
 
         # Ensure the schema exists and set it
         utils.create_schema_if_not_exists(schema)
@@ -29,6 +43,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Successfully ran migrations for schema "{schema}".'))
 
         # Create or get the user
+        if email is None: return
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
@@ -38,11 +53,9 @@ class Command(BaseCommand):
             }
         )
 
-        if created:
-            self.stdout.write(self.style.SUCCESS(f'User "{email}" created.'))
-            self.send_welcome_email(user, schema)
-
-            # self.send_password_reset_email(user, schema)
+        if not created: return
+        self.stdout.write(self.style.SUCCESS(f'User "{email}" created.'))
+        self.send_welcome_email(user, schema)
 
     def send_welcome_email(self, user, schema):
         """
