@@ -182,9 +182,11 @@ AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE', default=DEFAULT_FILE_STORAGE)
+DEFAULT_FILE_STORAGE = DEFAULT_FILE_STORAGE.replace('payday.', 'landlord.')
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_STORAGE = os.getenv("STATICFILES_STORAGE", STATICFILES_STORAGE)
+STATICFILES_STORAGE = STATICFILES_STORAGE.replace('payday.', 'landlord.')
 
 STORAGES = {
     "default": {
