@@ -33,6 +33,7 @@ services:
       - ./landlord:/app
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
+      - minio
       - master
       - redis
     env_file:
