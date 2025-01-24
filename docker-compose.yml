@@ -22,11 +22,11 @@ services:
       context: .
       dockerfile: landlord/Dockerfile
     container_name: payday-landlord
-    #command: >
-    #  sh -c "python manage.py migrate &&
-    #        gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:5000"
+      sh -c "python manage.py migrate &&
+            gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
+    #command: >
+    #  sh -c "python manage.py runserver 0.0.0.0:5000"
     ports:
       - "5000:5000"
     volumes:
