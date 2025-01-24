@@ -6,10 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db import connection
 
-from django.contrib.contenttypes.models import ContentType
 from html2text import html2text
-
-from core.models import Menu
 from core import utils
 
 
@@ -62,6 +59,8 @@ class Command(BaseCommand):
         )
 
         if not created: return
+        
+        from django.contrib.contenttypes.models import ContentType
         content_types = ContentType.objects.filter(app_label__in=['employee', 'payroll'])
         excluded_models = ['children','itempaid','paidemployee','advancesalary','specialemployeeitem']
         
@@ -93,6 +92,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f'Welcome email sent to {user.email}.'))
 
     def create_or_get_menu(self, user, name, excluded_models=[]):
+        from core.models import Menu
         obj, created = Menu.objects.get_or_create(**{
             'name': name,
             'created_by': user
