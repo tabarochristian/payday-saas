@@ -9,7 +9,7 @@ def preferences():
     return cache.get('PREFERENCES', default=[])
 
 class Preference(Base):
-    key = fields.SelectCreateChoiceField(
+    key = fields.CharField(
         verbose_name=_('clé'),
         max_length=100,
         unique=True,

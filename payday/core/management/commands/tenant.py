@@ -3,7 +3,13 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db import connection
+
+from django.contrib.contenttypes.models import ContentType
+from html2text import html2text
+
+from core.models import Menu
 from core import utils
+
 
 User = get_user_model()
 
@@ -54,6 +60,12 @@ class Command(BaseCommand):
         )
 
         if not created: return
+        content_types = ContentType.objects.filter(app_label__in=['employee', 'payroll'])
+        excluded_models = ['children','itempaid','paidemployee','advancesalary','specialemployeeitem']
+        
+        for content_type in content_types:
+            self.create_or_get_menu(user, content_type.app_label, excluded_models=excluded_models)
+
         self.stdout.write(self.style.SUCCESS(f'User "{email}" created.'))
         self.send_welcome_email(user, schema)
 
@@ -62,7 +74,7 @@ class Command(BaseCommand):
         Send a welcome email to the user.
         """
         subject = "Welcome to Our Platform"
-        message = render_to_string('email/welcome_email.html', {
+        html_message = render_to_string('email/welcome_email.html', {
             'user': user,
             'schema': schema,
             'site_name': 'Payday',
@@ -72,5 +84,18 @@ class Command(BaseCommand):
         })
 
         # Use the User model's email_user method to send the email
-        user.email_user(subject, message)
+        user.email_user(subject, html2text(html_message), html_message=html_message)
         self.stdout.write(self.style.SUCCESS(f'Welcome email sent to {user.email}.'))
+
+    def create_or_get_menu(self, user, name, excluded_models=[]):
+        obj, created = Menu.objects.get_or_create(**{
+            'name': name,
+            'created_by': user
+        })
+        if not created: return obj
+        qs = ContentType.objects\
+            .filter(app_label=app_label)\
+                .exclude(model__in=excluded_models)
+        obj.children.set(qs)
+        self.stdout.write(self.style.SUCCESS(f'Menu "{obj.name}" created.'))
+
