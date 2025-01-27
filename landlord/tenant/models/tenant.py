@@ -54,13 +54,14 @@ class Tenant(models.Model):
 
     plan = models.CharField(
         _("plan d'abonnement"),
+        max_length=50,  # Add max_length
         choices = (
             ('trail', _('Essai')),
             ('basic', _('Basique')),
             ('premium', _('Premium')),
             ('enterprise', _('Entreprise')),
         ),
-        default='free',
+        default='basic',  # Update default to an existing choice
     )
 
     schema = models.CharField(
@@ -72,7 +73,6 @@ class Tenant(models.Model):
 
     is_active = models.BooleanField(
         _('is active'), 
-        max_length=50,
         editable=False,
         default=False
     )
@@ -91,7 +91,7 @@ class Tenant(models.Model):
 
     @property
     def serialized(self):
-        data = {field.name:getattr(self, field.name, None) for field in Tenant._meta.fields}
+        data = {field.name: getattr(self, field.name, None) for field in Tenant._meta.fields}
         data['phone'] = data['phone'].as_e164
         return data
 
@@ -101,7 +101,7 @@ class Tenant(models.Model):
     
     def save(self, *args, **kwargs):
         self.schema = clean_string(self.name)
-        return super().save()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
