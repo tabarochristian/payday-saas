@@ -25,8 +25,6 @@ services:
     command: >
       sh -c "python manage.py migrate &&
             gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
-    #command: >
-    #  sh -c "python manage.py runserver 0.0.0.0:5000"
     ports:
       - "5000:5000"
     volumes:
@@ -202,7 +200,7 @@ services:
       dockerfile: payday/Dockerfile
     restart: unless-stopped
     container_name: payday-beat
-    command: celery -A payday beat -l INFO
+    command: celery -A payday beat -l INFO -E
     volumes:
       - ./payday:/app
     depends_on:
@@ -234,23 +232,21 @@ services:
     depends_on:
       - saas
 
-  # Pubsub service
-  pubsub:
-    container_name: payday-pubsub
-    build: ./pubsub
-    depends_on:
-      - redis
+  # Chargebee service
+  chargebee:
+    image: chargebee/chargebee:latest
+    container_name: payday-chargebee
+    restart: unless-stopped
     ports:
-      - "8001:8001"
+      - "8080:8080"
     environment:
-      - AUTH_TOKEN=123456
-      - SERVER_PORT=8001
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    profiles:
-      - no_auto_start
+      - CHARGEBEE_SITE=billing.payday.cd
+      - CHARGEBEE_API_KEY=Gvf3N3agz1YQNqArleS45WbPxL4mBeJ3C6TbVdGuNYCXBEOvw2Y1x0G0VKoDFPHu
+    volumes:
+      - chargebee_data:/data
 
 volumes:
+  chargebee_data:
   master_data:
   slave_data:
   minio_data:
