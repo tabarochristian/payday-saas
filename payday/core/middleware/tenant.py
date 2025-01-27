@@ -81,7 +81,7 @@ class TenantMiddleware:
                 cursor.execute("SELECT * FROM public.tenant WHERE schema = %s", [schema])
                 if row := cursor.fetchone():
                     set_schema(schema)
-                    return dict(row)
+                    return row
                 logger.warning(f"Schema {schema} not found in organization table")
                 return False
         except Exception as e:
