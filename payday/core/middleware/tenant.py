@@ -4,6 +4,8 @@ from django.conf import settings
 from django.db import connection
 
 from core.utils import set_schema
+from payday.models import Tenant
+
 import threading
 import logging
 
@@ -70,6 +72,7 @@ class TenantMiddleware:
         Returns True if the schema exists, False otherwise.
         """
         try:
+            print(Tenant.objects.all())
             with connection.cursor() as cursor:
                 cursor.execute("SELECT id FROM public.tenant WHERE schema = %s", [schema])
                 if cursor.fetchone():

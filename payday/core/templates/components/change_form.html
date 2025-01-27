@@ -8,9 +8,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ext-language_tools.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 
 <style>
     .delete-row{
@@ -69,4 +66,13 @@
 </{{ form.form_tag }}>
 
 {{ self.keywords|json_script:"keywords" }}
+
+<script>
+    $(document).ready(function() {
+        $("input[type='hidden'][id$='-DELETE']").each(function() {
+            $(this).attr("type", "checkbox");
+            $(this).attr("class", "form-check-input")
+        });
+    });    
+</script>
 {% endwith %}

@@ -10,9 +10,9 @@ from core.utils import upload_directory_file
 from core.models import Base, fields
 from employee.utils import *
 
-PAYMENT_METHODS = (('cash', _('cash')), ('bank', _('bank')), ('mobile Money', _('mobile Money')))
-MARITAl_STATUS = (('maried', _('marié')), ('single', _('célibataire')), ('widower', _('veuf')))
-GENDERS = (('male', _('homme')), ('female', _('femme')))
+GENDERS = (('MALE', _('HOMME')), ('FEMALE', _('FEMME')))
+PAYMENT_METHODS = (('CASH', _('CASH')), ('BANK', _('BANK')), ('MOBILE MONEY', _('MOBILE MONEY')))
+MARITAl_STATUS = (('MARIED', _('MARIÉ')), ('SINGLE', _('CÉLIBATAIRE')), ('WIDOWER', _('VEUF')), ('DIVORCED', _('DIVORCÉ')))
 
 class Employee(Base):
     social_security_number = fields.CharField(_('numéro de sécurité sociale'), max_length=50, blank=True, null=True, default=None)
@@ -40,7 +40,7 @@ class Employee(Base):
     spouse = fields.CharField(_('conjoint'), max_length=100, blank=True, null=True, default=None)
     marital_status = fields.CharField(_('état civil'), max_length=12, choices=MARITAl_STATUS)
 
-    mobile_number = PhoneNumberField(_('numéro de téléphone mobile'), null=True, default=None)
+    mobile_number = PhoneNumberField(_('numéro de téléphone mobile'), help_text=_("+243 XXX XXX XXX"), null=True, default=None)
     physical_address = fields.TextField(_('adresse physique'), blank=True, null=True, default=None)
     emergency_information = fields.TextField(_('informations d\'urgence'), null=True, default=None)
 
@@ -97,7 +97,8 @@ class Employee(Base):
             Column('spouse'),
             Column('spouse_date_of_birth')
         ),
-        Div(PrependedText('mobile_number', '+', active=True)),
+        #Div(PrependedText('mobile_number', '+', active=True)),
+        Div('mobile_number'),
         Row(
             Column('physical_address'),
             Column('emergency_information'),
