@@ -37,20 +37,20 @@ class Tenant(models.Model):
         unique=True
     )
 
-    size = models.CharField(
-        _("taille de l'organisation"),
-        max_length=50,
-        choices=(
-            (None, '-'),
-            ('1-10', '1-10'), 
-            ('11-50', '11-50'), 
-            ('51-200', '51-200'), 
-            ('201-500', '201-500'), 
-            ('501-1000', '501-1000'), 
-            ('1001+', '1001+')
-        ),
-        help_text=_('This information helps us tailor our services to better meet your needs.')
-    )
+    #size = models.CharField(
+    #    _("taille de l'organisation"),
+    #    max_length=50,
+    #    choices=(
+    #        (None, '-'),
+    #        ('1-10', '1-10'), 
+    #        ('11-50', '11-50'), 
+    #        ('51-200', '51-200'), 
+    #        ('201-500', '201-500'), 
+    #        ('501-1000', '501-1000'), 
+    #        ('1001+', '1001+')
+    #    ),
+    #    help_text=_('This information helps us tailor our services to better meet your needs.')
+    #)
 
     plan = models.CharField(
         _("plan d'abonnement"),
