@@ -11,6 +11,8 @@ from core import utils
 
 User = get_user_model()
 
+black_list_schema = ['public', 'shared', 'www', 'minio', 'device', 'billing']
+
 class Command(BaseCommand):
     help = 'Run migrations for a specific tenant schema, create a master user, and optionally delete a tenant'
 
@@ -24,7 +26,7 @@ class Command(BaseCommand):
         email = kwargs.get('email', None)
         schema = kwargs['schema']
 
-        if schema == 'public':
+        if schema in black_list_schema:
             self.stdout.write(self.style.ERROR('You cannot use the public schema.'))
             return
 

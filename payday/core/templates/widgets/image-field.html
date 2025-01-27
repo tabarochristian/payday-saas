@@ -1,10 +1,10 @@
 <div class="row image-field-container">
-    <div class="col-2 col-xs-12 text-center">
+    <div class="col-2 col-sm-12 col-xs-12">
         <div class="img-thumbnail">
             <canvas id="canvas-{{ widget.name }}" style="display:none;width: 100% !important;"></canvas>
         </div>
     </div>
-    <div class="col-10 col-xs-12">
+    <div class="col-10 col-sm-12 col-xs-12">
         <input type="file" class="form-control mb-3" name="{{ widget.name }}" id="{{ widget.name }}" accept="image/*" {% if widget.value %}data-url="{{ widget.value.url }}"{% endif %} />
     </div>
 </div>
