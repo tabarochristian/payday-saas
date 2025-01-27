@@ -12,4 +12,9 @@ class TenantAdmin(admin.ModelAdmin):
         return obj.full_name
     full_name.short_description = 'Full Name'
 
+    # Custom admin site header
+    admin.site.site_header = "Payday.LandLord Administration"
+    admin.site.site_title = "Payday.LandLord Admin Portal"
+    admin.site.index_title = "Admin Portal"
+
 admin.site.register(Tenant, TenantAdmin)

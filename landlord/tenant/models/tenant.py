@@ -8,7 +8,6 @@ def clean_string(input_string):
     cleaned_string = cleaned_string.lower().replace(' ','')
     return cleaned_string
 
-
 class Tenant(models.Model):
     first_name = models.CharField(
         _('votre prenom'),
@@ -31,6 +30,7 @@ class Tenant(models.Model):
         max_length=50,
         unique=True
     )
+
     phone = PhoneNumberField(
         _('numéro de téléphone mobile'),
         help_text=_('+243 8XX XXX XXX'),
@@ -51,12 +51,25 @@ class Tenant(models.Model):
         ),
         help_text=_('This information helps us tailor our services to better meet your needs.')
     )
+
+    plan = models.CharField(
+        _("plan d'abonnement"),
+        choices = (
+            ('trail', _('Essai')),
+            ('basic', _('Basique')),
+            ('premium', _('Premium')),
+            ('enterprise', _('Entreprise')),
+        ),
+        default='free',
+    )
+
     schema = models.CharField(
         _('schema'), 
         max_length=50,
         editable=False,
         unique=True
     )
+
     is_active = models.BooleanField(
         _('is active'), 
         max_length=50,
@@ -69,6 +82,7 @@ class Tenant(models.Model):
         auto_now=True,
         editable=False
     )
+
     created_at = models.DateTimeField(
         verbose_name=_('créé le/à'), 
         auto_now_add=True,

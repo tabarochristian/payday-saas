@@ -46,11 +46,16 @@ INSTALLED_APPS = [
     "django.contrib.auth",
 
     "corsheaders",
+    "phonenumber_field",
 
     "crispy_forms",
     "crispy_bootstrap5",
-    "phonenumber_field",
 
+    "django_filters",
+    "rest_framework",
+    "rest_framework.authtoken",
+
+    "api",
     "tenant"
 ]
 
@@ -114,6 +119,18 @@ CACHES = {
         "LOCATION": CACHE_LOCATION,
         "BACKEND": CACHE_BACKEND,
     }
+}
+
+# Django Rest Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        #'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 # Password validation
