@@ -3,10 +3,9 @@ from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from employee.models import Employee
 
+from core.middleware import TenantMiddleware
 from employee.tasks import setuserinfo
 from core.models import Preference
-
-from core.middleware import TenantMiddleware
 
 User = get_user_model()
 

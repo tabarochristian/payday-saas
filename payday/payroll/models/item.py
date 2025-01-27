@@ -5,7 +5,6 @@ from django.db import models
 from core.models.fields import AceField
 from core.models import Base
 
-
 class Item(Base):
     TYPE_OF_ITEMS = ((1, _('Remunerative')), (-1, _('Deductible')))
 

@@ -13,10 +13,11 @@ class SpecialEmployeeItem(Base):
     end_date = fields.DateField(_('date de fin'), inline=True, null=True, blank=True, default=None, help_text=_('laisser vide pour une date illimitée'))
 
     search_fields = ('employee__registration_number', 
-                     'employee__middle_name', 
-                     'employee__first_name', 
-                     'employee__last_name', 
-                    'item__code', 'item__name')
+                    'employee__middle_name', 
+                    'employee__first_name', 
+                    'employee__last_name', 
+                    'item__code', 
+                    'item__name')
     
     list_filter = ('item', 'employee__status', 'created_at')
     list_display = ('id', 'employee', 'item')

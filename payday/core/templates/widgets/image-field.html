@@ -1,10 +1,11 @@
 <div class="row image-field-container">
     <div class="col-md-2 col-xs-12">
         <div class="img-thumbnail">
-            <canvas id="canvas-{{ widget.name }}" style="display:none;width: 100% !important;"></canvas>
+            <canvas id="canvas-{{ widget.name }}" style="display:block; width: 100% !important;"></canvas>
         </div>
     </div>
+
     <div class="col-md-10 col-xs-12">
-        <input type="file" class="form-control mb-3" name="{{ widget.name }}" id="{{ widget.name }}" accept="image/*" {% if widget.value %}data-url="{{ widget.value.url }}"{% endif %} />
+        <input {% for k,v in widget.attrs.items %} {{k}}="{{v}}"{% endfor %} type="file" name="{{ widget.name }}" id="{{ widget.name }}" accept="image/*" {% if widget.value %}data-url="{{ widget.value.url }}"{% endif %} />
     </div>
 </div>

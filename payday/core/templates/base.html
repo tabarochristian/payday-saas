@@ -3,7 +3,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -191,6 +191,7 @@
 
    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+   <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
    
    <script>
       $(document).ready(() => {
@@ -204,6 +205,7 @@
             progressBar: true,
         };
 
+         $( ".datepicker" ).datepicker();
          $('form :input').on('input', () => isModified = true);
 
          $('button[type="submit"]').on('click', function() {

@@ -55,6 +55,7 @@ class ImageWidget(Widget):
                         img.onload = function() {
                             canvas.width = img.width;
                             canvas.height = img.height;
+                            canvas.style.display = 'block';
                             canvas.getContext('2d').drawImage(img, 0, 0);
                         };
                         img.src = image;
@@ -91,6 +92,6 @@ class ImageField(models.ImageField):
         self.inline = kwargs.pop('inline', False)
         super().__init__(*args, **kwargs)
 
-    def formfield(self, **kwargs):
-        kwargs['widget'] = ImageWidget
-        return super().formfield(**kwargs)
+    #def formfield(self, **kwargs):
+    #    kwargs['widget'] = ImageWidget
+    #    return super().formfield(**kwargs)

@@ -5,7 +5,6 @@ from django.db import models
 from core.models.fields import AceField
 from core.models import Base
 
-
 class TypeOfItems(models.IntegerChoices):
     Remunerative = (1, _('Remunerative'))
     Deductible = (-1, _('Deductible'))

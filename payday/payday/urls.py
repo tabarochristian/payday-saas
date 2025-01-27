@@ -27,7 +27,7 @@ urlpatterns = [
     
     path('', include('core.urls')),
     path('api/', include('api.urls')),
-    #path('payroll/', include('payroll.urls')),
+    path('payroll/', include('payroll.urls')),
     path('employee/', include('employee.urls')),
 ]
 
