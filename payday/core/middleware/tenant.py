@@ -1,10 +1,11 @@
 from django.http import HttpResponseRedirect
+from psycopg2.extras import DictCursor
+
 from django.core.cache import cache
 from django.conf import settings
-from django.db import connection
 
 from core.utils import set_schema
-from core.models import Tenant
+from django.db import connection
 
 import threading
 import logging
@@ -28,7 +29,12 @@ class TenantMiddleware:
             logger.warning(f"Invalid schema: {schema}")
             return self.redirect_to_default()
 
-        if not self.set_schema_from_cache_or_db(schema):
+        row = self.set_schema_from_cache_or_db(schema)
+        if not row:
+            return self.redirect_to_default()
+
+        if is_active := row['is_active']:
+            logger.warning(f"Schema {schema} is not active")
             return self.redirect_to_default()
 
         set_schema(schema)
@@ -53,16 +59,16 @@ class TenantMiddleware:
         Set the schema from cache or database.
         Returns True if the schema is valid and set, False otherwise.
         """
-        cached_schema = cache.get(f"tenant_schema_{schema}")
-        if cached_schema:
+        row = cache.get(f"tenant_schema_{schema}")
+        if row:
             logger.debug(f"Using cached schema for {schema}")
             set_schema(cached_schema)
-            return True
+            return row
 
-        if self.set_schema_from_db(schema):
-            cache.set(f"tenant_schema_{schema}", schema, timeout=self.cache_timeout)
+        if row := self.set_schema_from_db(schema):
+            cache.set(f"tenant_schema_{schema}", row, timeout=self.cache_timeout)
             logger.debug(f"Schema {schema} set and cached")
-            return True
+            return row
 
         return False
 
@@ -72,17 +78,13 @@ class TenantMiddleware:
         Returns True if the schema exists, False otherwise.
         """
         try:
-            qs = Tenant.objects.all()
-            logger.error(f"Querying organization table for schema {qs.query}")
-
-            with connection.cursor() as cursor:
+            with connection.cursor(cursor_factory=DictCursor) as cursor:
                 cursor.execute("SELECT id FROM public.tenant WHERE schema = %s", [schema])
-                if cursor.fetchone():
+                if row := cursor.fetchone():
                     set_schema(schema)
-                    return True
-                else:
-                    logger.warning(f"Schema {schema} not found in organization table")
-                    return False
+                    return dict(row)
+                logger.warning(f"Schema {schema} not found in organization table")
+                return False
         except Exception as e:
             logger.error(f"Error querying organization table for schema {schema}: {e}")
             return False
