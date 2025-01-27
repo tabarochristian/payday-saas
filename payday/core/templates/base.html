@@ -189,23 +189,10 @@
    <script src="{% static 'assets/js/bootstrap.js' %}"></script>
    <script src="{% static 'assets/js/app.js' %}"></script>
 
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" referrerpolicy="no-referrer"></script>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css" />
    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
    
    <script>
-      var results = [], steps = [];
-
-      function slugify(str) {
-         return str.trim()
-                     .toLowerCase()
-                     .replace(/[^a-z0-9 -]/g, '') // Remove non-alphanumeric characters
-                     .replace(/\s+/g, '-')        // Replace spaces with hyphens
-                     .replace(/-+/g, '-');        // Remove consecutive hyphens
-      }
-
       $(document).ready(() => {
          let isModified = false;
 
@@ -266,41 +253,10 @@
                   csrfmiddlewaretoken: Cookies.get('csrftoken')
                },
                async: false,
-               success: function() {
-                  location.reload();
-               }
+               success: () => location.reload()
             });
          });
-
-         // Initialize IntroJS
-         introJs().setOptions({
-            steps: steps.concat(results),
-            dontShowAgain: localStorage.getItem(window.location.pathname) !== null
-         }).oncomplete(() => {
-            localStorage.setItem(window.location.pathname, true);
-         }).start();
-
-         {% comment %}
-         $('.ajax-request').click(function() {
-            var url = $(this).data('url');
-            var json = $(this).data('json');
-            var method = $(this).data('method');
-
-            $.ajax({
-               url: url,
-               method: method,
-               data: JSON.parse(json),
-               contentType: "application/json",
-               error: () => toastr.error('Error action'),
-               success: () => toastr.info('Action successfully'),
-            });
-        });
-        {% endcomment %}
-
       });
-
-      
-
    </script>
 
 </html>

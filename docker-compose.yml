@@ -232,21 +232,7 @@ services:
     depends_on:
       - saas
 
-  # Chargebee service
-  chargebee:
-    image: chargebee/chargebee:latest
-    container_name: payday-chargebee
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    environment:
-      - CHARGEBEE_SITE=billing.payday.cd
-      - CHARGEBEE_API_KEY=Gvf3N3agz1YQNqArleS45WbPxL4mBeJ3C6TbVdGuNYCXBEOvw2Y1x0G0VKoDFPHu
-    volumes:
-      - chargebee_data:/data
-
 volumes:
-  chargebee_data:
   master_data:
   slave_data:
   minio_data:

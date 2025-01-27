@@ -28,6 +28,8 @@
 
 {{ menus|json_script:"menus" }}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css" />
 <script>
     $(function() {
         // Initial Steps for IntroJS
@@ -53,7 +55,7 @@
         // Generate Results Array
         results = JSON.parse(document.getElementById('menus').textContent).flatMap(menu => 
             menu.children && Array.isArray(menu.children) ? menu.children.map(child => ({
-                element: `#submenu-item-${slugify(child.title)}`,
+                element: `#submenu-item-${child.title}`,
                 intro: child.description || "No description available"
             }))
             : {
@@ -61,6 +63,14 @@
                 intro: menu.description || "No description available"
             }
         );
+
+        // Initialize IntroJS
+        introJs().setOptions({
+            steps: steps.concat(results),
+            dontShowAgain: localStorage.getItem(window.location.pathname) !== null
+         }).oncomplete(() => {
+            localStorage.setItem(window.location.pathname, true);
+         }).start();
     });
 </script>
 
