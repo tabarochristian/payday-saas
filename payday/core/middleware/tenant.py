@@ -61,7 +61,7 @@ class TenantMiddleware:
         row = cache.get(f"tenant_schema_{schema}")
         if row:
             logger.debug(f"Using cached schema for {schema}")
-            set_schema(cached_schema)
+            set_schema(schema)
             return row
 
         if row := self.set_schema_from_db(schema):
