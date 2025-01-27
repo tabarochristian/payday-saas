@@ -108,6 +108,7 @@ class Tenant(models.Model):
     
 
     class Meta:
+        managed = False
         db_table = 'public.tenant'
         verbose_name = _('tenant')
         unique_together = ('name', 'phone')

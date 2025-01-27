@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import connection
 
 from core.utils import set_schema
-from payday.models import Tenant
+from core.models import Tenant
 
 import threading
 import logging
