@@ -27,6 +27,9 @@
         #auth #auth-left .auth-logo img {
             height: 6rem !important;
         }
+        #auth #auth-left .auth-title {
+            font-size: 3rem;
+        }
     </style>
 </head>
 
@@ -39,7 +42,7 @@
                         <img src="{% static 'assets/images/logo/logo.png' %}" alt="payday-logo">
                     </div>
                     {% if not form.is_valid %}
-                        <h1 class="auth-title">Commencez ici!</h1>
+                        <h1 class="auth-title mb-0">Commencez ici!</h1>
                         <p class="auth-subtitle mb-5">Créez votre compte et transformez votre organisation.</p>
                         {% crispy form %}
                         <small class="text-muted">
