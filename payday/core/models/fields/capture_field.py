@@ -89,19 +89,18 @@ class CaptureWidget(Widget):
                     }
                 }
 
-                navigator.mediaDevices.enumerateDevices()
-                    .then(devices => {
-                        const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                        videoDevices.forEach(device => {
-                            const option = document.createElement('option');
-                            option.value = device.deviceId;
-                            option.text = device.label || `Camera ${deviceSelect.length + 1}`;
-                            deviceSelect.appendChild(option);
-                        });
-                        if (videoDevices.length > 0 && !existingValue) {
-                            startVideo(videoDevices[0].deviceId);
-                        }
+                navigator.mediaDevices.enumerateDevices().then(devices => {
+                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                    videoDevices.forEach(device => {
+                        const option = document.createElement('option');
+                        option.value = device.deviceId;
+                        option.text = device.label || `Camera ${deviceSelect.length + 1}`;
+                        deviceSelect.appendChild(option);
                     });
+                    if (videoDevices.length > 0 && !existingValue) {
+                        startVideo(videoDevices[0].deviceId);
+                    }
+                });
 
                 deviceSelect.addEventListener('change', (event) => {
                     stopVideo();
