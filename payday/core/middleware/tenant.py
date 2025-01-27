@@ -1,6 +1,4 @@
 from django.http import HttpResponseRedirect
-from psycopg2.extras import DictCursor
-
 from django.core.cache import cache
 from django.conf import settings
 
@@ -78,8 +76,8 @@ class TenantMiddleware:
         Returns True if the schema exists, False otherwise.
         """
         try:
-            with connection.cursor(cursor_factory=DictCursor) as cursor:
-                cursor.execute("SELECT id FROM public.tenant WHERE schema = %s", [schema])
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM public.tenant WHERE schema = %s", [schema])
                 if row := cursor.fetchone():
                     set_schema(schema)
                     return dict(row)
