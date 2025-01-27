@@ -73,8 +73,8 @@ class TenantMiddleware:
         """
         try:
             qs = Tenant.objects.all()
-            print(qs.query)
-            
+            logger.debug(f"Querying organization table for schema {qs.query}")
+
             with connection.cursor() as cursor:
                 cursor.execute("SELECT id FROM public.tenant WHERE schema = %s", [schema])
                 if cursor.fetchone():
