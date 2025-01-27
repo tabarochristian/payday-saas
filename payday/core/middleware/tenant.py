@@ -72,7 +72,9 @@ class TenantMiddleware:
         Returns True if the schema exists, False otherwise.
         """
         try:
-            print(Tenant.objects.all())
+            qs = Tenant.objects.all()
+            print(qs.query)
+            
             with connection.cursor() as cursor:
                 cursor.execute("SELECT id FROM public.tenant WHERE schema = %s", [schema])
                 if cursor.fetchone():
