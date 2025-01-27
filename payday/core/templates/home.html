@@ -51,7 +51,7 @@
         // Generate Results Array
         results = JSON.parse(document.getElementById('menus').textContent).flatMap(menu => 
             menu.children && Array.isArray(menu.children) ? menu.children.map(child => ({
-                element: `#submenu-item-${slugify(child.title)}`,
+                element: `#submenu-item-${slugify(child.title.toLowerCase())}`,
                 intro: child.description || "No description available"
             }))
             : {
