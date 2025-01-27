@@ -2629,3 +2629,218 @@ Traceback (most recent call last):
     raise TypeError(f'Object of type {o.__class__.__name__} '
                     f'is not JSON serializable')
 TypeError: Object of type AttendanceQuerySet is not JSON serializable
+ERROR 2025-01-27 14:30:04,182 log Internal Server Error: /delete/employee/device
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/delete.py", line 55, in post
+    qs.delete()
+    ~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1187, in delete
+    collector.collect(del_query)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/deletion.py", line 346, in collect
+    on_delete(self, field, sub_objs, self.using)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: SET_NULL() takes 4 positional arguments but 5 were given
+ERROR 2025-01-27 14:44:20,055 log Internal Server Error: /employee/change/1
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
+    return do()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 730, in _connect
+    raise err
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 718, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 127, in reconnect_on_error
+    yield
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 177, in _consume_from
+    self._pubsub.subscribe(key)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/client.py", line 957, in subscribe
+    ret_val = self.execute_command("SUBSCRIBE", *new_channels.keys())
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/client.py", line 786, in execute_command
+    self.connection = self.connection_pool.get_connection(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        "pubsub", self.shard_hint
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 61 connecting to localhost:6379. Connection refused.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 357, in connect
+    sock = self.retry.call_with_retry(
+        lambda: self._connect(), lambda error: self.disconnect(error)
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
+    return do()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 358, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 730, in _connect
+    raise err
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 718, in _connect
+    sock.connect(socket_address)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/connection.py", line 472, in _reraise_as_library_errors
+    yield
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 800, in send_task
+    self.backend.on_task_call(P, task_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 373, in on_task_call
+    self.result_consumer.consume_from(task_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 169, in consume_from
+    return self.start(task_id)
+           ~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 147, in start
+    self._consume_from(initial_task_id)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 176, in _consume_from
+    with self.reconnect_on_error():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 130, in reconnect_on_error
+    self._ensure(self._reconnect_pubsub, ())
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 384, in ensure
+    return retry_over_time(
+        fun, self.connection_errors, args, {},
+        partial(self.on_connection_error, max_retries),
+        **retry_policy)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/utils/functional.py", line 318, in retry_over_time
+    return fun(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/backends/redis.py", line 106, in _reconnect_pubsub
+    metas = self.backend.client.mget(self.subscribed_to)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/commands/core.py", line 2009, in mget
+    return self.execute_command("MGET", *args, **options)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/redis/connection.py", line 363, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 61 connecting to localhost:6379. Connection refused.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/employee/views/employee.py", line 39, in post
+    return super().post(request, self.kwargs['app'], self.kwargs['model'], pk)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/change.py", line 115, in post
+    form.save()
+    ~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/employee/signals/employee.py", line 21, in employee_created
+    setuserinfo.delay(schema, instance.registration_number)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/task.py", line 444, in delay
+    return self.apply_async(args, kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/task.py", line 594, in apply_async
+    return app.send_task(
+           ~~~~~~~~~~~~~^
+        self.name, args, kwargs, task_id=task_id, producer=producer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **options
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/celery/app/base.py", line 798, in send_task
+    with P.connection._reraise_as_library_errors():
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/kombu/connection.py", line 476, in _reraise_as_library_errors
+    raise ConnectionError(str(exc)) from exc
+kombu.exceptions.OperationalError: Error 61 connecting to localhost:6379. Connection refused.

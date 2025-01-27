@@ -12,4 +12,7 @@ from .service import Service
 from .designation import Designation
 from .attendance import Attendance
 from .employee import Employee
+
+from .education import Education
+from .document import Document
 from .child import Child

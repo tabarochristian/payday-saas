@@ -4,6 +4,7 @@ from core import utils
 
 from django.contrib.contenttypes.models import ContentType
 from core.models import Menu
+from django.apps import apps
 
 @shared_task(name='daily')
 def new_tenant(schema, user):

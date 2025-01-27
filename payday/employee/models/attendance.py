@@ -4,7 +4,6 @@ from crispy_forms.layout import Layout
 from core.models import fields, Base
 from django.urls import reverse_lazy
 
-
 class Attendance(Base):
     employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employé'), editable=False)
     device = fields.ModelSelectField('employee.Device', verbose_name=_('dispositif'), editable=False)
@@ -18,8 +17,8 @@ class Attendance(Base):
 
     class Meta:
         unique_together = ('employee', 'checked_at')
-        verbose_name_plural = _('attendances')
-        verbose_name = _('attendance')
+        verbose_name_plural = _('presences')
+        verbose_name = _('presence')
 
     @property
     def name(self):
@@ -28,6 +27,5 @@ class Attendance(Base):
     def get_absolute_url(self):
         return reverse_lazy("core:list", kwargs={'app': 'employee', 'model': 'attendance'})
     
-
     def __str__(self):
         return self.employee.name

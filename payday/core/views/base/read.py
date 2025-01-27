@@ -2,11 +2,16 @@ from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.http import Http404
 
-from core.forms import modelform_factory, InlineFormSetHelper, Button
-from django.urls import reverse_lazy
+from core.forms.button import Button
 from django.contrib import messages
-from .base import BaseView
 
+from core.forms import modelform_factory, InlineFormSetHelper
+from django.urls import reverse_lazy
+from django.db import transaction
+
+from core.models import Preference
+from .base import BaseView
+import copy
 
 class Read(BaseView):
     next = None
@@ -14,19 +19,42 @@ class Read(BaseView):
     template_name = "change.html"
     inline_formset_helper = InlineFormSetHelper()
 
+    def safe_eval(self, key, value):
+        allowed_names = {'int': int, 'float': float, 'str': str, 'bool': bool, 'list': list}
+        try:
+            return eval(f'{key}("{value}")', {"__builtins__": allowed_names}, {})
+        except:
+            return value
+
+    def preferences(self):
+        prefs = Preference.objects.all().values('key', 'value')
+        return {
+            pref.get('key').split(':')[0].lower(): self.safe_eval(pref.get('key').split(':')[-1].lower(), pref.get('value'))
+            for pref in prefs
+        }
+
+
+    def _get_object(self):
+        model = self.get_model()
+        pk = self.kwargs.get('pk', None)
+        if not pk:
+            raise Http404(_('Aucun identifiant n\'a été fourni'))
+        return self.get_queryset().filter(**{model._meta.pk.name: pk}).first()
+
     def get_action_buttons(self):
         obj = self._get_object()
         kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
 
-        action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
+        action_buttons = getattr(obj, 'get_action_buttons', [])
         action_buttons = [Button(**button) for button in action_buttons]
 
-        return [
+        action_buttons = action_buttons + [
             Button(**{
                 'text': _('Annuler'),
                 'tag': 'a',
                 'url': reverse_lazy('core:list', kwargs=kwargs),
-                'classes': 'btn btn-light-danger'
+                'classes': 'btn btn-light-danger',
+                'permission': f'{kwargs['app']}.view_{kwargs['model']}'
             }), 
             Button(**{
                 'text': _('Supprimer'),
@@ -34,29 +62,15 @@ class Read(BaseView):
                 'url': reverse_lazy('core:delete', kwargs=kwargs)+f'?pk__in={obj.pk}',
                 'classes': 'btn btn-danger',
                 'permission': f'{kwargs['app']}.delete_{kwargs['model']}'
-            }),
-            Button(**{
-                'text': _('Sauvegarder'),
-                'tag': 'button',
-                'classes': 'btn btn-success',
-                'permission': f'{kwargs['app']}.change_{kwargs['model']}',
-                'attrs': {
-                    'type': 'submit',
-                    'form': f'form-{kwargs["model"]}'
-                }
-            }),
-        ] + action_buttons
-    
-    def _get_object(self):
-        model = self.get_model()
-        pk = self.kwargs.get('pk', None)
-        if not pk:
-            raise Http404(_('Aucun identifiant n\'a été fourni'))
-        return self.get_queryset().filter(**{model._meta.pk.name: pk}).first()
-    
+            })
+        ]
+
+        # make sure the user has the permission to see the button
+        return [button for button in action_buttons if self.request.user.has_perm(button.permission)]
+
     def _set_readonly_and_class(self, fields, readonly=True, css_class='bg-dark'):
         for field in fields:
-            field.widget.attrs['readonly'] = readonly
+            field.widget.attrs['disabled'] = readonly
             field.widget.attrs['class'] = css_class
 
     def get(self, request, app, model, pk):
@@ -68,18 +82,11 @@ class Read(BaseView):
             messages.warning(request, message.format(**{'model': model._meta.model_name, 'pk': pk}))
             return redirect(reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name}))
         
-        self.inline_formset_helper.form_tag = False
         form = modelform_factory(model, fields=self.get_form_fields(), form_tag=False)
-        
         form = form(instance=obj)
+
         form = self.filter_form(form)
         self._set_readonly_and_class(form.fields.values())
 
         formsets = [formset(instance=obj) for formset in self.formsets()]
-
-        for formset in formsets:
-            for form in formset:
-                for field in form.fields:
-                    self._set_readonly_and_class(form.fields.values())
-
         return render(request, self.get_template_name(), locals())

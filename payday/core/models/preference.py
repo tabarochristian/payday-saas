@@ -28,7 +28,7 @@ class Preference(Base):
             Column('key'),
             Column('value')
         ),
-        '_metadata'
+        # '_metadata'
     )
 
     @property

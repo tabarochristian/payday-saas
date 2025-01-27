@@ -59,27 +59,37 @@ class Employee(BaseEmployee):
     )
 
     list_display = ('registration_number', 'last_name', 'middle_name', 'branch', 'designation', 'grade', 'status')
-    inlines = ['employee.child']#, 'payroll.specialemployeeitem']
+    inlines = ['employee.education', 'employee.child']
 
     layout = Layout(
-        'photo',
-        Row(
-            Column('registration_number'),
-            Column('social_security_number')
+        Div(
+            'photo',
         ),
-        Row(
-            Column('agreement'),
-            Column('date_of_join')
-        ),
-        Row(
-            Column('direction', css_class="col-md-4"),
-            Column('sub_direction', css_class="col-md-4"),
-            Column('service', css_class="col-md-4"),
-        ),
-        Row(
-            Column('branch'),
-            Column('grade'),
-            Column('designation'),
+        Div(
+            Row(
+                Column('registration_number'),
+                Column('social_security_number')
+            ),
+            Row(
+                Column('agreement'),
+                Column('date_of_join')
+            ),
+            Row(
+                Column('direction', css_class="col-md-4"),
+                Column('sub_direction', css_class="col-md-4"),
+                Column('service', css_class="col-md-4"),
+            ),
+            Row(
+                Column('branch'),
+                Column('grade'),
+                Column('designation'),
+            ),
+            Row(
+                Column('payment_method'),
+                Column('payer_name'),
+                Column('payment_account'),
+            ),
+            css_class='bg-dark p-4 rounded mb-4'
         ),
         Row(
             Column('first_name'),
@@ -90,10 +100,13 @@ class Employee(BaseEmployee):
             Column('date_of_birth'),
             Column('gender'),
         ),
-        Row(
-            Column('marital_status'),
-            Column('spouse'),
-            Column('spouse_date_of_birth')
+        Div(
+            Row(
+                Column('marital_status'),
+                Column('spouse'),
+                Column('spouse_date_of_birth')
+            ),
+            css_class='bg-light-warning p-4 mb-4 rounded'
         ),
         Row(
             Column(Div(PrependedText('mobile_number', '+', active=True))),
@@ -103,13 +116,8 @@ class Employee(BaseEmployee):
             Column('physical_address'),
             Column('emergency_information'),
         ),
-        Row(
-            Column('payment_method'),
-            Column('payer_name'),
-            Column('payment_account'),
-        ),
+        'comment',
         Div(
-            'comment',
             'status',
             'devices',
             css_class='bg-dark p-4 rounded'

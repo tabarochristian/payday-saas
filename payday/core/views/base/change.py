@@ -55,7 +55,8 @@ class Change(BaseView):
                 'text': _('Annuler'),
                 'tag': 'a',
                 'url': reverse_lazy('core:list', kwargs=kwargs),
-                'classes': 'btn btn-light-danger'
+                'classes': 'btn btn-light-danger',
+                'permission': f'{kwargs['app']}.view_{kwargs['model']}'
             }), 
             Button(**{
                 'text': _('Supprimer'),
