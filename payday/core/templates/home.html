@@ -47,11 +47,16 @@
                 intro: "{% trans "Utilisateur connecté" %}"
             }
         ];
+
+        // Configure slugify to remove special characters (replace with empty string)
+        const options = {
+            remove: /[*+~.()'"!:@]/g
+        };
     
         // Generate Results Array
         results = JSON.parse(document.getElementById('menus').textContent).flatMap(menu => 
             menu.children && Array.isArray(menu.children) ? menu.children.map(child => ({
-                element: `#submenu-item-${slugify(child.title.toLowerCase())}`,
+                element: `#submenu-item-${slugify(child.title.toLowerCase(), options)}`,
                 intro: child.description || "No description available"
             }))
             : {
