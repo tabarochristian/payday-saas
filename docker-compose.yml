@@ -45,7 +45,8 @@ services:
     container_name: payday-saas
     restart: unless-stopped
     command: >
-      sh -c "gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
+      sh -c "python manage.py tenants &&
+            gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     volumes:
       - ./payday:/app
     expose:

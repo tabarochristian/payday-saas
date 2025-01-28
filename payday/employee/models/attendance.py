@@ -3,10 +3,11 @@ from django.utils.translation import gettext as _
 from crispy_forms.layout import Layout
 from core.models import fields, Base
 from django.urls import reverse_lazy
+from django.db import models
 
 class Attendance(Base):
+    device = fields.ModelSelectField('employee.Device', verbose_name=_('dispositif'), blank=True, null=True, on_delete=models.SET_NULL)
     employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employé'))
-    device = fields.ModelSelectField('employee.Device', verbose_name=_('dispositif'))
     checked_at = fields.DateTimeField(verbose_name=_('vérifié à'))
 
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
