@@ -1,6 +1,8 @@
 from tenant.models import Tenant
+from celery import shared_task
 import docker
 
+@shared_task
 def create_tenant_schema(_id):
     tenant = Tenant.objects.filter(id=_id)
     tenant = tenant.first()
@@ -29,7 +31,7 @@ def create_tenant_schema(_id):
     # Return the output as a JSON response
     return {"output": output}
 
-
+@shared_task
 def delete_tenant_schema(schema):
     # Initialize Docker client
     client = docker.from_env()
