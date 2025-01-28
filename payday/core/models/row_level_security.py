@@ -26,7 +26,7 @@ class RowLevelSecurity(Base):
         editable=False
     )
     
-    content_type = fields.ForeignKey(
+    row_content_type = fields.ForeignKey(
         'contenttypes.contenttype',
         verbose_name=_("type de contenu"),
         limit_choices_to={'app_label__in': ['core', 'employee', 'payroll']},
@@ -53,7 +53,7 @@ class RowLevelSecurity(Base):
         CrispyRow(
             Column('group'),
             Column('user'),
-            Column('content_type'),
+            Column('row_content_type'),
         ),
         Fieldset(
             _('Row'),
@@ -63,13 +63,6 @@ class RowLevelSecurity(Base):
             )
         ),
     )
-
-    def __init__(self, *args, **kwargs):
-        """
-        Initialize RowLevelSecurity instance.
-        """
-        super().__init__(*args, **kwargs)
-        self._meta.get_field('field').choices = self.get_fields()
 
     def get_fields(self):
         """
@@ -103,9 +96,9 @@ class RowLevelSecurity(Base):
         """
         Return the name representation of the RowLevelSecurity instance.
         """
-        return f"{self.user} - {self.content_type}"
+        return f"{self.user} - {self.row_content_type}"
 
     class Meta:
-        unique_together = ("content_type", "user", "field")
         verbose_name = _("filtrage des lignes")
         verbose_name_plural = _("filtrage des lignes")
+        unique_together = ("row_content_type", "user", "field")

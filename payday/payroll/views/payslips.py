@@ -10,14 +10,7 @@ from django.apps import apps
 
 
 class Payslips(Change):
-    template_name = 'payroll/payslips.html'
-
-    def documents(self):
-        _model = apps.get_model('core', 'template')
-        return _model.objects.filter(**{
-            'content_type__app_label': 'payroll',
-            'content_type__model__in': ['payroll', 'payslip']
-        }).values('id', 'name', 'content_type__model')
+    template_name = 'payroll/preview.html'
     
     def sheets(self):
         data = [field for field in Employee._meta.fields if field.get_internal_type() == 'ModelSelect']
@@ -40,6 +33,11 @@ class Payslips(Change):
         ItemPaid = apps.get_model('payroll', 'ItemPaid')
         return list(ItemPaid.objects.filter(payslip__payroll=self.kwargs['pk'])\
             .filter(amount_qp_employee__gte=0).values('name', 'code').distinct())
+
+    def get_action_buttons(self):
+        buttons = super().get_action_buttons()
+        buttons.pop(len(buttons) - 1)
+        return buttons
     
     def get(self, request, pk):
         app, model = 'payroll', 'payroll'

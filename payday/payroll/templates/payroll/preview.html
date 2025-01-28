@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load core %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+{% include 'components/change/heading.html' %}
+
+<div class="page-content">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <section>
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title mb-0">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12 mb-2">
+                            <h3 class="mb-0">{{ obj.get_status_display|title }}</h3>
+                            <small>{% trans 'Status' %}</small>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 mb-2">
+                            <h3 class="mb-0">{{ count|intcomma }}</h3>
+                            <small>{% trans 'Fiches de paie' %}</small>
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-12 mb-2">
+                            <h3 class="mb-0">{{ overall_net|intcomma }}</h3>
+                            <small>{% trans 'Net à payer global' %}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr class="text-uppercase">
+                                            <th>{% trans 'Matricule' %}</th>
+                                            <th>{% trans 'Full name' %}</th>
+                                            <th>{% trans 'Branch' %}</th>
+                                            <th>{% trans 'Grade' %}</th>
+                                            <th>{% trans 'Working days' %}</th>
+                                            <th>{% trans 'Attendance' %}</th>
+                                        </tr>
+                                    </thead>
+                
+                                    <tbody>
+                                        {% for obj in qs %}
+                                        <tr data-id="{{ obj.id }}">
+                                            <td>{{ obj.registration_number }}</td>
+                                            <td>{{ obj.full_name }}</td>
+                                            <td>{{ obj.branch.name }}</td>
+                                            <td>{{ obj.grade.name }}</td>
+                                            <td>{{ obj.designation.working_days|default:23 }}</td>
+                                            <td>
+                                                <input type="number" name="attendance" class="form-control" value="{{ obj.attendance|default:31 }}" min="0" max="31">
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('table').DataTable({
+            "paging": false
+        });
+    });
+</script>
+
+{% endblock %}

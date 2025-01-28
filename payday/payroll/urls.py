@@ -14,6 +14,7 @@ urlpatterns = [
     path('synthesis/<str:func>/<int:pk>', Synthesis.as_view(), name='synthesis'),
     
     path('payslips/<str:pk>', Payslips.as_view(), name='payslips'),
+    path('preview/<str:pk>', Preview.as_view(), name='preview'),
     path('payslip/<int:pk>', Payslip.as_view(), name='payslip'),
     path('slips', Slips.as_view(), name='slips'),
 ]

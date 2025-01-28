@@ -71,7 +71,7 @@ class Payroll(Base):
     )
 
     def get_absolute_url(self):
-        return reverse_lazy('payroll:payslips', args=[self.pk])
+        return reverse_lazy('payroll:preview', args=[self.pk])
     
     def refresh(self):
         net = self.payslip_set.aggregate(amount=models.Sum('net')).get('amount', 0)

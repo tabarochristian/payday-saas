@@ -20,9 +20,10 @@ class AdvanceSalary(Base):
         Fieldset(
             _('Informations sur l\'avance de salaire'),
             Row(
-                Column('amount', css_class='form-group col-md-12'),
-                # Column('duration', css_class='form-group col-md-6'),
-            )
+                Column('amount'),
+                Column('duration'),
+            ),
+            css_class='bg-dark p-4 rounded'
         )
     )
 

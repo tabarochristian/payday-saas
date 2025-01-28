@@ -6,8 +6,8 @@ class Grade(Base):
     group = fields.CharField(verbose_name=_('groupe'), max_length=100, blank=True, null=True, default=None)
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
 
+    layout = Layout('group', 'name', '_metadata')
     list_display = ('id', 'group', 'name')
-    layout = Layout('group', 'name')
     list_filter = ('group', )
 
     def save(self, *args, **kwargs):
@@ -21,3 +21,13 @@ class Grade(Base):
         
     def __str__(self):
         return self.name
+
+"""
+{
+  "base": 100,
+  "logement": 200,
+  "energy": 50,
+  "ind. vie chere": 150,
+  "ind. kilometrique": 170
+}
+"""

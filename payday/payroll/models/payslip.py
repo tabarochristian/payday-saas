@@ -17,7 +17,7 @@ class Payslip(Base):
     net = models.FloatField(_('net'), default=0)
 
     search_fields = ['employee__registration_number', 'employee__first_name', 'employee__middle_name', 'employee__last_name']
-    list_filter = ('employee__branch', 'employee__direction', 'employee__sub_direction', 'employee__status')
+    list_filter = ('payroll', 'employee__branch', 'employee__direction', 'employee__sub_direction', 'employee__status')
     list_display = ('id', 'employee', 'payroll', 'gross', 'taxable_gross', 'net')
 
     class Meta:

@@ -9,6 +9,8 @@ from .sheet_summary import SheetSummary
 from .synthesis import Synthesis
 from .listing import Listing
 
+from .preview import Preview
+
 
 # from .synthesis_by_employee import SynthesisByEmployee
 # from .synthesis_by_item import SynthesisByItem
