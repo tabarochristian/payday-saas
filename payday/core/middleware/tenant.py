@@ -31,7 +31,7 @@ class TenantMiddleware:
         if not row:
             return self.redirect_to_default()
 
-        if not (is_active := row[5]):
+        if not (is_active := row['is_active']):
             # send message to the user that the schema is not active
             logger.warning(f"Schema {schema} is not active")
             return self.redirect_to_default()
