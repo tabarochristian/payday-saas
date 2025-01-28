@@ -22,7 +22,6 @@
                         date: new Date(e.checked_at__date),
                         count: e.attended,
                     }));
-                    console.log(attendances)
     
                     new ApexCharts(document.querySelector('#attendances-chart'), {
                         series: Array.from({ length: 12 }, (value, index) => index).map(function (month) {

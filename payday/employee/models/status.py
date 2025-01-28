@@ -6,24 +6,16 @@ from core.models import Base
 
 
 class Status(Base):
-    name = fields.CharField(
-        verbose_name=_('nom'), 
-        max_length=100, 
-        unique=True
-    )
+    group = fields.CharField(verbose_name=_('groupe'), max_length=100, blank=True, null=True, default=None)
+    name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
 
-    #is_active = fields.BooleanField(
-    #    verbose_name=_('est actif'), 
-    #    help_text=_("Considered as active or not employee's status"), 
-    #    default=True
-    #)
-
-    list_display = ('id', 'name')
-    layout = Layout('name',)
-    search_fields = ('name')
+    list_display = ('id', 'group', 'name')
+    layout = Layout('group', 'name')
+    list_filter = ('group', )
     
     def save(self, *args, **kwargs):
-        self.name = self.name.upper()
+        self.group = self.group.upper() if self.group else self.group
+        self.name = self.name.upper() if self.name else self.name
         super().save(*args, **kwargs)
 
     class Meta:

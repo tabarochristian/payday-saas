@@ -1,6 +1,7 @@
 from django.db import models
 from functools import reduce
 from operator import or_
+import pandas as pd
 
 class CustomQuerySet(models.QuerySet):
     def related_to(self, user=None, *args, **kwargs):
@@ -34,6 +35,19 @@ class CustomQuerySet(models.QuerySet):
         filters = [models.Q(**{field: user}) for field in all_related_fields] 
         combined_filter = reduce(or_, filters) 
         return qs.filter(combined_filter)
+
+    def to_table(self, fields=None):
+        def get_field(field):
+            return field.split('__')[0]
+
+        fields = fields or self.model.list_display or [field.name for field in self.model._meta.fields]
+        fields = [f'{field}__name' if self.model._meta.get_field(field).is_relation else field for field in fields]
+
+        columns = [self.model._meta.get_field(get_field(field)).verbose_name for field in fields]
+        df = pd.DataFrame.from_records(self.values(*fields))
+        df.columns = columns
+
+        return df.to_html(classes='col table table-striped table-bordered table-hover')
 
 class CustomManager(models.Manager):
     def get_queryset(self):

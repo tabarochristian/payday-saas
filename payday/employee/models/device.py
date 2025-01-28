@@ -15,13 +15,13 @@ class Device(Base):
     Represents a connected device.
     """
     status = fields.CharField(_("Status"), max_length=255, choices=DeviceStatus.choices, default=DeviceStatus.DISCONNECTED, editable=False)
-    sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, editable=False, blank=False, null=False)
     branch = fields.ModelSelectField('employee.branch', verbose_name=_("site"), blank=True, null=True)
+    sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, blank=False, null=False)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)
 
+    list_display = ("id", "branch", "name", "sn", "status")
+    layout = Layout("branch", "sn", "name")
     list_filter = ("status", "branch")
-    layout = Layout("branch", "name", "_metadata")
-    list_display = ("branch", "name", "sn", "status")
 
     class Meta:
         verbose_name_plural = _("terminals")

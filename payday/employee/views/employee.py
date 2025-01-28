@@ -1,6 +1,9 @@
+from django.utils.translation import gettext as _
 from core.forms import modelform_factory
 from crispy_forms.layout import Layout
 from django.utils.timezone import now
+from core.forms.button import Button
+from django.urls import reverse_lazy
 from core.views import Change
 from django.apps import apps
 
@@ -21,6 +24,16 @@ class Employee(Change):
             return None
         modelform = modelform_factory(model, fields=missed_fields, layout=Layout(*missed_fields))
         return modelform()
+
+    def get_action_buttons(self):
+        buttons = super().get_action_buttons()
+        buttons.insert(0, Button(**{
+            'text': _('Imprimer'),
+            'tag': 'a',
+            'url': reverse_lazy('employee:print', kwargs={'pk': self.kwargs['pk']}),
+            'classes': 'btn btn-light-success',
+        }))
+        return buttons
 
     def attendancces(self):
         qs = self._get_object().attendance_set.all().attended(

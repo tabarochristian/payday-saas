@@ -7,11 +7,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.conf import settings
 
-from core.views.mixins import FielderMixin, LoggerMixin
+from core.views.mixins import *
 from django.views import View
 from django.apps import apps
 
-class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, LoggerMixin, View):
+class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, LoggerMixin, DocumentMixin, View):
     actions = []
     template_name = None
     DEBUG = settings.DEBUG

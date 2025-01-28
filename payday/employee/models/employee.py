@@ -72,7 +72,8 @@ class Employee(BaseEmployee):
             ),
             Row(
                 Column('agreement'),
-                Column('date_of_join')
+                Column('date_of_join'),
+                Column('date_of_end')
             ),
             Row(
                 Column('direction', css_class="col-md-4"),

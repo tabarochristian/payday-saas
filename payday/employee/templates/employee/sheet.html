@@ -135,6 +135,10 @@
             <td>Date d'Engagement</td>
             <td>{{ obj.date_of_join|default:'N/A' }}</td>
         </tr>
+        <tr>
+            <td>Date de fin</td>
+            <td>{{ obj.date_of_end|default:'N/A' }}</td>
+        </tr>
     </table>
 
     <!-- Contact Information -->
@@ -178,7 +182,7 @@
         </tr>
         <tr>
             <td>Payeur</td>
-            <td>{{ obj.payer.name|default:'N/A' }}</td>
+            <td>{{ obj.payer_name|default:'N/A' }}</td>
         </tr>
         <tr>
             <td>Numéro de compte</td>
@@ -238,5 +242,6 @@
             </td>
         </td>
     </table>
+
 </body>
 </html>

@@ -5,13 +5,19 @@ from core.models import fields, Base
 from django.urls import reverse_lazy
 
 class Attendance(Base):
-    employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employé'), editable=False)
-    device = fields.ModelSelectField('employee.Device', verbose_name=_('dispositif'), editable=False)
-    checked_at = fields.DateTimeField(verbose_name=_('vérifié à'), editable=False)
+    employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employé'))
+    device = fields.ModelSelectField('employee.Device', verbose_name=_('dispositif'))
+    checked_at = fields.DateTimeField(verbose_name=_('vérifié à'))
 
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
     list_display = ('device', 'employee', 'checked_at')
     list_filter = ('device', 'checked_at',)
+
+    layout = Layout(
+        'employee',
+        'device',
+        'checked_at'
+    )
 
     objects = AttendanceManager()
 
@@ -22,7 +28,7 @@ class Attendance(Base):
 
     @property
     def name(self):
-        return self.employee.name
+        return f"{self.employee.name} - {self.checked_at}"
 
     def get_absolute_url(self):
         return reverse_lazy("core:list", kwargs={'app': 'employee', 'model': 'attendance'})

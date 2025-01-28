@@ -9,6 +9,8 @@ from api.serializers import model_serializer_factory
 from core.utils import DictToObject
 from core.models import fields
 
+from core.models.managers import CustomManager
+
 class Base(models.Model):
     #history = HistoricalRecords(
     #    verbose_name=_('historique'),
@@ -48,6 +50,8 @@ class Base(models.Model):
     search_fields = ('id',)
     layout = Layout()
     list_filter = ()
+
+    objects = CustomManager()
 
     @property
     def get_action_buttons(self):
