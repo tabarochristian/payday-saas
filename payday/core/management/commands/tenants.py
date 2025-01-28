@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
         # using connection fetch all schema in the table tenants in the db
         with connection.cursor() as cursor:
-            cursor.execute("SELECT schema FROM information_schema.schemata")
+            cursor.execute("SELECT schema FROM public.tenant")
             schemas = cursor.fetchall()
 
         from django.core.management import call_command
