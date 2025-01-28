@@ -11,7 +11,7 @@ BROKER_USE_SSL_CONFIG = {'ssl_cert_reqs': ssl.CERT_NONE}
 def is_redis_url_with_ssl(redis_url):
     return redis_url.startswith('rediss://')
 
-app = Celery("payday")
+app = Celery("landlord")
 
 if is_redis_url_with_ssl(REDIS_URL_WITH_SSL):
     app.conf.update(
