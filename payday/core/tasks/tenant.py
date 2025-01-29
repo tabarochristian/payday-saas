@@ -11,7 +11,7 @@ def new_tenant(schema, user):
     utils.set_schema(schema)
 
     apps = ContentType.objects.filter(app_label__in=['employee', 'payroll']).values_list('app_label', flat=True).distinct()
-    excluded_models = ['children','itempaid','paidemployee','advancesalary','specialemployeeitem']
+    excluded_models = ['children', 'itempaid', 'paidemployee', 'advancesalary', 'specialemployeeitem']
     
     for app_label in apps:
         obj, created = Menu.objects.get_or_create(**{
@@ -24,5 +24,11 @@ def new_tenant(schema, user):
                 .exclude(model__in=excluded_models)
         obj.children.set(qs)
         print(f'Created menu for {app_label}')
+
+    # check if fixtures exists in fixtures folder
+    # load fixtures
+    # call_command('loaddata', 'fixtures/core.json')
+    # call_command('loaddata', 'fixtures/employee.json')
+    # call_command('loaddata', 'fixtures/payroll.json')
 
     return "Success"

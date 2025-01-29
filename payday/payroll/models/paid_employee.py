@@ -6,6 +6,10 @@ from django.db import models
 
 class PaidEmployee(Employee):
     photo = None
+    agreement, status = None, None
+    branch, grade, designation = None, None, None
+    direction, subdirection, service = None, None, None
+
     payroll = ModelSelectField('payroll.payroll', verbose_name=_('paie'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     @property

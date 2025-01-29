@@ -68,7 +68,13 @@
                                             <td>{{ obj.grade.name }}</td>
                                             <td>{{ obj.designation.working_days|default:23 }}</td>
                                             <td>
-                                                <input type="number" name="attendance" class="form-control" value="{{ obj.attendance|default:31 }}" min="0" max="31">
+                                                <input 
+                                                    type="number" 
+                                                    name="attendance" 
+                                                    class="form-control" 
+                                                    value="{{ obj.attendance|default:obj.designation.working_days_per_month|default:23 }}" 
+                                                    min="0" 
+                                                    max="{{ obj.designation.working_days_per_month|default:23 }}" />
                                             </td>
                                         </tr>
                                         {% endfor %}
