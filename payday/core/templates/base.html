@@ -13,6 +13,7 @@
 
       <link rel="stylesheet" href="{% static 'assets/css/main/app.css' %}">
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
       {% comment %}<link rel="stylesheet" href="{% static 'assets/css/main/app-dark.css' %}">{% endcomment %}
       <link rel="stylesheet" href="{% static 'assets/css/shared/iconly.css' %}">
@@ -211,7 +212,7 @@
             progressBar: true,
         };
 
-         $( ".datepicker" ).datepicker();
+         // $( ".datepicker" ).datepicker();
          $('form :input').on('input', () => isModified = true);
 
          $('button[type="submit"]').on('click', function() {
@@ -227,7 +228,7 @@
          });
 
          document.body.addEventListener('htmx:configRequest', (event) => {
-            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+            event.detail.headers['X-CSRFToken'] = Cookies.get('csrftoken');
          });
 
          const modal = new bootstrap.Modal(document.getElementById("modal"));
@@ -263,6 +264,14 @@
                async: false,
                success: () => location.reload()
             });
+         });
+
+         $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+                }
+            }
          });
       });
    </script>

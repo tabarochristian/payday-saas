@@ -125,4 +125,46 @@ def notifications(request):
     return {'count': notifications}
 
 def action_required(request):
-    return {'count': 0}
+    data = {'count': 0}
+    from employee.models import Device
+    is_devices = Device.objects.all().exists()
+    if not is_devices: 
+        data['count'] += 1
+    return data
+
+"""
+from django.db.models import Case, When, Value, CharField, Sum
+from django.shortcuts import render
+from .models import Payroll
+from django.utils import timezone
+
+def get_payroll_data(request):
+    payroll_data = Payroll.objects.annotate(
+        month=Case(
+            When(start_dt__month=1, then=Value('January')),
+            When(start_dt__month=2, then=Value('February')),
+            When(start_dt__month=3, then=Value('March')),
+            When(start_dt__month=4, then=Value('April')),
+            When(start_dt__month=5, then=Value('May')),
+            When(start_dt__month=6, then=Value('June')),
+            When(start_dt__month=7, then=Value('July')),
+            When(start_dt__month=8, then=Value('August')),
+            When(start_dt__month=9, then=Value('September')),
+            When(start_dt__month=10, then=Value('October')),
+            When(start_dt__month=11, then=Value('November')),
+            When(start_dt__month=12, then=Value('December')),
+            output_field=CharField(),
+        )
+    ).values('month').annotate(
+        total_amount=Sum('amount')
+    ).values('month', 'total_amount')
+
+    # Convert to a format that can be used by the frontend chart
+    payroll_data = list(payroll_data)
+
+    context = {
+        'payroll_data': payroll_data
+    }
+    return render(request, 'payroll_chart.html', context)
+
+"""

@@ -37,8 +37,8 @@ class TenantMiddleware:
             return self.redirect_to_default()
 
         set_schema(schema)
-        thread.tenant = schema
-        request.tenant = schema
+        request.tenant = row
+        thread.schema = schema
         return self.get_response(request)
 
     def extract_schema_from_host(self, host):
@@ -96,6 +96,11 @@ class TenantMiddleware:
         redirect_url = getattr(settings, "DEFAULT_TENANT_REDIRECT_URL", "https://payday.cd")
         return HttpResponseRedirect(f"{redirect_url}?message=not-found")
 
+    @staticmethod
+    def get_schema():
+        return getattr(thread, 'schema', None)
+
     @staticmethod 
-    def get_tenant(): 
-        return getattr(thread, 'tenant', None)
+    def get_tenant():
+        schema = TenantMiddleware.get_schema()
+        return cache.get(f"tenant_schema_{schema}", {})

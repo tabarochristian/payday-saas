@@ -9,27 +9,8 @@
 
 {% block content %}
 
-<style>
-    .blink {
-        animation: animate 2.5s linear infinite;
-    }
-
-    @keyframes animate {
-        0% {
-            opacity: 0;
-        }
-
-        50% {
-            opacity: 0.7;
-        }
-
-        100% {
-            opacity: 0;
-        }
-    }
-</style>
-
-{% comment %}<div class="page-heading">
+{% comment %}
+<div class="page-heading">
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -92,13 +73,13 @@
             </div>
         </div>
     </div>
-</div>{% endcomment %}
+</div>
+{% endcomment %}
 
 {% include 'components/change/heading.html' %}
 
 <div class="page-content">
     <section>
-        
         {% for error in obj.metadata.errors %}
             <div class="alert alert-light-warning fw-bold mb-3" role="alert">
                 {{ error.message }}
@@ -110,12 +91,17 @@
                 <div class="card-title mb-0">
                     <div class="row">
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0 {% if obj.status != 'SUCCESS' %}blink{% endif %}">{{ obj.get_status_display|title }}</h3>
+                            <h3 class="mb-0">{{ obj.get_status_display|title }}</h3>
                             <small>{% trans 'Status' %}</small>
                         </div>
 
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ count|intcomma }}</h3>
+                            <h3 class="mb-0">
+                                {{ qs.count|intcomma }}
+                                <small>
+                                    {{  qs.count|pluralize:'fiche de paie' }}
+                                </small>
+                            </h3>
                             <small>{% trans 'Fiches de paie' %}</small>
                         </div>
                         
@@ -125,36 +111,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="progress">
+                {% comment %}<div class="progress">
                     <div class="progress-bar bg-success" id="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
+                </div>{% endcomment %}
             </div>
         </div>
-
-        {% if obj.approvers.all %}
-        <div class="card">
-            <div class="card-body">
-                <h4>{% trans "Approbateur(s)" %}</h4>
-                <ul>
-                    {% for approver in obj.approvers.all %}
-                        <li>{{ approver }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        {% endif %}
         
         <div class="col">
             <div class="row">
                 <div class="col-md-9 col-sm-12">
                 
                     <div class="card">
+                        
+                        {% if qs.paginator %}
                         <div class="card-header">
                             <form method="get" class="input-group mb-0">
                                 <span class="input-group-text" id="search-button"><i class="bi bi-search"></i></span>
                                 <input type="text" name="q" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search" aria-describedby="search-button" value="{{ request.GET.q }}">
                             </form>
                         </div>
+                        {% endif %}
             
                         <div class="card-body">
                             <div class="table-responsive">
@@ -187,6 +163,7 @@
             
                     </div>
 
+                    {% if qs.paginator %}
                     <div class="card">
                         <div class="card-body text-center">
                              <nav aria-label="Page navigation example">
@@ -216,7 +193,8 @@
                              </nav>
                          </div>
                     </div>
-                    
+                    {% endif %}
+
                 </div>
                 
                 <div class="col-md-3 col-sm-12 col-xs-12">
@@ -241,58 +219,5 @@
         </div>
     </section>
 </div>
-
-{% if obj.status == 'PROGRESS' %}
-<script>setTimeout(() => window.location.reload(1), 5000)</script>
-{% endif %}
-
-{% comment %}
- <script>
-    $(document).ready(function() {
-        $('input[id*="date"]').attr('type', 'month');
-        $("#filter-form").submit(function() {
-            $(this).find(':input, select').filter(function() {
-            return !this.value;
-            }).prop("disabled", true);
-            return true; // Ensure the form still submits
-        });
-    });
-</script>
-{% endcomment %}
-
-<script>
-    $(function() {
-        $("#master-checkbox").change(function() {
-            let value = $(this).is(":checked");
-            $("input[type='checkbox']").attr("checked", value);
-        });
-
-        $('input[type="checkbox"]').change(function() {
-            let checked = $('input:checked').map((_, el) => el.value).get();
-            let selected = $('input:checked').filter((_, el) => el.value !== "on").map((_, el) => el.value).get();
-
-            $('.btn-actor').each(function() {
-                let url = $(this).attr('href').split("?")[0] + "?";
-                if(selected.length > 0){
-                    $(this).attr('href', url+"pk__in=" + selected.join(","));
-                }else{
-                    $(this).attr('href', url);
-                }
-            });
-        });
-
-        /* $('fieldset').has('input[type="date"]').each(function() {
-            var legend = $(this).find('legend');
-            if (legend.length) legend.replaceWith($('<label>').html(legend.html()));
-        }); */
-
-        $("#filter-form").submit(function() {
-            $(this).find(':input, select').filter(function() {
-               return !this.value;
-            }).prop("disabled", true);
-            return true;
-        });
-    });
-</script>
 
 {% endblock %}

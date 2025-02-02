@@ -19,20 +19,11 @@
                 <h5 class="text-light fw-bolder mb-4">{{ obj.employee.last_name }} {{ obj.employee.middle_name }}</h5>
                 <div class="row">
                     {% for field in model|getattr:'_meta'|getattr:'fields' %}
-                        {% if field.editable and field.name != 'metadata' %}
+                        {% if field.editable and field.name != '_metadata' and obj|getattr:field.name %}
                             <div class="col-6">
                                 <dl class="row m-0">
                                     <dt class="col-sm-4 text-capitalized">{{ field.verbose_name|title }}</dt>
-                                    {% if field.get_internal_type == 'FloatField' %}
-                                        <dd class="col-sm-8">{{ obj|getattr:field.name|intcomma }}</dd>
-                                    {% elif field.get_internal_type == 'JSONField' %}
-                                        <dd class="col-sm-8">
-                                            {{ obj.employee.registration_number }} <br />
-                                            {{ obj.employee.last_name }} {{ obj.employee.middle_name }}
-                                        </dd>
-                                    {% else %}
-                                        <dd class="col-sm-8">{{ obj|getattr:field.name }}</dd>
-                                    {% endif %}
+                                    <dd class="col-sm-8">{{ obj|getattr:field.name }}</dd>
                                 </dl>
                             </div>
                         {% endif %}
@@ -69,7 +60,7 @@
                                     <td>{{ item.taxable_amount|intcomma }}</td>
                                     <td>{{ item.social_security_amount|intcomma }}</td>
                                     <td>
-                                        <a class="text-decoration-none" href="{% url 'core:delete' 'payroll' 'itempaid' item.pk %}?next={{ request.get_full_path }}">{% trans 'Remove' %}</a>
+                                        <a class="text-decoration-none" href="{% url 'core:delete' 'payroll' 'itempaid' %}?pk={{ item.pk }}&next={{ request.get_full_path }}">{% trans 'Delete' %}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

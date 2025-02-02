@@ -55,26 +55,38 @@ class Change(BaseView):
                 'text': _('Annuler'),
                 'tag': 'a',
                 'url': reverse_lazy('core:list', kwargs=kwargs),
-                'classes': 'btn btn-light-danger',
+                'classes': 'btn btn-light-success',
                 'permission': f'{kwargs['app']}.view_{kwargs['model']}'
             }), 
             Button(**{
                 'text': _('Supprimer'),
                 'tag': 'a',
                 'url': reverse_lazy('core:delete', kwargs=kwargs)+f'?pk__in={obj.pk}',
-                'classes': 'btn btn-danger',
+                'classes': 'btn btn-light-danger',
                 'permission': f'{kwargs['app']}.delete_{kwargs['model']}'
             }),
             Button(**{
                 'text': _('Sauvegarder'),
                 'tag': 'button',
-                'classes': 'btn btn-success',
+                'classes': 'btn btn-light-success',
                 'permission': f'{kwargs['app']}.change_{kwargs['model']}',
                 'attrs': {
                     'type': 'submit',
+                    # 'name': '_save',
                     'form': f'form-{kwargs["model"]}'
                 }
             }),
+            #Button(**{
+            #    'text': _('Sauvegarder et continuer les modifications'),
+            #    'tag': 'button',
+            #    'classes': 'btn btn-light-success',
+            #    'permission': f'{kwargs['app']}.change_{kwargs['model']}',
+            #    'attrs': {
+            #        'type': 'submit',
+            #        'name': '_continue',
+            #        'form': f'form-{kwargs["model"]}'
+            #    }
+            #   })
         ]
 
         # make sure the user has the permission to see the button

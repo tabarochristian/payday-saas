@@ -36,9 +36,21 @@ class AdvanceSalary(Base):
         verbose_name_plural = _('avances sur salaire')
 
 class AdvanceSalaryPayment(Base):
-    advance_salary = ModelSelectField('payroll.AdvanceSalary', verbose_name=_('avance de salaire'), on_delete=models.CASCADE)
-    amount = FloatField(_('montant'), inline=True)
-    date = DateField(_('date'), inline=True)
+    advance_salary = ModelSelectField(
+        'payroll.AdvanceSalary', 
+        verbose_name=_('avance de salaire'), 
+        on_delete=models.CASCADE
+    )
+    
+    date = DateField(
+        _('date'), 
+        inline=True
+    )
+
+    amount = FloatField(
+        _('montant'), 
+        inline=True
+    )
 
     list_display = ['advance_salary', 'amount', 'date']
     list_filter = ['date']

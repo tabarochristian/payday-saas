@@ -78,7 +78,6 @@
                                     
                                     {% url "core:change" app model|getattr:'_meta'|getattr:'model_name' obj.pk as url %}
                                     <td><a class="text-decoration-none" href="{{ obj.get_absolute_url|default:url }}">{% trans 'View' %}</a></td>
-                                    
                                 </tr>
                                 {% empty %}
                                 <tr>

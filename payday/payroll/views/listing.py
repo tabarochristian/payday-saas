@@ -3,6 +3,8 @@ from core.views import BaseView
 from payroll.models import *
 import pandas as pd
 
+from django.urls import reverse_lazy
+from django.contrib import messages
 from django.apps import apps
 
 intcomma = lambda value: "{:,}".format(round(abs(value), 2))
@@ -18,13 +20,15 @@ class Listing(BaseView):
         
         code = query.pop('code')
         item = Item.objects.filter(code=code).first()
-        if not item: item = LegalItem.objects.filter(code=code).first()
+        item = item or LegalItem.objects.filter(code=code).first()
 
-        if not code: return redirect(reversed('payroll:payslips', kwargs={'pk': obj.pk}))
+        if not code: 
+            messages.warning(request, 'Item not found.')
+            return redirect(reverse_lazy('payroll:payslips', kwargs={'pk': obj.pk}))
 
-        qs = ItemPaid.objects.filter(code=code, payslip__payroll=obj) \
-            .filter(**{f'payslip__employee__{k}__name':v for k,v in query.items()}) \
-            .values('payslip__employee__registration_number', 'payslip__employee__last_name', 'payslip__employee__middle_name', 'amount_qp_employee', 'amount_qp_employer')
+        # .filter(**{f'payslip__employee__{k}__name':v for k,v in query.items()}) \
+        qs = ItemPaid.objects.filter(code=code, employee__payroll=obj).all() \
+            .values('employee__registration_number', 'employee__last_name', 'employee__middle_name', 'amount_qp_employee', 'amount_qp_employer')
         
         df = pd.DataFrame(qs)
 
@@ -33,9 +37,9 @@ class Listing(BaseView):
         sum_amount_qp_employer = df['amount_qp_employer'].sum()
 
         total_df = pd.DataFrame({
-            'payslip__employee__registration_number': ['Total'],
-            'payslip__employee__last_name': [''],
-            'payslip__employee__middle_name': [''],
+            'employee__registration_number': ['Total'],
+            'employee__last_name': [''],
+            'employee__middle_name': [''],
             'amount_qp_employee': [sum_amount_qp_employee],
             'amount_qp_employer': [sum_amount_qp_employer]
         })
@@ -46,9 +50,9 @@ class Listing(BaseView):
             df[column] = df[column].apply(intcomma)
 
         columns = {
-            'payslip__employee__registration_number': 'matricule',
-            'payslip__employee__last_name': 'nom',
-            'payslip__employee__middle_name': 'post nom',
+            'employee__registration_number': 'matricule',
+            'employee__last_name': 'nom',
+            'employee__middle_name': 'post nom',
             'amount_qp_employee': 'montant qqe',
             'amount_qp_employer': 'montant qqp'
         }

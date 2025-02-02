@@ -21,12 +21,8 @@
                 {% for obj in qs %}
                     <dl class="row">
                         {% for field in model|getattr:"_meta"|getattr:"fields" %}
-                            {% with obj|getattr:field.name as value %}
-                                {% if value %}
-                                    <dt class="col-sm-3 text-capitalized">{{ field.verbose_name|title }}</dt>
-                                    <dd class="col-sm-9">{{ value }}</dd>
-                                {% endif %}
-                            {% endwith %}
+                            <dt class="col-sm-3 text-capitalized">{{ field.verbose_name|title }}</dt>
+                            <dd class="col-sm-9">{{ obj|getattr:field.name }}</dd>
                         {% endfor %}
                     </dl>
                     {% if not forloop.last %}

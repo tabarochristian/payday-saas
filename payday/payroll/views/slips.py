@@ -10,7 +10,7 @@ class Slips(BaseView):
     template_name = "payroll/slip.html"
 
     def get(self, request):
-        app, model = 'payroll', 'payslip'
+        app, model = 'payroll', 'paidemployee'
         self.kwargs['model'] = model
         self.kwargs['app'] = app
 

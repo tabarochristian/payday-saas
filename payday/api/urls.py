@@ -15,7 +15,7 @@ urlpatterns = [
         'post': 'create'
     }), name='list'),
 
-    path('v1/<str:app>/<str:model>/<int:pk>', ApiViewSet.as_view({
+    path('v1/<str:app>/<str:model>/<str:pk>', ApiViewSet.as_view({
         'get': 'retrieve', 
         'put': 'update', 
         'patch': 'partial_update', 

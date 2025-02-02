@@ -8,8 +8,29 @@ from django.utils.text import slugify
 import json
 
 class Canvas(BaseView):
-    def get(self, request):
-        query = {k:v.split(',') if '__in' in k else v  for k,v in request.GET.dict().items() if v}
+
+    headers = [{
+        'matricule': None,
+        
+        'type d\'element': 1,
+        'code': None,
+        'nom': None,
+
+        #'temps': 0,
+        #'taux': 0,
+        
+        'montant quote part employee': 0,
+        'montant quote part employeur': 0,
+
+        'plafond de la sécurité sociale': 0,
+        'montant imposable': 0,
+
+        'est une prime': 0,
+        #'est payable': 1,
+    }]
+
+    def tracker(self):
+        query = {k:v.split(',') if '__in' in k else v  for k,v in self.request.GET.dict().items() if v}
         qs = Employee.objects.filter(**query) \
             .values('registration_number', 'last_name', 'middle_name', 'branch__name', 'grade__name')
         
@@ -40,4 +61,19 @@ class Canvas(BaseView):
             [group.to_excel(writer, sheet_name=slugify(str(row)), index=False) 
                 for row, group in df] if group_by else df.to_excel(writer, sheet_name='global', index=False)
         return response
+
+    def benefits(self):
+        df = pd.read_json(json.dumps(self.headers))
+        response = HttpResponse(content_type='application/xlsx')
+        response['Content-Disposition'] = f'attachment; filename="canvas-items-to-pay.xlsx"'.lower()
+
+        with pd.ExcelWriter(response) as writer:
+            df.to_excel(writer, sheet_name='global', index=False)
+        return response
+
+    def get(self, request, actor):
+        actor = getattr(self, actor)
+        if not actor or not callable(actor):
+            raise Http404("Page not found")
+        return actor()
 

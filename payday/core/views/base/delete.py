@@ -14,8 +14,7 @@ class Delete(BaseView):
     template_name = "delete.html"
 
     def get_action_buttons(self):
-        kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
-
+        app, model = self.kwargs['app'], self.kwargs['model']
         action_buttons = getattr(self.get_model(), 'get_action_buttons()', [])
         action_buttons = [Button(**button) for button in action_buttons]
 
@@ -23,17 +22,20 @@ class Delete(BaseView):
             Button(**{
                 'text': _('Cancel'),
                 'tag': 'a',
-                'url': reverse_lazy('core:list', kwargs=kwargs),
+                'url': reverse_lazy('core:list', kwargs={
+                    'app': app, 
+                    'model': model
+                }),
                 'classes': 'btn btn-light-success'
             }),
             Button(**{
                 'text': _('Supprimer'),
                 'tag': 'button',
                 'classes': 'btn btn-danger',
-                'permission': f'{kwargs['app']}.delete_{kwargs['model']}',
+                'permission': f'{app}.delete_{model}',
                 'attrs': {
                     'type': 'submit',
-                    'form': f'form-{kwargs["model"]}'
+                    'form': f'form-{model}'
                 }
             }),
         ] + action_buttons
@@ -41,16 +43,22 @@ class Delete(BaseView):
     def get(self, request, app, model):
         model = self.get_model()
         query = {k:v.split(',') if '__in' in k else v for k, v in request.GET.dict().items()}
+
         if not query:
             raise Http404(_("Query is required for delete action"))
+        
+        next = query.pop('next', None)
         qs = self.get_queryset().filter(**query)
         return render(request, self.template_name, locals())
 
     def post(self, request, app, model):
         model = self.get_model()
         query = {k:v.split(',') if '__in' in k else v for k, v in request.GET.dict().items()}
+
         if not query:
             raise Http404(_("Query is required for delete action"))
+        
+        next = query.pop('next', reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name}))
         qs = self.get_queryset().filter(**query)
         qs.delete()
 
@@ -65,5 +73,4 @@ class Delete(BaseView):
         })
         """
 
-        next = request.GET.dict().get('next', reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name}))
-        return self.next if self.next else redirect(next)
+        return redirect(next) if next else render(request, self.template_name, locals())

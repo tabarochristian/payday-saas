@@ -51,9 +51,9 @@
                                     </td>
                                     <td>{{ obj.created_by|default:'-' }}</td>
                                     <td>{{ obj.description }}</td>
-                                    <td>{{ obj.created_at }}</td>
+                                    <td>{{ obj.created_at|default:'-' }}</td>
                                     <td>
-                                        <a class="text-decoration-none" href="{% url 'core:change' obj.app obj.model obj.pk %}">{% trans 'Voir' %}</a>
+                                        <a class="text-decoration-none" href="{{ obj.url }}">{% trans 'Voir' %}</a>
                                     </td>
                                 </tr>
                                 {% empty %}

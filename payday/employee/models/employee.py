@@ -19,6 +19,12 @@ def default_registration_number():
             return str(unique_int)
 
 class Employee(BaseEmployee):
+    create_user_on_save = fields.BooleanField(
+        _('créer un utilisateur'),
+        default=False,
+        help_text=_('Créez un utilisateur pour cet employé si l\'adresse e-mail est fournie.')
+    )
+
     user = fields.OneToOneField(
         'core.user', 
         verbose_name=_('utilisateur'), 
@@ -121,6 +127,7 @@ class Employee(BaseEmployee):
         Div(
             'status',
             'devices',
+            'create_user_on_save',
             css_class='bg-dark p-4 rounded'
         )
     )

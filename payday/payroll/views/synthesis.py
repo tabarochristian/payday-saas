@@ -28,15 +28,15 @@ class Synthesis(BaseView):
         return self.get_field(model, '__'.join(fields[1:]))
     
     def get(self, request, func, pk):
-        model = apps.get_model('payroll', 'payslip')
+        model = apps.get_model('payroll', 'paidemployee')
         return render(request, self.template_name_field_selector, locals())
     
     def post(self, request, func, pk):
-        obj = apps.get_model('payroll', 'payroll').objects.get(id=pk)
-        model = apps.get_model('payroll', 'payslip')
+        obj = apps.get_model('payroll', 'payroll')
+        obj = obj.objects.get(pk=pk)
 
-        qs = model.objects.select_related().prefetch_related()
-        qs = qs._all(user=request.user, subdomain=request.subdomain) if hasattr(qs, '_all') else qs.all()
+        model = apps.get_model('payroll', 'paidemployee')
+        qs = obj.paidemployee_set.all().select_related().prefetch_related()
 
         fields = list({k:v for k,v in request.POST.dict().items() if k not in ['csrfmiddlewaretoken']}.values())
         if 'net' not in fields: fields.append('net')

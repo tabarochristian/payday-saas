@@ -13,10 +13,15 @@
 
 <div class="page-content">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"/>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <section>
+        <form method="post" enctype="multipart/form-data" class="page-content" id="form-{{ model|getattr:'_meta'|getattr:'model_name' }}">
+            {% csrf_token %}
+        </form>
+        
         <div class="card">
             <div class="card-body">
                 <div class="card-title mb-0">
@@ -27,13 +32,13 @@
                         </div>
 
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ count|intcomma }}</h3>
-                            <small>{% trans 'Fiches de paie' %}</small>
+                            <h3 class="mb-0">{{ qs.count|intcomma }}</h3>
+                            <small>{% trans 'Employee(s)' %}</small>
                         </div>
                         
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ overall_net|intcomma }}</h3>
-                            <small>{% trans 'Net à payer global' %}</small>
+                            <h3 class="mb-0">{{ estimation_duration|naturaltime }}</h3>
+                            <small>{% trans 'Estimation du temps de calule' %}</small>
                         </div>
                     </div>
                 </div>
@@ -43,7 +48,6 @@
         <div class="col">
             <div class="row">
                 <div class="col">
-                
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
@@ -54,6 +58,7 @@
                                             <th>{% trans 'Full name' %}</th>
                                             <th>{% trans 'Branch' %}</th>
                                             <th>{% trans 'Grade' %}</th>
+                                            <th>{% trans 'Child(ren)' %}</th>
                                             <th>{% trans 'Working days' %}</th>
                                             <th>{% trans 'Attendance' %}</th>
                                         </tr>
@@ -64,22 +69,24 @@
                                         <tr data-id="{{ obj.id }}">
                                             <td>{{ obj.registration_number }}</td>
                                             <td>{{ obj.full_name }}</td>
-                                            <td>{{ obj.branch.name }}</td>
-                                            <td>{{ obj.grade.name }}</td>
-                                            <td>{{ obj.designation.working_days|default:23 }}</td>
+                                            <td>{{ obj.branch }}</td>
+                                            <td>{{ obj.grade }}</td>
+                                            <td>{{ obj.children }}</td>
+                                            <td>23</td>
                                             <td>
-                                                <input 
+                                                <input
                                                     type="number" 
                                                     name="attendance" 
-                                                    class="form-control" 
-                                                    value="{{ obj.attendance|default:obj.designation.working_days_per_month|default:23 }}" 
-                                                    min="0" 
-                                                    max="{{ obj.designation.working_days_per_month|default:23 }}" />
+                                                    data-app="payroll"
+                                                    data-model="paidemployee"
+                                                    data-id="{{ obj.id }}"
+                                                    class="form-control attendance-input-field" 
+                                                    min="0" step="1" max="{{ obj.working_days_per_month|default:23 }}"
+                                                    value="{{ obj.attendance|default:obj.working_days_per_month }}" />
                                             </td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
-                
                                 </table>
                             </div>
                         </div>
@@ -94,6 +101,25 @@
     $(document).ready(function() {
         $('table').DataTable({
             "paging": false
+        });
+
+        $('.attendance-input-field').on('change', function() {
+            var id = $(this).data('id');
+            var value = $(this).val();
+            var url = "{% url 'api:detail' 'payroll' 'paidemployee' 'xyz' %}";
+            
+            // make sure the value is a valid number
+            if (isNaN(value)) return toastr.error('Veuillez entrer un nombre valide');
+
+            $.ajax({
+                url: url.replace('xyz', id),
+                type: 'PATCH',
+                data: {
+                    'attendance': value,
+                },
+                success: (data) => toastr.success("L'opération a été effectuée avec succès"),
+                error: (error) => toastr.error("Une erreur s'est produite lors de l'opération ")
+            });
         });
     });
 </script>

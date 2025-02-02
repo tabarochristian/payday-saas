@@ -24,6 +24,10 @@ class Education(Base):
         'end_date'
     )
 
+    @property
+    def name(self):
+        return f'{self.employee} - {self.institution}'
+
     class Meta:
         verbose_name = _('education')
         verbose_name_plural = _('educations')

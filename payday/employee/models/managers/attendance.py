@@ -8,7 +8,7 @@ class AttendanceQuerySet(CustomQuerySet):
     def attended(self, min_attendance=1, *args, **kwargs):
         return self.filter(**kwargs).values('employee', 'checked_at__date') \
             .annotate(attended=models.Count('id')) \
-                .filter(attended__gt=min_attendance)
+                .filter(attended__gte=min_attendance)
 
 class AttendanceManager(CustomManager):
     def get_queryset(self):

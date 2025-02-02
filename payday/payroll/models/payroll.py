@@ -14,10 +14,15 @@ from core.models import Base
 intcomma = lambda value: "{:,}".format(round(abs(value), 2))
 leave_empty_for_all = _('laisser vide pour tous')
 
-class PayrollStatus(models.TextChoices):
-    WARNING = ('WARNING', _('avertissement'))
-    PROGRESS = ('PROGRESS', _('en cours'))
-    SUCCESS = ('SUCCESS', _('succès'))
+class PayrollStatus(models.TextChoices):    
+    CREATED = ('CREATED', _('créé'))
+    ON_HOLD = ('ON_HOLD', _('en attente'))
+
+    IN_PROGRESS = ('IN_PROGRESS', _('en cours'))
+    COMPLETED = ('COMPLETED', _('terminé'))
+    ERROR = ('ERROR', _('erreur'))
+    
+
 
 class Payroll(Base):
     additional_items = models.FileField(verbose_name=_('éléments additionnels'), upload_to=upload_directory_file, blank=True, null=True, default=None)
@@ -32,7 +37,7 @@ class Payroll(Base):
     employee_branch = ModelSelect2Multiple('employee.branch', verbose_name=_('site'), blank=True, help_text=leave_empty_for_all)
     employee_grade = ModelSelect2Multiple('employee.grade', verbose_name=_('grade'), blank=True, help_text=leave_empty_for_all)
     
-    status = models.CharField(_('status'), max_length=25, choices=PayrollStatus, default=PayrollStatus.PROGRESS, editable=False)
+    status = models.CharField(_('status'), max_length=25, choices=PayrollStatus, default=PayrollStatus.CREATED, editable=False)
     overall_net = models.FloatField(_('net global'), blank=True, default=0, editable=False)
     
     approvers = ModelSelect2Multiple('core.user', verbose_name=_('approbateurs'))
@@ -50,7 +55,7 @@ class Payroll(Base):
                 StrictButton(
                     'Télécharger le modèle', 
                     css_class='btn btn-light-info', 
-                    onclick="window.open('"+reverse_lazy('payroll:canvas')+"?status__in='+$('#id_employee_status').val().join(','), '_blank');"
+                    onclick="window.open('"+reverse_lazy('payroll:canvas', args=['tracker'])+"?status__in='+$('#id_employee_status').val().join(','), '_blank');"
                 )
             ),
             css_class='col-md-12 col-sm-12'
@@ -62,7 +67,7 @@ class Payroll(Base):
                 StrictButton(
                     'Télécharger le modèle', 
                     css_class='btn btn-light-info', 
-                    onclick="window.open('"+reverse_lazy('payroll:canvas-items-to-pay')+"?status__in='+$('#id_employee_status').val().join(','), '_blank');"
+                    onclick="window.open('"+reverse_lazy('payroll:canvas', args=['benefits'])+"?status__in='+$('#id_employee_status').val().join(','), '_blank');"
                 )
             ),
             css_class='col-md-12 col-sm-12'
@@ -73,10 +78,11 @@ class Payroll(Base):
     def get_absolute_url(self):
         return reverse_lazy('payroll:preview', args=[self.pk])
     
-    def refresh(self):
-        net = self.payslip_set.aggregate(amount=models.Sum('net')).get('amount', 0)
-        net = round(net, 2) if net else 0
-        self.overall_net = net
+    def update(self):
+        net = self.paidemployee_set.aggregate(amount=models.Sum('net')) #.get('amount', 0)
+        net = net['amount'] or 0
+
+        self.overall_net = round(net, 2)
         self.save()
     
     def synthesis(self):
