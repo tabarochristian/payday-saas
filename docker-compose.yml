@@ -96,6 +96,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    profiles:
+      - no_auto_start
 
   # PostgreSQL slave service
   slave:
@@ -123,6 +125,34 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    profiles:
+      - no_auto_start
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    container_name: pay_base
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=payday
+      - POSTGRES_USER=payday
+      - POSTGRES_PASSWORD=payday
+
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: pgbouncer
+    restart: unless-stopped
+    ports:
+      - "6432:6432"
+    volumes:
+      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
+      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
 
   # Redis service
   redis:
@@ -241,6 +271,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
-  master_data:
-  slave_data:
+  #master_data:
+  #slave_data:
+  postgres_data:
   minio_data:
