@@ -44,6 +44,7 @@ services:
     restart: unless-stopped
     command: >
       sh -c "python manage.py tenants &&
+            python manage.py collectstatic --noinput &&
             gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     volumes:
       - ./payday:/app
