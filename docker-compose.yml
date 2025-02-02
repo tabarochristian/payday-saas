@@ -130,7 +130,7 @@ services:
   db:
     image: postgres:latest
     restart: unless-stopped
-    container_name: pay_base
+    container_name: payday-db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -140,7 +140,7 @@ services:
 
   pgbouncer:
     image: edoburu/pgbouncer:latest
-    container_name: pgbouncer
+    container_name: payday-pgbouncer
     restart: unless-stopped
     ports:
       - "6432:6432"

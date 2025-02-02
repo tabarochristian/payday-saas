@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.template.loader import render_to_string
+from django.core.management import call_command
 from django.conf import settings
 from celery import shared_task
 from django.apps import apps
