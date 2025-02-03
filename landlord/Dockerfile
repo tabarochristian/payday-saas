@@ -8,7 +8,7 @@ WORKDIR /app
 COPY landlord/requirements.txt .
 
 # Install apt dependencies
-RUN apt-get update && apt-get install -y libz-dev libjpeg-dev libfreetype6-dev python-dev
+RUN apt-get update && apt-get install -y libz-dev libjpeg-dev libfreetype6-dev
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
