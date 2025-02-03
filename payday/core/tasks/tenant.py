@@ -31,11 +31,10 @@ def new_tenant(schema, user):
         obj.children.set(qs)
         print(f'Created menu and sub-menu for {app}')
 
-    # check if fixtures exists in fixtures folder
-    # load fixtures
+    fixtures = os.listdir('fixtures')
+    for fixture in fixtures:
+        utils.set_schema(schema)
+        call_command('loaddata', f'fixtures/{fixture}')
 
-    call_command('loaddata', 'fixtures/core.json')
-    call_command('loaddata', 'fixtures/employee.json')
-    call_command('loaddata', 'fixtures/payroll.json')
 
     return "Success"
