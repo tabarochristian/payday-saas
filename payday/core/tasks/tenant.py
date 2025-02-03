@@ -36,5 +36,4 @@ def new_tenant(schema, user):
         utils.set_schema(schema)
         call_command('loaddata', f'fixtures/{fixture}')
 
-
     return "Success"
