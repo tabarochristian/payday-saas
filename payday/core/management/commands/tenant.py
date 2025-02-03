@@ -61,7 +61,7 @@ class Command(BaseCommand):
         if not created: return
         
         from core.tasks import new_tenant
-        new_tenant.delay(schema, user.id)
+        new_tenant(schema, user.id)
 
         self.stdout.write(self.style.SUCCESS(f'User "{email}" created.'))
         self.send_welcome_email(user, schema)
