@@ -10,8 +10,10 @@ from core.models import Menu
 
 @shared_task(name='new_tenant')
 def new_tenant(schema, user):
-    if not settings.DEBUG:
+    try:
         utils.set_schema(schema)
+    except Exception as e:
+        logger.error(e)
 
     exclude = ['document', 'child', 'education', 'advancesalarypayment', 'itempaid', 'paidemployee', 'specialemployeeitem']
     apps = ContentType.objects.exclude(
