@@ -4,12 +4,8 @@
     "pk": 1,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T13:56:22.309Z",
         "created_at": "2025-02-02T12:57:21.771Z",
         "code": "991",
@@ -25,12 +21,8 @@
     "pk": 2,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T13:54:56.107Z",
         "created_at": "2025-02-02T13:08:02.831Z",
         "code": "992",
@@ -46,12 +38,8 @@
     "pk": 3,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:12:43.966Z",
         "created_at": "2025-02-02T14:12:43.966Z",
         "code": "993",
@@ -67,12 +55,8 @@
     "pk": 4,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:13:04.953Z",
         "created_at": "2025-02-02T14:13:04.953Z",
         "code": "994",
@@ -88,12 +72,8 @@
     "pk": 1,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:37:43.736Z",
         "created_at": "2025-02-02T07:16:12.818Z",
         "type_of_item": 1,
@@ -114,12 +94,8 @@
     "pk": 2,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:47:33.626Z",
         "created_at": "2025-02-02T12:34:37.933Z",
         "type_of_item": 1,
@@ -140,12 +116,8 @@
     "pk": 3,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:47:25.453Z",
         "created_at": "2025-02-02T12:35:16.896Z",
         "type_of_item": 1,
@@ -166,12 +138,8 @@
     "pk": 4,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:37:22.118Z",
         "created_at": "2025-02-02T12:37:22.118Z",
         "type_of_item": -1,
@@ -194,12 +162,8 @@
         "_metadata": {
             "errors": []
         },
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:38.003Z",
         "created_at": "2025-02-02T14:14:35.955Z",
         "additional_items": "",
@@ -222,12 +186,8 @@
     "pk": 233,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": 1,
@@ -249,12 +209,8 @@
     "pk": 234,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": 1,
@@ -276,12 +232,8 @@
     "pk": 235,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": 1,
@@ -303,12 +255,8 @@
     "pk": 236,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -330,12 +278,8 @@
     "pk": 237,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -357,12 +301,8 @@
     "pk": 238,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -384,12 +324,8 @@
     "pk": 239,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -411,12 +347,8 @@
     "pk": 240,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -438,12 +370,8 @@
     "pk": 241,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": 1,
@@ -465,12 +393,8 @@
     "pk": 242,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": 1,
@@ -492,12 +416,8 @@
     "pk": 243,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": 1,
@@ -519,12 +439,8 @@
     "pk": 244,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -546,12 +462,8 @@
     "pk": 245,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -573,12 +485,8 @@
     "pk": 246,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -600,12 +508,8 @@
     "pk": 247,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:37.999Z",
         "created_at": "2025-02-02T14:14:37.999Z",
         "type_of_item": -1,
@@ -627,12 +531,8 @@
     "pk": 2,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.541Z",
         "created_at": "2025-02-02T12:52:53.541Z",
         "employee": "429750",
@@ -814,12 +714,8 @@
     "pk": 13,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.543Z",
         "advance_salary": 2,
@@ -832,12 +728,8 @@
     "pk": 14,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.543Z",
         "advance_salary": 2,
@@ -850,12 +742,8 @@
     "pk": 15,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.543Z",
         "advance_salary": 2,
@@ -868,12 +756,8 @@
     "pk": 16,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.543Z",
         "advance_salary": 2,
@@ -886,12 +770,8 @@
     "pk": 17,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.543Z",
         "advance_salary": 2,
@@ -904,12 +784,8 @@
     "pk": 18,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.543Z",
         "advance_salary": 2,
@@ -922,12 +798,8 @@
     "pk": 19,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.543Z",
         "created_at": "2025-02-02T12:52:53.544Z",
         "advance_salary": 2,
@@ -940,12 +812,8 @@
     "pk": 20,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.544Z",
         "created_at": "2025-02-02T12:52:53.544Z",
         "advance_salary": 2,
@@ -958,12 +826,8 @@
     "pk": 21,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.544Z",
         "created_at": "2025-02-02T12:52:53.544Z",
         "advance_salary": 2,
@@ -976,12 +840,8 @@
     "pk": 22,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.544Z",
         "created_at": "2025-02-02T12:52:53.544Z",
         "advance_salary": 2,
@@ -994,12 +854,8 @@
     "pk": 23,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.544Z",
         "created_at": "2025-02-02T12:52:53.544Z",
         "advance_salary": 2,
@@ -1012,12 +868,8 @@
     "pk": 24,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T12:52:53.544Z",
         "created_at": "2025-02-02T12:52:53.544Z",
         "advance_salary": 2,
@@ -1124,12 +976,8 @@
     "pk": 57,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:35.974Z",
         "created_at": "2025-02-02T14:14:35.974Z",
         "social_security_number": "429750",
@@ -1175,12 +1023,8 @@
     "pk": 58,
     "fields": {
         "_metadata": {},
-        "updated_by": [
-            "christian@tabaro.me"
-        ],
-        "created_by": [
-            "christian@tabaro.me"
-        ],
+        "updated_by": 1,
+        "created_by": 1,
         "updated_at": "2025-02-02T14:14:35.975Z",
         "created_at": "2025-02-02T14:14:35.975Z",
         "social_security_number": "898031",
