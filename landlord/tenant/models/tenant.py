@@ -57,8 +57,8 @@ class Tenant(models.Model):
         max_length=50,  # Add max_length
         choices = (
             ('basic', _('Basique')),
-            ('premium', _('Premium')),
-            ('enterprise', _('Entreprise')),
+            # ('premium', _('Premium')),
+            # ('enterprise', _('Entreprise')),
         ),
         default='basic',  # Update default to an existing choice
     )
