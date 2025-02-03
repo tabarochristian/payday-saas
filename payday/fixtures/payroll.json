@@ -1,806 +1,1224 @@
 [
-    {
-        "model": "payroll.legalitem",
-        "pk": 1,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T13:56:22.309Z",
-            "created_at": "2025-02-02T12:57:21.771Z",
-            "code": "991",
-            "type_of_item": -1,
-            "name": "CNSS",
-            "formula_qp_employer": "itemspaid.loc[(itemspaid['is_payable'] == True), 'social_security_amount'].sum() * 0.05",
-            "formula_qp_employee": "itemspaid['social_security_amount'].sum() * 0.13",
-            "condition": "employee.status == \"EN SERVICE\""
-        }
-    },
-    {
-        "model": "payroll.legalitem",
-        "pk": 2,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T13:54:56.107Z",
-            "created_at": "2025-02-02T13:08:02.831Z",
-            "code": "992",
-            "type_of_item": -1,
-            "name": "IPR",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "self.ipr_iere(payroll, employee, itemspaid, item)",
-            "condition": "employee.status == \"EN SERVICE\""
-        }
-    },
-    {
-        "model": "payroll.legalitem",
-        "pk": 3,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:12:43.966Z",
-            "created_at": "2025-02-02T14:12:43.966Z",
-            "code": "993",
-            "type_of_item": -1,
-            "name": "INPP",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "0",
-            "condition": "employee.status == \"EN SERVICE\""
-        }
-    },
-    {
-        "model": "payroll.legalitem",
-        "pk": 4,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:13:04.953Z",
-            "created_at": "2025-02-02T14:13:04.953Z",
-            "code": "994",
-            "type_of_item": -1,
-            "name": "ONEM",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "0",
-            "condition": "employee.status == \"EN SERVICE\""
-        }
-    },
-    {
-        "model": "payroll.item",
-        "pk": 1,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:37:43.736Z",
-            "created_at": "2025-02-02T07:16:12.818Z",
-            "type_of_item": 1,
-            "code": "001",
-            "name": "Base",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "employee.bareme.base",
-            "condition": "employee.status == \"EN SERVICE\"",
-            "time": "0",
-            "is_social_security": true,
-            "is_taxable": true,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.item",
-        "pk": 2,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:47:33.626Z",
-            "created_at": "2025-02-02T12:34:37.933Z",
-            "type_of_item": 1,
-            "code": "002",
-            "name": "Transport",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "employee.bareme.transport",
-            "condition": "employee.status == \"EN SERVICE\"",
-            "time": "0",
-            "is_social_security": false,
-            "is_taxable": false,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.item",
-        "pk": 3,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:47:25.453Z",
-            "created_at": "2025-02-02T12:35:16.896Z",
-            "type_of_item": 1,
-            "code": "003",
-            "name": "Logement",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "employee.bareme.logement",
-            "condition": "employee.status == \"EN SERVICE\"",
-            "time": "0",
-            "is_social_security": false,
-            "is_taxable": false,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.item",
-        "pk": 4,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:37:22.118Z",
-            "created_at": "2025-02-02T12:37:22.118Z",
-            "type_of_item": -1,
-            "code": "004",
-            "name": "Avance sur salaire",
-            "formula_qp_employer": "0",
-            "formula_qp_employee": "employee.advance_salary",
-            "condition": "employee.status == \"EN SERVICE\" and employee.advance_salary > 0",
-            "time": "0",
-            "is_social_security": false,
-            "is_taxable": false,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.payroll",
-        "pk": 29,
-        "fields": {
-            "_metadata": {
-                "errors": []
-            },
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:38.003Z",
-            "created_at": "2025-02-02T14:14:35.955Z",
-            "additional_items": "",
-            "canvas": "",
-            "name": "Test",
-            "start_dt": "2025-01-01",
-            "end_dt": "2025-02-28",
-            "status": "COMPLETED",
-            "overall_net": 1166517.69,
-            "approved": false,
-            "employee_direction": [],
-            "employee_status": [],
-            "employee_branch": [],
-            "employee_grade": [],
-            "approvers": []
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 233,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": 1,
-            "code": "001",
-            "name": "Base",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 250000.0,
-            "employee": 57,
-            "social_security_amount": 250000.0,
-            "taxable_amount": 250000.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 234,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": 1,
-            "code": "002",
-            "name": "Transport",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 150000.0,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 235,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": 1,
-            "code": "003",
-            "name": "Logement",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 300000.0,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 236,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "004",
-            "name": "Avance sur salaire",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": -100.0,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 237,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "991",
-            "name": "CNSS",
-            "time": 23.0,
-            "rate": -1413.0434782608695,
-            "amount_qp_employer": 12500.0,
-            "amount_qp_employee": -32500.0,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 238,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "992",
-            "name": "IPR",
-            "time": 23.0,
-            "rate": -703.6891304347827,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": -16184.85,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 239,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "993",
-            "name": "INPP",
-            "time": 23.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 0.0,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 240,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "994",
-            "name": "ONEM",
-            "time": 23.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 0.0,
-            "employee": 57,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 241,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": 1,
-            "code": "001",
-            "name": "Base",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 200000.0,
-            "employee": 58,
-            "social_security_amount": 200000.0,
-            "taxable_amount": 200000.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 242,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": 1,
-            "code": "002",
-            "name": "Transport",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 100000.0,
-            "employee": 58,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 243,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": 1,
-            "code": "003",
-            "name": "Logement",
-            "time": 0.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 250000.0,
-            "employee": 58,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 244,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "991",
-            "name": "CNSS",
-            "time": 23.0,
-            "rate": -1130.4347826086957,
-            "amount_qp_employer": 10000.0,
-            "amount_qp_employee": -26000.0,
-            "employee": 58,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 245,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "992",
-            "name": "IPR",
-            "time": 23.0,
-            "rate": -378.15043478260867,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": -8697.46,
-            "employee": 58,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 246,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "993",
-            "name": "INPP",
-            "time": 23.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 0.0,
-            "employee": 58,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.itempaid",
-        "pk": 247,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:37.999Z",
-            "created_at": "2025-02-02T14:14:37.999Z",
-            "type_of_item": -1,
-            "code": "994",
-            "name": "ONEM",
-            "time": 23.0,
-            "rate": 0.0,
-            "amount_qp_employer": 0.0,
-            "amount_qp_employee": 0.0,
-            "employee": 58,
-            "social_security_amount": 0.0,
-            "taxable_amount": 0.0,
-            "is_bonus": false,
-            "is_payable": true
-        }
-    },
-    {
-        "model": "payroll.advancesalary",
-        "pk": 2,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.541Z",
-            "created_at": "2025-02-02T12:52:53.541Z",
-            "employee": "429750",
-            "duration": 12,
-            "amount": 1200.0,
-            "date": "2024-12-01"
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 13,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.543Z",
-            "advance_salary": 2,
-            "date": "2024-12-31",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 14,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.543Z",
-            "advance_salary": 2,
-            "date": "2025-01-30",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 15,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.543Z",
-            "advance_salary": 2,
-            "date": "2025-03-01",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 16,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.543Z",
-            "advance_salary": 2,
-            "date": "2025-03-31",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 17,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.543Z",
-            "advance_salary": 2,
-            "date": "2025-04-30",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 18,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.543Z",
-            "advance_salary": 2,
-            "date": "2025-05-30",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 19,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.543Z",
-            "created_at": "2025-02-02T12:52:53.544Z",
-            "advance_salary": 2,
-            "date": "2025-06-29",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 20,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.544Z",
-            "created_at": "2025-02-02T12:52:53.544Z",
-            "advance_salary": 2,
-            "date": "2025-07-29",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 21,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.544Z",
-            "created_at": "2025-02-02T12:52:53.544Z",
-            "advance_salary": 2,
-            "date": "2025-08-28",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 22,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.544Z",
-            "created_at": "2025-02-02T12:52:53.544Z",
-            "advance_salary": 2,
-            "date": "2025-09-27",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 23,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.544Z",
-            "created_at": "2025-02-02T12:52:53.544Z",
-            "advance_salary": 2,
-            "date": "2025-10-27",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.advancesalarypayment",
-        "pk": 24,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T12:52:53.544Z",
-            "created_at": "2025-02-02T12:52:53.544Z",
-            "advance_salary": 2,
-            "date": "2025-11-26",
-            "amount": 100.0
-        }
-    },
-    {
-        "model": "payroll.paidemployee",
-        "pk": 57,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:35.974Z",
-            "created_at": "2025-02-02T14:14:35.974Z",
-            "social_security_number": "429750",
-            "date_of_join": "2025-02-01",
-            "date_of_end": null,
-            "middle_name": "Michael",
-            "first_name": "John",
-            "last_name": "Doe",
-            "date_of_birth": "1990-02-01",
-            "gender": "MALE",
-            "spouse_date_of_birth": null,
-            "spouse": null,
-            "marital_status": "SINGLE",
-            "mobile_number": "+243811111111",
-            "physical_address": "",
-            "emergency_information": "-",
-            "payment_account": null,
-            "payment_method": "CASH",
-            "payer_name": "CAISSE",
-            "comment": "",
-            "payroll": 29,
-            "employee": "429750",
-            "attendance": 23,
-            "registration_number": "429750",
-            "agreement": "CDI",
-            "status": "EN SERVICE",
-            "designation": "DIRECTEUR/TRISE",
-            "branch": "KINSHASA",
-            "grade": "CADRE DE DIRECTION",
-            "sub_direction": "PERSONNEL",
-            "direction": "RESSOURCE HUMAINE",
-            "service": "PAIE",
-            "working_days_per_month": 23,
-            "children": 0,
-            "social_security_threshold": 250000.0,
-            "taxable_gross": 250000.0,
-            "gross": 699900.0,
-            "net": 651215.15
-        }
-    },
-    {
-        "model": "payroll.paidemployee",
-        "pk": 58,
-        "fields": {
-            "_metadata": {},
-            "updated_by": 1,
-            "created_by": 1,
-            "updated_at": "2025-02-02T14:14:35.975Z",
-            "created_at": "2025-02-02T14:14:35.975Z",
-            "social_security_number": "898031",
-            "date_of_join": "2025-02-01",
-            "date_of_end": null,
-            "middle_name": "Ipsum",
-            "first_name": "Lorem",
-            "last_name": "Dolor",
-            "date_of_birth": "2000-02-01",
-            "gender": "FEMALE",
-            "spouse_date_of_birth": null,
-            "spouse": null,
-            "marital_status": "SINGLE",
-            "mobile_number": "+243825012792",
-            "physical_address": "",
-            "emergency_information": "-",
-            "payment_account": null,
-            "payment_method": "CASH",
-            "payer_name": "CAISSE",
-            "comment": "",
-            "payroll": 29,
-            "employee": "898031",
-            "attendance": 23,
-            "registration_number": "898031",
-            "agreement": "CDI",
-            "status": "EN SERVICE",
-            "designation": "SOUS DIRECTEUR/TRICE",
-            "branch": "MATADI",
-            "grade": "CADRE DE COLLABORATION",
-            "sub_direction": "PERSONNEL",
-            "direction": "RESSOURCE HUMAINE",
-            "service": "PAIE",
-            "working_days_per_month": 23,
-            "children": 2,
-            "social_security_threshold": 200000.0,
-            "taxable_gross": 200000.0,
-            "gross": 550000.0,
-            "net": 515302.54
-        }
+{
+    "model": "payroll.legalitem",
+    "pk": 1,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T13:56:22.309Z",
+        "created_at": "2025-02-02T12:57:21.771Z",
+        "code": "991",
+        "type_of_item": -1,
+        "name": "CNSS",
+        "formula_qp_employer": "itemspaid.loc[(itemspaid['is_payable'] == True), 'social_security_amount'].sum() * 0.05",
+        "formula_qp_employee": "itemspaid['social_security_amount'].sum() * 0.13",
+        "condition": "employee.status == \"EN SERVICE\""
     }
+},
+{
+    "model": "payroll.legalitem",
+    "pk": 2,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T13:54:56.107Z",
+        "created_at": "2025-02-02T13:08:02.831Z",
+        "code": "992",
+        "type_of_item": -1,
+        "name": "IPR",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "self.ipr_iere(payroll, employee, itemspaid, item)",
+        "condition": "employee.status == \"EN SERVICE\""
+    }
+},
+{
+    "model": "payroll.legalitem",
+    "pk": 3,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:12:43.966Z",
+        "created_at": "2025-02-02T14:12:43.966Z",
+        "code": "993",
+        "type_of_item": -1,
+        "name": "INPP",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "0",
+        "condition": "employee.status == \"EN SERVICE\""
+    }
+},
+{
+    "model": "payroll.legalitem",
+    "pk": 4,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:13:04.953Z",
+        "created_at": "2025-02-02T14:13:04.953Z",
+        "code": "994",
+        "type_of_item": -1,
+        "name": "ONEM",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "0",
+        "condition": "employee.status == \"EN SERVICE\""
+    }
+},
+{
+    "model": "payroll.item",
+    "pk": 1,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:37:43.736Z",
+        "created_at": "2025-02-02T07:16:12.818Z",
+        "type_of_item": 1,
+        "code": "001",
+        "name": "Base",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "employee.bareme.base",
+        "condition": "employee.status == \"EN SERVICE\"",
+        "time": "0",
+        "is_social_security": true,
+        "is_taxable": true,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.item",
+    "pk": 2,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:47:33.626Z",
+        "created_at": "2025-02-02T12:34:37.933Z",
+        "type_of_item": 1,
+        "code": "002",
+        "name": "Transport",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "employee.bareme.transport",
+        "condition": "employee.status == \"EN SERVICE\"",
+        "time": "0",
+        "is_social_security": false,
+        "is_taxable": false,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.item",
+    "pk": 3,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:47:25.453Z",
+        "created_at": "2025-02-02T12:35:16.896Z",
+        "type_of_item": 1,
+        "code": "003",
+        "name": "Logement",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "employee.bareme.logement",
+        "condition": "employee.status == \"EN SERVICE\"",
+        "time": "0",
+        "is_social_security": false,
+        "is_taxable": false,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.item",
+    "pk": 4,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:37:22.118Z",
+        "created_at": "2025-02-02T12:37:22.118Z",
+        "type_of_item": -1,
+        "code": "004",
+        "name": "Avance sur salaire",
+        "formula_qp_employer": "0",
+        "formula_qp_employee": "employee.advance_salary",
+        "condition": "employee.status == \"EN SERVICE\" and employee.advance_salary > 0",
+        "time": "0",
+        "is_social_security": false,
+        "is_taxable": false,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.payroll",
+    "pk": 29,
+    "fields": {
+        "_metadata": {
+            "errors": []
+        },
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:38.003Z",
+        "created_at": "2025-02-02T14:14:35.955Z",
+        "additional_items": "",
+        "canvas": "",
+        "name": "Test",
+        "start_dt": "2025-01-01",
+        "end_dt": "2025-02-28",
+        "status": "COMPLETED",
+        "overall_net": 1166517.69,
+        "approved": false,
+        "employee_direction": [],
+        "employee_status": [],
+        "employee_branch": [],
+        "employee_grade": [],
+        "approvers": []
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 233,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": 1,
+        "code": "001",
+        "name": "Base",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 250000.0,
+        "employee": 57,
+        "social_security_amount": 250000.0,
+        "taxable_amount": 250000.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 234,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": 1,
+        "code": "002",
+        "name": "Transport",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 150000.0,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 235,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": 1,
+        "code": "003",
+        "name": "Logement",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 300000.0,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 236,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "004",
+        "name": "Avance sur salaire",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": -100.0,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 237,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "991",
+        "name": "CNSS",
+        "time": 23.0,
+        "rate": -1413.0434782608695,
+        "amount_qp_employer": 12500.0,
+        "amount_qp_employee": -32500.0,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 238,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "992",
+        "name": "IPR",
+        "time": 23.0,
+        "rate": -703.6891304347827,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": -16184.85,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 239,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "993",
+        "name": "INPP",
+        "time": 23.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 0.0,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 240,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "994",
+        "name": "ONEM",
+        "time": 23.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 0.0,
+        "employee": 57,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 241,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": 1,
+        "code": "001",
+        "name": "Base",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 200000.0,
+        "employee": 58,
+        "social_security_amount": 200000.0,
+        "taxable_amount": 200000.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 242,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": 1,
+        "code": "002",
+        "name": "Transport",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 100000.0,
+        "employee": 58,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 243,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": 1,
+        "code": "003",
+        "name": "Logement",
+        "time": 0.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 250000.0,
+        "employee": 58,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 244,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "991",
+        "name": "CNSS",
+        "time": 23.0,
+        "rate": -1130.4347826086957,
+        "amount_qp_employer": 10000.0,
+        "amount_qp_employee": -26000.0,
+        "employee": 58,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 245,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "992",
+        "name": "IPR",
+        "time": 23.0,
+        "rate": -378.15043478260867,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": -8697.46,
+        "employee": 58,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 246,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "993",
+        "name": "INPP",
+        "time": 23.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 0.0,
+        "employee": 58,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.itempaid",
+    "pk": 247,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:37.999Z",
+        "created_at": "2025-02-02T14:14:37.999Z",
+        "type_of_item": -1,
+        "code": "994",
+        "name": "ONEM",
+        "time": 23.0,
+        "rate": 0.0,
+        "amount_qp_employer": 0.0,
+        "amount_qp_employee": 0.0,
+        "employee": 58,
+        "social_security_amount": 0.0,
+        "taxable_amount": 0.0,
+        "is_bonus": false,
+        "is_payable": true
+    }
+},
+{
+    "model": "payroll.advancesalary",
+    "pk": 2,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.541Z",
+        "created_at": "2025-02-02T12:52:53.541Z",
+        "employee": "429750",
+        "duration": 12,
+        "amount": 1200.0,
+        "date": "2024-12-01"
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 1,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2024-12-31",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 2,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-01-30",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 3,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-03-01",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 4,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-03-31",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 5,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-04-30",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 6,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-05-30",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 7,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-06-29",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 8,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-07-29",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 9,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-08-28",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 10,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-09-27",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 11,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-10-27",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 12,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.700Z",
+        "created_at": "2025-02-02T21:08:21.700Z",
+        "advance_salary": 2,
+        "date": "2025-11-26",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 13,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.543Z",
+        "advance_salary": 2,
+        "date": "2024-12-31",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 14,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.543Z",
+        "advance_salary": 2,
+        "date": "2025-01-30",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 15,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.543Z",
+        "advance_salary": 2,
+        "date": "2025-03-01",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 16,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.543Z",
+        "advance_salary": 2,
+        "date": "2025-03-31",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 17,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.543Z",
+        "advance_salary": 2,
+        "date": "2025-04-30",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 18,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.543Z",
+        "advance_salary": 2,
+        "date": "2025-05-30",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 19,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.543Z",
+        "created_at": "2025-02-02T12:52:53.544Z",
+        "advance_salary": 2,
+        "date": "2025-06-29",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 20,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.544Z",
+        "created_at": "2025-02-02T12:52:53.544Z",
+        "advance_salary": 2,
+        "date": "2025-07-29",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 21,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.544Z",
+        "created_at": "2025-02-02T12:52:53.544Z",
+        "advance_salary": 2,
+        "date": "2025-08-28",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 22,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.544Z",
+        "created_at": "2025-02-02T12:52:53.544Z",
+        "advance_salary": 2,
+        "date": "2025-09-27",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 23,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.544Z",
+        "created_at": "2025-02-02T12:52:53.544Z",
+        "advance_salary": 2,
+        "date": "2025-10-27",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.advancesalarypayment",
+    "pk": 24,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T12:52:53.544Z",
+        "created_at": "2025-02-02T12:52:53.544Z",
+        "advance_salary": 2,
+        "date": "2025-11-26",
+        "amount": 100.0
+    }
+},
+{
+    "model": "payroll.paidemployee",
+    "pk": 1,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.694Z",
+        "created_at": "2025-02-02T21:08:21.694Z",
+        "social_security_number": "429750",
+        "date_of_join": "2025-02-01",
+        "date_of_end": null,
+        "middle_name": "Michael",
+        "first_name": "John",
+        "last_name": "Doe",
+        "date_of_birth": "1990-02-01",
+        "gender": "MALE",
+        "spouse_date_of_birth": null,
+        "spouse": null,
+        "marital_status": "SINGLE",
+        "mobile_number": "+243811111111",
+        "physical_address": "",
+        "emergency_information": "-",
+        "payment_account": null,
+        "payment_method": "CASH",
+        "payer_name": "CAISSE",
+        "comment": "",
+        "payroll": 29,
+        "employee": "429750",
+        "attendance": 1,
+        "registration_number": "429750",
+        "agreement": "CDI",
+        "status": "EN SERVICE",
+        "designation": "DIRECTEUR/TRISE",
+        "branch": "KINSHASA",
+        "grade": "CADRE DE DIRECTION",
+        "sub_direction": "PERSONNEL",
+        "direction": "RESSOURCE HUMAINE",
+        "service": "PAIE",
+        "working_days_per_month": 23,
+        "children": 0,
+        "social_security_threshold": 0.0,
+        "taxable_gross": 0.0,
+        "gross": 0.0,
+        "net": 0.0
+    }
+},
+{
+    "model": "payroll.paidemployee",
+    "pk": 2,
+    "fields": {
+        "_metadata": {},
+        "updated_by": null,
+        "created_by": null,
+        "updated_at": "2025-02-02T21:08:21.694Z",
+        "created_at": "2025-02-02T21:08:21.694Z",
+        "social_security_number": "898031",
+        "date_of_join": "2025-02-01",
+        "date_of_end": null,
+        "middle_name": "Ipsum",
+        "first_name": "Lorem",
+        "last_name": "Dolor",
+        "date_of_birth": "2000-02-01",
+        "gender": "FEMALE",
+        "spouse_date_of_birth": null,
+        "spouse": null,
+        "marital_status": "SINGLE",
+        "mobile_number": "+243825012792",
+        "physical_address": "",
+        "emergency_information": "-",
+        "payment_account": null,
+        "payment_method": "CASH",
+        "payer_name": "CAISSE",
+        "comment": "",
+        "payroll": 29,
+        "employee": "898031",
+        "attendance": 23,
+        "registration_number": "898031",
+        "agreement": "CDI",
+        "status": "EN SERVICE",
+        "designation": "SOUS DIRECTEUR/TRICE",
+        "branch": "MATADI",
+        "grade": "CADRE DE COLLABORATION",
+        "sub_direction": "PERSONNEL",
+        "direction": "RESSOURCE HUMAINE",
+        "service": "PAIE",
+        "working_days_per_month": 23,
+        "children": 2,
+        "social_security_threshold": 0.0,
+        "taxable_gross": 0.0,
+        "gross": 0.0,
+        "net": 0.0
+    }
+},
+{
+    "model": "payroll.paidemployee",
+    "pk": 57,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:35.974Z",
+        "created_at": "2025-02-02T14:14:35.974Z",
+        "social_security_number": "429750",
+        "date_of_join": "2025-02-01",
+        "date_of_end": null,
+        "middle_name": "Michael",
+        "first_name": "John",
+        "last_name": "Doe",
+        "date_of_birth": "1990-02-01",
+        "gender": "MALE",
+        "spouse_date_of_birth": null,
+        "spouse": null,
+        "marital_status": "SINGLE",
+        "mobile_number": "+243811111111",
+        "physical_address": "",
+        "emergency_information": "-",
+        "payment_account": null,
+        "payment_method": "CASH",
+        "payer_name": "CAISSE",
+        "comment": "",
+        "payroll": 29,
+        "employee": "429750",
+        "attendance": 23,
+        "registration_number": "429750",
+        "agreement": "CDI",
+        "status": "EN SERVICE",
+        "designation": "DIRECTEUR/TRISE",
+        "branch": "KINSHASA",
+        "grade": "CADRE DE DIRECTION",
+        "sub_direction": "PERSONNEL",
+        "direction": "RESSOURCE HUMAINE",
+        "service": "PAIE",
+        "working_days_per_month": 23,
+        "children": 0,
+        "social_security_threshold": 250000.0,
+        "taxable_gross": 250000.0,
+        "gross": 699900.0,
+        "net": 651215.15
+    }
+},
+{
+    "model": "payroll.paidemployee",
+    "pk": 58,
+    "fields": {
+        "_metadata": {},
+        "updated_by": [
+            "christian@tabaro.me"
+        ],
+        "created_by": [
+            "christian@tabaro.me"
+        ],
+        "updated_at": "2025-02-02T14:14:35.975Z",
+        "created_at": "2025-02-02T14:14:35.975Z",
+        "social_security_number": "898031",
+        "date_of_join": "2025-02-01",
+        "date_of_end": null,
+        "middle_name": "Ipsum",
+        "first_name": "Lorem",
+        "last_name": "Dolor",
+        "date_of_birth": "2000-02-01",
+        "gender": "FEMALE",
+        "spouse_date_of_birth": null,
+        "spouse": null,
+        "marital_status": "SINGLE",
+        "mobile_number": "+243825012792",
+        "physical_address": "",
+        "emergency_information": "-",
+        "payment_account": null,
+        "payment_method": "CASH",
+        "payer_name": "CAISSE",
+        "comment": "",
+        "payroll": 29,
+        "employee": "898031",
+        "attendance": 23,
+        "registration_number": "898031",
+        "agreement": "CDI",
+        "status": "EN SERVICE",
+        "designation": "SOUS DIRECTEUR/TRICE",
+        "branch": "MATADI",
+        "grade": "CADRE DE COLLABORATION",
+        "sub_direction": "PERSONNEL",
+        "direction": "RESSOURCE HUMAINE",
+        "service": "PAIE",
+        "working_days_per_month": 23,
+        "children": 2,
+        "social_security_threshold": 200000.0,
+        "taxable_gross": 200000.0,
+        "gross": 550000.0,
+        "net": 515302.54
+    }
+}
 ]
