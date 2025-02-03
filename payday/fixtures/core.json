@@ -11,7 +11,7 @@
         "column": "col-md-12 col-xs-12",
         "name": "quota",
         "template": "<div class=\"card\">\r\n    <div class=\"card-header\">\r\n        <h1>\r\n            {{ value }}\r\n            <small>/{{ max_ }}</small>\r\n        </h1>\r\n        <small>Employee</small>\r\n    </div>\r\n    <div class=\"card-body\">\r\n        <div class=\"progress\">\r\n          <div class=\"progress-bar\" role=\"progressbar\" style=\"width: {{ percentage }}%;\" aria-valuenow=\"{{ percentage }}\" aria-valuemin=\"0\" aria-valuemax=\"100\">{{ percentage }}%</div>\r\n        </div>\r\n    </div>\r\n</div>",
-        "view": "from core.middleware import TenantMiddleware\r\nfrom employee.models import Employee\r\n\r\nvalue = Employee.objects.all().count()\r\ntenant = TenantMiddleware.get_tenant()\r\nmax_ = tenant.get('max_employee', value)\r\n\r\npercentage = int(value * 100 / max_) if value != 0 and max_ != 0 else 0",
+        "view": "from core.middleware import TenantMiddleware\r\nfrom employee.models import Employee\r\n\r\nvalue = Employee.objects.all().count()\r\ntenant = TenantMiddleware.get_tenant()\r\nmax_ = tenant.get('max_employee', 100)\r\n\r\npercentage = int(value * 100 / max_) if value != 0 and max_ != 0 else 0",
         "is_active": true
     }
 },
