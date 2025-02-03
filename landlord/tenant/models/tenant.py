@@ -56,7 +56,7 @@ class Tenant(models.Model):
         _("plan d'abonnement"),
         max_length=50,  # Add max_length
         choices = (
-            ('basic', _('Basique')),
+            ('basic', _('Essentielle')),
             # ('premium', _('Premium')),
             # ('enterprise', _('Entreprise')),
         ),
