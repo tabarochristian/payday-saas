@@ -5,6 +5,7 @@ from django.conf import settings
 from celery import shared_task
 from django.apps import apps
 from core import utils
+import os
 
 from core.models import Menu
 
@@ -31,7 +32,8 @@ def new_tenant(schema, user):
         obj.children.set(qs)
         print(f'Created menu and sub-menu for {app}')
 
-    fixtures = os.listdir('fixtures')
+    #os.listdir('fixtures')
+    fixtures = ['core.json', 'employee.json', 'payroll.json'] 
     for fixture in fixtures:
         utils.set_schema(schema)
         call_command('loaddata', f'fixtures/{fixture}')
