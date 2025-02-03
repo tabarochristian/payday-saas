@@ -140,8 +140,7 @@
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                           <div class="avatar avatar-md">
-                                             {% static "/minio/payday/static/assets/images/faces/1.jpg" as face %}
-                                             <img src="{{ request.user.employee.photo|default:face }}">
+                                             <img src="{% static "/minio/payday/static/assets/images/faces/1.jpg" %}">
                                           </div>
                                         </div>
                                     </div>
