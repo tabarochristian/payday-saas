@@ -1,6 +1,7 @@
 # forms.py
 from django.forms import modelform_factory
 from crispy_forms.helper import FormHelper
+from captcha.fields import CaptchaField
 from crispy_forms.layout import Submit
 
 def crispy_modelform_factory(model, exclude=[], submit_label='Submit'):
@@ -9,6 +10,8 @@ def crispy_modelform_factory(model, exclude=[], submit_label='Submit'):
 
     # Create a new form class that inherits from the generated ModelForm
     class CrispyForm(ModelForm):
+        captcha = CaptchaField()
+        
         def __init__(self, *args, **kwargs):
             super(CrispyForm, self).__init__(*args, **kwargs)
             self.helper = FormHelper()

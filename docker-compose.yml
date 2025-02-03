@@ -22,7 +22,7 @@ services:
     container_name: payday-landlord
     command: >
       sh -c "python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
+          gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
     ports:
       - "5000:5000"
     volumes:

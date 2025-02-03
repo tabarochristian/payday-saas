@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "phonenumber_field",
 
+    "captcha",
     "crispy_forms",
     "crispy_bootstrap5",
 
