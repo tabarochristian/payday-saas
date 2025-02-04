@@ -171,6 +171,7 @@ class Payer(Task):
         formula_qp_employee = item.get('formula_qp_employee', '0')
         formula_qp_employer = item.get('formula_qp_employer', '0')
         time = item.get('time', str(employee['attendance']))
+        context['time'] = time
 
         formula_qp_employee = self.evaluate_expression(formula_qp_employee, context) or 0
         formula_qp_employer = self.evaluate_expression(formula_qp_employer, context) or 0
