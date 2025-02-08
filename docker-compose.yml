@@ -266,10 +266,7 @@ services:
       - saas
 
   certbot:
-    # image: certbot/certbot:latest
-    build:
-      context: .
-      dockerfile: certbot/Dockerfile
+    image: certbot/certbot:latest
     volumes:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
