@@ -65,6 +65,7 @@ services:
     container_name: payday-nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /nginx:/usr/share/nginx/html
