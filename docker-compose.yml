@@ -43,7 +43,7 @@ services:
     container_name: payday-saas
     restart: unless-stopped
     command: >
-      sh -c "python manage.py tenants &&
+      sh -c "python manage.py migratetenants &&
             python manage.py collectstatic --noinput &&
             gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
     volumes:

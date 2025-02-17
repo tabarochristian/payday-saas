@@ -15,9 +15,8 @@
     <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/png">
     <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.svg' %}" type="image/x-icon">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ meta_description }}">
-    <meta name="keywords" content="{{ meta_keywords }}">
+    <meta name="description" content="{{ self.meta_description }}">
+    <meta name="keywords" content="{{ self.meta_keywords }}">
 
     <style>
         body, html {
@@ -46,16 +45,16 @@
                         <img src="{% static 'assets/images/logo/logo.png' %}" alt="payday-logo">
                     </div>
                     {% if not form.is_valid %}
-                        <h1 class="auth-title mb-0">Commencez ici!</h1>
-                        <p class="auth-subtitle mb-5">Créez votre compte et transformez votre organisation.</p>
+                        <h1 class="auth-title mb-0">{% trans "Commencez ici!" %}</h1>
+                        <p class="auth-subtitle mb-5">{% trans "Créez votre compte et transformez votre organisation." %}</p>
                         {% crispy form %}
                         <small class="text-muted">
-                            En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale.
+                            {% trans "En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale." %}
                         </small>
                     {% else %}
                         <h1 class="auth-title mt-5 text-primary">{{ form.instance.first_name }},</h1>
                         <p class="auth-subtitle mb-5">
-                            We're creating your <b class="text-primary">organization’s</b> account.
+                            {% trans "We're creating your <b class='text-primary'>organization’s</b> account." %}
                         </p>
                         <div class="text-center">
                             <l-bouncy size="256" speed="1.75" color="#435ebe"></l-bouncy>
@@ -69,11 +68,10 @@
 
                     <div class="mt-5 text-center">
                         <p>
-                            Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition.
+                            {% trans "Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition." %}
                         </p>
                         <a href="mailto:contact@payday.cd">contact@payday.cd</a>
                         <a href="telto:+243825012792">+243 82 50 12 702</a>
-                        <p>18 - 20 Immeuble SNDE, GOMBE/KINSHASA</p>
                     </div>
                 </div>
             </div>
@@ -176,11 +174,11 @@
                 "We’re setting up everything so you can start.",
             ];
             let index = 0;
-        
+    
             const animateText = () => {
                 const animatedText = document.getElementById('animatedText');
                 if (!animatedText) return; // Exit if the element doesn't exist
-        
+    
                 // Fade in the text
                 anime({
                     targets: animatedText,
@@ -190,26 +188,30 @@
                     complete: () => {
                         // Wait 2 seconds, then fade out
                         setTimeout(() => {
-                            anime({
-                                targets: animatedText,
-                                opacity: [1, 0],
-                                duration: 2000,
-                                easing: 'easeInOutSine',
-                                complete: () => {
-                                    // Update text and restart animation
-                                    index = (index + 1) % textList.length;
-                                    animatedText.textContent = textList[index];
-                                    animateText();
-                                },
-                            });
+                            fadeOutText(animatedText);
                         }, 500);
                     },
                 });
             };
-        
+    
+            const fadeOutText = (element) => {
+                anime({
+                    targets: element,
+                    opacity: [1, 0],
+                    duration: 2000,
+                    easing: 'easeInOutSine',
+                    complete: () => {
+                        // Update text and restart animation
+                        index = (index + 1) % textList.length;
+                        element.textContent = textList[index];
+                        animateText();
+                    },
+                });
+            };
+    
             // Start the text animation
             animateText();
-        
+    
             // Polling logic for account creation status
             const bouncyElement = document.querySelector('l-bouncy');
             if (bouncyElement) {
@@ -221,11 +223,11 @@
                                 'Content-Type': 'application/json',
                             },
                         });
-        
+    
                         if (!response.ok) {
                             throw new Error(`HTTP error! Status: ${response.status}`);
                         }
-        
+    
                         const data = await response.json();
                         if (data.schema && data.is_active) {
                             // Redirect if the account is ready
@@ -240,19 +242,19 @@
                         }
                     }
                 };
-        
+    
                 // Poll every 3 seconds
                 const pollingInterval = setInterval(pollAccountCreationStatus, 3000);
-        
+    
                 // Optionally, stop polling after a certain number of attempts
-                const maxAttempts = 30; // 30 attempts = 1 minute
+                const maxAttempts = 30; // 30 attempts = 1.5 minutes
                 let attempts = 0;
-        
+    
                 const stopPolling = () => {
                     clearInterval(pollingInterval);
                     console.log('Polling stopped.');
                 };
-        
+    
                 const checkAttempts = () => {
                     attempts++;
                     if (attempts >= maxAttempts) {
@@ -263,12 +265,13 @@
                         }
                     }
                 };
-        
+    
                 // Check attempts on each poll
-                setInterval(checkAttempts, 2000);
+                const attemptsInterval = setInterval(checkAttempts, 2000);
+                setTimeout(() => clearInterval(attemptsInterval), maxAttempts * 2000); // Stop attempts check after maxAttempts
             }
         });
-    </script>
+    </script>    
     {% endif %}
 </body>
 </html>

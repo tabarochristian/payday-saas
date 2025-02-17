@@ -10,14 +10,10 @@ logger = logging.getLogger(__name__)
 
 @receiver(pre_delete, sender=Tenant)
 def deleted(sender, instance, **kwargs):
-    try:
-        # Create a new process
-        thread = Thread(target=delete_tenant_schema, args=(instance.schema,))
-        thread.daemon = True
-        thread.start()
+    # Create a new process
+    thread = Thread(target=delete_tenant_schema, args=(instance.id,))
+    thread.daemon = True
+    thread.start()
 
-        # Log the start of the task
-        logger.info(f"Started task for tenant {instance.id}")
-    except Exception as e:
-        # Log any errors
-        logger.error(f"Error starting task for tenant {instance.id}: {e}")
+    # Log the start of the task
+    logger.info(f"Started task for tenant {instance.id}")

@@ -1,2 +1,2 @@
 from .tenant import CreateTenantView, TenantView
-from .sitemap import Sitemap
+from .sitemap import StaticViewSitemap

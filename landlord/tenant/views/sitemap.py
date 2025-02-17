@@ -1,8 +1,12 @@
-from django.template.loader import render_to_string
-from django.http import HttpResponse
-from django.views import View
+from django.contrib.sitemaps import Sitemap
+from django.urls import reverse_lazy
 
-class Sitemap(View):
-    def get(self, request):
-        sitemap_content = render_to_string('sitemap.xml', {})
-        return HttpResponse(sitemap_content, content_type='application/xml')
+class StaticViewSitemap(Sitemap):
+    priority = 1.0
+    changefreq = 'daily'
+
+    def items(self):
+        return ["tenant:create"] 
+
+    def location(self, item):
+        return reverse_lazy(item)
