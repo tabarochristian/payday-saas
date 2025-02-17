@@ -1,12 +1,28 @@
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext as _
 from django.db import models
-import re
+import re, json
 
 def clean_string(input_string):
     cleaned_string = re.sub(r'[^A-Za-z\s]', '', input_string)
     cleaned_string = cleaned_string.lower().replace(' ','')
     return cleaned_string
+
+class TenantPlan(models.TextChoices):
+    BASIC = json.dumps({
+        "name": "basic",
+        "description": "Essentielle",
+        "price": 0,
+        "currency": "USD",
+        "apps": {
+            "employee": {
+                "max": 100
+            },
+            "payroll": {
+                "max": 1
+            },
+        }
+    }), _('Essentielle')
 
 class Tenant(models.Model):
     first_name = models.CharField(
@@ -37,43 +53,25 @@ class Tenant(models.Model):
         unique=True
     )
 
-    #size = models.CharField(
-    #    _("taille de l'organisation"),
-    #    max_length=50,
-    #    choices=(
-    #        (None, '-'),
-    #        ('1-10', '1-10'), 
-    #        ('11-50', '11-50'), 
-    #        ('51-200', '51-200'), 
-    #        ('201-500', '201-500'), 
-    #        ('501-1000', '501-1000'), 
-    #        ('1001+', '1001+')
-    #    ),
-    #    help_text=_('This information helps us tailor our services to better meet your needs.')
-    #)
-
     plan = models.CharField(
         _("plan d'abonnement"),
-        max_length=50,  # Add max_length
-        choices = (
-            ('basic', _('Essentielle')),
-            # ('premium', _('Premium')),
-            # ('enterprise', _('Entreprise')),
-        ),
-        default='basic',  # Update default to an existing choice
+        max_length=255,
+        choices = TenantPlan.choices,
+        default=TenantPlan.BASIC
     )
 
     schema = models.CharField(
         _('schema'), 
         max_length=50,
         editable=False,
-        unique=True
+        unique=True,
+        help_text=_('Nom du schéma dans la base de données')
     )
 
     is_active = models.BooleanField(
-        _('is active'), 
-        editable=False,
-        default=False
+        _('is active'),
+        default=False,
+        help_text=_('Définir si le compte est actif ou non')
     )
 
     updated_at = models.DateTimeField(
@@ -91,6 +89,7 @@ class Tenant(models.Model):
     @property
     def serialized(self):
         data = {field.name: getattr(self, field.name, None) for field in Tenant._meta.fields}
+        data['plan'] = json.loads(data['plan'])
         data['phone'] = data['phone'].as_e164
         return data
 

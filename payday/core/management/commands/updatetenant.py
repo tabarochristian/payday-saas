@@ -1,0 +1,61 @@
+from django.core.management.base import BaseCommand
+from django.core.cache import cache
+from django.db import connection
+
+class Command(BaseCommand):
+    help = 'Update the tenant table in the public schema with key-value arguments and update the cache'
+
+    def add_arguments(self, parser):
+        parser.add_argument('schema', type=str, help='The schema name to update')
+        parser.add_argument('--fields', nargs='+', help='Key-value pairs to update the tenant table')
+
+    def handle(self, *args, **kwargs):
+        schema = kwargs['schema']
+        fields = kwargs['fields']
+
+        if not fields:
+            self.stdout.write(self.style.ERROR('No fields provided for update.'))
+            return
+
+        # Prepare a dictionary of key-value pairs
+        update_data = {field.split('=')[0]: field.split('=')[1] for field in fields}
+
+        # Ensure the tenant exists
+        tenant_data = self.get_tenant(schema)
+        if not tenant_data:
+            self.stdout.write(self.style.ERROR(f'Tenant with schema "{schema}" does not exist.'))
+            return
+
+        # Update the tenant with the provided key-value pairs using raw SQL
+        self.update_tenant(schema, update_data)
+        self.stdout.write(self.style.SUCCESS(f'Tenant with schema "{schema}" has been updated.'))
+
+        # Update the cache key with the updated tenant row dictionary
+        tenant_data.update(update_data)
+        cache_key = f'tenant_{schema}'
+        cache.set(cache_key, tenant_data)
+
+        self.stdout.write(self.style.SUCCESS(f'Cache key "{cache_key}" has been updated with the tenant data.'))
+        self.stdout.write(self.style.SUCCESS(f'Tenant data: {tenant_data}'))
+
+    def get_tenant(self, schema):
+        """
+        Retrieve the tenant row as a dictionary using raw SQL.
+        """
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM tenant WHERE schema_name = %s;", [schema])
+            row = cursor.fetchone()
+            if row:
+                columns = [col[0] for col in cursor.description]
+                return dict(zip(columns, row))
+        return None
+
+    def update_tenant(self, schema, update_data):
+        """
+        Update the tenant row using raw SQL.
+        """
+        set_clause = ', '.join([f"{key} = %s" for key in update_data.keys()])
+        values = list(update_data.values()) + [schema]
+
+        with connection.cursor() as cursor:
+            cursor.execute(f"UPDATE tenant SET {set_clause} WHERE schema_name = %s;", values)
