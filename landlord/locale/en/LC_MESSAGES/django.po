@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 13:53+0100\n"
+"POT-Creation-Date: 2025-02-17 14:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: tenant/models/tenant.py:25
+#: tenant/models/tenant.py:25 tenant/templates/index.html:92
 msgid "Essentielle"
 msgstr "Essential"
 
@@ -91,21 +91,162 @@ msgid "Créez votre compte et transformez votre organisation."
 msgstr "Create your account and transform your organization."
 
 #: tenant/templates/index.html:55
-msgid "En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale."
-msgstr "By filling out this form, I agree that my entered personal information will be used by Payday or its affiliates for commercial prospecting purposes."
+msgid ""
+"En remplissant ce formulaire, j'accepte que mes informations personnelles "
+"saisies soient utilisées par Payday ou ses filiales à des fins de "
+"prospections commerciale."
+msgstr ""
+"By filling out this form, I agree that my entered personal information will "
+"be used by Payday or its affiliates for commercial prospecting purposes."
 
 #: tenant/templates/index.html:60
-msgid "Nous créons le compte de votre <b class='text-primary'>organisation</b>."
-msgstr "We are creating the account for your <b class='text-primary'>organization</b>."
+msgid ""
+"Nous créons le compte de votre <b class='text-primary'>organisation</b>."
+msgstr ""
+"We are creating the account for your <b class='text-primary'>organization</"
+"b>."
 
 #: tenant/templates/index.html:74
 msgid "Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition."
 msgstr "Need help? Let's talk! We are at your disposal."
+
+#: tenant/templates/index.html:93
+msgid ""
+"Idéale pour les petites organisations <b>(jusqu’à 100 employés)</b> "
+"souhaitant automatiser leur paie sans complexité."
+msgstr "Ideal for small organizations <b>(up to 100 employees)</b> wanting to automate their payroll without complexity."
+
+#: tenant/templates/index.html:95
+msgid "Gratuit"
+msgstr "Free"
+
+#: tenant/templates/index.html:97
+msgid "Gestion complète de la paie"
+msgstr "Comprehensive payroll management"
+
+#: tenant/templates/index.html:98
+msgid "Modèle de calcul flexible"
+msgstr "Flexible calculation model"
+
+#: tenant/templates/index.html:99
+msgid "Export des états de paie & génération de bulletins"
+msgstr "Payroll export & payslip generation"
+
+#: tenant/templates/index.html:100
+msgid "Support standard par email"
+msgstr "Standard email support"
+
+#: tenant/templates/index.html:104
+msgid ""
+"Pour une organisation qui veut digitaliser sa paie sans se soucier d’outils "
+"complexes."
+msgstr "For an organization that wants to digitize its payroll without worrying about complex tools."
+
+#: tenant/templates/index.html:113
+msgid "Entreprise"
+msgstr "Company"
+
+#: tenant/templates/index.html:114
+msgid ""
+"Conçue pour les moyennes organisations <b>(100 à 3000 employés)</b> "
+"nécessitant un contrôle avancé et une meilleure gestion des présences."
+msgstr "Designed for medium-sized organizations <b>(100 to 3000 employees)</b> needing advanced control and better attendance management."
+
+#: tenant/templates/index.html:116 tenant/templates/index.html:138
+msgid "Contactez nous"
+msgstr "Contact us"
+
+#: tenant/templates/index.html:118
+msgid "Tous les avantages de la Formule Essentielle"
+msgstr "All the benefits of the Essential Plan"
+
+#: tenant/templates/index.html:119
+msgid "Gestion des absences & congés intégrée"
+msgstr "Integrated absence & leave management"
+
+#: tenant/templates/index.html:120
+msgid "Accès à des rapports avancés"
+msgstr "Access to advanced reports"
+
+#: tenant/templates/index.html:121
+msgid "Personnalisation des bulletins de paie"
+msgstr "Payslip customization"
+
+#: tenant/templates/index.html:122
+msgid "Intégration avec des systèmes comptables"
+msgstr "Integration with accounting systems"
+
+#: tenant/templates/index.html:123
+msgid "Support prioritaire (Email & Telephone)"
+msgstr "Priority support (Email & Telephone)"
+
+#: tenant/templates/index.html:127
+msgid ""
+"Solution complète pour structurer efficacement la paie et la gestion RH."
+msgstr "Complete solution for efficiently structuring payroll and HR management."
+
+#: tenant/templates/index.html:135
+msgid "Gestionnaire"
+msgstr "Manager"
+
+#: tenant/templates/index.html:136
+msgid ""
+"Pensée pour les grandes organisations <b>(3000+ employés)</b> qui veulent un "
+"contrôle total sur leur gestion RH et paie avec un suivi en temps réel des "
+"présences."
+msgstr "Designed for large organizations <b>(3000+ employees)</b> that want total control over their HR and payroll management with real-time attendance tracking."
+
+#: tenant/templates/index.html:140
+msgid "Tous les avantages de la Formule Pro"
+msgstr "All the benefits of the Pro Plan"
+
+#: tenant/templates/index.html:141
+msgid "Gestion des heures supplémentaires et primes"
+msgstr "Overtime and bonus management"
+
+#: tenant/templates/index.html:142
+msgid "Gestion des avances et prêts"
+msgstr "Advances and loans management"
+
+#: tenant/templates/index.html:143
+msgid "Gestion des shifts"
+msgstr "Shift management"
+
+#: tenant/templates/index.html:144
+msgid "Collecte des présences via nos terminaux autonomes 4G"
+msgstr "Attendance collection via our standalone 4G terminals"
+
+#: tenant/templates/index.html:145
+msgid "Rapports analytiques et tableaux de bord avancés"
+msgstr "Analytical reports and advanced dashboards"
+
+#: tenant/templates/index.html:146
+msgid "Automatisation des ajustements salariaux en fonction de la présence"
+msgstr "Automation of salary adjustments based on attendance"
+
+#: tenant/templates/index.html:147
+msgid "Accès API pour intégration avec des systèmes internes"
+msgstr "API access for integration with internal systems"
+
+#: tenant/templates/index.html:148
+msgid "Support premium avec un gestionnaire dédié"
+msgstr "Premium support with a dedicated manager"
+
+#: tenant/templates/index.html:152
+msgid ""
+"Une solution de pointe qui allie automatisation et contrôle précis de la "
+"paie."
+msgstr "A cutting-edge solution that combines automation and precise payroll control."
 
 #: tenant/views/tenant.py:11
 msgid ","
 msgstr ","
 
 #: tenant/views/tenant.py:24
-msgid "Découvrez PayDay, la solution SaaS complète pour automatiser la paie, gérer les présences avec un dispositif 4G et simplifier vos processus RH."
-msgstr "Discover PayDay, the complete SaaS solution for automating payroll, managing attendance with a 4G device, and simplifying your HR processes."
+msgid ""
+"Découvrez PayDay, la solution SaaS complète pour automatiser la "
+"paie,         gérer les présences avec un dispositif 4G et simplifier vos "
+"processus RH."
+msgstr ""
+"Discover PayDay, the complete SaaS solution for automating payroll, managing "
+"attendance with a 4G device, and simplifying your HR processes."
