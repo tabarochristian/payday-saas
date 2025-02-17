@@ -29,7 +29,6 @@ def create_tenant_schema(_id):
     # Return the output as a JSON response
     return {"output": output}
 
-@shared_task
 def delete_tenant_schema(_id):
     tenant = Tenant.objects.filter(id=_id)
     tenant = tenant.first()
