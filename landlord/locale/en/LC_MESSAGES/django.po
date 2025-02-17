@@ -238,10 +238,6 @@ msgid ""
 "paie."
 msgstr "A cutting-edge solution that combines automation and precise payroll control."
 
-#: tenant/views/tenant.py:11
-msgid ","
-msgstr ","
-
 #: tenant/views/tenant.py:24
 msgid ""
 "Découvrez PayDay, la solution SaaS complète pour automatiser la "

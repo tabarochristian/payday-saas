@@ -1,0 +1,227 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-17 18:35+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: tenant/models/tenant.py:25 tenant/templates/index.html:111
+msgid "Essentielle"
+msgstr ""
+
+#: tenant/models/tenant.py:29
+msgid "votre prenom"
+msgstr "votre prénom"
+
+#: tenant/models/tenant.py:34
+msgid "votre nom"
+msgstr "votre nom"
+
+#: tenant/models/tenant.py:39
+msgid "nom de l'organisme"
+msgstr "nom de l'organisme"
+
+#: tenant/models/tenant.py:45
+msgid "email"
+msgstr "email"
+
+#: tenant/models/tenant.py:51
+msgid "numéro de téléphone mobile"
+msgstr "numéro de téléphone mobile"
+
+#: tenant/models/tenant.py:52
+msgid "+243 8XX XXX XXX"
+msgstr "+243 8XX XXX XXX"
+
+#: tenant/models/tenant.py:57
+msgid "plan d'abonnement"
+msgstr "plan d'abonnement"
+
+#: tenant/models/tenant.py:64
+msgid "schema"
+msgstr "schéma"
+
+#: tenant/models/tenant.py:68
+msgid "Nom du schéma dans la base de données"
+msgstr "Nom du schéma dans la base de données"
+
+#: tenant/models/tenant.py:72
+msgid "is active"
+msgstr "est actif"
+
+#: tenant/models/tenant.py:74
+msgid "Définir si le compte est actif ou non"
+msgstr "Définir si le compte est actif ou non"
+
+#: tenant/models/tenant.py:78
+msgid "mis à jour le/à"
+msgstr "mis à jour le/à"
+
+#: tenant/models/tenant.py:84
+msgid "créé le/à"
+msgstr "créé le/à"
+
+#: tenant/models/tenant.py:110
+msgid "tenant"
+msgstr "tenant"
+
+#: tenant/models/tenant.py:112
+msgid "tenant(s)"
+msgstr "tenant(s)"
+
+#: tenant/templates/index.html:52
+msgid "Commencez ici!"
+msgstr "Commencez ici!"
+
+#: tenant/templates/index.html:53
+msgid "Créez votre compte et transformez votre organisation."
+msgstr "Créez votre compte et transformez votre organisation."
+
+#: tenant/templates/index.html:56
+msgid "En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale."
+msgstr "En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale."
+
+#: tenant/templates/index.html:61
+msgid "Nous créons le compte de votre <b class='text-primary'>organisation</b>."
+msgstr "Nous créons le compte de votre <b class='text-primary'>organisation</b>."
+
+#: tenant/templates/index.html:75
+msgid "Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition."
+msgstr "Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition."
+
+#: tenant/templates/index.html:95
+msgid "change"
+msgstr "modifier"
+
+#: tenant/templates/index.html:112
+msgid "Idéale pour les petites organisations <b>(jusqu’à 100 employés)</b> souhaitant automatiser leur paie sans complexité."
+msgstr "Idéale pour les petites organisations <b>(jusqu’à 100 employés)</b> souhaitant automatiser leur paie sans complexité."
+
+#: tenant/templates/index.html:114
+msgid "Gratuit"
+msgstr "Gratuit"
+
+#: tenant/templates/index.html:116
+msgid "Gestion complète de la paie"
+msgstr "Gestion complète de la paie"
+
+#: tenant/templates/index.html:117
+msgid "Modèle de calcul flexible"
+msgstr "Modèle de calcul flexible"
+
+#: tenant/templates/index.html:118
+msgid "Export des états de paie & génération de bulletins"
+msgstr "Export des états de paie & génération de bulletins"
+
+#: tenant/templates/index.html:119
+msgid "Support standard par email"
+msgstr "Support standard par email"
+
+#: tenant/templates/index.html:123
+msgid "Pour une organisation qui veut digitaliser sa paie sans se soucier d’outils complexes."
+msgstr "Pour une organisation qui veut digitaliser sa paie sans se soucier d’outils complexes."
+
+#: tenant/templates/index.html:132
+msgid "Entreprise"
+msgstr "Entreprise"
+
+#: tenant/templates/index.html:133
+msgid "Conçue pour les moyennes organisations <b>(100 à 3000 employés)</b> nécessitant un contrôle avancé et une meilleure gestion des présences."
+msgstr "Conçue pour les moyennes organisations <b>(100 à 3000 employés)</b> nécessitant un contrôle avancé et une meilleure gestion des présences."
+
+#: tenant/templates/index.html:135 tenant/templates/index.html:157
+msgid "Contactez nous"
+msgstr "Contactez nous"
+
+#: tenant/templates/index.html:137
+msgid "Tous les avantages de la Formule Essentielle"
+msgstr "Tous les avantages de la Formule Essentielle"
+
+#: tenant/templates/index.html:138
+msgid "Gestion des absences & congés intégrée"
+msgstr "Gestion des absences & congés intégrée"
+
+#: tenant/templates/index.html:139
+msgid "Accès à des rapports avancés"
+msgstr "Accès à des rapports avancés"
+
+#: tenant/templates/index.html:140
+msgid "Personnalisation des bulletins de paie"
+msgstr "Personnalisation des bulletins de paie"
+
+#: tenant/templates/index.html:141
+msgid "Intégration avec des systèmes comptables"
+msgstr "Intégration avec des systèmes comptables"
+
+#: tenant/templates/index.html:142
+msgid "Support prioritaire (Email & Telephone)"
+msgstr "Support prioritaire (Email & Telephone)"
+
+#: tenant/templates/index.html:146
+msgid "Solution complète pour structurer efficacement la paie et la gestion RH."
+msgstr "Solution complète pour structurer efficacement la paie et la gestion RH."
+
+#: tenant/templates/index.html:154
+msgid "Gestionnaire"
+msgstr "Gestionnaire"
+
+#: tenant/templates/index.html:155
+msgid "Pensée pour les grandes organisations <b>(3000+ employés)</b> qui veulent un contrôle total sur leur gestion RH et paie avec un suivi en temps réel des présences."
+msgstr "Pensée pour les grandes organisations <b>(3000+ employés)</b> qui veulent un contrôle total sur leur gestion RH et paie avec un suivi en temps réel des présences."
+
+#: tenant/templates/index.html:159
+msgid "Tous les avantages de la Formule Pro"
+msgstr "Tous les avantages de la Formule Pro"
+
+#: tenant/templates/index.html:160
+msgid "Gestion des heures supplémentaires et primes"
+msgstr "Gestion des heures supplémentaires et primes"
+
+#: tenant/templates/index.html:161
+msgid "Gestion des avances et prêts"
+msgstr "Gestion des avances et prêts"
+
+#: tenant/templates/index.html:162
+msgid "Gestion des shifts"
+msgstr "Gestion des shifts"
+
+#: tenant/templates/index.html:163
+msgid "Collecte des présences via nos terminaux autonomes 4G"
+msgstr "Collecte des présences via nos terminaux autonomes 4G"
+
+#: tenant/templates/index.html:164
+msgid "Rapports analytiques et tableaux de bord avancés"
+msgstr "Rapports analytiques et tableaux de bord avancés"
+
+#: tenant/templates/index.html:165
+msgid "Automatisation des ajustements salariaux en fonction de la présence"
+msgstr "Automatisation des ajustements salariaux en fonction de la présence"
+
+#: tenant/templates/index.html:166
+msgid "Accès API pour intégration avec des systèmes internes"
+msgstr "Accès API pour intégration avec des systèmes internes"
+
+#: tenant/templates/index.html:167
+msgid "Support premium avec un gestionnaire dédié"
+msgstr "Support premium avec un gestionnaire dédié"
+
+#: tenant/templates/index.html:171
+msgid "Une solution de pointe qui allie automatisation et contrôle précis de la paie."
+msgstr "Une solution de pointe qui allie automatisation et contrôle précis de la paie."
+
+#: tenant/views/tenant.py:24
+msgid "Découvrez PayDay, la solution SaaS complète pour automatiser la paie, gérer les présences avec un dispositif 4G et simplifier vos processus RH."
+msgstr "Découvrez PayDay, la solution SaaS complète pour automatiser la paie, gérer les présences avec un dispositif 4G et simplifier vos processus RH."
+
