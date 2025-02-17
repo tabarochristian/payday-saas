@@ -77,6 +77,23 @@
                         <br />
                         <a href="telto:+243825012792">+243 82 50 12 702</a>
                     </div>
+
+                    <div class="mt-5 text-center">
+                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}">
+                            <select name="language">
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                        {{ language.name_local }} ({{ language.code }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" value="Go">
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">

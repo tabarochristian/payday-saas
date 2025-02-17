@@ -22,6 +22,8 @@ from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
 
 urlpatterns = [
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('captcha/', include('captcha.urls')),
     path("api/", include("api.urls")),
     path("", include("tenant.urls")),
