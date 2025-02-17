@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-17 13:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tenant/models/tenant.py:25
+msgid "Essentielle"
+msgstr "Essential"
+
+#: tenant/models/tenant.py:29
+msgid "votre prenom"
+msgstr "your first name"
+
+#: tenant/models/tenant.py:34
+msgid "votre nom"
+msgstr "your last name"
+
+#: tenant/models/tenant.py:39
+msgid "nom de l'organisme"
+msgstr "organization name"
+
+#: tenant/models/tenant.py:45
+msgid "email"
+msgstr "email"
+
+#: tenant/models/tenant.py:51
+msgid "numéro de téléphone mobile"
+msgstr "mobile phone number"
+
+#: tenant/models/tenant.py:52
+msgid "+243 8XX XXX XXX"
+msgstr "+243 8XX XXX XXX"
+
+#: tenant/models/tenant.py:57
+msgid "plan d'abonnement"
+msgstr "subscription plan"
+
+#: tenant/models/tenant.py:64
+msgid "schema"
+msgstr "schema"
+
+#: tenant/models/tenant.py:68
+msgid "Nom du schéma dans la base de données"
+msgstr "Schema name in the database"
+
+#: tenant/models/tenant.py:72
+msgid "is active"
+msgstr "is active"
+
+#: tenant/models/tenant.py:74
+msgid "Définir si le compte est actif ou non"
+msgstr "Define if the account is active or not"
+
+#: tenant/models/tenant.py:78
+msgid "mis à jour le/à"
+msgstr "updated on"
+
+#: tenant/models/tenant.py:84
+msgid "créé le/à"
+msgstr "created on"
+
+#: tenant/models/tenant.py:110
+msgid "tenant"
+msgstr "tenant"
+
+#: tenant/models/tenant.py:112
+msgid "tenant(s)"
+msgstr "tenant(s)"
+
+#: tenant/templates/index.html:51
+msgid "Commencez ici!"
+msgstr "Start here!"
+
+#: tenant/templates/index.html:52
+msgid "Créez votre compte et transformez votre organisation."
+msgstr "Create your account and transform your organization."
+
+#: tenant/templates/index.html:55
+msgid "En remplissant ce formulaire, j'accepte que mes informations personnelles saisies soient utilisées par Payday ou ses filiales à des fins de prospections commerciale."
+msgstr "By filling out this form, I agree that my entered personal information will be used by Payday or its affiliates for commercial prospecting purposes."
+
+#: tenant/templates/index.html:60
+msgid "Nous créons le compte de votre <b class='text-primary'>organisation</b>."
+msgstr "We are creating the account for your <b class='text-primary'>organization</b>."
+
+#: tenant/templates/index.html:74
+msgid "Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition."
+msgstr "Need help? Let's talk! We are at your disposal."
+
+#: tenant/views/tenant.py:11
+msgid ","
+msgstr ","
+
+#: tenant/views/tenant.py:24
+msgid "Découvrez PayDay, la solution SaaS complète pour automatiser la paie, gérer les présences avec un dispositif 4G et simplifier vos processus RH."
+msgstr "Discover PayDay, the complete SaaS solution for automating payroll, managing attendance with a 4G device, and simplifying your HR processes."
