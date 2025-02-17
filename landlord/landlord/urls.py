@@ -20,6 +20,7 @@ from django.contrib import admin
 
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
+from django.views.i18n import JavaScriptCatalog
 
 urlpatterns = [
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
