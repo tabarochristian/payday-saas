@@ -26,8 +26,8 @@
     </div>
 </div>
 
-{{ menus|json_script:"menus" }}
-
+{% comment %}
+ {{ menus|json_script:"menus" }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css" />
 <script>
@@ -74,5 +74,6 @@
          }).start();
     });
 </script>
+{% endcomment %}
 
 {% endblock %}

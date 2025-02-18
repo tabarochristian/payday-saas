@@ -56,12 +56,14 @@ def base(request):
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'menu'}),
             'permission': 'core.view_menu',
             'description': _('Faite la disposition de vos menus.')
-        }, {
-            'title': _('Importeur'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'importer'}),
-            'permission': 'core.view_menu',
-            'description': _('Importez vos données en masse.')
-        }, {
+        }, 
+        #{
+        #    'title': _('Importeur'),
+        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'importer'}),
+        #    'permission': 'core.view_menu',
+        #    'description': _('Importez vos données en masse.')
+        #}, 
+        {
             'title': _('Modèle de document'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'template'}),
             'permission': 'core.view_template',
@@ -71,12 +73,14 @@ def base(request):
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'widget'}),
             'permission': 'core.view_widget',
             'description': _('Créez des widgets pour votre tableau de bord, ainsi que listing.')
-        }, {
-            'title': _('Préférences'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'preference'}),
-            'permission': 'core.view_preference',
-            'description': _('Définissez vos préférences pour une meilleure expérience.')
-        }, {
+        }, 
+        #{
+        #    'title': _('Préférences'),
+        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'preference'}),
+        #    'permission': 'core.view_preference',
+        #    'description': _('Définissez vos préférences pour une meilleure expérience.')
+        #}, 
+        {
             'title': _('Utilisateurs'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'user'}),
             'permission': 'core.view_user',
@@ -86,12 +90,14 @@ def base(request):
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'group'}),
             'permission': 'auth.view_group',
             'description': _('Gérez les roles de votre organisation.')
-        }, {
-            'title': _('Job'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'job'}),
-            'permission': 'core.view_job',
-            'description': _('Mettez en place des tâches automatisées.')
-        }, {
+        }, 
+        #{
+        #    'title': _('Job'),
+        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'job'}),
+        #    'permission': 'core.view_job',
+        #    'description': _('Mettez en place des tâches automatisées.')
+        #}, 
+        {
             'title': _('Journal d\'activité'),
             'href': reverse_lazy('core:activity-log'),
             'permission': 'admin.view_logentry',
