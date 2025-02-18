@@ -1,6 +1,6 @@
+from tenant.views import CreateTenantView, TenantView, StaticViewSitemap, RobotsView
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
-from tenant.views import *
 
 app_name = "tenant"
 sitemaps = {
