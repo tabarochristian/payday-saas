@@ -1,6 +1,6 @@
-from tenant.views import CreateTenantView, TenantView, StaticViewSitemap
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
+from tenant.views import *
 
 app_name = "tenant"
 sitemaps = {
@@ -15,5 +15,6 @@ urlpatterns = [
         sitemap,
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
-    )
+    ),
+    path('robots.txt', RobotsView.as_view(), name='robots'),
 ]
