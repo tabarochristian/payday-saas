@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 
 class StaticViewSitemap(Sitemap):
     priority = 1.0
+    protocol = 'https'
     changefreq = 'daily'
 
     def items(self):
