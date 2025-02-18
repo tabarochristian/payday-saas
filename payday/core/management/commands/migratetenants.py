@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
         # Fetch all schemas from the tenant table in the public schema
         with connection.cursor() as cursor:
-            cursor.execute("SELECT schema FROM public.tenant")
+            cursor.execute("SELECT schema FROM public.tenant_tenant")
             schemas = cursor.fetchall()
 
         # Iterate over each schema and run migrations
