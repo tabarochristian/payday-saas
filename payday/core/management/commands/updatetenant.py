@@ -36,7 +36,7 @@ class Command(BaseCommand):
         Retrieve the tenant row as a dictionary using raw SQL.
         """
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM tenant WHERE schema_name = %s;", [schema])
+            cursor.execute("SELECT * FROM public.tenant_tenant WHERE schema_name = %s;", [schema])
             row = cursor.fetchone()
             if not row: return None
             row = dict(zip([col[0] for col in cursor.description], row))
