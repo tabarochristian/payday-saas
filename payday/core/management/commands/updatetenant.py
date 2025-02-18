@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.core.cache import cache
 from django.db import connection
+import json
 
 class Command(BaseCommand):
     help = 'Update the tenant table in the public schema with key-value arguments and update the cache'
@@ -13,9 +14,9 @@ class Command(BaseCommand):
         schema = kwargs['schema']
         fields = kwargs['fields']
 
-        if not fields:
-            self.stdout.write(self.style.ERROR('No fields provided for update.'))
-            return
+        #if not fields:
+        #    self.stdout.write(self.style.ERROR('No fields provided for update.'))
+        #    return
 
         # Ensure the tenant exists
         tenant_data = self.get_tenant(schema)
@@ -37,7 +38,8 @@ class Command(BaseCommand):
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM tenant WHERE schema_name = %s;", [schema])
             row = cursor.fetchone()
-            if row:
-                columns = [col[0] for col in cursor.description]
-                return dict(zip(columns, row))
+            if not row: return None
+            row = dict(zip([col[0] for col in cursor.description], row))
+            row['plan'] = json.loads(row['plan'])
+            return row
         return None

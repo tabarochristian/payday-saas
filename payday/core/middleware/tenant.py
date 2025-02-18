@@ -58,14 +58,15 @@ class TenantMiddleware:
         Set the schema from cache or database.
         Returns True if the schema is valid and set, False otherwise.
         """
-        row = cache.get(f"tenant_schema_{schema}")
+        key = f"tenant_{schema}"
+        row = cache.get(key)
         if row:
             logger.debug(f"Using cached schema for {schema}")
             set_schema(schema)
             return row
 
         if row := self.set_schema_from_db(schema):
-            cache.set(f"tenant_schema_{schema}", row, timeout=self.cache_timeout)
+            cache.set(key, row, timeout=self.cache_timeout)
             logger.debug(f"Schema {schema} set and cached")
             return row
 

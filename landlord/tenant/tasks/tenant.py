@@ -29,26 +29,6 @@ def create_tenant_schema(_id):
     # Return the output as a JSON response
     return {"output": output}
 
-def delete_tenant_schema(_id):
-    tenant = Tenant.objects.filter(id=_id)
-    tenant = tenant.first()
-
-    # Initialize Docker client
-    client = docker.from_env()
-
-    # Get the Django container
-    container = client.containers.get("payday-saas")
-
-    # Run the migrate command
-    cmd = f"python manage.py deletetenant {tenant.schema} {tenant.email}"
-    result = container.exec_run(cmd)
-
-    # Decode the output
-    output = result.output.decode("utf-8")
-
-    # Return the output as a JSON response
-    return {"output": output}
-
 def update_tenant_schema(_id):
     tenant = Tenant.objects.filter(id=_id)
     tenant = tenant.first()

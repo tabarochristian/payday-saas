@@ -106,7 +106,6 @@ class Tenant(models.Model):
     
 
     class Meta:
-        db_table = 'tenant'
-        verbose_name = _('tenant')
-        unique_together = ('name', 'phone')
         verbose_name_plural = _('tenant(s)')
+        unique_together = ('name', 'phone')
+        verbose_name = _('tenant')
