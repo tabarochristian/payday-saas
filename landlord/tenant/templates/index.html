@@ -19,6 +19,17 @@
     <meta name="description" content="{{ self.meta_description }}">
     <meta name="keywords" content="{{ self.meta_keywords }}">
 
+    <meta property="og:title" content="Payday">
+    <meta property="og:description" content="{{ self.meta_description }}">
+
+    <meta property="og:url" content="https://payday.cd">
+    <meta property="og:image" content="{% static 'assets/images/logo/favicon.png' %}">
+
+    <meta name="twitter:title" content="Payday">
+    <meta name="twitter:description" content="{{ self.meta_description }}">
+    <meta name="twitter:url" content="{% static 'assets/images/logo/favicon.png' %}">
+    <meta name="twitter:card" content="{{ self.meta_description }}">
+
     <style>
         body, html {
             font-size: 12px;
@@ -74,7 +85,7 @@
                         <p>
                             {% trans "Besoin d'aide ? Parlons-en ! Nous sommes à votre disposition." %}
                         </p>
-                        <a href="mailto:contact@payday.cd">contact@payday.cd</a>
+                        <a href="mailto:contact@payday.cd">contact(at)payday.cd</a>
                         <br />
                         <a href="telto:+243825012792">+243 82 50 12 702</a>
                     </div>
