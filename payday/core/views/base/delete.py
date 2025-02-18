@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
 
-# from django.contrib.admin.models import LogEntry, DELETION
+from django.contrib.admin.models import LogEntry, DELETION
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from core.forms.button import Button
@@ -60,9 +60,8 @@ class Delete(BaseView):
         
         next = query.pop('next', reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name}))
         qs = self.get_queryset().filter(**query)
-        qs.delete()
+        
 
-        """
         # To-Do: To prevent delete of approved object by creator
         LogEntry.objects.log_action(**{
             'user_id': request.user.id,
@@ -71,6 +70,5 @@ class Delete(BaseView):
             'object_repr': force_str(obj),
             'action_flag': DELETION
         })
-        """
-
+        qs.delete()
         return redirect(next) if next else render(request, self.template_name, locals())

@@ -21,13 +21,12 @@ class LoggerMixin:
         return "; ".join(change_messages) if change_messages else None
 
     def log(self, model, form, action, change_message):
-        return
-        if change_message:
-            return LogEntry.objects.log_action(
-                user_id=self.request.user.id,
-                content_type_id=ContentType.objects.get_for_model(model).id,
-                object_id=form.instance.pk,
-                object_repr=force_str(str(form.instance)),
-                action_flag=action,
-                change_message=change_message
-            )
+        if not change_message: return
+        return LogEntry.objects.log_action(
+            user_id=self.request.user.id,
+            content_type_id=ContentType.objects.get_for_model(model).id,
+            object_id=form.instance.pk,
+            object_repr=force_str(str(form.instance)),
+            action_flag=action,
+            change_message=change_message
+        )

@@ -74,7 +74,7 @@ class Create(BaseView):
                 obj.save()
 
         message = _('Ajout du/de {model} #{pk}')
-        #self.log(model, form, action=ADDITION, change_message=self.generate_change_message(instance, form.instance))
+        self.log(model, form, action=ADDITION, change_message=self.generate_change_message(instance, form.instance))
         messages.add_message(request, messages.SUCCESS,  message=message.format(**{'model': model._meta.model_name, 'pk': instance.pk}))
 
         redirect_to = reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name})

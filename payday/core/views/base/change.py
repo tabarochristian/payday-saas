@@ -129,7 +129,7 @@ class Change(BaseView):
         [formset.save() for formset in formsets]
 
         message = _('Le {model} #{pk} a été mis à jour avec succès')
-        # self.log(model, form, action=CHANGE, change_message=self.generate_change_message(instance, form.instance))
+        self.log(model, form, action=CHANGE, change_message=self.generate_change_message(instance, form.instance))
         messages.add_message(request, messages.SUCCESS,  message=message.format(**{'model': model._meta.model_name, 'pk': pk}))
 
         redirect_to = reverse_lazy('core:list', kwargs={'app': app, 'model': model._meta.model_name})
