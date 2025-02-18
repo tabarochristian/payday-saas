@@ -273,6 +273,18 @@ SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://payday.cd",
-    "http://www.payday.cd"
+    "https://payday.cd",
+    "https://www.payday.cd"
 ]
+
+if not DEBUG:
+    # Security settings
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # HSTS settings
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
