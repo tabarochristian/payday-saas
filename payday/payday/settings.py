@@ -226,7 +226,7 @@ AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_SECURE_URLS = int(os.getenv('AWS_S3_SECURE', default=0))
+AWS_S3_SECURE_URLS = bool(int(os.getenv('AWS_S3_SECURE', default=0)))
 AWS_S3_URL_PROTOCOL = os.getenv('AWS_S3_URL_PROTOCOL', default='http:')
 
 # Optional: Define S3 file URLs 
@@ -403,3 +403,15 @@ SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
 #if not DEBUG:
 #import sentry_sdk
 #sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
+
+if not DEBUG:
+    # Security settings
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # HSTS settings
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
