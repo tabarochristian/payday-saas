@@ -11,14 +11,16 @@ logger = logging.getLogger(__name__)
 @receiver(post_save, sender=Tenant)
 def saved(sender, instance, created, **kwargs):
     if not created:
-        thread = Thread(target=update_tenant_schema, args=(instance.id,))
-        logger.info(f"Started task for tenant update {instance.id}")
-        thread.daemon = True
-        thread.start()
+        #thread = Thread(target=update_tenant_schema, args=(instance.id,))
+        #logger.info(f"Started task for tenant update {instance.id}")
+        #thread.daemon = True
+        #thread.start()
+        update_tenant_schema(instance.id)
         return
     
     # if tenant is created
-    thread = Thread(target=create_tenant_schema, args=(instance.id,))
-    logger.info(f"Started task for tenant {instance.id}")
-    thread.daemon = True
-    thread.start()
+    #thread = Thread(target=create_tenant_schema, args=(instance.id,))
+    #logger.info(f"Started task for tenant {instance.id}")
+    #thread.daemon = True
+    #thread.start()
+    create_tenant_schema(instance.id)
