@@ -79,7 +79,7 @@ class TenantMiddleware:
         """
         try:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM public.tenant WHERE schema = %s", [schema])
+                cursor.execute("SELECT * FROM public.tenant_tenant WHERE schema = %s", [schema])
                 if row := cursor.fetchone():
                     set_schema(schema)
                     col_names = [desc[0] for desc in cursor.description]
