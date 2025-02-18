@@ -240,7 +240,7 @@
             if (bouncyElement) {
                 const pollAccountCreationStatus = async () => {
                     try {
-                        const response = await fetch('{% url 'tenant:tenant' form.instance.pk %}', {
+                        const response = await fetch('{% url 'tenant:view' form.instance.pk %}', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',

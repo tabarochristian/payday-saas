@@ -8,7 +8,7 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path("tenant/<int:pk>", TenantView.as_view(), name="change"),
+    path("tenant/<int:pk>", TenantView.as_view(), name="view"),
     path("", CreateTenantView.as_view(), name="create"),
     path(
         "sitemap.xml",
