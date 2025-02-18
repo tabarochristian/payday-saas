@@ -12,4 +12,7 @@ class TenantAdmin(admin.ModelAdmin):
     admin.site.site_title = "Payday.LandLord Admin Portal"
     admin.site.index_title = "Admin Portal"
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 admin.site.register(Tenant, TenantAdmin)

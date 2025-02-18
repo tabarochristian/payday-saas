@@ -1,4 +1,5 @@
 from phonenumber_field.modelfields import PhoneNumberField
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.db import models
 import re, json
@@ -103,6 +104,9 @@ class Tenant(models.Model):
 
     def __str__(self):
         return self.name
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("This entry cannot be deleted.")
     
 
     class Meta:
