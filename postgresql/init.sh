@@ -14,7 +14,7 @@ curl -fsSL -o /etc/apt/trusted.gpg.d/dalibo-labs.gpg https://apt.dalibo.org/labs
 # Step 3: Install PostgreSQL Anonymizer
 echo "Installing PostgreSQL Anonymizer..."
 apt-get update
-apt-get install -y postgresql-anonymizer-17
+apt-get install -y postgresql_anonymizer_17
 
 # Step 4: Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL to be ready..."
