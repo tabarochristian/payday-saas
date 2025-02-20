@@ -16,18 +16,4 @@ echo "Installing PostgreSQL Anonymizer..."
 apt update
 apt install -y postgresql_anonymizer_17
 
-# Step 4: Wait for PostgreSQL to be ready
-echo "Waiting for PostgreSQL to be ready..."
-until pg_isready -h db -U $POSTGRES_USER -d $POSTGRES_DB -p $POSTGRES_PASSWORD; do
-  sleep 2
-done
-
-# Step 5: Enable the anon extension in the database
-echo "Enabling the anon extension..."
-psql -h db -U $POSTGRES_USER -d $POSTGRES_DB -p $POSTGRES_PASSWORD -c "CREATE EXTENSION IF NOT EXISTS anon;"
-
-# Step 6: Run any additional SQL scripts
-echo "Running additional SQL scripts..."
-psql -h db -U $POSTGRES_USER -d $POSTGRES_DB -p $POSTGRES_PASSWORD -f /docker-entrypoint-initdb.d/init.sql
-
 echo "PostgreSQL Anonymizer setup completed!"
