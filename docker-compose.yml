@@ -132,10 +132,10 @@ services:
       - no_auto_start
 
   db:
-    #image: postgres:latest
-    build:
-      context: .
-      dockerfile: postgresql/Dockerfile
+    image: postgres:latest
+    #build:
+    #  context: .
+    #  dockerfile: postgresql/Dockerfile
     restart: unless-stopped
     container_name: payday-db
     volumes:
