@@ -9,7 +9,7 @@ from core.forms import modelform_factory, InlineFormSetHelper
 from django.urls import reverse_lazy
 from django.db import transaction
 
-#from django.contrib.admin.models import CHANGE
+from django.contrib.admin.models import CHANGE
 from core.models import Preference
 from .base import BaseView
 import copy
