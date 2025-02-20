@@ -4,7 +4,6 @@ from django.utils.translation import gettext as _
 from django.http import JsonResponse
 from django.utils import translation
 
-from django_ratelimit.decorators import ratelimit
 from django.forms import modelform_factory
 from tenant.models import Tenant
 from django.views import View
@@ -30,8 +29,7 @@ class CreateTenantView(View):
     def get(self, request):
         form = crispy_modelform_factory(Tenant, exclude=["is_active"])
         return render(request, "index.html", locals())
-
-    @ratelimit(key="ip", rate="10/m", method="POST", block=True)    
+  
     def post(self, request):
         form = crispy_modelform_factory(Tenant, exclude=["is_active"])
         form = form(request.POST)
