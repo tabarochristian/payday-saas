@@ -3,8 +3,8 @@ set -e
 
 # Step 1: Install prerequisites
 echo "Installing prerequisites..."
-apt-get update
-apt-get install -y curl gnupg lsb-release
+apt update
+apt install -y curl gnupg lsb-release
 
 # Step 2: Add Dalibo Labs APT repository
 echo "Adding Dalibo Labs repository..."
@@ -13,8 +13,8 @@ curl -fsSL -o /etc/apt/trusted.gpg.d/dalibo-labs.gpg https://apt.dalibo.org/labs
 
 # Step 3: Install PostgreSQL Anonymizer
 echo "Installing PostgreSQL Anonymizer..."
-apt-get update
-apt-get install -y postgresql_anonymizer_17
+apt update
+apt install -y postgresql_anonymizer_17
 
 # Step 4: Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL to be ready..."
