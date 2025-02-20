@@ -140,11 +140,13 @@ services:
     container_name: payday-db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgresql/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./postgresql/init.sh:/init.sh
+      - ./postgresql/entrypoint.sh:/entrypoint.sh
     environment:
       - POSTGRES_DB=payday
       - POSTGRES_USER=payday
       - POSTGRES_PASSWORD=payday
+    entrypoint: /entrypoint.sh
     # entrypoint: ["/bin/bash", "-c", "/docker-entrypoint-initdb.d/init.sh && docker-entrypoint.sh postgres"]
 
   pgbouncer:
