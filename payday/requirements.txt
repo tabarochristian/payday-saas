@@ -40,7 +40,6 @@ django-json-widget==2.0.1
 django-mathfilters==1.0.0
 django-model-utils==5.0.0
 django-money==3.5.3
-git+https://github.com/tabarochristian/django-notifications.git@5a01c3bfa9e742222427a6fb387d9e35dab28fc8
 django-phonenumber-field==8.0.0
 django-qr-code==4.1.0
 django-ranged-response==0.2.0
