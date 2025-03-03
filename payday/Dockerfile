@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y git
 # Set the working directory in the container
 WORKDIR /app
 
+# Clear pip cache
+RUN pip cache purge
+
 # Copy the requirements file into the container
 COPY payday/requirements.txt .
 
