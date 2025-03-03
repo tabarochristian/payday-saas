@@ -68,8 +68,7 @@ class Delete(BaseView):
         LogEntry.objects.log_action(**{
             'user_id': request.user.id,
             'content_type_id': ContentType.objects.get_for_model(model).id,
-            # 'object_id': obj.pk,
-            'object_repr': "Object(s) deletion :" + ", ".join(qs.values_list('id', flat=True)),
+            'object_repr': "Object(s) deletion :" + ", ".join([str(obj) for obj in qs.values_list('id', flat=True)]),
             'action_flag': DELETION
         })
         qs.delete()
