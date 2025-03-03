@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y git
 # Set the working directory in the container
 WORKDIR /app
 
+# Uninstall all currently installed packages
+RUN pip freeze | xargs pip uninstall -y
+
 # Clear pip cache
 RUN pip cache purge
 
