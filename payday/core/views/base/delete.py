@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.http import Http404
 
 from django.contrib.admin.models import LogEntry, DELETION
@@ -68,8 +69,9 @@ class Delete(BaseView):
             'user_id': request.user.id,
             'content_type_id': ContentType.objects.get_for_model(model).id,
             # 'object_id': obj.pk,
-            'object_repr': "Object deletion :" + ", ".join(qs.values_list('id', flat=True)),
+            'object_repr': "Object(s) deletion :" + ", ".join(qs.values_list('id', flat=True)),
             'action_flag': DELETION
         })
         qs.delete()
+        messages.add_message(request, messages.SUCCESS,  message="Object(s) deleted")
         return redirect(next) if next else render(request, self.template_name, locals())
