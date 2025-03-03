@@ -11,9 +11,7 @@ WORKDIR /app
 COPY payday/requirements.txt .
 
 # Install dependencies
-RUN pip uninstall django-notifications-hq -y
-RUN pip install git+https://github.com/tabarochristian/django-notifications.git@5a01c3bfa9e742222427a6fb387d9e35dab28fc8
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade --force-reinstall -r requirements.txt
 
 # Copy the rest of the application code
 COPY payday/ .
