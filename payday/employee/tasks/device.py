@@ -9,8 +9,8 @@ from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
+from notifications.signals import notify
 from employee.models import Employee
-from core.models import Notification
 from core.utils import set_schema
 from celery import shared_task
 
@@ -138,16 +138,14 @@ def setuserinfo(self, tenant, pk):
     except ValueError as e:
         # Handle exceptions from process_employee_photo without triggering a retry
         logger.error(f"Error processing employee photo for {employee.last_name}: {e}")
-        user = employee.created_by
-        if user:
-            notification = Notification(
-                _from=user,
-                _to=user,
-                redirect=None,
-                subject=_(f"Failed to process employee's photo {employee.last_name}"),
-                message=str(e),
-            )
-            notification.save()
+        notify.send(
+            employee.created_by,
+            recipient=employee.created_by,
+            verb=_("Échec de la synchronisation"),
+            level="info",
+            description=_(f"Échec de l'envoi des données pour le salarié ") + employee.last_name,
+            public=False,
+        )
         return  # Exit the task without retrying
 
     try:
@@ -161,15 +159,13 @@ def setuserinfo(self, tenant, pk):
 
     except Exception as ex:
         # Handle exceptions from device communication (trigger retry)
-        user = employee.created_by
-        if user:
-            notification = Notification(
-                _from=user,
-                _to=user,
-                redirect=None,
-                subject=_(f"Failed to send data for employee {employee.last_name}"),
-                message=str(ex),
-            )
-            notification.save()
         logger.error(f"Error sending data for employee {employee.last_name}: {ex}")
+        notify.send(
+            employee.created_by,
+            recipient=employee.created_by,
+            verb=_("Échec de la synchronisation"),
+            level="info",
+            description=_(f"Échec de l'envoi des données pour le salarié ") + employee.last_name,
+            public=False,
+        )
         raise ex  # Re-raise the exception to trigger retry

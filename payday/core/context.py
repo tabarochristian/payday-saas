@@ -1,6 +1,6 @@
 from django.utils.translation import gettext as _
-from core.models import Menu, Notification
 from django.urls import reverse_lazy
+from core.models import Menu
 
 
 def base(request):
@@ -41,7 +41,7 @@ def base(request):
         'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'notification'})+'?viewed=False',
         'icon': 'bi-bell',
         'forced': True,
-        'badge': notifications(request).get('count', 0),
+        'badge': request.user.notifications.unread().count(),
         'description': _('Les notifications qui vous sont destinées.')
     }))
     

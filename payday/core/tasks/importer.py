@@ -1,9 +1,11 @@
-from core.models import ImporterStatus, Notification, Importer
 from django.utils.translation import gettext as _
+from core.models import ImporterStatus, Importer
+from notifications.signals import notify
 from django.urls import reverse_lazy
 from django.template import loader
 from celery import shared_task
 import pandas as pd
+
 
 @shared_task(name='importer')
 def importer(pk):
@@ -22,7 +24,7 @@ def importer(pk):
     try:
         data = process_excel_file(obj, fields)
         bulk_create_records(model, data)
-        create_notification(obj, _('Importation réussie'), _('Les données ont été importées avec succès'), 'core:list')
+        notify(obj, _('Importation réussie'), _('Les données ont été importées avec succès'))
         update_status(obj, ImporterStatus.SUCCESS)
     except Exception as e:
         handle_import_error(obj, str(e))
@@ -73,23 +75,20 @@ def bulk_create_records(model, data):
     records = [model(**row) for row in data]
     model.objects.bulk_create(records, ignore_conflicts=True)
 
-def create_notification(obj, subject, message, redirect_view):
-    Notification.objects.create(
-        _from=obj.created_by,
-        _to=obj.created_by,
-        subject=subject,
-        message=message,
-        redirect=reverse_lazy(
-            redirect_view, 
-            kwargs={
-                'app': obj.content_type.app_label, 
-                'model': obj.content_type.model
-            }
-        )
+def notify(obj, subject, message, level='info'):
+    notify.send(
+        obj.created_by,
+        recipient=obj.created_by,
+        verb=subject,
+        level=level,
+        action_object=obj,
+        target=obj,
+        description=message,
+        public=False,
     )
 
 def handle_import_error(obj, error_message):
-    create_notification(obj, _('Importation échouée'), error_message)
+    notify(obj, _('Importation échouée'), error_message)
     obj.status = ImporterStatus.ERROR
     obj.message = error_message
     obj.save()

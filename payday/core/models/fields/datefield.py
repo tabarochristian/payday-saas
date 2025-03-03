@@ -7,5 +7,5 @@ class DateField(models.DateField):
         super().__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
-        kwargs['widget'] = forms.DateInput(attrs={'class': 'datepicker', 'type': 'date'})
+        kwargs['widget'] = forms.DateInput(attrs={'class': 'datepicker'})
         return super().formfield(**kwargs)

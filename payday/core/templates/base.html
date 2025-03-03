@@ -16,10 +16,10 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
       {% comment %}<link rel="stylesheet" href="{% static 'assets/css/main/app-dark.css' %}">{% endcomment %}
-      <link rel="stylesheet" href="{% static 'assets/css/shared/iconly.css' %}">
-      <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/png">
       <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.svg' %}" type="image/x-icon">
-      
+      <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/png">
+      <link rel="stylesheet" href="{% static 'assets/css/shared/iconly.css' %}">
+
       <style>
          html{
             font-size: 10px;
@@ -191,6 +191,10 @@
       
    </body>
 
+   <script>
+      var change_language_url = "{% url "set_language" %}";
+   </script>
+
    <script src="https://unpkg.com/htmx.org@1.6.1" defer></script>
    <script src="{% static 'assets/js/bootstrap.js' %}"></script>
    <script src="{% static 'assets/js/app.js' %}"></script>
@@ -199,81 +203,6 @@
    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
-   
-   <script>
-      $(document).ready(() => {
-         let isModified = false;
-
-         toastr.options = {
-            positionClass: "toast-bottom-right",
-            extendedTimeOut: 1000,
-            timeOut: 1500,
-            closeButton: true,
-            progressBar: true,
-        };
-
-         // $( ".datepicker" ).datepicker();
-         $('form :input').on('input', () => isModified = true);
-
-         $('button[type="submit"]').on('click', function() {
-            isModified = false;
-            $(this).closest('form').submit();
-         });
-
-         $(window).on('beforeunload', (e) => {
-            if (!isModified) return;
-            const message = '{% trans "You have unsaved changes. Are you sure you want to leave?" %}';
-            e.returnValue = message;
-            return message;
-         });
-
-         document.body.addEventListener('htmx:configRequest', (event) => {
-            event.detail.headers['X-CSRFToken'] = Cookies.get('csrftoken');
-         });
-
-         const modal = new bootstrap.Modal(document.getElementById("modal"));
-
-         htmx.on("hidden.bs.modal", () => {
-            document.getElementById("dialog").innerHTML = "";
-         });
-
-         htmx.on("htmx:beforeSwap", (e) => {
-            if (e.detail.target.id === "dialog" && !e.detail.xhr.response) {
-               modal.hide();
-               e.detail.shouldSwap = false;
-            }
-         });
-
-         htmx.on("htmx:afterSwap", (e) => {
-            if (e.detail.target.id === "dialog") {
-               modal.show();
-            } else {
-               modal.hide();
-            }
-         });
-
-         // Change the language
-         $('.lang-item').click(function() {
-            $.ajax({
-               url: '{% url 'set_language' %}',
-               type: 'POST',
-               data: {
-                  language: $(this).data('value'),
-                  csrfmiddlewaretoken: Cookies.get('csrftoken')
-               },
-               async: false,
-               success: () => location.reload()
-            });
-         });
-
-         $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                    xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
-                }
-            }
-         });
-      });
-   </script>
+   <script src="{% static "assets/js/init.js" %}"></script>
 
 </html>
