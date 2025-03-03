@@ -1,6 +1,4 @@
 $(document).ready(() => {
-    let isModified = false;
-
     toastr.options = {
         positionClass: "toast-bottom-right",
         extendedTimeOut: 1000,
@@ -9,8 +7,11 @@ $(document).ready(() => {
         progressBar: true,
     };
 
+    
     $(".datepicker").datepicker();
 
+    /*
+    let isModified = false;
     $('form :input').on('input', () => {
         isModified = true;
     });
@@ -20,13 +21,14 @@ $(document).ready(() => {
         isModified = false;
         $(this).closest('form').submit();
     });
-
+    
     $(window).on('beforeunload', (e) => {
         if (!isModified) return;
         const message = '{% trans "Vous avez des changements non sauvés. Êtes-vous sûr de vouloir partir ?" %}';
         e.returnValue = message;
         return message;
     });
+    */
 
     // Change the language
     $('.lang-item').click(function() {
