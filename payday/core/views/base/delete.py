@@ -67,6 +67,7 @@ class Delete(BaseView):
         # To-Do: To prevent delete of approved object by creator
         LogEntry.objects.log_action(**{
             'user_id': request.user.id,
+            'object_id': None,
             'content_type_id': ContentType.objects.get_for_model(model).id,
             'object_repr': "Object(s) deletion :" + ", ".join([str(obj) for obj in qs.values_list('id', flat=True)]),
             'action_flag': DELETION
