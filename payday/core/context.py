@@ -38,7 +38,7 @@ def base(request):
 
     menu.insert(2, dict({
         'title': _('Notifications'),
-        'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'notification'})+'?viewed=False',
+        'href': reverse_lazy('core:list', kwargs={'app': 'notifications', 'model': 'notification'})+'recipient_id='+str(request.user.id),
         'icon': 'bi-bell',
         'forced': True,
         'badge': request.user.notifications.unread().count(),
