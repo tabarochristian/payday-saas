@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 
 from django.contrib.admin.models import LogEntry, DELETION
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from core.forms.button import Button
