@@ -13,7 +13,7 @@ class Preference(Base):
         verbose_name=_('clé'),
         max_length=100,
         unique=True,
-        choices=preferences
+        # choices=preferences
     )
 
     value = fields.CharField(

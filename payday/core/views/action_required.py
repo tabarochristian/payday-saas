@@ -4,27 +4,18 @@ from django.shortcuts import render
 from django.apps import apps
 from .base import BaseView
 
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.apps import apps
+from core import views as core_views
+from django.http.request import QueryDict
 
-class ActionRequired(BaseView):
-    template_name = 'required.html'
+class ActionRequired(core_views.List):
+    action = ['view']
 
-    def devices(self, qs):
-        model = apps.get_model('employee', 'device')
-        device = model.objects.all().exists()
-        if device: return qs
-        qs.insert(0, {
-            'created_by': None, 'created_at': None,
-            'url': reverse_lazy('core:list', args=['employee', 'device']),
-
-            'pk': 1,
-            'app': 'employee',
-            'model': 'device',
-            'model_verbose': _('Terminal de presence'),
-            'description': _('Aucun terminal de presence n\'a été detecté'),
-        })
-        return qs
+    def get_action_buttons(self):
+        return []
 
     def get(self, request):
-        qs = []
-        qs = self.devices(qs)
-        return render(request, self.template_name, locals())
+        self.kwargs.update({'app': 'core', 'model': 'actionrequired'})
+        return super().get(request, app='core', model='actionrequired')

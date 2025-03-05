@@ -32,7 +32,7 @@ urlpatterns = [
     
     path('print/<str:document>/<str:app>/<str:model>', Print.as_view(), name='print'),
     path('exporter/<str:app>/<str:model>', Exporter.as_view(), name='exporter'),
-    path('notification/<str:pk>', Notification.as_view(), name='notification'),
+    path('notifications', Notifications.as_view(), name='notifications'),
     path('activity-log', ActivityLog.as_view(), name='activity-log'),
 
     path('canvas/download/<str:pk>', Canvas.as_view(), name='canvas-download'),

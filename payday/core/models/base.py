@@ -72,5 +72,13 @@ class Base(models.Model):
     def __str__(self):
         return str(self.name) if self.name else super().__str__()
 
+    @staticmethod
+    def get_action_required():
+        return []
+
+    @staticmethod
+    def can_search():
+        return True
+
     class Meta:
         abstract = True

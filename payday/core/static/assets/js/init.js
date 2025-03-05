@@ -9,26 +9,24 @@ $(document).ready(() => {
 
     
     $(".datepicker").datepicker();
+    $('form').dirrty();
 
-    /*
-    let isModified = false;
-    $('form :input').on('input', () => {
-        isModified = true;
+    $(window).on('beforeunload', function() {
+        if ($('form').dirrty('isDirty')) {
+            return 'You have unsaved changes. Are you sure you want to leave?';
+        }
     });
 
-    $('button[type="submit"]').on('click', function(e) {
-        e.preventDefault();
-        isModified = false;
-        $(this).closest('form').submit();
+    $('form').on('submit', () => $('form').dirrty('reset'));
+
+    // CSRF token for AJAX requests
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+            }
+        }
     });
-    
-    $(window).on('beforeunload', (e) => {
-        if (!isModified) return;
-        const message = '{% trans "Vous avez des changements non sauvés. Êtes-vous sûr de vouloir partir ?" %}';
-        e.returnValue = message;
-        return message;
-    });
-    */
 
     // Change the language
     $('.lang-item').click(function() {
@@ -40,7 +38,7 @@ $(document).ready(() => {
             type: 'POST',
             data: {
                 language: language,
-                csrfmiddlewaretoken: csrfToken,
+                // csrfmiddlewaretoken: csrfToken,
             },
             async: false,
             success: () => location.reload(),
@@ -50,14 +48,5 @@ $(document).ready(() => {
                 console.log(error);
             }
         });
-    });
-
-    // CSRF token for AJAX requests
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
-            }
-        }
     });
 });

@@ -32,12 +32,14 @@
     <div class="row">
         <div class="{% if self.get_list_filter %}col-md-9{% else %}col{% endif %} col-sm-12 col-xs-12">
             <div class="card">
+                {% if model.can_search %}
                 <div class="card-header">
                     <form method="get" class="input-group mb-0">
                         <span class="input-group-text" id="search-button"><i class="bi bi-search"></i></span>
                         <input type="text" name="q" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search" aria-describedby="search-button" value="{{ request.GET.q }}">
                     </form>
                 </div>
+                {% endif %}
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -150,11 +152,6 @@
         {% endif %}
     </div>
 </div>
-
-{% comment %}
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-{% endcomment %}
 
 <script>
     $(function() {

@@ -1,7 +1,6 @@
 from django.utils.translation import gettext as _
+from core.models import Menu, ActionRequired
 from django.urls import reverse_lazy
-from core.models import Menu
-
 
 def base(request):
     if not request.user.is_authenticated: return {}
@@ -32,13 +31,13 @@ def base(request):
         'href': reverse_lazy('core:action-required'),
         'icon': 'bi-lightning-fill',
         'forced': True,
-        'badge': action_required(request).get('count', 0),
+        'badge': ActionRequired.objects.count(),
         'description': _('Les actions qui nécessitent votre attention.')
     }))
 
     menu.insert(2, dict({
         'title': _('Notifications'),
-        'href': reverse_lazy('core:list', kwargs={'app': 'notifications', 'model': 'notification'})+'recipient_id='+str(request.user.id),
+        'href': reverse_lazy('core:notifications'),
         'icon': 'bi-bell',
         'forced': True,
         'badge': request.user.notifications.unread().count(),

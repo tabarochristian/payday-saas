@@ -37,3 +37,14 @@ class Device(Base):
     @property
     def is_disconnected(self):
         return self.status == DeviceStatus.DISCONNECTED
+
+    @staticmethod
+    def get_action_required():
+        messages = []
+        qs = Device.objects.all()
+        return [{
+            "app": "employee",
+            "model": "device",
+            "title": _("No device found"),
+            "description": _("You need to add a device to the system.")
+        }] if not qs.exists() else []
