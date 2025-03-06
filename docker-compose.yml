@@ -102,9 +102,9 @@ services:
     restart: unless-stopped
     container_name: payday-db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./postgresql/init.sh:/docker-entrypoint-init.d/init.sh
-      - ./postgresql/entrypoint.sh:/docker-entrypoint-init.d/entrypoint.sh
+      - postgres_data:/var/lib/postgresql/data 
+      - ./postgresql/init.sh:/init.sh 
+      - ./postgresql/entrypoint.sh:/entrypoint.sh
     environment:
       POSTGRES_DB: payday
       POSTGRES_USER: payday
