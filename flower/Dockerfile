@@ -10,5 +10,5 @@ COPY . /app/
 # Install flower
 RUN pip install flower
 
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
+# Make port 5555 available to the world outside this container
+EXPOSE 5555

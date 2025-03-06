@@ -210,7 +210,7 @@ services:
   flower:
     build:
       context: .
-      dockerfile: flower/Dockerfile
+      dockerfile: payday/Dockerfile
     command: flower --broker=redis://redis:6379/0 --port=5555
     ports:
       - "5555:5555"
