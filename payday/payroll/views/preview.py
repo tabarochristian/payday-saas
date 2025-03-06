@@ -8,9 +8,6 @@ from django.apps import apps
 
 from core.forms.button import Button
 from core.views import Change
-import threading
-
-thread = threading.local()
 
 # Constants for payroll statuses
 PAYROLL_STATUSES = (
@@ -151,8 +148,8 @@ class Preview(Change):
         # Trigger payroll processing using a background task.
         from payroll.tasks import Payer
         # Payer().run(request.schema, pk)
-        
-        schema = getattr(thread, 'schema', None)
+
+        schema = request.get_host().split('.')[0]
         Payer().delay(schema, pk)
 
         # Redirect to the payslips view.
