@@ -13,7 +13,7 @@ import pandas as pd
 import itertools
 import os
 
-from core.utils import DictToObject
+from core.utils import DictToObject, set_schema
 
 class Payer(Task):
     """
@@ -31,13 +31,14 @@ class Payer(Task):
         0.40: [3600001, 9999999999999]
     }
 
-    def run(self, pk: int, *args, **kwargs) -> None:
+    def run(self, schema:str, pk: int, *args, **kwargs) -> None:
         """
         Main entry point for the task. Processes the payroll.
         
         Args:
             pk (int): Primary key of the payroll to process.
         """
+        set_schema(schema)
         self.now = datetime.now()
         self.today = self.now.today
         self.payroll = get_object_or_404(Payroll, pk=pk)
