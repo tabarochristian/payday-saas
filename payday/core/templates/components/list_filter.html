@@ -1,0 +1,40 @@
+{% load core %}
+{% load i18n %}
+{% load humanize %}
+{% load crispy_forms_filters %}
+
+<div class="col-md-3 col-sm-12">
+    <div class="card">
+        <div class="card-body" id="filter-card">
+            <div class="card-title row">
+                <div class="col">
+                    <h3 class="mb-0">{% trans 'Filter' %}</h3>
+                </div>
+                <div class="col text-end">
+                    <div class="row">
+                        <div class="col text-end">
+                            <button type="submit" form="filter-form"  class="btn btn-primary btn-sm">{% trans 'Soumettre' %}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <form name="GET" type="Search" id="filter-form">
+                {{ filter_set.form|crispy }}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $(function() {
+            $('#filter-form').submit(function() {
+                $(this).find(':input, select').filter(function() {
+                    return !this.value;
+                }).prop('disabled', true);
+                return true;
+            });
+        });  
+    })
+</script>

@@ -83,7 +83,13 @@ class ActionRequired(Base):
     def can_search():
         return False
 
+    def save(self):
+        raise NotImplementedError('ActionRequired objects cannot be saved')
+
+    def delete(self):
+        raise NotImplementedError('ActionRequired objects cannot be deleted')
+
     class Meta:
-        managed = False
+        # managed = False
         verbose_name = _('action requise')
         verbose_name_plural = _('actions requises')

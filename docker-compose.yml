@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   # Thumbor service
   thumbor:
@@ -6,15 +8,20 @@ services:
     ports:
       - "8888:80"
     environment:
-      - THUMBOR_LOG_LEVEL=DEBUG
-      - THUMBOR_SECURITY_KEY=MY_SECURE_KEY
-      - THUMBOR_DETECTORS=['thumbor.detectors.face_detector', 'thumbor.detectors.feature_detector']
-      - THUMBOR_FACE_DETECTOR_CASCADE_FILE=/usr/local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml
+      THUMBOR_LOG_LEVEL: DEBUG
+      THUMBOR_SECURITY_KEY: MY_SECURE_KEY
+      THUMBOR_DETECTORS: '["thumbor.detectors.face_detector", "thumbor.detectors.feature_detector"]'
+      THUMBOR_FACE_DETECTOR_CASCADE_FILE: /usr/local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml
     volumes:
       - ./thumbor/storage:/app/storage
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8888/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # landlord service (Flask)
+  # Landlord service (Flask)
   landlord:
     build:
       context: .
@@ -22,7 +29,7 @@ services:
     container_name: payday-landlord
     command: >
       sh -c "python manage.py migrate &&
-          gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
+             gunicorn --bind 0.0.0.0:5000 landlord.wsgi:application"
     ports:
       - "5000:5000"
     volumes:
@@ -34,6 +41,11 @@ services:
       - redis
     env_file:
       - prod.env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # SaaS service (Django)
   saas:
@@ -44,8 +56,8 @@ services:
     restart: unless-stopped
     command: >
       sh -c "python manage.py migratetenants &&
-            python manage.py collectstatic --noinput &&
-            gunicorn --bind 0.0.0.0:8000 payday.wsgi:application"
+             python manage.py collectstatic --noinput &&
+             daphne -b 0.0.0.0 -p 8000 payday.asgi:application"
     volumes:
       - ./payday:/app
     expose:
@@ -57,6 +69,11 @@ services:
       - landlord
     env_file:
       - prod.env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Nginx service
   nginx:
@@ -74,80 +91,30 @@ services:
       - ./certbot/conf:/etc/letsencrypt
     depends_on:
       - saas
-
-  # PostgreSQL master service
-  master:
-    container_name: payday-master
-    image: bitnami/postgresql
-    restart: always
-    ports:
-      - '5432:5432'
-    volumes:
-      - master_data:/bitnami/postgresql
-    environment:
-      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
-      - POSTGRESQL_LOG_HOSTNAME=true
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=slave
-      - POSTGRESQL_REPLICATION_PASSWORD=payday
-      - POSTGRESQL_USERNAME=master
-      - POSTGRESQL_PASSWORD=payday
-      - POSTGRESQL_DATABASE=payday
-      - ALLOW_EMPTY_PASSWORD=yes
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U master -d payday"]
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
-    profiles:
-      - no_auto_start
-
-  # PostgreSQL slave service
-  slave:
-    container_name: payday-slave
-    image: bitnami/postgresql
-    restart: always
-    ports:
-      - '5433:5432'
-    volumes:
-      - slave_data:/bitnami/postgresql
-    depends_on:
-      - master
-    environment:
-      - POSTGRESQL_PASSWORD=payday
-      - POSTGRESQL_MASTER_HOST=master
-      - POSTGRESQL_PGAUDIT_LOG=READ
-      - POSTGRESQL_LOG_HOSTNAME=true
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=slave
-      - POSTGRESQL_REPLICATION_PASSWORD=payday
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
-      - ALLOW_EMPTY_PASSWORD=yes
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U slave -h master -d payday"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    profiles:
-      - no_auto_start
 
   db:
     image: postgres:latest
-    #build:
-    #  context: .
-    #  dockerfile: postgresql/Dockerfile
     restart: unless-stopped
     container_name: payday-db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgresql/init.sh:/init.sh
-      - ./postgresql/entrypoint.sh:/entrypoint.sh
+      - ./postgresql/init.sh:/docker-entrypoint-init.d/init.sh
+      - ./postgresql/entrypoint.sh:/docker-entrypoint-init.d/entrypoint.sh
     environment:
-      - POSTGRES_DB=payday
-      - POSTGRES_USER=payday
-      - POSTGRES_PASSWORD=payday
-    entrypoint: /entrypoint.sh
-    # entrypoint: ["/bin/bash", "-c", "/docker-entrypoint-initdb.d/init.sh && docker-entrypoint.sh postgres"]
+      POSTGRES_DB: payday
+      POSTGRES_USER: payday
+      POSTGRES_PASSWORD: payday
+    entrypoint: /docker-entrypoint-init.d/entrypoint.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   pgbouncer:
     image: edoburu/pgbouncer:latest
@@ -159,10 +126,15 @@ services:
       - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
       - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
+      DB_HOST: db
+      DB_PORT: 5432
     depends_on:
       - db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -h db -p 6432"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Redis service
   redis:
@@ -186,9 +158,9 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-      - MINIO_OPTS=--address :9000 --console-address :9001
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_OPTS: --address :9000 --console-address :9001
     command: server /data --address :9000 --console-address ":9001"
     volumes:
       - minio_data:/data
@@ -210,9 +182,9 @@ services:
     depends_on:
       - minio
     environment:
-      - MINIO_BUCKET_NAME=payday
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
+      MINIO_BUCKET_NAME: payday
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
 
   # Celery worker service
   worker:
@@ -234,47 +206,25 @@ services:
       timeout: 10s
       retries: 3
 
-  # Celery beat service
-  beat:
-    build:
-      context: .
-      dockerfile: payday/Dockerfile
-    restart: unless-stopped
-    container_name: payday-beat
-    command: celery -A payday beat -l INFO -E
-    volumes:
-      - ./payday:/app
+  # Flower service
+  flower:
+    image: mher/flower
+    command: flower --broker=redis://redis:6379/0 --port=5555
+    ports:
+      - "5555:5555"
     depends_on:
       - worker
-    env_file:
-      - prod.env
+    environment:
+      FLOWER_BROKER: redis://redis:6379/0
+      FLOWER_BASIC_AUTH: admin:admin
     healthcheck:
-      test: ["CMD-SHELL", "celery -A payday inspect ping"]
+      test: ["CMD", "curl", "-f", "http://localhost:5555/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
-    profiles:
-      - no_auto_start
 
-  # Device service
-  device:
-    build:
-      context: .
-      dockerfile: device/Dockerfile
-    container_name: payday-device
-    restart: unless-stopped
-    volumes:
-      - ./device:/app
-    environment:
-      - WEBHOOK_URL=http://saas:8000/api/v1/hook/device/
-    ports:
-      - "7788:7788"
-    command: uvicorn device:app --host 0.0.0.0 --port 7788 --workers 4
-    depends_on:
-      - saas
-
+  # Certbot service
   certbot:
-    # image: certbot/certbot:latest
     build:
       context: .
       dockerfile: certbot/Dockerfile
@@ -285,7 +235,5 @@ services:
     #entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
-  #master_data:
-  #slave_data:
   postgres_data:
   minio_data:

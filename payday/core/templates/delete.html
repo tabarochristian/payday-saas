@@ -16,11 +16,11 @@
             </div>
         </div>
         <div class="card-body">
-            <form id="form-{{ model|getattr:'_meta'|getattr:'model_name' }}" method="post" enctype="multipart/form-data">
+            <form id="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for obj in qs %}
                     <dl class="row">
-                        {% for field in model|getattr:"_meta"|getattr:"fields" %}
+                        {% for field in model_class|getattr:"_meta"|getattr:"fields" %}
                             <dt class="col-sm-3 text-capitalized">{{ field.verbose_name|title }}</dt>
                             <dd class="col-sm-9">{{ obj|getattr:field.name }}</dd>
                         {% endfor %}

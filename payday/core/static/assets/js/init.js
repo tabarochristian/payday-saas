@@ -8,7 +8,16 @@ $(document).ready(() => {
     };
 
     
-    $(".datepicker").datepicker();
+    $(".datepicker").datepicker({
+        regional: language,  // French language
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        showButtonPanel: true,
+        closeText: 'Clear',
+        currentText: 'Today',
+    });
     $('form').dirrty();
 
     $(window).on('beforeunload', function() {
@@ -49,4 +58,5 @@ $(document).ready(() => {
             }
         });
     });
+    
 });

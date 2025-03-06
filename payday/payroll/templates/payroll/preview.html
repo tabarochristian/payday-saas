@@ -12,13 +12,12 @@
 {% include 'components/change/heading.html' %}
 
 <div class="page-content">
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"/>
-    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" >
+    <link ref="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css" >
 
     <section>
-        <form method="post" enctype="multipart/form-data" class="page-content" id="form-{{ model|getattr:'_meta'|getattr:'model_name' }}">
+        <form method="post" enctype="multipart/form-data" class="page-content" id="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}">
             {% csrf_token %}
         </form>
         
@@ -27,12 +26,12 @@
                 <div class="card-title mb-0">
                     <div class="row">
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ obj.get_status_display|title }}</h3>
+                            <h3 class="mb-0">{{ payroll_obj.get_status_display|title }}</h3>
                             <small>{% trans 'Status' %}</small>
                         </div>
 
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ qs.count|intcomma }}</h3>
+                            <h3 class="mb-0">{{ paid_employees_qs.count|intcomma }}</h3>
                             <small>{% trans 'Employee(s)' %}</small>
                         </div>
                         
@@ -65,7 +64,7 @@
                                     </thead>
                 
                                     <tbody>
-                                        {% for obj in qs %}
+                                        {% for obj in paid_employees_qs %}
                                         <tr data-id="{{ obj.id }}">
                                             <td>{{ obj.registration_number }}</td>
                                             <td>{{ obj.full_name }}</td>
@@ -97,10 +96,11 @@
     </section>
 </div>
 
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
         $('table').DataTable({
-            "paging": false
+            paging: false
         });
 
         $('.attendance-input-field').on('change', function() {
@@ -115,7 +115,7 @@
                 url: url.replace('xyz', id),
                 type: 'PATCH',
                 data: {
-                    'attendance': value,
+                    'attendance': value
                 },
                 success: (data) => toastr.success("L'opération a été effectuée avec succès"),
                 error: (error) => toastr.error("Une erreur s'est produite lors de l'opération ")

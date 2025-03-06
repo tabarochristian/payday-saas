@@ -9,73 +9,6 @@
 
 {% block content %}
 
-{% comment %}
-<div class="page-heading">
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4 col-sm-12 text-start">
-                    <h3 class="m-0">{{ model|getattr:'_meta'|getattr:'verbose_name'|title }} - {{ obj.name }}</h3>
-                    {% include 'components/breadcrumb.html' %}
-                </div>
-
-                <div class="col-md-8 col-sm-12 text-end">
-                    <div class="btn-group mb-1">
-
-                        <span>
-                            <button class="btn btn-light-warning dropdown-toggle rounded-0" id="dropdown-synthesis" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Synthesis' %}</button>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-synthesis">
-
-                                <a href="{% url 'payroll:synthesis' 'sum' obj.pk %}" class="dropdown-item">{% trans 'Par somme' %}</a>
-                                <a href="{% url 'payroll:synthesis' 'count' obj.pk %}" class="dropdown-item">{% trans 'Par eff.' %}</a>
-
-                            </div>
-                        </span>
-
-                        <span>
-                            <button class="btn btn-light-info dropdown-toggle rounded-0" id="dropdown-listing" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Listing' %}</button>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-listing">
-                                {% for duty in self.duties %}
-                                    <a target="_blank" class="dropdown-item text-uppercase" href="{% url 'payroll:listing' obj.pk %}?code={{ duty.code }}&{{ request.GET.urlencode }}">{{ duty.name }}</a>
-                                {% endfor %}         
-                                <div class="dropdown-divider"></div>
-                                {% for item in self.items %}
-                                    <a target="_blank" class="dropdown-item text-uppercase" href="{% url 'payroll:listing' obj.pk %}?code={{ item.code }}&{{ request.GET.urlencode }}">{{ item.name }}</a>
-                                {% endfor %}
-                            </div>
-
-                            {% with self.documents as documents %}
-                                {% if documents %}
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownDocumentBtn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {% trans "Documents" %}
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownDocumentBtn">
-                                        {% for document in documents %}
-                                            <a target="_blank" class="dropdown-item btn-list-action" href="{% url 'core:print' document.id app model|getattr:'_meta'|getattr:'model_name' %}?pk={{ obj.pk }}">{{ document.name }}</a>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-
-                            {% for button in self.get_action_buttons %}
-                                {{ button.render }}
-                            {% endfor %}
-                        </span>
-
-                        {% if request.user in obj.approvers.all %}
-                            <a href="#" class="btn btn-danger">{% trans 'Approuver' %}</a>
-                        {% endif %}
-
-                        <a href="{% url 'core:exporter' app 'payslip' %}?payroll__pk={{ obj.pk }}" class="btn btn-light-success">{% trans 'Exporter' %}</a>
-                        <a href="{% url 'core:delete' app model|getattr:'_meta'|getattr:'model_name' obj.pk %}" class="btn btn-light-danger">{% trans 'Supprimer' %}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endcomment %}
-
 {% include 'components/change/heading.html' %}
 
 <div class="page-content">
@@ -91,7 +24,7 @@
                 <div class="card-title mb-0">
                     <div class="row">
                         <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ obj.get_status_display|title }}</h3>
+                            <h3 class="mb-0">{{ payroll_obj.get_status_display|title }}</h3>
                             <small>{% trans 'Status' %}</small>
                         </div>
 
@@ -111,110 +44,16 @@
                         </div>
                     </div>
                 </div>
-                {% comment %}<div class="progress">
-                    <div class="progress-bar bg-success" id="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>{% endcomment %}
             </div>
         </div>
         
         <div class="col">
             <div class="row">
                 <div class="col-md-9 col-sm-12">
-                
-                    <div class="card">
-                        
-                        {% if qs.paginator %}
-                        <div class="card-header">
-                            <form method="get" class="input-group mb-0">
-                                <span class="input-group-text" id="search-button"><i class="bi bi-search"></i></span>
-                                <input type="text" name="q" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search" aria-describedby="search-button" value="{{ request.GET.q }}">
-                            </form>
-                        </div>
-                        {% endif %}
-            
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr class="text-uppercase">
-                                            <th><input type="checkbox" class="form-check-input" id="master-checkbox"/></th>
-                                            <th>{% trans 'Matricule' %}</th>
-                                            <th>{% trans 'Full name' %}</th>
-                                            <th>{% trans 'Net' %}</th>
-                                            <th>{% trans 'Action' %}</th>
-                                        </tr>
-                                    </thead>
-                
-                                    <tbody>
-                                        {% for obj in qs %}
-                                        <tr data-id="{{ obj.id }}">
-                                            <td><input type="checkbox" class="form-check-input" value="{{ obj.pk }}" /></td>
-                                            <td>{{ obj.employee.registration_number }}</td>
-                                            <td>{{ obj.employee.last_name }} {{ obj.employee.middle_name }}</td>
-                                            <td>{{ obj.net|intcomma }}</td>
-                                            <td><a href="{{ obj.get_absolute_url }}">{% trans 'View' %}</a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                
-                                </table>
-                            </div>
-                        </div>
-            
-                    </div>
-
-                    {% if qs.paginator %}
-                    <div class="card">
-                        <div class="card-body text-center">
-                             <nav aria-label="Page navigation example">
-                               <ul class="pagination justify-content-center mb-0">
-                                 {% if qs.has_previous %}
-                                     <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ qs.previous_page_number }}">{% trans 'Prev' %}</a></li>
-                                 {% else %}
-                                     <li class="page-item disabled"><a class="page-link">{% trans 'Prev' %}</a></li>
-                                 {% endif %}
-             
-                                 {% if qs.page > 10 %}
-                                     {% for i in qs.paginator.page_range %}
-                                       {% if qs.number == i %}
-                                         <li class="page-item active"><a class="page-link">{{ i }}</a></li>
-                                       {% else %}
-                                         <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ i }}">{{ i }}</a></li>
-                                       {% endif %}
-                                     {% endfor %}
-                                 {% endif %}
-             
-                                 {% if qs.has_next %}
-                                   <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ qs.next_page_number }}">{% trans 'Next' %}</a></li>
-                                 {% else %}
-                                   <li class="page-item disabled"><a class="page-link">{% trans 'Next' %}</a></li>
-                                 {% endif %}
-                               </ul>
-                             </nav>
-                         </div>
-                    </div>
-                    {% endif %}
-
+                    {% include "components/list_table.html" %}
                 </div>
                 
-                <div class="col-md-3 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title row">
-                                <div class="col">
-                                    <h3 class="mb-0">{% trans 'Filtre' %}</h3>
-                                </div>
-                                <div class="col text-end">
-                                    <button type="submit" form="filter-form"  class="btn btn-primary btn-sm">Filtre</button>
-                                </div>
-                            </div>
-                            <hr>
-                            <form name="GET" id="filter-form">
-                                {{ filter.form|crispy }}
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                {% include "components/list_filter.html" %}
             </div>
         </div>
     </section>

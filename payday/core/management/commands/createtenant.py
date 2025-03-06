@@ -1,19 +1,26 @@
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
-from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from html2text import html2text
 from core import utils
-from django.core.management import call_command
-from django.apps import apps
+
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.management import call_command
 from django.db import connection
 from core.models import Menu
+from django.apps import apps
 
 User = get_user_model()
 
 class Command(BaseCommand):
+    """
+    A management command to run migrations for a specific tenant schema,
+    create a master user, send welcome and password reset emails, 
+    and optionally delete a tenant.
+    """
     help = 'Run migrations for a specific tenant schema, create a master user, and optionally delete a tenant'
     black_list_schema = ['public', 'shared', 'www', 'minio', 'device', 'billing']
 
@@ -23,7 +30,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         """
-        Handle method to run migrations for a specific tenant schema, create a master user, and optionally delete a tenant.
+        Main method to handle the command logic.
         """
         schema = kwargs['schema']
         email = kwargs['email']
@@ -56,6 +63,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Fixtures loaded for schema "{schema}".'))
             self.send_welcome_email(schema, user)
             self.stdout.write(self.style.SUCCESS(f'Welcome email sent to "{email}".'))
+            self.send_password_reset_email(schema, user)
+            self.stdout.write(self.style.SUCCESS(f'Password reset email sent to "{email}".'))
         else:
             self.stdout.write(self.style.SUCCESS(f'User "{email}" already exists.'))
 
@@ -88,6 +97,24 @@ class Command(BaseCommand):
         email.send()
 
         self.stdout.write(self.style.SUCCESS(f'Welcome email sent to {user.email}.'))
+
+    def send_password_reset_email(self, schema, user):
+        """
+        Send a password reset email to the user.
+        """
+        utils.set_schema(schema)
+        form = PasswordResetForm({'email': user.email})
+        if not form.is_valid():
+            self.stdout.write(self.style.ERROR('Password reset form is invalid.'))
+            return
+        
+        form.save(
+            request=None,
+            use_https=True,  # Set True if you're using HTTPS
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            email_template_name='registration/password_reset_email.html',
+            subject_template_name='registration/password_reset_subject.txt',
+        )
 
     def load_fixtures(self, schema, user):
         """

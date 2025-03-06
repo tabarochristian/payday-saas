@@ -11,19 +11,19 @@
     <div class="col mb-3">
         <div class="row">
             <div class="col text-start">
-                <h3 class="m-0">{% trans 'Exporter' %} {{ model|getattr:'_meta'|getattr:'verbose_name'|title }}</h3>
+                <h3 class="m-0">{% trans 'Exporter' %} {{ model_class|getattr:'_meta'|getattr:'verbose_name'|title }}</h3>
                 {% include 'components/breadcrumb.html' %}
             </div>
 
             <div class="col text-end">
-                <a href="{% url 'core:list' app model|getattr:'_meta'|getattr:'model_name' %}" class="btn btn-danger">{% trans 'Annuler' %}</a>
-                <button type="submit" form="form-{{ model|getattr:'_meta'|getattr:'model_name' }}" class="btn btn-success">{% trans 'Exporter' %}</button>
+                <a href="{% url 'core:list' app model_class|getattr:'_meta'|getattr:'model_name' %}" class="btn btn-danger">{% trans 'Annuler' %}</a>
+                <button type="submit" form="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}" class="btn btn-success">{% trans 'Exporter' %}</button>
             </div>
         </div>
     </div>
 </div>
 
-<form method="post" id="form-{{ model|getattr:'_meta'|getattr:'model_name' }}">
+<form method="post" id="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}">
     {% csrf_token %}
     <div class="page-content row">
         <section class="col col-xs-12">

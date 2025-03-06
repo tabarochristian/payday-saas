@@ -4,7 +4,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% with alias=model|getattr:'_meta'|getattr:'model_name' verbose=model|getattr:'_meta'|getattr:'verbose_name' %}
+{% with alias=model_class|getattr:'_meta'|getattr:'model_name' verbose=model_class|getattr:'_meta'|getattr:'verbose_name' %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ext-language_tools.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>

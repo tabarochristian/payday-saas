@@ -1,0 +1,143 @@
+{% load core %}
+{% load i18n %}
+{% load humanize %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" >
+<link ref="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css" >
+
+<div class="card">
+    {% if model.can_search %}
+    <div class="card-header">
+        <form method="get" class="input-group mb-0">
+            <span class="input-group-text" id="search-button"><i class="bi bi-search"></i></span>
+            <input type="text" name="q" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search" aria-describedby="search-button" value="{{ request.GET.q }}">
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-uppercase">
+                        <th><input type="checkbox" class="form-check-input" id="select-all-checkbox"/></th>
+                        {% for field in self.get_list_display %}
+                            <th>{{ field.verbose_name }}</th>
+                        {% empty %}
+                            <th>{% trans 'PK' %}</th>
+                            <th>{% trans 'Name' %}</th>
+                        {% endfor %}
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obj in qs %}
+                    <tr data-row-id="{{ obj.pk }}">
+                        <td><input type="checkbox" class="form-check-input row-checkbox" data-value="{{ obj.pk }}" /></td>
+                        {% for field in self.get_list_display %}
+                            {% if field.get_internal_type == 'FloatField' %}
+                                <td>{{ obj|getattr:field.name|intcomma|default:'-' }}</td>
+                            {% elif field.get_internal_type == 'BooleanField' %}
+                                <td>
+                                    {% if obj|getattr:field.name %}
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                        <i class="bi bi-slash-circle-fill text-danger"></i>
+                                    {% endif %}
+                                </td>
+                            {% else %}
+                                <td>{{ obj|getattr:field.name|default:'-' }}</td>
+                            {% endif %}
+                        {% empty %}
+                            <td>{{ obj.pk }}</td>
+                            <td>{{ obj }}</td>
+                        {% endfor %}
+                        
+                        {% url "core:change" app model_class|getattr:'_meta'|getattr:'model_name' obj.pk as url %}
+                        <td><a class="text-decoration-none" href="{{ obj.get_absolute_url|default:url }}">{% trans 'View' %}</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="{{ self.get_list_display|length|add:4 }}" class="text-center">
+                            {% trans 'Oupps... We found nothing' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body text-center" id="pagination-card">
+         <nav aria-label="Page navigation example">
+           <ul class="pagination justify-content-center mb-0">
+             {% if qs.has_previous %}
+                 <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ qs.previous_page_number }}">{% trans 'Prev' %}</a></li>
+             {% else %}
+                 <li class="page-item disabled"><a class="page-link">{% trans 'Prev' %}</a></li>
+             {% endif %}
+
+             {% if qs.page > 10 %}
+                 {% for i in qs.paginator.page_range %}
+                   {% if qs.number == i %}
+                     <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+                   {% else %}
+                     <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ i }}">{{ i }}</a></li>
+                   {% endif %}
+                 {% endfor %}
+             {% endif %}
+
+             {% if qs.has_next %}
+               <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ qs.next_page_number }}">{% trans 'Next' %}</a></li>
+             {% else %}
+               <li class="page-item disabled"><a class="page-link">{% trans 'Next' %}</a></li>
+             {% endif %}
+           </ul>
+         </nav>
+     </div>
+</div>
+
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+<script>
+    // Function to get selected rows based on the current state
+    function getSelectedRows(selector) {
+        const selectedRows = [];
+        const table = $(selector).DataTable();
+        const rows = table.rows({ search: 'applied' }).nodes();
+        $('input[type="checkbox"].row-checkbox:checked', rows).each(function() {
+            selectedRows.push($(this).closest('tr').data('row-id'));
+        });
+        return selectedRows;
+    }
+
+    // Function to act on selected rows
+    $(function() {
+        $.fn.dataTable.ext.errMode = 'none';
+        const table = new DataTable('table', {
+            responsive: true,
+            paging: false,           // Disable pagination
+            searching: false,        // Disable the search field
+            columnDefs: [
+                { orderable: false, targets: 0 },    // Disable ordering on the first column (checkbox column)
+                { orderable: false, targets: -1 }    // Disable ordering on the last column
+            ],
+            dom: '<"top"f>rt<"bottom"lp><"clear">'  // Custom DOM layout for DataTable
+        });
+
+        // Handle click on "select all" control
+        $('#select-all-checkbox').on('click', function() {
+            const rows = table.rows({ search: 'applied' }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        // Handle click on checkbox to set state of "select all" control
+        $('table').on('change', 'input[type="checkbox"]', function() {
+            const el = $('#select-all-checkbox').get(0);
+            if (el && el.checked && ('indeterminate' in el)) {
+                el.indeterminate = true;
+            }
+        });
+    })
+</script>

@@ -36,6 +36,7 @@ ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOSTS', '*').split(','))
 
 # Application definition
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",

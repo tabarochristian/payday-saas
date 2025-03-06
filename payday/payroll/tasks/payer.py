@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
-from core.models import Notification
 from employee.models import *
 from payroll.models import *
 from django.db import models
