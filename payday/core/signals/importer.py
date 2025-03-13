@@ -7,4 +7,5 @@ from core import tasks
 @receiver(post_save, sender=Importer)
 def saved(sender, instance, created, **kwargs):
     if not created: return
-    tasks.importer.delay(instance.pk)
+    tasks.importer(instance.pk)
+    #tasks.importer.delay(instance.pk)
