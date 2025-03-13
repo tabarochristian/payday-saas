@@ -1,8 +1,8 @@
 from django.utils.translation import gettext as _
 from core.models import ImporterStatus, Importer
-from notifications.signals import notify
 from django.urls import reverse_lazy
 from django.template import loader
+from notifications import signals
 from celery import shared_task
 import pandas as pd
 
@@ -76,7 +76,7 @@ def bulk_create_records(model, data):
     model.objects.bulk_create(records, ignore_conflicts=True)
 
 def notify(obj, subject, message, level='info'):
-    notify.send(
+    signals.notify.send(
         obj.created_by,
         recipient=obj.created_by,
         verb=subject,
