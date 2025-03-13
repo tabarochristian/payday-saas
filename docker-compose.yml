@@ -54,10 +54,12 @@ services:
       dockerfile: payday/Dockerfile
     container_name: payday-saas
     restart: unless-stopped
+    #command: >
+    #  sh -c "python manage.py migratetenants &&
+    #         python manage.py collectstatic --noinput &&
+    #         daphne -b 0.0.0.0 -p 8000 payday.asgi:application"
     command: >
-      sh -c "python manage.py migratetenants &&
-             python manage.py collectstatic --noinput &&
-             daphne -b 0.0.0.0 -p 8000 payday.asgi:application"
+      sh -c "daphne -b 0.0.0.0 -p 8000 payday.asgi:application"
     volumes:
       - ./payday:/app
     expose:
