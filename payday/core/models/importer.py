@@ -33,11 +33,7 @@ class Importer(Base):
         on_delete=models.SET_NULL,
         limit_choices_to={
             'app_label__in': [
-                'core',
-            ],
-            'model__in': [
-                'preference',
-                'widget'
+                'employee',
             ],
         }
     )
