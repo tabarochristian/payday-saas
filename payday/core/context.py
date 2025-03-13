@@ -56,12 +56,12 @@ def base(request):
             'permission': 'core.view_menu',
             'description': _('Faite la disposition de vos menus.')
         }, 
-        #{
-        #    'title': _('Importeur'),
-        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'importer'}),
-        #    'permission': 'core.view_menu',
-        #    'description': _('Importez vos données en masse.')
-        #}, 
+        {
+            'title': _('Importeur'),
+            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'importer'}),
+            'permission': 'core.view_menu',
+            'description': _('Importez vos données en masse.')
+        }, 
         {
             'title': _('Modèle de document'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'template'}),
