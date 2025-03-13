@@ -93,9 +93,9 @@ class Canvas(BaseView):
             return None
         
         # Retrieve field names from the layout.
-        field_names = layout.get_field_names()
+        fields = layout.get_field_names()
         # Create a dictionary mapping field names to their corresponding field objects.
-        model_fields = {name: model_class._meta.get_field(name) for name in field_names}
+        model_fields = {field.name: model_class._meta.get_field(field.name) for field in fields}
         
         # Remove excluded fields from the dictionary.
         for excluded in self.EXCLUDED_FIELDS:
