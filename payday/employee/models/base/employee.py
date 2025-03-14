@@ -22,7 +22,7 @@ class Employee(Base):
     date_of_join = fields.DateField(_('date d\'engagement'), help_text='YYYY-MM-DD', null=True, default=None)
     date_of_end = fields.DateField(_('date de fin'), help_text='YYYY-MM-DD', blank=True, null=True, default=None)
 
-    designation = fields.ModelSelectField('employee.designation', verbose_name=_('position'), blank=True, null=True, on_delete=models.SET_NULL)
+    designation = fields.ModelSelectField('employee.designation', verbose_name=_('fonction'), blank=True, null=True, on_delete=models.SET_NULL)
     grade = fields.ModelSelectField('employee.grade', verbose_name=_('grade'), blank=True, null=True, on_delete=models.SET_NULL)
 
     # linked field
