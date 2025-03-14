@@ -133,7 +133,7 @@ class Canvas(BaseView):
             # Write the header (in uppercase for clarity).
             worksheet.write(0, col_index, field.verbose_name.upper())
             # Apply validation rules for each field.
-            self._apply_data_validation(worksheet, col_index, field)
+            self._apply_data_validation(workbook, worksheet, col_index, field)
         
         workbook.close()
         output.seek(0)
@@ -151,37 +151,53 @@ class Canvas(BaseView):
         """
         return field.is_relation and hasattr(field, 'remote_field') and field.remote_field
 
-    def _apply_data_validation(self, worksheet, col_index, field):
+    def _apply_data_validation(self, workbook, worksheet, col_index, field):
         """
         Apply appropriate Excel data validation to a column based on the field's characteristics.
-        
+
         Args:
+            workbook: The xlsxwriter workbook instance.
             worksheet: The xlsxwriter worksheet instance.
             col_index (int): The column index in the worksheet where the field is written.
             field: The Django model field.
         """
+
+        # Store field-specific sources for data validation
         if field.choices:
-            # Data validation for choice fields (dropdown list).
-            worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
-                'validate': 'list',
-                'source': [choice[0] for choice in field.choices],
-                'input_title': 'Choose one:',
-                'input_message': _('Select a value from the list'),
-            })
-
+            # Handle choice fields
+            sources = [choice[0] for choice in field.choices]
         elif self._is_single_relation_field(field):
-            # Data validation for single-relation fields.
-            source = list(field.related_model.objects.all().values_list('name', flat=True))
-            print(source)
-            worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
-                'validate': 'list',
-                'source': source,
-                'input_title': 'Choose one:',
-                'input_message': _('Select a value from the list'),
-            })
+            # Handle related fields
+            sources = list(field.related_model.objects.all().values_list('name', flat=True))
+        else:
+            sources = []
 
-        elif field.get_internal_type() in ['DateField', 'DateTimeField']:
-            # Data validation for date fields, ensuring the date is within the specified range.
+        # If there are sources, write them to the hidden sheet
+        if sources:
+            # Prepare a hidden sheet for storing data validation values
+            sheet_name = field.name.lower()  # Unique hidden sheet name per field
+            hidden_sheet = workbook.add_worksheet(sheet_name)
+            hidden_sheet.hide()  # Keep it hidden from users
+
+            for row, value in enumerate(sources, start=1):  # Start from row 1 (Excel is 1-based)
+                hidden_sheet.write(row, 0, value)
+
+            # Calculate the source range dynamically
+            range_reference = f"'{sheet_name}'!$A$1:$A${len(sources)}"
+
+            # Apply the data validation referencing the hidden sheet
+            worksheet.data_validation(
+                1, col_index, self.MAX_ROWS, col_index,  # Apply to all rows in the column
+                {
+                    'validate': 'list',
+                    'source': range_reference,
+                    'input_title': 'Choose one:',
+                    'input_message': _('Select a value from the list'),
+                },
+            )
+
+        # Apply other data validation types
+        if field.get_internal_type() in ['DateField', 'DateTimeField']:
             worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
                 'validate': 'date',
                 'criteria': 'between',
@@ -192,7 +208,6 @@ class Canvas(BaseView):
             })
 
         elif field.get_internal_type() in ['IntegerField', 'DecimalField', 'FloatField']:
-            # Data validation for numeric fields, ensuring the number is within the allowed range.
             worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
                 'validate': 'integer',
                 'criteria': 'between',
@@ -201,3 +216,4 @@ class Canvas(BaseView):
                 'input_title': 'Invalid number',
                 'input_message': _('Number must be between {0} and {1}.').format(*self.NUMBER_RANGE),
             })
+
