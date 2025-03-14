@@ -53,7 +53,7 @@ def get_model_fields(model):
     return {field.verbose_name.lower(): field for field in model._meta.fields}
 
 def process_excel_file(obj, fields):
-    df = pd.read_excel(obj.document)
+    df = pd.read_excel(obj.document, sheet_name=0)
     df = df.where(pd.notnull(df), None)
     df.columns = [fields[col.lower()].name for col in df.columns]
     related_fields = {field.name: field.related_model.objects.values('id', 'name') for field in fields.values() if field.is_relation and field.name in df.columns}
