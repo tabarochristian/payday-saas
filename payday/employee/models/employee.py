@@ -89,7 +89,7 @@ class Employee(BaseEmployee):
             Row(
                 Column('branch'),
                 Column('grade'),
-                # Column('designation'),
+                Column('designation'),
             ),
             Row(
                 Column('payment_method'),
