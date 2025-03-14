@@ -76,14 +76,14 @@ class Employee(Base):
             Column('date_of_end')
         ),
         Row(
-            Column('direction', css_class="col-md-4"),
-            Column('sub_direction', css_class="col-md-4"),
+            #Column('direction', css_class="col-md-4"),
+            #Column('sub_direction', css_class="col-md-4"),
             Column('service', css_class="col-md-4"),
         ),
         Row(
+            #Column('branch'),
+            #Column('grade'),
             Column('designation'),
-            Column('branch'),
-            Column('grade')
         ),
         Row(
             Column('first_name'),
