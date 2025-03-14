@@ -96,7 +96,8 @@ class Delete(BaseView):
 
         # Log the deletion action using Django's LogEntry.
         # Build a comma-separated string of deleted IDs.
-        object_ids = list(qs.values_list('id', flat=True))
+        pk_field = model_class._meta.pk.name
+        object_ids = list(qs.values_list(pk_field, flat=True))
         id_str = ", ".join(str(obj_id) for obj_id in object_ids)
         LogEntry.objects.log_action(
             user_id=request.user.id,
