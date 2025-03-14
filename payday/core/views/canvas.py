@@ -169,6 +169,14 @@ class Canvas(BaseView):
                 'input_message': _('Select a value from the list'),
             })
 
+        elif field.name == "designation":
+            worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
+                'validate': 'list',
+                'source': ["Test", "Test"],
+                'input_title': 'Choose one:',
+                'input_message': _('Select a value from the list'),
+            })
+
         elif self._is_single_relation_field(field):
             # Data validation for single-relation fields.
             source = list(field.related_model.objects.all().values_list('name', flat=True))
