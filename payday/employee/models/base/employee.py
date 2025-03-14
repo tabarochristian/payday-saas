@@ -81,9 +81,9 @@ class Employee(Base):
             Column('service', css_class="col-md-4"),
         ),
         Row(
-            Column('branch'),
-            Column('grade'),
             Column('designation'),
+            Column('branch'),
+            Column('grade')
         ),
         Row(
             Column('first_name'),
