@@ -169,7 +169,7 @@ class Canvas(BaseView):
                 'input_message': _('Select a value from the list'),
             })
 
-        elif self._is_single_relation_field(field):
+        elif self._is_single_relation_field(field) or field.name == 'designation':
             # Data validation for single-relation fields.
             worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
                 'validate': 'list',
