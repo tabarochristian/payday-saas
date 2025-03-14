@@ -171,7 +171,8 @@ class Canvas(BaseView):
 
         elif self._is_single_relation_field(field):
             # Data validation for single-relation fields.
-            source = list(field.related_model.objects.all().values_list('name', flat=True)[:2])
+            source = list(field.related_model.objects.all().values_list('name', flat=True))
+            print(source)
             worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
                 'validate': 'list',
                 'source': source,
