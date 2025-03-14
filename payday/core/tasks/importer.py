@@ -59,8 +59,8 @@ def process_excel_file(obj, fields):
     related_fields = {field.name: field.related_model.objects.values('id', 'name') for field in fields.values() if field.is_relation and field.name in df.columns}
 
     # Add constant values to all rows
-    df['organization_id'] = obj.created_by.organization.id
     df['created_by_id'] = obj.created_by.id
+    df['updated_by_id'] = obj.created_by.id
 
     # Convert related fields to foreign key ids using mapping
     for field, choices in related_fields.items():

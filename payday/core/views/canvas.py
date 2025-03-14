@@ -32,7 +32,12 @@ class Canvas(BaseView):
         'updated_by', 
         'created_at', 
         'updated_at', 
-        '_metadata'
+        '_metadata',
+        
+        # Employee excluded fields
+        'photo',
+        'devices',
+        'create_user_on_save'
     ]
     EXCLUDED_FIELD_TYPES = [
         'AutoField', 
@@ -40,7 +45,7 @@ class Canvas(BaseView):
         'ManyToManyField',
         'ImageField',
         'FileField',
-        'ImporterField'
+        'ImporterField',
     ]
 
     def get(self, request, pk):
@@ -94,8 +99,12 @@ class Canvas(BaseView):
         
         # Retrieve field names from the layout.
         fields = layout.get_field_names()
+        
         # Create a dictionary mapping field names to their corresponding field objects.
         model_fields = {field.name: model_class._meta.get_field(field.name) for field in fields}
+
+        # remove photo, file, m2m field in the model canvas
+
         
         # Remove excluded fields from the dictionary.
         for excluded in self.EXCLUDED_FIELDS:
