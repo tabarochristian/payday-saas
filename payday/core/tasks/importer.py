@@ -69,6 +69,10 @@ def process_excel_file(obj, fields):
 
     # Drop the original related fields
     df.drop(columns=related_fields.keys(), inplace=True)
+
+    # replace all nan by None
+    df = df.where(pd.notnull(df), None)
+
     return df.to_dict(orient='records')
 
 def bulk_create_records(model, data):
