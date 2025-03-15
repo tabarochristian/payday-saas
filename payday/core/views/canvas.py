@@ -196,6 +196,7 @@ class Canvas(BaseView):
                 },
             )
 
+        """
         # Apply other data validation types
         if field.get_internal_type() in ['DateField', 'DateTimeField']:
             worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
@@ -206,8 +207,9 @@ class Canvas(BaseView):
                 'input_title': 'Invalid date',
                 'input_message': _('Date must be between {0} and {1}.').format(*self.DATE_RANGE),
             })
+        """
 
-        elif field.get_internal_type() in ['IntegerField', 'DecimalField', 'FloatField']:
+        if field.get_internal_type() in ['IntegerField', 'DecimalField', 'FloatField']:
             worksheet.data_validation(1, col_index, self.MAX_ROWS, col_index, {
                 'validate': 'integer',
                 'criteria': 'between',
