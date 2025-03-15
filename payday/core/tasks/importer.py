@@ -70,7 +70,9 @@ def process_excel_file(obj, fields):
     for field, choices in related_fields.items():
         pk_field = pks[field]
         choices_dict = {choice['name']: choice['id'] for choice in choices}
+        df[f'{field}_{pk_field}'] = df[f'{field}_{pk_field}'].astype(object)
         df[f'{field}_{pk_field}'] = df[field].map(choices_dict)
+        df[f'{field}_{pk_field}'] = df[f'{field}_{pk_field}'].fillna(None)
 
     # Drop the original related fields
     df.drop(columns=related_fields.keys(), inplace=True)
