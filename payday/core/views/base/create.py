@@ -68,7 +68,7 @@ class Create(BaseView):
         formsets = [formset() for formset in self.formsets()]
         return render(request, self.get_template_name(), locals())
     
-    @transaction.atomic
+    # @transaction.atomic
     def post(self, request, app, model):
         """
         Process the form submission (POST). Validate the main form and inline formsets,
