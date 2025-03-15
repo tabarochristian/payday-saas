@@ -54,10 +54,10 @@ def get_model_fields(model):
 
 def process_excel_file(obj, fields):
     df = pd.read_excel(obj.document, sheet_name=0, dtype=str)
-    
     df = df.where(pd.notnull(df), None)
     df.columns = [fields[col.lower()].name for col in df.columns]
-    related_fields = {field.name: field.related_model.objects.values('id', 'name') for field in fields.values() if field.is_relation and field.name in df.columns}
+    related_fields = {field.name: field.related_model.objects.values('id', 'name') 
+        for field in fields.values() if field.is_relation and field.name in df.columns}
 
     # Add constant values to all rows
     df['created_by_id'] = obj.created_by.id
@@ -65,8 +65,9 @@ def process_excel_file(obj, fields):
 
     # Convert related fields to foreign key ids using mapping
     for field, choices in related_fields.items():
+        pk_field = fields[field].remote_field.model._meta.pk.name
         choices_dict = {choice['name']: choice['id'] for choice in choices}
-        df[f'{field}_id'] = df[field].map(choices_dict)
+        df[f'{field}_{pk_field}'] = df[field].map(choices_dict)
 
     # Drop the original related fields
     df.drop(columns=related_fields.keys(), inplace=True)
