@@ -64,8 +64,11 @@ def process_excel_file(obj, fields):
     df['updated_by_id'] = obj.created_by.id
 
     # Convert related fields to foreign key ids using mapping
+    pks = {field.name: field.remote_field.model._meta.pk.name
+        for field in fields.values() if field.is_relation and field.name in df.columns}
+
     for field, choices in related_fields.items():
-        pk_field = fields[field].remote_field.model._meta.pk.name
+        pk_field = pks[field]
         choices_dict = {choice['name']: choice['id'] for choice in choices}
         df[f'{field}_{pk_field}'] = df[field].map(choices_dict)
 
