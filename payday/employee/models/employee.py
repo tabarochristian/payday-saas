@@ -77,9 +77,9 @@ class Employee(BaseEmployee):
                 Column('social_security_number')
             ),
             Row(
-                Column('agreement'),
-                Column('date_of_join'),
-                Column('date_of_end')
+                Column('agreement', css_class="col-md-4"),
+                Column('date_of_join', css_class="col-md-4"),
+                Column('date_of_end', css_class="col-md-4"),
             ),
             Row(
                 Column('direction', css_class="col-md-4"),
@@ -87,14 +87,14 @@ class Employee(BaseEmployee):
                 Column('service', css_class="col-md-4"),
             ),
             Row(
-                Column('branch'),
-                Column('grade'),
-                Column('designation'),
+                Column('branch', css_class="col-md-4"),
+                Column('grade', css_class="col-md-4"),
+                Column('designation', css_class="col-md-4"),
             ),
             Row(
-                Column('payment_method'),
-                Column('payer_name'),
-                Column('payment_account'),
+                Column('payment_method', css_class="col-md-4"),
+                Column('payer_name', css_class="col-md-4"),
+                Column('payment_account', css_class="col-md-4"),
             ),
             css_class='bg-dark p-4 rounded mb-4'
         ),

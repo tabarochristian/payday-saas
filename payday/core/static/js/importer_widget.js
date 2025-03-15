@@ -103,7 +103,7 @@ function displayData(data, maxRows) {
     }
 
     $section = $('<div>').attr('id', 'preview').addClass('card').appendTo('section');
-    const $cardBody = $('<div>').addClass('card-body').appendTo($section);
+    const $cardBody = $('<div>').addClass('card-body table-responsive').appendTo($section);
     const $table = $('<table>').appendTo($cardBody).addClass('table table-striped');
 
     $table.append('<thead><tr></tr></thead><tbody></tbody>');

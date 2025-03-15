@@ -5,7 +5,7 @@ from django.template import loader
 from notifications import signals
 from celery import shared_task
 import pandas as pd
-
+import numpy as np
 
 @shared_task(name='importer')
 def importer(pk):
@@ -21,6 +21,12 @@ def importer(pk):
     model = obj.content_type.model_class()
     fields = get_model_fields(model)
 
+    data = process_excel_file(obj, fields)
+    bulk_create_records(model, data)
+    notify(obj, _('Importation réussie'), _('Les données ont été importées avec succès'))
+    update_status(obj, ImporterStatus.SUCCESS)
+
+    """
     try:
         data = process_excel_file(obj, fields)
         bulk_create_records(model, data)
@@ -28,6 +34,7 @@ def importer(pk):
         update_status(obj, ImporterStatus.SUCCESS)
     except Exception as e:
         handle_import_error(obj, str(e))
+    """
 
 def user_has_permission(obj):
     permission = f'{obj.content_type.app_label}.add_{obj.content_type.model}'
@@ -54,7 +61,9 @@ def get_model_fields(model):
 
 def process_excel_file(obj, fields):
     df = pd.read_excel(obj.document, sheet_name=0, dtype=str)
+    df = df.replace({np.nan: None, '': None})
     df = df.where(pd.notnull(df), None)
+
     df.columns = [fields[col.lower()].name for col in df.columns]
     related_fields = {field.name: field.related_model.objects.values('id', 'name') 
         for field in fields.values() if field.is_relation and field.name in df.columns}
@@ -67,19 +76,24 @@ def process_excel_file(obj, fields):
     pks = {field.name: field.remote_field.model._meta.pk.name
         for field in fields.values() if field.is_relation and field.name in df.columns}
 
+    columns = {}
     for field, choices in related_fields.items():
         pk_field = pks[field]
         choices_dict = {choice['name']: choice['id'] for choice in choices}
-        df[f'{field}_{pk_field}'] = df[f'{field}_{pk_field}'].astype(object)
-        df[f'{field}_{pk_field}'] = df[field].map(choices_dict)
-        df[f'{field}_{pk_field}'] = df[f'{field}_{pk_field}'].fillna(None)
+        df[field] = df[field].map(choices_dict)
+        df[field] = df[field].replace({np.nan: None})
+        columns[field] = f'{field}_{pk_field}'
+    
+    for name, field in fields.items():
+        if 'date' not in field.get_internal_type().lower() or field.name not in df.columns:
+            continue
+        df[field.name] = df[field.name].where(df[field.name].isnull(), pd.to_datetime(df[field.name], errors='coerce'))
 
-    # Drop the original related fields
-    df.drop(columns=related_fields.keys(), inplace=True)
+    # rename field
+    df.rename(columns=columns, inplace=True)
 
     # replace all nan by None
     df = df.where(pd.notnull(df), None)
-
     return df.to_dict(orient='records')
 
 def bulk_create_records(model, data):
