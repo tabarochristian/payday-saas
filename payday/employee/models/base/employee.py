@@ -12,7 +12,7 @@ from employee.utils import *
 
 GENDERS = (('MALE', _('HOMME')), ('FEMALE', _('FEMME')))
 PAYMENT_METHODS = (('CASH', _('CASH')), ('BANK', _('BANK')), ('MOBILE MONEY', _('MOBILE MONEY')))
-MARITAl_STATUS = (('MARIED', _('MARIÉ')), ('SINGLE', _('CÉLIBATAIRE')), ('WIDOWER', _('VEUF')), ('DIVORCED', _('DIVORCÉ')))
+MARITAl_STATUS = (('MARRIED', _('MARIÉ')), ('SINGLE', _('CÉLIBATAIRE')), ('WIDOWER', _('VEUF')), ('DIVORCED', _('DIVORCÉ')))
 
 class Employee(Base):
     social_security_number = fields.CharField(_('numéro de sécurité sociale'), max_length=50, blank=True, null=True, default=None)
