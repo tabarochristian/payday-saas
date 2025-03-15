@@ -183,7 +183,7 @@ class Canvas(BaseView):
                 hidden_sheet.write(row, 0, value)
 
             # Calculate the source range dynamically
-            range_reference = f"'{sheet_name}'!$A$1:$A${len(sources)}"
+            range_reference = f"'{sheet_name}'!$A$1:$A${len(sources) + 1}"
 
             # Apply the data validation referencing the hidden sheet
             worksheet.data_validation(
