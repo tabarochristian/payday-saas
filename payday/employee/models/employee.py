@@ -65,7 +65,7 @@ class Employee(BaseEmployee):
     )
 
     list_display = ('registration_number', 'last_name', 'middle_name', 'branch', 'designation', 'grade', 'status')
-    inlines = ['employee.education', 'employee.child']
+    inlines = ['employee.education', 'employee.child', 'payroll.specialemployeeitem']
 
     layout = Layout(
         Div(
