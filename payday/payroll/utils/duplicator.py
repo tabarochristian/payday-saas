@@ -15,8 +15,10 @@ class PayrollProcessor:
 
     def duplicate(self):
         df = self._get_employee_data()
+        
         df = self._merge_with_native_attendance(df)
         df = self._merge_with_canvas_attendance(df)
+        
         self._create_paid_employees(df)
 
     @staticmethod
@@ -26,6 +28,10 @@ class PayrollProcessor:
     @staticmethod
     def _is_relation(field):
         return field.is_relation and field.get_internal_type() in ['ForeignKey', 'OneToOneField', 'ModelSelectField']
+
+    def _get_date_time_field(self):
+        return [field for field in EmployeeModel._meta.fields
+                if 'date' in field.get_internal_type().lower()]
 
     def _get_employee_data(self):
         exclude = ['id', 'user', 'created_at', 'updated_at', 
@@ -41,8 +47,15 @@ class PayrollProcessor:
         }).values(*fields)
 
         df = pd.DataFrame.from_records(employees)
+        df['mobile_number'] = df['mobile_number'].astype(str)
+
+        """
+        for field in self._get_date_time_field():
+            if field.name in df.columns:
+                df[field.name] = pd.to_datetime(df[field.name], errors='coerce')
+        """
+        df['working_days_per_month'] = df['working_days_per_month'].fillna(0)
         df['attendance'] = df['working_days_per_month']
-        # df = df.drop(columns=['working_days_per_month'])
 
         df.columns = [self._get_field_name(c) for c in df.columns]
         df['employee_id'] = df['registration_number']

@@ -36793,3 +36793,2299 @@ Traceback (most recent call last):
     )
 ValueError: Cannot assign "4": "Employee.agreement" must be a "Agreement" instance.
 ERROR 2025-03-15 17:52:24,561 runserver [35;1mHTTP POST /create/core/importer 500 [0.15, 127.0.0.1:51655][0m
+ERROR 2025-03-17 12:30:44,384 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2123, in get_prep_value
+    return int(value)
+ValueError: cannot convert float NaN to integer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 20, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 90, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2130, in get_db_prep_value
+    value = super().get_db_prep_value(value, connection, prepared)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1001, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2125, in get_prep_value
+    raise e.__class__(
+        "Field '%s' expected a number but got %r." % (self.name, value),
+    ) from e
+ValueError: Field 'attendance' expected a number but got nan.
+ERROR 2025-03-17 12:30:44,391 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.11, 127.0.0.1:52422][0m
+ERROR 2025-03-17 12:32:16,684 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 21, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 90, in _create_paid_employees
+    paid_employees = [PaidEmployee(**employee) for employee in df.to_dict('records')]
+                      ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 546, in __init__
+    _setattr(self, field.attname, val)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/phonenumber_field/modelfields.py", line 45, in __set__
+    instance.__dict__[self.field.name] = to_python(value, region=self.field.region)
+                                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/phonenumber_field/phonenumber.py", line 162, in to_python
+    raise TypeError("Can't convert %s to PhoneNumber." % type(value).__name__)
+TypeError: Can't convert int to PhoneNumber.
+ERROR 2025-03-17 12:32:16,689 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.10, 127.0.0.1:52495][0m
+ERROR 2025-03-17 12:34:48,197 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 17, in duplicate
+    df = self._get_employee_data()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 44, in _get_employee_data
+    df = pd.DataFrame.from_records(employees, dtype={'mobile_number': str})
+TypeError: DataFrame.from_records() got an unexpected keyword argument 'dtype'
+ERROR 2025-03-17 12:34:48,201 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.05, 127.0.0.1:52520][0m
+ERROR 2025-03-17 12:35:24,071 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 17, in duplicate
+    df = self._get_employee_data()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 44, in _get_employee_data
+    df = pd.DataFrame.from_records(employees, dtype={'mobile_number': str})
+TypeError: DataFrame.from_records() got an unexpected keyword argument 'dtype'
+ERROR 2025-03-17 12:35:24,075 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.06, 127.0.0.1:52547][0m
+ERROR 2025-03-17 12:35:31,625 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 21, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 92, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:35:31,629 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.07, 127.0.0.1:52554][0m
+ERROR 2025-03-17 12:40:00,986 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 21, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 101, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:40:00,991 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.11, 127.0.0.1:52649][0m
+ERROR 2025-03-17 12:41:54,327 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 23, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 104, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:41:54,332 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.11, 127.0.0.1:52711][0m
+ERROR 2025-03-17 12:42:27,700 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 24, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 105, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:42:27,704 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.11, 127.0.0.1:52734][0m
+ERROR 2025-03-17 12:45:20,063 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 24, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 105, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:45:20,067 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.11, 127.0.0.1:52758][0m
+ERROR 2025-03-17 12:45:29,640 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 24, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 105, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:45:29,644 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.11, 127.0.0.1:52764][0m
+ERROR 2025-03-17 12:46:01,729 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 24, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 107, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:46:01,734 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.09, 127.0.0.1:52782][0m
+ERROR 2025-03-17 12:46:13,600 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 24, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 107, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:46:13,605 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.09, 127.0.0.1:52790][0m
+ERROR 2025-03-17 12:47:02,141 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2123, in get_prep_value
+    return int(value)
+ValueError: cannot convert float NaN to integer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 24, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 107, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2130, in get_db_prep_value
+    value = super().get_db_prep_value(value, connection, prepared)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1001, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2125, in get_prep_value
+    raise e.__class__(
+        "Field '%s' expected a number but got %r." % (self.name, value),
+    ) from e
+ValueError: Field 'attendance' expected a number but got nan.
+ERROR 2025-03-17 12:47:02,146 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.08, 127.0.0.1:52808][0m
+ERROR 2025-03-17 12:48:08,329 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/pandas/core/indexes/base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7081, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7089, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'attenance'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 17, in duplicate
+    df = self._get_employee_data()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 62, in _get_employee_data
+    df['attenance'] = df['attenance'].fillna(0)
+                      ~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/pandas/core/frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: 'attenance'
+ERROR 2025-03-17 12:48:08,335 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.10, 127.0.0.1:52840][0m
+ERROR 2025-03-17 12:49:39,895 log Internal Server Error: /create/payroll/payroll
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/create.py", line 94, in post
+    instance = form.save()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/forms/models.py", line 554, in save
+    self.instance.save()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1012, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/dispatch/dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/signals/payroll.py", line 22, in payroll_created
+    duplicator.duplicate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 23, in duplicate
+    self._create_paid_employees(df)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/utils/duplicator.py", line 104, in _create_paid_employees
+    PaidEmployee.objects.bulk_create(paid_employees)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1835, in execute_sql
+    for sql, params in self.as_sql():
+                       ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1760, in as_sql
+    self.prepare_value(field, self.pre_save_val(field, obj))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1699, in prepare_value
+    return field.get_db_prep_save(value, connection=self.connection)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1008, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1536, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1531, in get_prep_value
+    return self.to_python(value)
+           ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1487, in to_python
+    parsed = parse_date(value)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/utils/dateparse.py", line 74, in parse_date
+    return datetime.date.fromisoformat(value)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+TypeError: fromisoformat: argument must be str
+ERROR 2025-03-17 12:49:39,901 runserver [35;1mHTTP POST /create/payroll/payroll 500 [0.09, 127.0.0.1:52900][0m
+ERROR 2025-03-17 12:50:36,454 log Internal Server Error: /payroll/preview/49
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 119, in get
+    return render(request, self.template_name, locals())
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 550, in render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'print' with arguments '(1, '', 'payroll')' not found. 1 pattern(s) tried: ['print/(?P<document>[^/]+)/(?P<app>[^/]+)/(?P<model>[^/]+)\\Z']
+ERROR 2025-03-17 12:50:36,459 runserver [35;1mHTTP GET /payroll/preview/49 500 [0.09, 127.0.0.1:52930][0m
+ERROR 2025-03-17 12:51:56,265 log Internal Server Error: /payroll/preview/49
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 103, in _execute
+    return self.cursor.execute(sql)
+           ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 350, in execute
+    return super().execute(query)
+           ~~~~~~~~~~~~~~~^^^^^^^
+sqlite3.OperationalError: near "SET": syntax error
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 41, in run
+    set_schema(schema)
+    ~~~~~~~~~~^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/utils/schema.py", line 13, in set_schema
+    cursor.execute(f"SET search_path TO {schema_name};")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 103, in _execute
+    return self.cursor.execute(sql)
+           ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 350, in execute
+    return super().execute(query)
+           ~~~~~~~~~~~~~~~^^^^^^^
+django.db.utils.OperationalError: near "SET": syntax error
+ERROR 2025-03-17 12:51:56,270 runserver [35;1mHTTP POST /payroll/preview/49 500 [0.05, 127.0.0.1:52956][0m
+ERROR 2025-03-17 12:53:47,607 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 76, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 92, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 146, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 174, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 12:53:47,612 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.05, 127.0.0.1:53035][0m
+ERROR 2025-03-17 12:54:45,847 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 76, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 92, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 146, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 174, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 12:54:45,851 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.06, 127.0.0.1:53059][0m
+ERROR 2025-03-17 12:58:21,864 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 81, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 97, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 151, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 179, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 12:58:21,868 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.07, 127.0.0.1:53165][0m
+ERROR 2025-03-17 12:58:46,310 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 82, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 98, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 152, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 180, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 12:58:46,313 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.07, 127.0.0.1:53175][0m
+ERROR 2025-03-17 12:59:07,408 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 81, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 98, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 152, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 180, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 12:59:07,411 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.08, 127.0.0.1:53186][0m
+ERROR 2025-03-17 13:00:34,132 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 81, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 97, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 151, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 180, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 13:00:34,136 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.07, 127.0.0.1:53216][0m
+ERROR 2025-03-17 13:01:32,363 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 81, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 97, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 152, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 181, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 13:01:32,366 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.07, 127.0.0.1:53223][0m
+ERROR 2025-03-17 13:03:46,333 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 81, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 97, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 153, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 181, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 13:03:46,336 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.06, 127.0.0.1:53247][0m
+ERROR 2025-03-17 13:04:38,937 log Internal Server Error: /payroll/preview/50
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 82, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 98, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 154, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 182, in process_item
+    condition = item.get('condition', 'False')
+                ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2025-03-17 13:04:38,939 runserver [35;1mHTTP POST /payroll/preview/50 500 [0.05, 127.0.0.1:53256][0m
+ERROR 2025-03-17 13:11:41,341 log Internal Server Error: /payroll/preview/52
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/views/preview.py", line 151, in post
+    Payer().run("sycamore", pk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 79, in run
+    self.process()
+    ~~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 95, in process
+    employee, _items = self.process_employee(employee, special_items)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 149, in process_employee
+    _item = self.process_item(employee, items, item)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/payroll/tasks/payer.py", line 202, in process_item
+    formula_qp_employee = formula_qp_employee * type_of_item
+                          ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+ERROR 2025-03-17 13:11:41,344 runserver [35;1mHTTP POST /payroll/preview/52 500 [0.07, 127.0.0.1:53448][0m

@@ -38,23 +38,26 @@ class Payer(Task):
         Args:
             pk (int): Primary key of the payroll to process.
         """
-        set_schema(schema)
+        # set_schema(schema)
         self.now = datetime.now()
         self.today = self.now.today
         self.payroll = get_object_or_404(Payroll, pk=pk)
 
         self.items = list(Item.objects.all().values())
         self.legal_items = list(LegalItem.objects.all().values())
-        self.special_items = list(SpecialEmployeeItem.objects.all().values(
-            'employee', 'item', 'item__code', 'item__name', 
-            'amount_qp_employee', 'amount_qp_employer', 'end_date'
+        self.special_items = list(SpecialEmployeeItem.objects.all().annotate(
+            code=models.F('item__code'),
+            name=models.F('item__name'),
+            formula_qp_employee=models.F('amount_qp_employee'),
+            formula_qp_employer=models.F('amount_qp_employer')
+        ).values(
+            'employee', 'code', 'name', 
+            'formula_qp_employee', 'formula_qp_employer', 'end_date'
         ))
-        
+
         # split special_items to each employee
-        self.special_items = {
-            s['employee'] : s
-            for s in self.special_items
-        }
+        self.special_items = pd.DataFrame(self.special_items) \
+            .groupby('employee').apply(lambda x: x.to_dict(orient='records')).to_dict()
 
         self.employees = PaidEmployee.objects.filter(payroll=self.payroll)
         self.employees = self.employees.select_related('employee').values()
@@ -186,8 +189,8 @@ class Payer(Task):
         if not condition:
             return None
         
-        formula_qp_employee = item.get('formula_qp_employee', '0')
-        formula_qp_employer = item.get('formula_qp_employer', '0')
+        formula_qp_employee = str(item.get('formula_qp_employee', '0'))
+        formula_qp_employer = str(item.get('formula_qp_employer', '0'))
         time = item.get('time', str(employee['attendance']))
         context['time'] = time
 

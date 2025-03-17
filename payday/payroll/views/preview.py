@@ -102,6 +102,7 @@ class Preview(Change):
             HttpResponse: The rendered preview page.
         """
         # Set URL kwargs for the payroll model.
+        app = 'payroll'
         self.kwargs.update({'app': 'payroll', 'model': 'payroll'})
         model_class = apps.get_model('payroll', 'payroll')
         payroll_obj = get_object_or_404(model_class, pk=pk)
@@ -133,6 +134,7 @@ class Preview(Change):
             HttpResponseRedirect: A redirect to the payslips view.
         """
         # Set URL kwargs for the payroll model.
+        app = 'payroll'
         self.kwargs.update({'app': 'payroll', 'model': 'payroll'})
         model_class = apps.get_model('payroll', 'payroll')
         payroll_obj = get_object_or_404(model_class, pk=pk)
