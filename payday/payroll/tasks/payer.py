@@ -45,6 +45,16 @@ class Payer(Task):
 
         self.items = list(Item.objects.all().values())
         self.legal_items = list(LegalItem.objects.all().values())
+        self.special_items = list(SpecialEmployeeItem.objects.all().values(
+            'employee', 'item', 'item__code', 'item__name', 
+            'amount_qp_employee', 'amount_qp_employer', 'end_date'
+        ))
+        
+        # split special_items to each employee
+        self.special_items = {
+            s['employee'] : s
+            for s in self.special_items
+        }
 
         self.employees = PaidEmployee.objects.filter(payroll=self.payroll)
         self.employees = self.employees.select_related('employee').values()
@@ -59,7 +69,8 @@ class Payer(Task):
             amount=models.Sum('amount')
         )
         self.advancesalary = {
-            a['advance_salary__employee__registration_number']: a['amount'] for a in self.advancesalary
+            a['advance_salary__employee__registration_number']: a['amount'] 
+            for a in self.advancesalary
         }
 
         self.process()
@@ -77,7 +88,8 @@ class Payer(Task):
             employee['advance_salary'] = self.advancesalary.get(employee['registration_number'], 0)
             employee['bareme'] = self.bareme.get(employee['grade'], {})
             
-            employee, _items = self.process_employee(employee)
+            special_items = self.special_items.get(employee['registration_number'], [])
+            employee, _items = self.process_employee(employee, special_items)
             employees.append(employee)
             items.append(_items)
 
@@ -113,7 +125,7 @@ class Payer(Task):
 
         PaidEmployee.objects.bulk_update(objs, attrs)
 
-    def process_employee(self, employee: dict) -> tuple:
+    def process_employee(self, employee: dict, special_items: list) -> tuple:
         """
         Process the payroll for a single employee.
         
@@ -126,6 +138,11 @@ class Payer(Task):
         items = []
         
         for item in self.items:
+            _item = self.process_item(employee, items, item)
+            if _item:
+                items.append(_item)
+        
+        for item in special_items:
             _item = self.process_item(employee, items, item)
             if _item:
                 items.append(_item)
@@ -164,6 +181,7 @@ class Payer(Task):
         }
 
         condition = self.evaluate_expression(condition, context)
+        condition = condition or 'condition' not in item
 
         if not condition:
             return None
@@ -180,8 +198,8 @@ class Payer(Task):
         type_of_item = int(item.get('type_of_item', '1'))
         formula_qp_employee = formula_qp_employee * type_of_item
 
-        social_security_amount = formula_qp_employee if item.get('is_social_security') else 0
-        taxable_amount = formula_qp_employee if item.get('is_taxable') else 0
+        social_security_amount = formula_qp_employee if item.get('is_social_security', False) else 0
+        taxable_amount = formula_qp_employee if item.get('is_taxable', False) else 0
         rate = (formula_qp_employee / time) if time else 0
 
         is_payable = item.get('is_payable', True)
