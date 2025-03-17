@@ -151,8 +151,8 @@ class Preview(Change):
         from payroll.tasks import Payer
         
         host = request.get_host().split('.')
-        Payer().run(host[0], pk)
-        # Payer().delay(host[0], pk)
+        # Payer().run(host[0], pk)
+        Payer().delay(host[0], pk)
 
         # Redirect to the payslips view.
         return redirect('payroll:payslips', pk=pk)
