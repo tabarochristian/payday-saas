@@ -149,9 +149,9 @@ class Preview(Change):
 
         # Trigger payroll processing using a background task.
         from payroll.tasks import Payer
-        # Payer().run(request.schema, pk)
-
+        
         host = request.get_host().split('.')
+        #Payer().run(request.schema, pk)
         Payer().delay(host[0], pk)
 
         # Redirect to the payslips view.
