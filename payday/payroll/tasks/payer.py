@@ -38,7 +38,7 @@ class Payer(Task):
         Args:
             pk (int): Primary key of the payroll to process.
         """
-        # set_schema(schema)
+        set_schema(schema)
         self.now = datetime.now()
         self.today = self.now.today
         self.payroll = get_object_or_404(Payroll, pk=pk)
