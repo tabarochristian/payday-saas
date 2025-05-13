@@ -36,6 +36,8 @@ services:
     container_name: payday-db
     image: postgres:16
     restart: unless-stopped
+    env_file:
+      - db.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -81,7 +83,7 @@ services:
       redis:
         condition: service_healthy
     env_file:
-      - django.env
+      - saas.env
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
       interval: 30s
@@ -103,7 +105,7 @@ services:
       saas:
         condition: service_healthy
     env_file:
-      - django.env
+      - saas.env
     healthcheck:
       test: ["CMD", "celery", "-A", "payday", "inspect", "ping"]
       interval: 30s
@@ -148,7 +150,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - django.env
+      - saas.env
     depends_on:
       pgbouncer:
         condition: service_healthy
