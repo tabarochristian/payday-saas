@@ -113,6 +113,8 @@ services:
     image: mher/flower:latest
     restart: unless-stopped
     command: flower --broker=${CELERY_BROKER_URL} --port=5555
+    env_file:
+      - prod.env
     ports:
       - "5555:5555"
     depends_on:
