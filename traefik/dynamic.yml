@@ -1,21 +1,19 @@
-http:
-  middlewares:
-    security-headers:
-      headers:
-        frameDeny: true
-        stsSeconds: 31536000
-        contentTypeNosniff: true
-        browserXssFilter: true
-    gzip:
-      compress: {}
-    websocket-headers:
-      headers:
-        customRequestHeaders:
-          Upgrade: "websocket"
-          Connection: "upgrade"
-        customResponseHeaders:
-          Upgrade: "websocket"
-          Connection: "upgrade"
-    large-body:
-      buffering:
-        maxRequestBodyBytes: 100000000
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: ":80"
+
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: traefik-net
+
+log:
+  level: DEBUG
