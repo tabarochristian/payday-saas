@@ -1,2 +1,1 @@
-DROP SCHEMA public CASCADE;
 CREATE SCHEMA lago;

@@ -210,6 +210,8 @@ services:
     depends_on:
       - pgbouncer
       - redis
+    ports:
+      - "3000:3000"
     healthcheck:
       # test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
       test: ["CMD", "true"]
