@@ -7,57 +7,148 @@ services:
     restart: unless-stopped
     ports:
       - "8080:80"
+    env_file:
+      - prod.env
     environment:
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
       - mariadb
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   mariadb:
-    image: mariadb:latest
     container_name: payday-mariadb
+    image: mariadb:latest
     restart: unless-stopped
+    env_file:
+      - prod.env
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: wordpress
-      MYSQL_PASSWORD: wordpress
-      MYSQL_USER: wordpress
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  db:
+    container_name: payday-db
+    image: postgres:latest
+    restart: unless-stopped
+    env_file:
+      - prod.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  pgbouncer:
+    container_name: payday-pgbouncer
+    image: edoburu/pgbouncer:latest
+    restart: unless-stopped
+    ports:
+      - "6432:6432"
+    volumes:
+      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
+      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
+    env_file:
+      - prod.env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "db", "-p", "5432"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   saas:
+    container_name: payday-saas
     build:
       context: .
       dockerfile: payday/Dockerfile
-    container_name: payday-saas
     restart: unless-stopped
-    command: >
-      sh -c "daphne -b 0.0.0.0 -p 8000 payday.asgi:application"
+    command: sh -c "daphne -b 0.0.0.0 -p 8000 payday.asgi:application"
     volumes:
       - ./payday:/app
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     depends_on:
       - pgbouncer
       - redis
     env_file:
       - prod.env
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  celery:
+    container_name: payday-celery
+    build:
+      context: .
+      dockerfile: payday/Dockerfile
+    restart: unless-stopped
+    command: celery -A payday worker -l INFO -E
+    volumes:
+      - ./payday:/app
+    depends_on:
+      - saas
+      - redis
+    env_file:
+      - prod.env
+    healthcheck:
+      test: ["CMD", "celery", "-A", "payday", "inspect", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  flower:
+    container_name: payday-flower
+    image: mher/flower:latest
+    restart: unless-stopped
+    command: flower --broker=${CELERY_BROKER_URL} --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5555"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    container_name: payday-redis
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -66,14 +157,49 @@ services:
     container_name: payday-lago
     image: getlago/lago:latest
     restart: unless-stopped
-    expose:
-      - "3000"
-    environment:
-      DATABASE_URL: postgres://payday:payday@pgbouncer:6432/payday
+    ports:
+      - "3000:3000"
+    env_file:
+      - prod.env
     depends_on:
       - pgbouncer
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  n8n:
+    container_name: payday-n8n
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    env_file:
+      - prod.env
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - pgbouncer
+      - redis
+
+  minio:
+    container_name: payday-minio
+    image: minio/minio:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    env_file:
+      - prod.env
+    environment:
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+    command: server /data --address :9000 --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -97,123 +223,21 @@ services:
       - celery
       - n8n
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
-
-  db:
-    image: postgres:latest
-    container_name: payday-db
-    restart: unless-stopped
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: payday
-      POSTGRES_USER: payday
-      POSTGRES_PASSWORD: payday
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U payday"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  pgbouncer:
-    image: edoburu/pgbouncer:latest
-    container_name: payday-pgbouncer
-    restart: unless-stopped
-    ports:
-      - "6432:6432"
-    volumes:
-      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
-      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-    depends_on:
-      - db
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U payday -h db -p 5432"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  redis:
-    container_name: payday-redis
-    image: redis:latest
-    restart: unless-stopped
-    expose:
-      - "6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  minio:
-    container_name: payday-minio
-    image: minio/minio:latest
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    command: server /data --address :9000 --console-address ":9001"
-    volumes:
-      - minio_data:/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  celery:
-    build:
-      context: .
-      dockerfile: payday/Dockerfile
-    container_name: payday-celery
-    restart: unless-stopped
-    command: celery -A payday worker -l INFO -E
-    volumes:
-      - ./payday:/app
-    depends_on:
-      - saas
-      - redis
-    env_file:
-      - prod.env
-    healthcheck:
-      test: ["CMD-SHELL", "celery -A payday inspect ping || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  n8n:
-    image: n8nio/n8n:latest
-    container_name: payday-n8n
-    restart: unless-stopped
-    expose:
-      - "5678"
-    environment:
-      N8N_DB_POSTGRES_HOST: pgbouncer
-      N8N_DB_POSTGRES_DATABASE: payday
-      N8N_DB_POSTGRES_USER: payday
-      N8N_DB_POSTGRES_PASSWORD: payday
-    volumes:
-      - n8n_data:/home/node/.n8n
-    depends_on:
-      - pgbouncer
-      - redis
 
   cmonitor:
-    image: doormanio/cmonitor:latest
     container_name: payday-cmonitor
+    image: doormanio/cmonitor:latest
     restart: unless-stopped
-    expose:
-      - "6000"
+    ports:
+      - "6000:6000"
+    env_file:
+      - prod.env
     environment:
-      CMONITOR_INTERVAL: 30
+      CMONITOR_INTERVAL: ${CMONITOR_INTERVAL}
     depends_on:
       - saas
       - wordpress
@@ -224,23 +248,22 @@ services:
       - minio
       - celery
       - n8n
+      - flower
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:6000 || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:6000 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   certbot:
+    container_name: payday-certbot
     build:
       context: .
       dockerfile: certbot/Dockerfile
-    container_name: payday-certbot
     volumes:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/digitalocean.ini:/etc/letsencrypt/digitalocean.ini
-    entrypoint: ""
-    command: tail -f /dev/null # Prevent it from exiting unless run manually
 
 volumes:
   wordpress_data:
