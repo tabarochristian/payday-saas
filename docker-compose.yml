@@ -225,9 +225,11 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.minio-console.rule=Host(`minio.payday.cd`)"
       - "traefik.http.routers.minio-console.entrypoints=web"
+      - "traefik.http.routers.minio-console.service=minio-console"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
       - "traefik.http.routers.minio-bucket.rule=Host(`cdn.payday.cd`)"
       - "traefik.http.routers.minio-bucket.entrypoints=web"
+      - "traefik.http.routers.minio-bucket.service=minio-bucket"
       - "traefik.http.services.minio-bucket.loadbalancer.server.port=9000"
     networks:
       - traefik-net
