@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.auth",
 
+    "health_check",
+    "health_check.db",
+    "health_check.cache",
+    "health_check.storage",
+
     "dal",
     "dal_select2",
     "widget_tweaks",

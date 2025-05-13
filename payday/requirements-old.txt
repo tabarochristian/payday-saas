@@ -43,13 +43,12 @@ django-currentuser==0.8.0
 django-debug-toolbar==4.4.6
 django-extensions==3.2.3
 django-filter==24.3
-django-health-check==3.18.3
 django-htmx==1.21.0
 django-json-widget==2.0.1
 django-mathfilters==1.0.0
 django-model-utils==5.0.0
 django-money==3.5.3
-django-notifications-hq @ git+https://github.com/tabarochristian/django-notifications.git@25d0fc99ca2b11feffe727f2dba8f712facf2d43
+git+https://github.com/tabarochristian/django-notifications.git
 django-phonenumber-field==8.0.0
 django-qr-code==4.1.0
 django-ranged-response==0.2.0

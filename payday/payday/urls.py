@@ -21,6 +21,7 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
+    path('ht/', include('health_check.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('', include('django.contrib.auth.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
