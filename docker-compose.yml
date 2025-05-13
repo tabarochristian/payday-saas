@@ -238,30 +238,30 @@ services:
       - "traefik.http.routers.uptime.entrypoints=web"
       - "traefik.http.services.uptime.loadbalancer.server.port=3001"
 
-    traefik:
-      container_name: payday-traefik
-      image: traefik:latest
-      restart: unless-stopped
-      ports:
-        - "80:80"
-      volumes:
-        - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-        - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-      depends_on:
-        - wordpress
-        - saas
-        - lago
-        - minio
-        - celery
-        - n8n
-        - uptime
-        - flower
-      healthcheck:
-        test: ["CMD", "traefik", "healthcheck"]
-        interval: 30s
-        timeout: 10s
-        retries: 3
+  traefik:
+    container_name: payday-traefik
+    image: traefik:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - wordpress
+      - saas
+      - lago
+      - minio
+      - celery
+      - n8n
+      - uptime
+      - flower
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   uptimekuma_data:
