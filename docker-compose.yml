@@ -22,6 +22,8 @@ services:
     container_name: payday-mariadb
     restart: unless-stopped
     image: mariadb:latest
+    env_file:
+      - wordpress.env
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
