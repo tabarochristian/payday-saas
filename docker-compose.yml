@@ -1,4 +1,72 @@
 services:
+  db:
+    container_name: payday-db
+    image: postgres:16
+    restart: unless-stopped
+    env_file:
+      - db.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - traefik-net
+
+  redis:
+    container_name: payday-redis
+    image: redis:latest
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - traefik-net
+
+  mariadb:
+    container_name: payday-mariadb
+    restart: unless-stopped
+    image: mariadb:latest
+    env_file:
+      - wordpress.env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    expose:
+      - 3306
+    networks:
+      - traefik-net
+
+  pgbouncer:
+    container_name: payday-pgbouncer
+    image: edoburu/pgbouncer:latest
+    restart: unless-stopped
+    ports:
+      - "6432:6432"
+    volumes:
+      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
+      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
+    env_file:
+      - pgbouncer.env
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -h db -p 5432"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - traefik-net
+
   wordpress:
     container_name: payday-wordpress
     image: wordpress:latest
@@ -23,58 +91,33 @@ services:
     networks:
       - traefik-net
 
-  mariadb:
-    container_name: payday-mariadb
+  minio:
+    container_name: payday-minio
+    image: minio/minio:latest
     restart: unless-stopped
-    image: mariadb:latest
     env_file:
-      - wordpress.env
+      - minio.env
+    command: server /data --address :9000 --console-address :9001
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - minio_data:/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "curl", "-f", "http://localhost:9001/minio/health/live"]
       interval: 30s
       timeout: 10s
       retries: 3
-    expose:
-      - 3306
-    networks:
-      - traefik-net
-
-  db:
-    container_name: payday-db
-    image: postgres:16
-    restart: unless-stopped
-    env_file:
-      - db.env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - traefik-net
-
-  pgbouncer:
-    container_name: payday-pgbouncer
-    image: edoburu/pgbouncer:latest
-    restart: unless-stopped
-    ports:
-      - "6432:6432"
-    volumes:
-      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
-      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
-    env_file:
-      - pgbouncer.env
-    depends_on:
-      - db
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -h db -p 5432"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio-console.rule=Host(`minio.payday.cd`)"
+      - "traefik.http.routers.minio-console.entrypoints=web"
+      - "traefik.http.routers.minio-console.service=minio-console"
+      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio-console.middlewares=minio-redirect"
+      - "traefik.http.middlewares.minio-redirect.redirectregex.regex=^http://minio.payday.cd$$"
+      - "traefik.http.middlewares.minio-redirect.redirectregex.replacement=http://minio.payday.cd/login"
+      - "traefik.http.routers.minio-bucket.rule=Host(`cdn.payday.cd`)"
+      - "traefik.http.routers.minio-bucket.entrypoints=web"
+      - "traefik.http.routers.minio-bucket.service=minio-bucket"
+      - "traefik.http.services.minio-bucket.loadbalancer.server.port=9000"
     networks:
       - traefik-net
 
@@ -154,19 +197,6 @@ services:
     networks:
       - traefik-net
 
-  redis:
-    container_name: payday-redis
-    image: redis:latest
-    restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"]
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - traefik-net
-
   lago:
     container_name: payday-lago
     image: getlago/lago:latest
@@ -176,7 +206,10 @@ services:
     depends_on:
       - pgbouncer
     healthcheck:
-      disable: true
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lago.rule=Host(`lago.payday.cd`)"
@@ -211,36 +244,6 @@ services:
     networks:
       - traefik-net
 
-  minio:
-    container_name: payday-minio
-    image: minio/minio:latest
-    restart: unless-stopped
-    env_file:
-      - minio.env
-    command: server /data --address :9000 --console-address :9001
-    volumes:
-      - minio_data:/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9001/minio/health/live"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.minio-console.rule=Host(`minio.payday.cd`)"
-      - "traefik.http.routers.minio-console.entrypoints=web"
-      - "traefik.http.routers.minio-console.service=minio-console"
-      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
-      - "traefik.http.routers.minio-console.middlewares=minio-redirect"
-      - "traefik.http.middlewares.minio-redirect.redirectregex.regex=^http://minio.payday.cd$$"
-      - "traefik.http.middlewares.minio-redirect.redirectregex.replacement=http://minio.payday.cd/login"
-      - "traefik.http.routers.minio-bucket.rule=Host(`cdn.payday.cd`)"
-      - "traefik.http.routers.minio-bucket.entrypoints=web"
-      - "traefik.http.routers.minio-bucket.service=minio-bucket"
-      - "traefik.http.services.minio-bucket.loadbalancer.server.port=9000"
-    networks:
-      - traefik-net
-
   uptime:
     container_name: payday-uptime
     image: louislam/uptime-kuma:latest
@@ -250,12 +253,11 @@ services:
     env_file:
       - uptime.env
     depends_on:
-      - saas
       - wordpress
-      - lago
       - minio
-      - celery
+      - lago
       - n8n
+      - saas
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001"]
       interval: 30s
@@ -281,13 +283,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - wordpress
-      - saas
-      - lago
       - minio
-      - celery
+      - lago
       - n8n
-      - uptime
+      - saas
       - flower
+      - uptime
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
