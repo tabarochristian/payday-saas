@@ -3,12 +3,12 @@ version: '3.8'
 services:
   wordpress:
     container_name: payday-wordpress
-    image: wordpress:6.5
+    image: wordpress:latest
     restart: unless-stopped
     ports:
       - "8080:80"
     env_file:
-      - prod.env
+      - wordpress.env
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
@@ -22,10 +22,8 @@ services:
 
   mariadb:
     container_name: payday-mariadb
-    image: mariadb:11.3
     restart: unless-stopped
-    env_file:
-      - prod.env
+    image: mariadb:latest
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
@@ -38,8 +36,6 @@ services:
     container_name: payday-db
     image: postgres:16
     restart: unless-stopped
-    env_file:
-      - prod.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -58,7 +54,7 @@ services:
       - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
       - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
     env_file:
-      - prod.env
+      - pgbouncer.env
     depends_on:
       db:
         condition: service_healthy
@@ -85,7 +81,7 @@ services:
       redis:
         condition: service_healthy
     env_file:
-      - prod.env
+      - django.env
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
       interval: 30s
@@ -107,7 +103,7 @@ services:
       saas:
         condition: service_healthy
     env_file:
-      - prod.env
+      - django.env
     healthcheck:
       test: ["CMD", "celery", "-A", "payday", "inspect", "ping"]
       interval: 30s
@@ -121,8 +117,6 @@ services:
     command: flower --broker=redis://redis:6379/0 --port=5555
     ports:
       - "5555:5555"
-    env_file:
-      - prod.env
     depends_on:
       redis:
         condition: service_healthy
@@ -136,7 +130,7 @@ services:
 
   redis:
     container_name: payday-redis
-    image: redis:7.0
+    image: redis:latest
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -154,7 +148,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - prod.env
+      - django.env
     depends_on:
       pgbouncer:
         condition: service_healthy
@@ -171,7 +165,7 @@ services:
     ports:
       - "5678:5678"
     env_file:
-      - prod.env
+      - n8n.env
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
@@ -193,7 +187,7 @@ services:
       - "9000:9000"
       - "9001:9001"
     env_file:
-      - prod.env
+      - minio.env
     command: server /data --address :9000 --console-address ":9001"
     volumes:
       - minio_data:/data
@@ -205,7 +199,7 @@ services:
 
   nginx:
     container_name: payday-nginx
-    image: nginx:1.25
+    image: nginx:latest
     restart: unless-stopped
     ports:
       - "80:80"
@@ -235,14 +229,14 @@ services:
 
   uptime:
     container_name: payday-uptime
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:latest
     restart: unless-stopped
     ports:
       - "6000:3001"
     volumes:
       - uptimekuma_data:/app/data
     env_file:
-      - prod.env
+      - uptime.env
     depends_on:
       saas:
         condition: service_healthy
