@@ -145,7 +145,7 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`,`flower.payday.cd`,`lagoapi.payday.cd`,`lago.payday.cd`,`n8n.payday.cd`,`minio.payday.cd`,`cdn.payday.cd`,`uptime.payday.cd`,`traefik.payday.cd`)"
+      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`,`flower.payday.cd`,`api.lago.payday.cd`,`lago.payday.cd`,`n8n.payday.cd`,`minio.payday.cd`,`cdn.payday.cd`,`uptime.payday.cd`,`traefik.payday.cd`)"
       - "traefik.http.routers.saas.entrypoints=web"
       - "traefik.http.routers.saas.service=saas"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
@@ -202,32 +202,28 @@ services:
       - traefik-net
 
   lago:
-    container_name: payday-lago
     image: getlago/lago:latest
+    container_name: payday-lago
     restart: unless-stopped
     env_file:
       - lago.env
     depends_on:
-      - pgbouncer
       - redis
-    healthcheck:
-      test: ["CMD", "true"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - db
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lago-front.rule=Host(`lago.payday.cd`)"
-      - "traefik.http.routers.lago-front.entrypoints=web"
-      - "traefik.http.routers.lago-front.service=lago-front"
-      - "traefik.http.services.lago-front.loadbalancer.server.port=80"
-      - "traefik.http.services.lago-front.loadbalancer.healthcheck.path=/"
-      - "traefik.http.services.lago-front.loadbalancer.healthcheck.interval=10s"
-      - "traefik.http.routers.lago-api.rule=Host(`lagoapi.payday.cd`)"
+      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
+      - "traefik.http.routers.lago-ui.entrypoints=web"
+      - "traefik.http.routers.lago-ui.service=lago-ui"
+      - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
+      - "traefik.http.services.lago-ui.loadbalancer.healthcheck.path=/"
+      - "traefik.http.services.lago-ui.loadbalancer.healthcheck.interval=10s"
+
+      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
       - "traefik.http.routers.lago-api.entrypoints=web"
       - "traefik.http.routers.lago-api.service=lago-api"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
-      - "traefik.http.services.lago-api.loadbalancer.healthcheck.path=/healthcheck"
+      - "traefik.http.services.lago-api.loadbalancer.healthcheck.path=/"
       - "traefik.http.services.lago-api.loadbalancer.healthcheck.interval=10s"
     networks:
       - traefik-net
