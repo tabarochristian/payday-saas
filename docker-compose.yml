@@ -10,8 +10,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
-      mariadb:
-        condition: service_healthy
+      - mariadb
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
@@ -60,8 +59,7 @@ services:
     env_file:
       - pgbouncer.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -h db -p 5432"]
       interval: 30s
@@ -80,10 +78,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      pgbouncer:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - pgbouncer
+      - redis
     env_file:
       - saas.env
     healthcheck:
@@ -102,10 +98,8 @@ services:
     volumes:
       - ./payday:/app
     depends_on:
-      redis:
-        condition: service_healthy
-      saas:
-        condition: service_healthy
+      - redis
+      - saas
     env_file:
       - saas.env
     healthcheck:
@@ -122,10 +116,8 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      redis:
-        condition: service_healthy
-      celery:
-        condition: service_healthy
+      - redis
+      - celery
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5555"]
       interval: 30s
@@ -154,8 +146,7 @@ services:
     env_file:
       - saas.env
     depends_on:
-      pgbouncer:
-        condition: service_healthy
+      - pgbouncer
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
@@ -173,10 +164,8 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
-      pgbouncer:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - pgbouncer
+      - redis
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5678"]
       interval: 30s
@@ -213,18 +202,12 @@ services:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
     depends_on:
-      wordpress:
-        condition: service_healthy
-      saas:
-        condition: service_healthy
-      lago:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      celery:
-        condition: service_healthy
-      n8n:
-        condition: service_healthy
+      - wordpress
+      - saas
+      - lago
+      - minio
+      - celery
+      - n8n
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
@@ -242,24 +225,15 @@ services:
     env_file:
       - uptime.env
     depends_on:
-      saas:
-        condition: service_healthy
-      wordpress:
-        condition: service_healthy
-      lago:
-        condition: service_healthy
-      nginx:
-        condition: service_healthy
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      celery:
-        condition: service_healthy
-      n8n:
-        condition: service_healthy
+      - saas
+      - wordpress
+      - lago
+      - nginx
+      - db
+      - redis
+      - minio
+      - celery
+      - n8n
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:6000"]
       interval: 30s
