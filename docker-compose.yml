@@ -231,8 +231,6 @@ services:
       - "traefik.http.services.lago-api.loadbalancer.healthcheck.interval=10s"
     networks:
       - traefik-net
-    ports:
-      - "3000:3000"
 
   n8n:
     container_name: payday-n8n
