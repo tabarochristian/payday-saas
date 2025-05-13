@@ -4,7 +4,7 @@ services:
     image: wordpress:latest
     restart: unless-stopped
     ports:
-      - "80:8080"
+      - "8080:8080"
     env_file:
       - wordpress.env
     volumes:
