@@ -19,6 +19,7 @@ providers:
   docker:
     exposedByDefault: false
     network: payday-saas_traefik-net
+    constraints: "!Label(`traefik.enable`, `false`)"
 
 log:
   level: DEBUG
