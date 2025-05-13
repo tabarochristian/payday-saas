@@ -205,7 +205,7 @@ services:
     image: getlago/lago:latest
     restart: unless-stopped
     env_file:
-      - saas.env
+      - lago.env
     depends_on:
       - pgbouncer
     healthcheck:
