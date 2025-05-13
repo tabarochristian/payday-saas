@@ -207,6 +207,7 @@ services:
     env_file:
       - lago.env
     depends_on:
+      - redis
       - pgbouncer
     healthcheck:
       # test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
