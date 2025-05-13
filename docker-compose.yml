@@ -212,13 +212,6 @@ services:
       - db
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
-      - "traefik.http.routers.lago-ui.entrypoints=web"
-      - "traefik.http.routers.lago-ui.service=lago-ui"
-      - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
-      - "traefik.http.services.lago-ui.loadbalancer.healthcheck.path=/"
-      - "traefik.http.services.lago-ui.loadbalancer.healthcheck.interval=10s"
-
       - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
       - "traefik.http.routers.lago-api.entrypoints=web"
       - "traefik.http.routers.lago-api.service=lago-api"
