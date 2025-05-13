@@ -112,7 +112,7 @@ services:
     container_name: payday-flower
     image: mher/flower:latest
     restart: unless-stopped
-    command: flower --broker=${CELERY_BROKER_URL} --port=5555
+    command: flower --broker=redis://redis:6379/0 --port=5555
     env_file:
       - prod.env
     ports:
