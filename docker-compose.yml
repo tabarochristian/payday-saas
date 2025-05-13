@@ -210,8 +210,6 @@ services:
     depends_on:
       - pgbouncer
       - redis
-    ports:
-      - "3000:3000"
     healthcheck:
       # test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
       test: ["CMD", "true"]
@@ -220,10 +218,14 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lago.rule=Host(`lago.payday.cd`)"
-      - "traefik.http.routers.lago.entrypoints=web"
-      - "traefik.http.routers.lago.service=lago"
-      - "traefik.http.services.lago.loadbalancer.server.port=3000"
+      - "traefik.http.routers.lago-front.rule=Host(`lago.payday.cd`)"
+      - "traefik.http.routers.lago-front.entrypoints=web"
+      - "traefik.http.routers.lago-front.service=lago-front"
+      - "traefik.http.services.lago-front.loadbalancer.server.port=80"
+      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
+      - "traefik.http.routers.lago-api.entrypoints=web"
+      - "traefik.http.routers.lago-api.service=lago-api"
+      - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
     networks:
       - traefik-net
 
