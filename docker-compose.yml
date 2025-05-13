@@ -209,7 +209,7 @@ services:
 
   minio:
     container_name: payday-minio
-    image: minio/latest
+    image: minio/minio:latest
     restart: unless-stopped
     env_file:
       - minio.env
