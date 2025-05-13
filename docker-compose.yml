@@ -240,7 +240,7 @@ services:
 
     traefik:
       container_name: payday-traefik
-      image: traefik:v2.10
+      image: traefik:latest
       restart: unless-stopped
       ports:
         - "80:80"
