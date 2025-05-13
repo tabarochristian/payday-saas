@@ -9,11 +9,6 @@ services:
       - "8080:80"
     env_file:
       - prod.env
-    environment:
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
@@ -30,11 +25,6 @@ services:
     restart: unless-stopped
     env_file:
       - prod.env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
@@ -49,10 +39,6 @@ services:
     restart: unless-stopped
     env_file:
       - prod.env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -72,9 +58,6 @@ services:
       - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
     env_file:
       - prod.env
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
     depends_on:
       - db
     healthcheck:
@@ -192,9 +175,6 @@ services:
       - "9001:9001"
     env_file:
       - prod.env
-    environment:
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
     command: server /data --address :9000 --console-address ":9001"
     volumes:
       - minio_data:/data
@@ -236,8 +216,6 @@ services:
       - "6000:6000"
     env_file:
       - prod.env
-    environment:
-      CMONITOR_INTERVAL: ${CMONITOR_INTERVAL}
     depends_on:
       - saas
       - wordpress
