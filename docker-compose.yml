@@ -145,7 +145,7 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`,`flower.payday.cd`,`api.lago.payday.cd`,`lago.payday.cd`,`n8n.payday.cd`,`minio.payday.cd`,`cdn.payday.cd`,`uptime.payday.cd`,`traefik.payday.cd`)"
+      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`,`flower.payday.cd`,`lagoapi.payday.cd`,`lago.payday.cd`,`n8n.payday.cd`,`minio.payday.cd`,`cdn.payday.cd`,`uptime.payday.cd`,`traefik.payday.cd`)"
       - "traefik.http.routers.saas.entrypoints=web"
       - "traefik.http.routers.saas.service=saas"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
@@ -223,7 +223,7 @@ services:
       - "traefik.http.services.lago-front.loadbalancer.server.port=80"
       - "traefik.http.services.lago-front.loadbalancer.healthcheck.path=/"
       - "traefik.http.services.lago-front.loadbalancer.healthcheck.interval=10s"
-      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
+      - "traefik.http.routers.lago-api.rule=Host(`lagoapi.payday.cd`)"
       - "traefik.http.routers.lago-api.entrypoints=web"
       - "traefik.http.routers.lago-api.service=lago-api"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
