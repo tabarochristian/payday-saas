@@ -5,6 +5,11 @@ global:
 entryPoints:
   web:
     address: ":80"
+    transport:
+      respondingTimeouts:
+        readTimeout: 0
+        writeTimeout: 0
+        idleTimeout: 0
 
 api:
   dashboard: true
@@ -13,11 +18,7 @@ api:
 providers:
   docker:
     exposedByDefault: false
-    network: bridge
-  file:
-    filename: /etc/traefik/dynamic.yml
+    network: payday-saas_traefik-net
 
 log:
-  level: INFO
-
-accessLog: {}
+  level: DEBUG

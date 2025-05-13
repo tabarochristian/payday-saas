@@ -20,6 +20,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.wordpress.rule=Host(`payday.cd`)"
       - "traefik.http.routers.wordpress.entrypoints=web"
+      - "traefik.http.routers.wordpress.service=wordpress"
       - "traefik.http.services.wordpress.loadbalancer.server.port=80"
     networks:
       - traefik-net
@@ -102,6 +103,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`,`flower.payday.cd`,`lago.payday.cd`,`n8n.payday.cd`,`minio.payday.cd`,`cdn.payday.cd`,`uptime.payday.cd`,`traefik.payday.cd`)"
       - "traefik.http.routers.saas.entrypoints=web"
+      - "traefik.http.routers.saas.service=saas"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
       - "traefik.http.services.saas.loadbalancer.sticky.cookie=true"
       - "traefik.http.routers.saas.transport.respondingTimeouts.readTimeout=0"
