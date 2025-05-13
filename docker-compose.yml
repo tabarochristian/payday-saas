@@ -205,11 +205,11 @@ services:
     container_name: payday-lago
     image: getlago/lago:latest
     restart: unless-stopped
-    #env_file:
-    #  - lago.env
+    env_file:
+      - lago.env
     depends_on:
-      - redis
       - pgbouncer
+      - redis
     healthcheck:
       # test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
       test: ["CMD", "true"]
