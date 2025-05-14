@@ -201,29 +201,10 @@ services:
     networks:
       - traefik-net
 
-  lago-front:
-    container_name: payday-lago-front
-    image: ghcr.io/getlago/front
+  lago:
+    container_name: payday-lago
     restart: unless-stopped
-    env_file:
-      - lago.env
-    depends_on:
-      - lago-api
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
-      - "traefik.http.routers.lago-ui.entrypoints=web"
-      - "traefik.http.routers.lago-ui.service=lago-ui"
-      - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
-      - "traefik.http.services.lago-ui.loadbalancer.healthcheck.path=/"
-      - "traefik.http.services.lago-ui.loadbalancer.healthcheck.interval=10s"
-    networks:
-      - traefik-net
-
-  lago-api:
-    container_name: payday-lago-api
-    image: ghcr.io/getlago/api
-    restart: unless-stopped
+    image: getlago/front
     env_file:
       - lago.env
     depends_on:
@@ -231,12 +212,16 @@ services:
       - db
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
+
+      # Lago UI
+      - "traefik.http.routers.lago-ui.entrypoints=web"
+      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
+      - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
+
+      # Lago API
       - "traefik.http.routers.lago-api.entrypoints=web"
-      - "traefik.http.routers.lago-api.service=lago-api"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
-      - "traefik.http.services.lago-api.loadbalancer.healthcheck.path=/"
-      - "traefik.http.services.lago-api.loadbalancer.healthcheck.interval=10s"
+      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
     networks:
       - traefik-net
 
