@@ -204,11 +204,12 @@ services:
   lago:
     container_name: payday-lago
     restart: unless-stopped
-    image: getlago/front
+    image: getlago/lago
     env_file:
       - lago.env
     depends_on:
-      - lago-api
+      - redis
+      - db
     healthcheck:
       test: ["CMD", "true"]
       interval: 10s
@@ -222,25 +223,6 @@ services:
       - "traefik.http.routers.lago-ui.service=lago-ui"
       - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
       - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
-    networks:
-      - traefik-net
-
-  lago-api:
-    container_name: payday-lago-api
-    restart: unless-stopped
-    image: getlago/api
-    env_file:
-      - lago.env
-    depends_on:
-      - redis
-      - db
-    healthcheck:
-      test: ["CMD", "true"]
-      interval: 10s
-      timeout: 10s
-      retries: 10
-    labels:
-      - "traefik.enable=true"
 
       # Lago API
       - "traefik.http.routers.lago-api.entrypoints=web"
