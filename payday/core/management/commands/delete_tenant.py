@@ -1,13 +1,13 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.conf import settings
-import re
-import logging
 from typing import Optional
-from tenants.schema import SchemaManager
-from tenants.lago import LagoClient
-from tenants.email import EmailService
-from tenants.utils import generate_random_password
+import re, logging
+
+from core.management.tenants.utils import generate_random_password
+from core.management.tenants.schema import SchemaManager
+from core.management.tenants.email import EmailService
+from core.management.tenants.lago import LagoClient
 
 logger = logging.getLogger(__name__)
 
