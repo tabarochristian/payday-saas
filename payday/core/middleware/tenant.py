@@ -11,9 +11,9 @@ thread = threading.local()
 class TenantMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.cache_timeout = getattr(settings, 'TENANT_CACHE_TIMEOUT', 60 * 60)
         self.lago_api_url = getattr(settings, 'LAGO_API_URL', 'http://lago:3000')
-        self.lago_api_key = getattr(settings, 'LAGO_API_KEY', "23e0a6aa-a0a7-4dc9-bec6-e225bf65ec05")
+        self.cache_timeout = getattr(settings, 'TENANT_CACHE_TIMEOUT', 60 * 60)
+        self.lago_api_key = getattr(settings, 'LAGO_API_KEY', None)
 
     def __call__(self, request):
         if getattr(settings, "DEBUG", True):
@@ -56,8 +56,8 @@ class TenantMiddleware:
         Set the schema from cache or Lago API.
         Returns customer data if valid and set, False otherwise.
         """
-        key = f"tenant_{schema}"
-        row = cache.get(key.lower())
+        key = f"tenant_{schema.lower()}"
+        row = cache.get(key)
         if row:
             logger.debug(f"Using cached schema for {schema}")
             return row
@@ -71,7 +71,7 @@ class TenantMiddleware:
 
     def set_schema_from_lago(self, schema):
         """
-        Check customer status via Lago API.
+        Check customer status via Lago API subscriptions endpoint.
         Returns customer data with is_active status if the customer exists, False otherwise.
         """
         if not self.lago_api_key:
@@ -79,32 +79,52 @@ class TenantMiddleware:
             return False
 
         try:
-            # Fetch customer from Lago
+            # Fetch active subscriptions from Lago
             headers = {"Authorization": f"Bearer {self.lago_api_key}"}
-            response = requests.get(f"{self.lago_api_url}/api/v1/customers/{schema}", headers=headers)
+            response = requests.get(
+                f"{self.lago_api_url}/api/v1/subscriptions",
+                params={"external_customer_id": schema, "status[]": "active"},
+                headers=headers
+            )
             
             if response.status_code == 404:
                 logger.warning(f"Customer {schema} not found in Lago")
                 return False
             
             response.raise_for_status()
-            customer_data = response.json().get('customer', {})
+            subscription_data = response.json()
+            subscriptions = subscription_data.get('subscriptions', [])
 
-            # Check subscriptions for active status
-            is_active = any(
-                sub.get('status') == 'active' and not sub.get('terminated_at')
-                for sub in customer_data.get('subscriptions', [])
-            )
+            # Determine if customer is active based on subscriptions
+            is_active = len(subscriptions) > 0
 
             # Prepare row data
             row = {
-                'external_id': customer_data.get('external_id'),
+                'external_id': schema,
                 'is_active': is_active,
-                'lago_id': customer_data.get('lago_id'),
-                'name': customer_data.get('name'),
-                'created_at': customer_data.get('created_at'),
+                'lago_id': subscriptions[0].get('lago_customer_id') if subscriptions else None,
+                'name': None,  # Name not available in subscriptions endpoint
+                'created_at': subscriptions[0].get('created_at') if subscriptions else None,
                 'schema': schema
             }
+
+            # Optional: Check wallets if no active subscriptions (uncomment if needed)
+            """
+            if not is_active:
+                wallet_response = requests.get(
+                    f"{self.lago_api_url}/api/v1/wallets",
+                    params={"lago_customer_id": row['lago_id']},
+                    headers=headers
+                )
+                wallet_response.raise_for_status()
+                wallets = wallet_response.json().get('wallets', [])
+                is_active = any(
+                    wallet.get('status') == 'active' and not wallet.get('terminated_at')
+                    for wallet in wallets
+                )
+                row['is_active'] = is_active
+            """
+
             return row
 
         except requests.RequestException as e:
@@ -125,4 +145,4 @@ class TenantMiddleware:
     @staticmethod 
     def get_tenant():
         schema = TenantMiddleware.get_schema()
-        return cache.get(f"tenant_{schema}", {})
+        return cache.get(f"tenant_{schema.lower()}", {})
