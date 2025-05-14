@@ -10,7 +10,7 @@ from core.management.tenants.lago import LagoClient
 
 logger = logging.getLogger(__name__)
 
-class CreateTenantCommand(BaseCommand):
+class Command(BaseCommand):
     """
     Django management command to create a new tenant.
     Orchestrates schema creation, Lago customer/subscription, superuser, and emails.
