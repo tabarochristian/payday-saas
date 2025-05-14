@@ -150,7 +150,7 @@ services:
       - "traefik.http.routers.saas.entrypoints=web"
       - "traefik.http.routers.saas.priority=1"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
-      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`)"
+      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}\\.payday\\.cd`)"
     networks:
       - traefik-net
 
