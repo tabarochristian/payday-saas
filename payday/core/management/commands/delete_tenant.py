@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.core.cache import cache
 from django.db import transaction
 from django.conf import settings
 from typing import Optional
@@ -81,3 +82,8 @@ class Command(BaseCommand):
 
             schema_manager.drop_schema(schema)
             self.stdout.write(self.style.SUCCESS(f'Dropped schema "{schema}"'))
+
+            cache.delete(f"tenant_{schema.lower()}")
+            self.stdout.write(self.style.SUCCESS(f'Deleted cache schema "{schema}"'))
+
+            

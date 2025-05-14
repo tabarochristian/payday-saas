@@ -1,9 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.core.cache import cache
 from django.conf import settings
+import threading
 import requests
 import logging
-import threading
 
 logger = logging.getLogger(__name__)
 thread = threading.local()
