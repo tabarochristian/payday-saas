@@ -150,13 +150,8 @@ services:
       - "traefik.http.routers.saas.service=saas"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
       - "traefik.http.services.saas.loadbalancer.sticky.cookie=true"
-      - "traefik.http.routers.saas.transport.respondingTimeouts.readTimeout=0"
-      - "traefik.http.routers.saas.transport.respondingTimeouts.writeTimeout=0"
-      - "traefik.http.routers.saas.transport.respondingTimeouts.idleTimeout=0"
     networks:
       - traefik-net
-    expose:
-      - 8000
 
   celery:
     container_name: payday-celery
