@@ -63,8 +63,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Fixtures loaded for schema "{schema}".'))
             self.send_welcome_email(schema, user)
             self.stdout.write(self.style.SUCCESS(f'Welcome email sent to "{email}".'))
-            self.send_password_reset_email(schema, user)
-            self.stdout.write(self.style.SUCCESS(f'Password reset email sent to "{email}".'))
+            # self.send_password_reset_email(schema, user)
+            # self.stdout.write(self.style.SUCCESS(f'Password reset email sent to "{email}".'))
         else:
             self.stdout.write(self.style.SUCCESS(f'User "{email}" already exists.'))
 
