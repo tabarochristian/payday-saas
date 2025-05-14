@@ -1,0 +1,18 @@
+Bienvenue {{ tenant_name|default:"Payday" }} !
+
+Bonjour {{ user.email }},
+
+Nous sommes ravis de vous accueillir ! Votre tenant "{{ schema }}" a été créé avec succès sur {{ tenant_name|default:"Payday" }} avec le plan "{{ plan }}".
+
+Voici votre mot de passe temporaire pour accéder à votre tableau de bord :
+{{ password }}
+
+Important : Une fois connecté, accédez à votre tableau de bord à l’adresse {{ protocol }}://{{ schema }}.{{ domain }}.
+
+Pour toute question, contactez-nous à {{ support_email }}.
+
+Merci de faire confiance à {{ tenant_name|default:"Payday" }}.
+
+Cordialement,
+L’équipe {{ tenant_name|default:"Payday" }}
+{{ protocol }}://{{ domain }}
