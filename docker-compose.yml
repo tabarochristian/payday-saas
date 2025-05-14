@@ -262,8 +262,7 @@ services:
     depends_on:
       - wordpress
       - minio
-      - lago-front
-      - lago-api
+      - lago
       - n8n
       - saas
     healthcheck:
@@ -292,8 +291,7 @@ services:
     depends_on:
       - wordpress
       - minio
-      - lago-api
-      - lago-front
+      - lago
       - n8n
       - saas
       - flower
