@@ -229,8 +229,8 @@ services:
     networks:
       - traefik-net
     ports:
-      - "8888:8888"   # Frontend
-      - "9999:9999"   # API
+      - "8888:80"   # Frontend
+      - "9999:3000"   # API
 
   n8n:
     container_name: payday-n8n
