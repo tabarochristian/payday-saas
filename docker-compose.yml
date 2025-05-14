@@ -80,7 +80,7 @@ services:
     depends_on:
       - mariadb
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -89,7 +89,9 @@ services:
       - "traefik.http.routers.wordpress.rule=Host(`payday.cd`)"
       - "traefik.http.routers.wordpress.entrypoints=web"
       - "traefik.http.routers.wordpress.service=wordpress"
-      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=8080"
+    ports:
+      - "8080:80"  # Maps internal port 80 to external port 8080
     networks:
       - traefik-net
 
@@ -229,6 +231,13 @@ services:
       - "traefik.http.routers.lago-api.service=lago-api"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
       - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
+
+      # CORS Middleware
+      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowmethods=GET,POST,PUT,DELETE,PATCH,OPTIONS"
+      - "traefik.http.middlewares.lago-cors.headers.accesscontrolalloworigin=http://lago.payday.cd"
+      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowcredentials=true"
+      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowheaders=Content-Type,Authorization,X-Requested-With"
+
     networks:
       - traefik-net
 
