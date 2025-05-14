@@ -96,4 +96,5 @@ class SchemaManager:
         Drop the database schema.
         """
         with connection.cursor() as cursor:
+            cursor.execute('COMMIT')
             cursor.execute(f'DROP SCHEMA "{schema}" CASCADE')
