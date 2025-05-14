@@ -203,7 +203,7 @@ services:
 
   lago-front:
     container_name: payday-lago-front
-    image: getlago/front
+    image: ghcr.io/getlago/front
     restart: unless-stopped
     env_file:
       - lago.env
@@ -222,7 +222,7 @@ services:
 
   lago-api:
     container_name: payday-lago-api
-    image: getlago/api
+    image: ghcr.io/getlago/api
     restart: unless-stopped
     env_file:
       - lago.env
