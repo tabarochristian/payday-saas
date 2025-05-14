@@ -11,9 +11,9 @@ thread = threading.local()
 class TenantMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        self.lago_api_key = getattr(settings, 'LAGO_API_KEY', '23e0a6aa-a0a7-4dc9-bec6-e225bf65ec05')
         self.lago_api_url = getattr(settings, 'LAGO_API_URL', 'http://lago:3000')
         self.cache_timeout = getattr(settings, 'TENANT_CACHE_TIMEOUT', 60 * 60)
-        self.lago_api_key = getattr(settings, 'LAGO_API_KEY', None)
 
     def __call__(self, request):
         if getattr(settings, "DEBUG", True):
