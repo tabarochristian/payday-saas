@@ -307,7 +307,8 @@ services:
     depends_on:
       - wordpress
       - minio
-      - lago
+      - lago-api
+      - lago-front
       - n8n
       - saas
       - flower
