@@ -202,8 +202,8 @@ services:
       - traefik-net
 
   lago-front:
-    image: getlago/front:latest
     container_name: payday-lago-front
+    image: getlago/front:latest
     restart: unless-stopped
     env_file:
       - lago.env
@@ -221,8 +221,8 @@ services:
       - traefik-net
 
   lago-api:
-    image: getlago/api:latest
     container_name: payday-lago-api
+    image: getlago/api:latest
     restart: unless-stopped
     env_file:
       - lago.env
