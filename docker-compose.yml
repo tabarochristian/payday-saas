@@ -277,7 +277,8 @@ services:
     depends_on:
       - wordpress
       - minio
-      - lago
+      - lago-front
+      - lago-api
       - n8n
       - saas
     healthcheck:
