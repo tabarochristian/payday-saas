@@ -151,6 +151,7 @@ services:
       - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`) && !Host(`flower.payday.cd`) && !Host(`api.lago.payday.cd`) && !Host(`lago.payday.cd`) && !Host(`n8n.payday.cd`) && !Host(`minio.payday.cd`) && !Host(`cdn.payday.cd`) && !Host(`uptime.payday.cd`) && !Host(`traefik.payday.cd`)"
     ports:
       - "8000:8000"
+      
     networks:
       - traefik-net
 
