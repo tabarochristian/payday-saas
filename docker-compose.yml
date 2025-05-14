@@ -201,15 +201,14 @@ services:
     networks:
       - traefik-net
 
-  lago:
-    image: getlago/lago:latest
-    container_name: payday-lago
+  lago-front:
+    image: getlago/front:latest
+    container_name: payday-lago-front
     restart: unless-stopped
     env_file:
       - lago.env
     depends_on:
-      - redis
-      - db
+      - lago-api
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
@@ -218,7 +217,20 @@ services:
       - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
       - "traefik.http.services.lago-ui.loadbalancer.healthcheck.path=/"
       - "traefik.http.services.lago-ui.loadbalancer.healthcheck.interval=10s"
+    networks:
+      - traefik-net
 
+  lago-api:
+    image: getlago/api:latest
+    container_name: payday-lago-api
+    restart: unless-stopped
+    env_file:
+      - lago.env
+    depends_on:
+      - redis
+      - db
+    labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
       - "traefik.http.routers.lago-api.entrypoints=web"
       - "traefik.http.routers.lago-api.service=lago-api"
@@ -227,9 +239,6 @@ services:
       - "traefik.http.services.lago-api.loadbalancer.healthcheck.interval=10s"
     networks:
       - traefik-net
-    ports:
-      - "8080:80"   # Frontend
-      - "3001:3000" # API
 
   n8n:
     container_name: payday-n8n
