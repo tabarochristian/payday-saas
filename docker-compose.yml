@@ -148,10 +148,8 @@ services:
       - "traefik.http.routers.saas.service=saas"
       - "traefik.http.routers.saas.entrypoints=web"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
-      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`) && !Host(`flower.payday.cd`) && !Host(`api.lago.payday.cd`) && !Host(`lago.payday.cd`) && !Host(`n8n.payday.cd`) && !Host(`minio.payday.cd`) && !Host(`cdn.payday.cd`) && !Host(`uptime.payday.cd`) && !Host(`traefik.payday.cd`)"
-    ports:
-      - "8000:8000"
-      
+      - "traefik.http.routers.saas.rule=Host(`test.payday.cd`)"
+
     networks:
       - traefik-net
 
@@ -245,9 +243,6 @@ services:
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowCredentials=true"
       - "traefik.http.middlewares.lago-cors.headers.accessControlMaxAge=100"
       - "traefik.http.middlewares.lago-cors.headers.addVaryHeader=true"
-
-
-
 
     networks:
       - traefik-net
