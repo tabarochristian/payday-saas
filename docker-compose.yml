@@ -212,25 +212,24 @@ services:
       - db
     labels:
       - "traefik.enable=true"
-      
-      # Lago UI
       - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
       - "traefik.http.routers.lago-ui.entrypoints=web"
-      - "traefik.http.services.lago-ui.loadbalancer.server.port=8888"
+      - "traefik.http.routers.lago-ui.service=lago-ui"
+      - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
       - "traefik.http.services.lago-ui.loadbalancer.healthcheck.path=/"
       - "traefik.http.services.lago-ui.loadbalancer.healthcheck.interval=10s"
 
-      # Lago API
       - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
       - "traefik.http.routers.lago-api.entrypoints=web"
-      - "traefik.http.services.lago-api.loadbalancer.server.port=9999"
+      - "traefik.http.routers.lago-api.service=lago-api"
+      - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
       - "traefik.http.services.lago-api.loadbalancer.healthcheck.path=/"
       - "traefik.http.services.lago-api.loadbalancer.healthcheck.interval=10s"
     networks:
       - traefik-net
     ports:
-      - "8888:80"   # Frontend
-      - "9999:3000"   # API
+      - "8080:80"   # Frontend
+      - "3001:3000" # API
 
   n8n:
     container_name: payday-n8n
