@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from smtplib import SMTPException
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type, before_sleep_log
+from tenacity import retry, stop_after_attempt, wait_none, retry_if_exception_type, before_sleep_log
 import logging
 from typing import Optional
 
@@ -16,7 +16,7 @@ class EmailService:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none(),
         retry=retry_if_exception_type((SMTPException, ConnectionError)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -56,7 +56,7 @@ class EmailService:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none(),  # No waiting between retries
         retry=retry_if_exception_type((Exception,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )

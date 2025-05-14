@@ -1,6 +1,6 @@
 import requests
 from django.conf import settings
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type, before_sleep_log
+from tenacity import retry, stop_after_attempt, wait_none, retry_if_exception_type, before_sleep_log
 import logging
 from typing import Optional, Dict, Any
 
@@ -20,7 +20,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -38,7 +38,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -55,7 +55,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((requests.RequestException, ValueError)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -80,7 +80,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((requests.RequestException, ValueError)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -113,7 +113,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -140,7 +140,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )

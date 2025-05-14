@@ -1,7 +1,7 @@
 from django.db import connection
 from django.core.management import call_command
 from django.contrib.auth import get_user_model
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type, before_sleep_log
+from tenacity import retry, stop_after_attempt, wait_none, retry_if_exception_type, before_sleep_log
 import logging
 from typing import Optional
 
@@ -15,7 +15,7 @@ class SchemaManager:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((connection.DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -28,7 +28,7 @@ class SchemaManager:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((connection.DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -42,7 +42,7 @@ class SchemaManager:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        wait=wait_none()
         retry=retry_if_exception_type((connection.DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
