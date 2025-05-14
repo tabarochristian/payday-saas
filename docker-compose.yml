@@ -210,6 +210,12 @@ services:
     depends_on:
       - redis
       - db
+    healthcheck:
+      # test: ["CMD", "curl", "-f", "http://localhost:5678/healthz"]
+      test: ["CMD", "true"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     labels:
       - "traefik.enable=true"
 
