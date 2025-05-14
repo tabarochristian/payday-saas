@@ -70,3 +70,30 @@ class SchemaManager:
         with connection.cursor() as cursor:
             cursor.execute("SELECT schema_name FROM information_schema.schemata WHERE schema_name = %s", [schema])
             return not cursor.fetchone()
+
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_none(),
+        retry=retry_if_exception_type((DatabaseError,)),
+        before_sleep=before_sleep_log(logger, logging.WARNING)
+    )
+    def delete_superuser(self, schema: str) -> None:
+        """
+        Delete the superuser for the tenant.
+        """
+        from core.utils import set_schema
+        set_schema(schema)
+        User.objects.filter(is_superuser=True).delete()
+
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_none(),
+        retry=retry_if_exception_type((DatabaseError,)),
+        before_sleep=before_sleep_log(logger, logging.WARNING)
+    )
+    def drop_schema(self, schema: str) -> None:
+        """
+        Drop the database schema.
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(f'DROP SCHEMA "{schema}" CASCADE')
