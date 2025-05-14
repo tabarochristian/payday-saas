@@ -233,9 +233,9 @@ services:
       - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
 
       # CORS Middleware
-      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowmethods=GET,POST,PUT,DELETE,PATCH,OPTIONS"
-      - "traefik.http.middlewares.lago-cors.headers.accesscontrolalloworigin=http://lago.payday.cd"
       - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowcredentials=true"
+      - "traefik.http.middlewares.lago-cors.headers.accesscontrolalloworigin=http://api.lago.payday.cd"
+      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowmethods=GET,POST,PUT,DELETE,PATCH,OPTIONS"
       - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowheaders=Content-Type,Authorization,X-Requested-With"
 
     networks:
