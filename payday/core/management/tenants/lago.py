@@ -13,7 +13,7 @@ class LagoClient:
 
     def __init__(self):
         self.api_url: str = getattr(settings, 'LAGO_API_URL', 'http://lago:3000')
-        self.api_key: str = getattr(settings, 'LAGO_API_KEY', '')
+        self.api_key: str = getattr(settings, 'LAGO_API_KEY', '23e0a6aa-a0a7-4dc9-bec6-e225bf65ec05')
         if not self.api_key:
             raise ValueError('LAGO_API_KEY is not configured')
         self.headers = {'Authorization': f'Bearer {self.api_key}'}

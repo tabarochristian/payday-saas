@@ -395,3 +395,9 @@ LOGGING = {
 # Sentry settings
 SENTRY_DSN = "https://61630e2ac1f3c024ffa6a3d4a7207f57@o4505861077204992.ingest.us.sentry.io/4507582424612864"
 SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
+
+LAGO_API_KEY = "23e0a6aa-a0a7-4dc9-bec6-e225bf65ec05"
+LAGO_API_KEY = os.getenv("LAGO_API_KEY", LAGO_API_KEY)
+
+LAGO_API_URL = "http://lago:3000"
+LAGO_API_URL = os.getenv("LAGO_API_URL", LAGO_API_URL)
