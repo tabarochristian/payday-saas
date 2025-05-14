@@ -21,7 +21,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -41,20 +40,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.admin",
-
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django.contrib.auth",
-
     "health_check",
     "health_check.db",
     "health_check.cache",
     "health_check.storage",
-
     "dal",
     "dal_select2",
     "widget_tweaks",
-
     "tinymce",
     "storages",
     "mathfilters",
@@ -63,18 +58,15 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_bootstrap5",
     "django_json_widget",
-
     "djmoney",
     "django_ace",
     "corsheaders",
     "phonenumber_field",
     "django_extensions",
-
     "django_htmx",
     "djcelery_email",
     "simple_history",
     "notifications",
-
     "api",
     "core",
     "employee",
@@ -151,7 +143,6 @@ REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
 REDIS_PORT = os.getenv('REDIS_PORT', 6379)
 
-
 # Cache settings default memory and redis cache
 CACHE_BACKEND = os.getenv('CACHE_BACKEND', 'django.core.cache.backends.locmem.LocMemCache')
 CACHE_LOCATION = os.getenv('CACHE_LOCATION',  'unique-snowflake')
@@ -192,7 +183,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -361,7 +351,6 @@ DEVICE_API_URL = "http://46.101.92.215:7788"
 CELERY_RETRY_DELAY = 7200
 CELERY_MAX_RETRIES = 12
 
-
 # Logging configuration
 LOGGING = {
     'version': 1,
@@ -406,23 +395,3 @@ LOGGING = {
 # Sentry settings
 SENTRY_DSN = "https://61630e2ac1f3c024ffa6a3d4a7207f57@o4505861077204992.ingest.us.sentry.io/4507582424612864"
 SENTRY_DSN = os.getenv("SENTRY_DSN", SENTRY_DSN)
-
-#if not DEBUG:
-#import sentry_sdk
-#sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=1.0, profiles_sample_rate=1.0)
-
-if not DEBUG:
-    # Security settings
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-    # HSTS settings
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
