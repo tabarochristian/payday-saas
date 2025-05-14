@@ -242,11 +242,12 @@ services:
       # CORS Middleware
       # --------------------
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowOriginList=http://lago.payday.cd,http://api.lago.payday.cd"
-      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowHeaders=Content-Type,Authorization,X-Requested-With,apollographql-client-version,apollographql-client-name"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowHeaders=Content-Type,Authorization,X-Requested-With,apollographql-client-version,apollographql-client-name,x-lago-organization"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowMethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowCredentials=true"
       - "traefik.http.middlewares.lago-cors.headers.accessControlMaxAge=100"
       - "traefik.http.middlewares.lago-cors.headers.addVaryHeader=true"
+
 
 
 
