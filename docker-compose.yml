@@ -91,7 +91,7 @@ services:
       - "traefik.http.routers.wordpress.service=wordpress"
       - "traefik.http.services.wordpress.loadbalancer.server.port=8080"
     ports:
-      - "8080:82"
+      - "8080:80"
     networks:
       - traefik-net
 
