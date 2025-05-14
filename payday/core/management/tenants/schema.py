@@ -15,7 +15,7 @@ class SchemaManager:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((connection.DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -28,7 +28,7 @@ class SchemaManager:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((connection.DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -42,7 +42,7 @@ class SchemaManager:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((connection.DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )

@@ -20,7 +20,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -38,7 +38,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -55,7 +55,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((requests.RequestException, ValueError)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -80,7 +80,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((requests.RequestException, ValueError)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -113,7 +113,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
@@ -140,7 +140,7 @@ class LagoClient:
 
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_none()
+        wait=wait_none(),
         retry=retry_if_exception_type((requests.RequestException,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
