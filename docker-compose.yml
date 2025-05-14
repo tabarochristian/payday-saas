@@ -150,8 +150,8 @@ services:
       - "traefik.http.routers.saas.service=saas"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
       - "traefik.http.services.saas.loadbalancer.sticky.cookie=true"
-    port:
-      - 8000:8000
+    ports:
+      - "8000:8000"
     networks:
       - traefik-net
 
