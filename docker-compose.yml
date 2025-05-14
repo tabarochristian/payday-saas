@@ -145,7 +145,7 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`,`flower.payday.cd`,`api.lago.payday.cd`,`lago.payday.cd`,`n8n.payday.cd`,`minio.payday.cd`,`cdn.payday.cd`,`uptime.payday.cd`,`traefik.payday.cd`)"
+      - "traefik.http.routers.saas.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`) && !Host(`payday.cd`) && !Host(`flower.payday.cd`) && !Host(`api.lago.payday.cd`) && !Host(`lago.payday.cd`) && !Host(`n8n.payday.cd`) && !Host(`minio.payday.cd`) && !Host(`cdn.payday.cd`) && !Host(`uptime.payday.cd`) && !Host(`traefik.payday.cd`)"
       - "traefik.http.routers.saas.entrypoints=web"
       - "traefik.http.routers.saas.service=saas"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
