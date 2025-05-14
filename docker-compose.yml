@@ -213,19 +213,21 @@ services:
     healthcheck:
       # test: ["CMD", "curl", "-f", "http://localhost:5678/healthz"]
       test: ["CMD", "true"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 10
     labels:
       - "traefik.enable=true"
 
       # Lago UI
       - "traefik.http.routers.lago-ui.entrypoints=web"
+      - "traefik.http.routers.lago-ui.service=lago-ui"
       - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
       - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
 
       # Lago API
       - "traefik.http.routers.lago-api.entrypoints=web"
+      - "traefik.http.routers.lago-api.service=lago-api"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
       - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
     networks:
