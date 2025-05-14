@@ -157,6 +157,8 @@ services:
       - "traefik.http.routers.saas.transport.respondingTimeouts.idleTimeout=0"
     networks:
       - traefik-net
+    expose:
+      - 8000
 
   celery:
     container_name: payday-celery
@@ -217,30 +219,40 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+
     labels:
       - "traefik.enable=true"
 
-      # Lago UI
+      # --------------------
+      # Lago UI Router
+      # --------------------
+      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
       - "traefik.http.routers.lago-ui.entrypoints=web"
       - "traefik.http.routers.lago-ui.service=lago-ui"
-      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
       - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
 
-      # Lago API
+      # --------------------
+      # Lago API Router
+      # --------------------
+      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
       - "traefik.http.routers.lago-api.entrypoints=web"
       - "traefik.http.routers.lago-api.service=lago-api"
+      - "traefik.http.routers.lago-api.middlewares=lago-cors"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
-      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
 
+      # --------------------
       # CORS Middleware
-      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowheaders=Content-Type,Authorization,X-Requested-With"
-      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowmethods=GET,POST,PUT,DELETE,PATCH,OPTIONS"
-      - "traefik.http.middlewares.lago-cors.headers.accesscontrolalloworigin=http://*.payday.cd"
-      - "traefik.http.middlewares.lago-cors.headers.accesscontrolallowcredentials=true"
-      
+      # --------------------
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowOriginList=http://lago.payday.cd,http://api.lago.payday.cd"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowHeaders=Content-Type,Authorization,X-Requested-With"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowMethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowCredentials=true"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlMaxAge=100"
+      - "traefik.http.middlewares.lago-cors.headers.addVaryHeader=true"
 
     networks:
       - traefik-net
+
 
   n8n:
     container_name: payday-n8n
