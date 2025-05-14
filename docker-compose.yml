@@ -208,10 +208,8 @@ services:
     env_file:
       - lago.env
     depends_on:
-      - redis
-      - db
+      - lago-api
     healthcheck:
-      # test: ["CMD", "curl", "-f", "http://localhost:5678/healthz"]
       test: ["CMD", "true"]
       interval: 10s
       timeout: 10s
@@ -224,6 +222,25 @@ services:
       - "traefik.http.routers.lago-ui.service=lago-ui"
       - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
       - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
+    networks:
+      - traefik-net
+
+  lago-api:
+    container_name: payday-lago-api
+    restart: unless-stopped
+    image: getlago/api
+    env_file:
+      - lago.env
+    depends_on:
+      - redis
+      - db
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    labels:
+      - "traefik.enable=true"
 
       # Lago API
       - "traefik.http.routers.lago-api.entrypoints=web"
