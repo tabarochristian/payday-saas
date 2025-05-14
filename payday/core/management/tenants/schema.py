@@ -1,4 +1,5 @@
 from django.db import connection
+from django.db.utils import DatabaseError
 from django.core.management import call_command
 from django.contrib.auth import get_user_model
 from tenacity import retry, stop_after_attempt, wait_none, retry_if_exception_type, before_sleep_log
@@ -16,7 +17,7 @@ class SchemaManager:
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_none(),
-        retry=retry_if_exception_type((connection.DatabaseError,)),
+        retry=retry_if_exception_type((DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def create_schema(self, schema: str) -> None:
@@ -29,7 +30,7 @@ class SchemaManager:
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_none(),
-        retry=retry_if_exception_type((connection.DatabaseError,)),
+        retry=retry_if_exception_type((DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def apply_migrations(self, schema: str) -> None:
@@ -43,7 +44,7 @@ class SchemaManager:
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_none(),
-        retry=retry_if_exception_type((connection.DatabaseError,)),
+        retry=retry_if_exception_type((DatabaseError,)),
         before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def create_superuser(self, schema: str, email: str, password: str) -> User:
