@@ -94,7 +94,7 @@ class TenantMiddleware:
         """
         Redirect to the default URL with an optional error message.
         """
-        redirect_url = getattr(settings, "DEFAULT_TENANT_REDIRECT_URL", "https://payday.cd")
+        redirect_url = getattr(settings, "DEFAULT_TENANT_REDIRECT_URL", "http://payday.cd")
         return HttpResponseRedirect(f"{redirect_url}?message=not-found")
 
     @staticmethod
