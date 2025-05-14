@@ -1,12 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.core.cache import cache
 from django.conf import settings
-
-from core.utils import set_schema
-from django.db import connection
-
-import threading
+import requests
 import logging
+import threading
 
 logger = logging.getLogger(__name__)
 thread = threading.local()
@@ -14,29 +11,30 @@ thread = threading.local()
 class TenantMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.cache_timeout = 60 * 60  # Cache timeout in seconds (1 hour)
+        self.cache_timeout = getattr(settings, 'TENANT_CACHE_TIMEOUT', 60 * 60)
+        self.lago_api_url = getattr(settings, 'LAGO_API_URL', 'https://lago:3000')
+        self.lago_api_key = getattr(settings, 'LAGO_API_KEY', "23e0a6aa-a0a7-4dc9-bec6-e225bf65ec05")
 
     def __call__(self, request):
         if getattr(settings, "DEBUG", True):
             response = self.get_response(request)
             return response
-            
-        schema = self.extract_schema_from_host(request.get_host())
+        
+        host = request.get_host()
+        schema = self.extract_schema_from_host(host)
 
         if not self.is_valid_schema(schema):
             logger.warning(f"Invalid schema: {schema}")
             return self.redirect_to_default()
 
-        row = self.set_schema_from_cache_or_db(schema)
+        row = self.set_schema_from_cache_or_lago(schema)
         if not row:
             return self.redirect_to_default()
 
-        if not (is_active := row['is_active']):
-            # send message to the user that the schema is not active
+        if not (is_active := row.get('is_active', False)):
             logger.warning(f"Schema {schema} is not active")
             return self.redirect_to_default()
 
-        set_schema(schema)
         request.tenant = row
         thread.schema = schema
         return self.get_response(request)
@@ -53,41 +51,64 @@ class TenantMiddleware:
         """
         return schema and schema != "www"
 
-    def set_schema_from_cache_or_db(self, schema):
+    def set_schema_from_cache_or_lago(self, schema):
         """
-        Set the schema from cache or database.
-        Returns True if the schema is valid and set, False otherwise.
+        Set the schema from cache or Lago API.
+        Returns customer data if valid and set, False otherwise.
         """
         key = f"tenant_{schema}"
-        row = cache.get(key)
+        row = cache.get(key.lower())
         if row:
             logger.debug(f"Using cached schema for {schema}")
-            set_schema(schema)
             return row
 
-        if row := self.set_schema_from_db(schema):
+        if row := self.set_schema_from_lago(schema):
             cache.set(key, row, timeout=self.cache_timeout)
             logger.debug(f"Schema {schema} set and cached")
             return row
 
         return False
 
-    def set_schema_from_db(self, schema):
+    def set_schema_from_lago(self, schema):
         """
-        Set the schema by querying the organization table in the public schema.
-        Returns True if the schema exists, False otherwise.
+        Check customer status via Lago API.
+        Returns customer data with is_active status if the customer exists, False otherwise.
         """
+        if not self.lago_api_key:
+            logger.error("Lago API key not configured")
+            return False
+
         try:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM public.tenant_tenant WHERE schema = %s", [schema])
-                if row := cursor.fetchone():
-                    set_schema(schema)
-                    col_names = [desc[0] for desc in cursor.description]
-                    return dict(zip(col_names, row))
-                logger.warning(f"Schema {schema} not found in organization table")
+            # Fetch customer from Lago
+            headers = {"Authorization": f"Bearer {self.lago_api_key}"}
+            response = requests.get(f"{self.lago_api_url}/api/v1/customers/{schema}", headers=headers)
+            
+            if response.status_code == 404:
+                logger.warning(f"Customer {schema} not found in Lago")
                 return False
-        except Exception as e:
-            logger.error(f"Error querying organization table for schema {schema}: {e}")
+            
+            response.raise_for_status()
+            customer_data = response.json().get('customer', {})
+
+            # Check subscriptions for active status
+            is_active = any(
+                sub.get('status') == 'active' and not sub.get('terminated_at')
+                for sub in customer_data.get('subscriptions', [])
+            )
+
+            # Prepare row data
+            row = {
+                'external_id': customer_data.get('external_id'),
+                'is_active': is_active,
+                'lago_id': customer_data.get('lago_id'),
+                'name': customer_data.get('name'),
+                'created_at': customer_data.get('created_at'),
+                'schema': schema
+            }
+            return row
+
+        except requests.RequestException as e:
+            logger.error(f"Error querying Lago API for schema {schema}: {e}")
             return False
 
     def redirect_to_default(self):
@@ -104,4 +125,4 @@ class TenantMiddleware:
     @staticmethod 
     def get_tenant():
         schema = TenantMiddleware.get_schema()
-        return cache.get(f"tenant_schema_{schema}", {})
+        return cache.get(f"tenant_{schema}", {})
