@@ -1,5 +1,6 @@
+from .create_tenant import CreateTenantCommand
 from .utils import generate_random_password
-from .command import CreateTenantCommand
+
 from .schema import SchemaManager
 from .email import EmailService
 from .lago import LagoClient
