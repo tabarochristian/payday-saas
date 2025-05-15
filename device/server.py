@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 import redis.asyncio as aioredis
+from redis.asyncio import Redis
 import uvicorn
 
 from fastapi import Depends, FastAPI, HTTPException, Path, WebSocket, WebSocketDisconnect
@@ -136,7 +137,7 @@ async def push_command(
         cmd: Command,
         bg: BackgroundTasks,
         sn: str = Path(...),
-        redis_conn: Redis = Depends(get_redis),
+        redis_conn: Redis = Depends(get_redis),  # ✅ now this works
     ) -> dict:
     """
     Forward a command to a connected device. If offline, queue it in Redis.
