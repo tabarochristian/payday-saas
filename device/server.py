@@ -133,8 +133,8 @@ async def ws_device_endpoint(sock: WebSocket,
 # --------------------------------------------------------------------------- #
 @app.post("/api/device/{sn}/command", status_code=202)
 async def push_command(sn: str = Path(..., description="Device serial-number"),
-                       cmd: Command = Depends(),
-                       bg: BackgroundTasks = Depends(),
+                       cmd: Command,
+                       bg: BackgroundTasks,
                        redis_conn: aioredis.Redis = Depends(get_redis)) -> dict:
     """
     Forward a command to a connected device. If offline, queue it in Redis.
