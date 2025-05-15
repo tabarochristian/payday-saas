@@ -119,5 +119,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Created superuser "{email}" for schema "{schema}"'))
 
             email_service.send_welcome_email(schema, user, password, name, plan)
-            email_service.send_password_reset_email(schema, user)
             self.stdout.write(self.style.SUCCESS(f'Sent welcome and password reset emails to "{email}"'))

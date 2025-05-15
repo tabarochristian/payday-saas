@@ -1,6 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.core.cache import cache
+from core.utils import set_schema
 from django.conf import settings
+
 import threading
 import requests
 import logging
@@ -37,6 +39,8 @@ class TenantMiddleware:
 
         request.tenant = row
         thread.schema = schema
+        
+        set_schema(schema)
         return self.get_response(request)
 
     def extract_schema_from_host(self, host):
