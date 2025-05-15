@@ -4,7 +4,8 @@ from django.urls import reverse_lazy
 from django.apps import apps
 
 TARGET_APPS = ["employee", "payroll"]
-EXCLUDED_MODELS = {"child", "device", "document", "education", "itempaid", "paidemployee", "specialemployeeitem"}
+EXCLUDED_MODELS = {"child", "device", "document", "education", 
+"itempaid", "paidemployee", "specialemployeeitem", "advancesalarypayment"}
 
 def base(request):
     if not request.user.is_authenticated: return {}
