@@ -1,4 +1,4 @@
-uvicorn[standard]
+"uvicorn[standard]"
 python-dotenv
 pydantic
 aioredis
