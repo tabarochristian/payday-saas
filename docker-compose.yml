@@ -294,6 +294,8 @@ services:
     image: minimalcompact/thumbor:6.7.5
     container_name: payday-thumbor
     restart: unless-stopped
+    ports:
+      - "8888:8888"
     environment:
       - THUMBOR_LOG_LEVEL=DEBUG
       - THUMBOR_SECURITY_KEY=MY_SECURE_KEY
