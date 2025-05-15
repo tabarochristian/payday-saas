@@ -1,22 +1,34 @@
 from django.utils.translation import gettext as _
 from core.models import Menu, ActionRequired
 from django.urls import reverse_lazy
+from django.apps import apps
+
+TARGET_APPS = ["employee", "payroll"]
+EXCLUDED_MODELS = {"child", "device", "document", "education", "itempaid", "paidemployee", "specialemployeeitem"}
 
 def base(request):
     if not request.user.is_authenticated: return {}
-    modules = Menu.objects.filter().order_by('created_at')
+
+    apps = {
+        app: [model for model in app.get_models() if model._meta.model_name not in EXCLUDED_MODELS]
+        for app in apps.get_app_configs() if app.label in TARGET_APPS
+    }
     
     menu = [{
         'class': 'active',
-        'title': module.name,
-        'href': f'#{module.name}',
-        'icon': f'bi-{module.icon}',
-        'children': [{
-            'title': child.name,
-            'href': reverse_lazy('core:list', kwargs={'app': child.app_label, 'model': child.model}),
-            'permission': f'{child.app_label}.view_{child.model}'
-        } for child in module.children.all() if request.user.has_perm(f'{child.app_label}.view_{child.model}')]
-    } for module in modules]
+        'href': f'#{app.label}',
+        'title': app.verbose_name,
+        # 'icon': f'bi-{getattr(app, "icon", "default-icon")}',  # Ensure safe reference
+        'children': [
+            {
+                'title': model._meta.verbose_name,
+                'permission': f'{app.label}.view_{model._meta.model_name}',
+                'href': reverse_lazy('core:list', kwargs={'app': app.label, 'model': model._meta.model_name})
+            }
+            for model in apps_models[app] if request.user.has_perm(f'{app.label}.view_{model._meta.model_name}')
+        ]
+    }
+    for app in apps_models.keys()]
     
     menu.insert(0, dict({
         'title': _('Tableau de bord'),
@@ -50,12 +62,13 @@ def base(request):
         'href': '#',
         'icon': 'bi-gear-fill',
         'description': _('Paramètres de votre organisation.'),
-        'children': [item for item in [{
-            'title': _('Menus'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'menu'}),
-            'permission': 'core.view_menu',
-            'description': _('Faite la disposition de vos menus.')
-        }, 
+        'children': [item for item in [
+        #{
+        #    'title': _('Menus'),
+        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'menu'}),
+        #    'permission': 'core.view_menu',
+        #    'description': _('Faite la disposition de vos menus.')
+        #}, 
         {
             'title': _('Importeur'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'importer'}),
@@ -89,6 +102,11 @@ def base(request):
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'group'}),
             'permission': 'auth.view_group',
             'description': _('Gérez les roles de votre organisation.')
+        }, {
+            'title': _('Terminaux'),
+            'href': reverse_lazy('core:list', kwargs={'app': 'employee', 'model': 'device'}),
+            'description': _('Gérez vos terminaux de presence'),
+            'permission': 'employee.view_device',
         }, 
         #{
         #    'title': _('Job'),
