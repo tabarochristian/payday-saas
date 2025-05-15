@@ -154,35 +154,6 @@ services:
     networks:
       - traefik-net
 
-  device:
-    container_name: payday-device
-    build:
-      context: .
-      dockerfile: device/Dockerfile
-    restart: unless-stopped
-    command: sh -c "uvicorn server:app --host 0.0.0.0 --port 7788"
-    volumes:
-      - ./device:/app
-    depends_on:
-      - pgbouncer
-      - redis
-    env_file:
-      - saas.env
-    healthcheck:
-      test: ["CMD", "true"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.saas.priority=999"
-      - "traefik.http.routers.saas.service=device"
-      - "traefik.http.routers.saas.entrypoints=web"
-      - "traefik.http.services.saas.loadbalancer.server.port=7788"
-      - "traefik.http.routers.saas.rule=HostRegexp(`[a-z]+\\.device.payday\\.cd`)"
-    networks:
-      - traefik-net
-
   celery:
     container_name: payday-celery
     build:
