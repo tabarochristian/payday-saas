@@ -132,10 +132,12 @@ async def ws_device_endpoint(sock: WebSocket,
 #  HTTP – backend issues command to device
 # --------------------------------------------------------------------------- #
 @app.post("/api/device/{sn}/command", status_code=202)
-async def push_command(sn: str = Path(..., description="Device serial-number"),
-                       cmd: Command,
-                       bg: BackgroundTasks,
-                       redis_conn: aioredis.Redis = Depends(get_redis)) -> dict:
+async def push_command(
+        cmd: Command,                               # ✅ first: no default
+        sn: str = Path(..., description="Device serial-number"),
+        bg: BackgroundTasks,                        # ✅ special FastAPI injection
+        redis_conn: Redis = Depends(get_redis)      # ✅ default via Depends
+    ) -> dict:
     """
     Forward a command to a connected device. If offline, queue it in Redis.
     """
