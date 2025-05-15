@@ -16,6 +16,7 @@ from fastapi import Depends, FastAPI, HTTPException, Path, WebSocket, WebSocketD
 from fastapi.background import BackgroundTasks
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
+from typing import Literal
 
 from tasks import save_message_to_db  # Celery task
 
@@ -50,7 +51,7 @@ async def _shutdown() -> None:
 #  Data models
 # --------------------------------------------------------------------------- #
 class DeviceRegistration(BaseModel):
-    cmd: str = Field("reg", const=True)
+    cmd: str = Literal["reg"]
     sn: str
 
 class GenericFrame(BaseModel):
