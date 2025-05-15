@@ -9,7 +9,9 @@ import asyncio, json, logging, os
 from datetime import datetime
 from typing import Dict, Any
 
-import aioredis, uvicorn
+import redis.asyncio as aioredis
+import uvicorn
+
 from fastapi import Depends, FastAPI, HTTPException, Path, WebSocket, WebSocketDisconnect
 from fastapi.background import BackgroundTasks
 from pydantic import BaseModel, Field
@@ -36,7 +38,7 @@ async def get_redis() -> aioredis.Redis:
 @app.on_event("startup")
 async def _startup() -> None:
     global redis
-    redis = await aioredis.from_url(REDIS_URL, decode_responses=True)
+    redis = aioredis.from_url(REDIS_URL, decode_responses=True)
     logger.info("✅ Redis connected → %s", REDIS_URL)
 
 @app.on_event("shutdown")

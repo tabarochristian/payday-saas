@@ -1,7 +1,7 @@
 uvicorn[standard]
 python-dotenv
+redis[async]
 pydantic
-aioredis
 asyncpg
 fastapi
 celery
