@@ -168,7 +168,7 @@
          <div id="dialog" class="modal-dialog" hx-target="this"></div>
       </div>
 
-      {% if not self.DEBUG %}<!--Start of Tawk.to Script-->
+      {% comment %}{% if not self.DEBUG %}<!--Start of Tawk.to Script-->
       <script type="text/javascript">
          var Tawk_API = Tawk_API || {};
          var Tawk_LoadStart = new Date();
@@ -186,8 +186,7 @@
          })();
       </script>
       <!--End of Tawk.to Script-->
-      {% endif %}
-      
+      {% endif %}{% endcomment %}
    </body>
 
    <script>
