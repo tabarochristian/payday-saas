@@ -9,7 +9,7 @@ EXCLUDED_MODELS = {"child", "device", "document", "education", "itempaid", "paid
 def base(request):
     if not request.user.is_authenticated: return {}
 
-    apps = {
+    apps_models = {
         app: [model for model in app.get_models() if model._meta.model_name not in EXCLUDED_MODELS]
         for app in apps.get_app_configs() if app.label in TARGET_APPS
     }
