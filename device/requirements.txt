@@ -1,7 +1,0 @@
-uvicorn[standard]
-python-dotenv
-redis[async]
-pydantic
-asyncpg
-fastapi
-celery
