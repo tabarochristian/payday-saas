@@ -2,6 +2,7 @@ from django.utils.timezone import now
 from device.models import Device, Log
 from django.core.cache import cache
 from core.utils import set_schema
+from django.db import connection
 from celery import shared_task
 import logging
 
@@ -44,28 +45,38 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
 
         # Process Bulk Logs from `sendlog`
         elif cmd == "sendlog":
-            log_index = data.get("logindex", now())
             records = data.get("record", [])
+            if not records: return
 
-            records = [
-                Log(
-                    sn=sn,
-                    enroll_id=record.get("enrollid"),
-                    timestamp=record.get("time"),
-                    mode=record.get("mode"),
+            # Dynamically fetch the table name from the Django model
+            table_name = Log._meta.db_table  
 
-                    in_out=record.get("inout"),
-                    event=record.get("event"),
-                    
-                    temperature=record.get("temp"),
-                    verify_mode=record.get("verifymode")
+            # Prepare SQL insert statement with conflict handling
+            sql = f"""
+                INSERT INTO {schema}.{table_name} (sn, timestamp, enroll_id, in_out, mode, event, temperature, verify_mode)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (sn, timestamp, enroll_id, in_out) DO NOTHING;
+            """
+
+            values = [
+                (
+                    sn,
+                    record.get("time"),
+                    record.get("enrollid"),
+                    record.get("inout"),
+                    record.get("mode"),
+                    record.get("event"),
+                    record.get("temp"),
+                    record.get("verifymode"),
                 )
                 for record in records
             ]
 
-            if not records: return
-            Log.objects.bulk_create(records, ignore_conflicts=True)
-            logger.info(f"{len(records)} logs created for device {sn}.")
+            # Execute bulk insert with raw SQL
+            with connection.cursor() as cursor:
+                cursor.executemany(sql, values)
+
+            logger.info(f"{len(values)} logs inserted for device {sn}, skipping duplicates.")
 
     except Exception as e:
         logger.error(f"Error processing data for device {sn}: {e}", exc_info=True)
