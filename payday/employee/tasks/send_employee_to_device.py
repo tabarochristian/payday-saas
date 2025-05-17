@@ -29,7 +29,7 @@ def face_detection_crop_using_thumbor_to_base64(image_url, host="thumbor", port=
     return fetch_image_as_base64(thumbor_url)
 
 @shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=5, max_retries=3)
-def send_employee_to_device(schema, pk):
+def send_employee_to_device(self, schema, pk):
     """Sends employee data to a device with error handling and Celery retries."""
     set_schema(schema)
     employee = get_object_or_404(Employee, pk=pk)
