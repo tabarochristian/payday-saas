@@ -60,14 +60,14 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
                 logger.info(f"📭 No log records to insert for device {sn}")
                 return
 
+            """
             table_name = Log._meta.db_table
-
-            sql = f"""
+            sql = f
                 INSERT INTO {schema}.{table_name}
                     (sn, timestamp, enroll_id, in_out, mode, event, temperature, verify_mode)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (sn, timestamp, enroll_id, in_out) DO NOTHING;
-            """
+            
 
             values = [(
                 sn,
@@ -79,9 +79,10 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
                 record.get("temp"),
                 record.get("verifymode"),
             ) for record in records]
+            """
 
-            with connection.cursor() as cursor:
-                cursor.executemany(sql, values)
+            values = [Log(sn=sn, **record) for record in records]
+            Log.objects.bulk_create(values, ignore_conflicts=True)
 
             logger.info(f"📦 Inserted {len(values)} logs for device {sn}, skipped duplicates.")
 
