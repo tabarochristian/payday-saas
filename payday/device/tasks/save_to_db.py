@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 @shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=5, max_retries=3)
-def save_message_to_db(self, schema: str, sn: str, data: dict) -> None:
+def save_to_db(self, schema: str, sn: str, data: dict) -> None:
     """
     Saves device messages to the database with bulk creation and update logic.
 

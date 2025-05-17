@@ -71,11 +71,6 @@ class PubChat(WebsocketConsumer):
 
         except Exception as e:
             logger.exception(f"❌ Error processing message: {e}")
-            error_data = {"ret": "error", "result": False, "message": str(e)}
-            try:
-                self.send(text_data=json.dumps(error_data))
-            except Exception as send_error:
-                logger.warning(f"❌ Could not send error response: {send_error}")
 
     def send_command(self, event):
         message = event.get("message")
