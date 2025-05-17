@@ -1,5 +1,6 @@
 from django.utils.timezone import now
 from device.models import Device, Log
+from django.core.cache import cache
 from core.utils import set_schema
 from celery import shared_task
 import logging
@@ -20,6 +21,11 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
         None
     """
     try:
+        # make sure the schema exist
+        key = f"tenant_{schema.lower()}"
+        row = cache.get(key)
+        if not row: return
+
         set_schema(schema)
         cmd = data.get("cmd")
 
