@@ -26,6 +26,7 @@ class Log(Base):
     image = models.TextField(_("Punch Image"), blank=True, null=True)  # Base64 encoded image
     
     class Meta:
+        unique_together = ("sn", "timestamp", "enroll_id", "in_out")
         verbose_name_plural = _("Logs")
         verbose_name = _("Log")
         indexes = [
