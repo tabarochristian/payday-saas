@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)  # Configure logging
 redis_conn = get_redis_connection("default")  # Redis connection
 
 @shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=5, max_retries=3)
-def send_to_device(schema, sn: str, payload: dict):
+def send_to_device(self, schema, sn: str, payload: dict):
     """
     Sends a command to the WebSocket group corresponding to a device.
 
