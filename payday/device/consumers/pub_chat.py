@@ -67,8 +67,8 @@ class PubChat(WebsocketConsumer):
             if not cmd or not sn:
                 raise ValueError("Missing 'cmd' or 'sn' in message")
 
-            if cmd not in {"reg", "other_command"}:  # Add valid commands here
-                raise ValueError(f"Invalid command: {cmd}")
+            # if cmd not in {"reg", "other_command"}:  # Add valid commands here
+            #     raise ValueError(f"Invalid command: {cmd}")
 
             if not self.sn:
                 self.sn = sn
