@@ -292,6 +292,7 @@ services:
 
   thumbor:
     image: minimalcompact/thumbor
+    
     container_name: payday-thumbor
     restart: unless-stopped
     ports:
