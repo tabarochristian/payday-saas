@@ -105,9 +105,9 @@ def base(request):
             'description': _('Gérez les roles de votre organisation.')
         }, {
             'title': _('Terminaux'),
-            'href': reverse_lazy('core:list', kwargs={'app': 'employee', 'model': 'device'}),
+            'href': reverse_lazy('core:list', kwargs={'app': 'device', 'model': 'device'}),
             'description': _('Gérez vos terminaux de presence'),
-            'permission': 'employee.view_device',
+            'permission': 'device.view_device',
         }, 
         #{
         #    'title': _('Job'),

@@ -69,8 +69,10 @@ INSTALLED_APPS = [
     "notifications",
     "api",
     "core",
-    "employee",
-    "payroll"
+    "device",
+    
+    "payroll",
+    "employee"
 ]
 
 MIDDLEWARE = [
@@ -144,8 +146,8 @@ REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
 REDIS_PORT = os.getenv('REDIS_PORT', 6379)
 
 # Cache settings default memory and redis cache
-CACHE_BACKEND = os.getenv('CACHE_BACKEND', 'django.core.cache.backends.locmem.LocMemCache')
-CACHE_LOCATION = os.getenv('CACHE_LOCATION',  'unique-snowflake')
+CACHE_BACKEND = os.getenv('CACHE_BACKEND', 'django_redis.cache.RedisCache')
+CACHE_LOCATION = os.getenv('CACHE_LOCATION',  'redis://127.0.0.1:6379/1')
 
 CACHES = {
     "default": {

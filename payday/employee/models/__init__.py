@@ -1,5 +1,3 @@
-from .device import Device
-
 from .grade import Grade
 from .status import Status
 from .branch import Branch

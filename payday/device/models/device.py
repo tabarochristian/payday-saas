@@ -15,7 +15,7 @@ class Device(Base):
     Represents a connected device.
     """
     status = fields.CharField(_("Status"), max_length=255, choices=DeviceStatus.choices, default=DeviceStatus.DISCONNECTED, editable=False)
-    branch = fields.ModelSelectField('employee.branch', verbose_name=_("site"), blank=True, null=True)
+    # branch = fields.ModelSelectField('employee.branch', verbose_name=_("site"), blank=True, null=True)
     sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, blank=False, null=False)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)
 

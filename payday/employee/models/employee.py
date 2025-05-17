@@ -43,7 +43,7 @@ class Employee(BaseEmployee):
     )
 
     devices = fields.ModelSelect2Multiple(
-        'employee.device',
+        'device.device',
         verbose_name=_('terminaux'),
         help_text=_('Veuillez choisir les terminaux de présence que l\'agent utilisera pour pointer.'),
         blank=True

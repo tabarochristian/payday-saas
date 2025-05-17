@@ -1,3 +1,2 @@
-from .employee import Employee
 from .print import EmployeePrint
-from .device import DeviceAPIView
+from .employee import Employee

@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.db import models
 
 class Attendance(Base):
-    device = fields.ModelSelectField('employee.Device', verbose_name=_('dispositif'), blank=True, null=True, on_delete=models.SET_NULL)
+    device = fields.ModelSelectField('device.Device', verbose_name=_('dispositif'), blank=True, null=True, on_delete=models.SET_NULL)
     employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employé'))
     checked_at = fields.DateTimeField(verbose_name=_('vérifié à'))
 

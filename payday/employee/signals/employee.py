@@ -4,7 +4,6 @@ from django.dispatch import receiver
 from employee.models import Employee
 
 from core.middleware import TenantMiddleware
-from employee.tasks import setuserinfo
 from core.models import Preference
 from django.conf import settings
 from employee.tasks import *
