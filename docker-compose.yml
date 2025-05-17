@@ -291,15 +291,16 @@ services:
       - traefik-net
 
   thumbor:
-    image: minimalcompact/thumbor:6.7.5
+    image: ghcr.io/minimalcompact/thumbor
     container_name: payday-thumbor
     restart: unless-stopped
     ports:
       - "8888:8888"
     environment:
       - THUMBOR_LOG_LEVEL=DEBUG
+      - THUMBOR_NUM_PROCESSES = 8
       - THUMBOR_SECURITY_KEY=MY_SECURE_KEY
-      - THUMBOR_DETECTORS=thumbor.detectors.face_detector,thumbor.detectors.feature_detector
+      - THUMBOR_DETECTORS=['thumbor.detectors.face_detector', 'thumbor.detectors.feature_detector']
       - THUMBOR_FACE_DETECTOR_CASCADE_FILE=/usr/local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml
     healthcheck:
       test: ["CMD", "true"]
