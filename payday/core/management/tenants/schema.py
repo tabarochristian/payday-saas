@@ -53,14 +53,15 @@ class SchemaManager:
         """
         from core.utils import set_schema
         set_schema(schema)
+        
         username = email.split('@')[0]
         user = User.objects.create_superuser(
-            email=email,
-            # username=username,
-            password=password,
             is_active=True,
-            is_staff=True
+            is_staff=True,
+            email=email
         )
+        user.set_password(password)
+        user.save()
         return user
 
     def is_schema_unique(self, schema: str) -> bool:
