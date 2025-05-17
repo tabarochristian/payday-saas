@@ -1,4 +1,5 @@
 from django.utils.translation import gettext as _
+from django.db.models import UniqueConstraint
 from core.models import fields, Base
 from django.db import models
 import json
@@ -31,4 +32,7 @@ class Log(Base):
         verbose_name = _("Log")
         indexes = [
             models.Index(fields=["sn", "timestamp"])
+        ]
+        constraints = [
+            UniqueConstraint(fields=["sn", "timestamp", "enroll_id", "in_out"], name="unique_attendance_log")
         ]
