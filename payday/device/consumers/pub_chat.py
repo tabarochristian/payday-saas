@@ -15,7 +15,6 @@ logger = logging.getLogger("gateway")
 channel_layer = get_channel_layer()
 redis_cache = caches[settings.DEFAULT_CACHE_ALIAS or 'default']  # Configurable cache alias
 
-
 class PubChat(WebsocketConsumer):
     """WebSocket consumer for handling device communication with tenant-based schema."""
 
@@ -43,7 +42,8 @@ class PubChat(WebsocketConsumer):
 
         try:
             async_to_sync(channel_layer.group_discard)(f"device_{self.sn}", self.channel_name)
-            redis_cache.delete(f"active_device:{self.sn}")
+            redis_client = redis_cache.client.get_client()
+            redis_client.srem("active_devices", self.sn)  # Remove from active devices set
             save_to_db.delay(self.schema, self.sn, {"sn": self.sn, "cmd": "unreg"})
             logger.info(f"🔴 Device disconnected: {self.sn}")
         except Exception as e:
@@ -51,7 +51,11 @@ class PubChat(WebsocketConsumer):
 
     def _schema_exists(self) -> bool:
         """Check if the tenant schema exists in Redis."""
-        return bool(redis_cache.get(f"tenant_{self.schema.lower()}"))
+        try:
+            return bool(redis_cache.get(f"tenant_{self.schema.lower()}"))
+        except Exception as e:
+            logger.error(f"❌ Redis error checking schema {self.schema}: {e}")
+            return False
 
     def receive(self, text_data: Optional[str] = None, bytes_data: Optional[bytes] = None) -> None:
         """Handle incoming WebSocket messages."""
@@ -66,9 +70,6 @@ class PubChat(WebsocketConsumer):
 
             if not cmd or not sn:
                 raise ValueError("Missing 'cmd' or 'sn' in message")
-
-            # if cmd not in {"reg", "other_command"}:  # Add valid commands here
-            #     raise ValueError(f"Invalid command: {cmd}")
 
             if not self.sn:
                 self.sn = sn
@@ -115,7 +116,8 @@ class PubChat(WebsocketConsumer):
     def _register_device(self, sn: str) -> None:
         """Register a device in Redis."""
         try:
-            redis_cache.set(f"active_device:{sn}", True, timeout=None)
+            redis_client = redis_cache.client.get_client()
+            redis_client.sadd("active_devices", sn)  # Add to active devices set
             logger.info(f"🟢 Device registered: {sn}")
         except Exception as e:
             logger.error(f"❌ Failed to register device {sn}: {e}")
@@ -125,16 +127,13 @@ class PubChat(WebsocketConsumer):
         """Send queued commands to the device and clear the queue."""
         key = f"queue:{self.sn}"
         try:
-            messages = redis_cache.get(key) or []
-            if not isinstance(messages, list):
-                logger.warning(f"⚠️ Invalid queue data for {self.sn}; resetting.")
-                messages = []
-
+            redis_client = redis_cache.client.get_client()
+            messages = redis_client.lrange(key, 0, -1)  # Get all queued messages
             if not messages:
                 return
 
             logger.info(f"📤 Flushing {len(messages)} queued commands for {self.sn}")
-            with redis_cache.client.pipeline() as pipe:  # Use Redis pipeline
+            with redis_client.pipeline() as pipe:
                 for msg in messages:
                     self.send(text_data=msg)
                 pipe.delete(key)
