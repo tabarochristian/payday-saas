@@ -62,8 +62,15 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
 
             values = [Log(
                 sn=sn,
+                _metadata=record,
                 enroll_id=record.get("enrollid"),
-                **{k: v for k, v in record.items() if k != "enrollid"},
+                timestamp=record.get("time"),
+                in_out=record.get("inout"),
+                mode=record.get("mode"),
+                event=record.get("event"),
+                temperature=record.get("temp"),
+                verify_mode=record.get("verifymode")
+                **{k: v for k, v in record.items()},
             ) for record in records]
             Log.objects.bulk_create(values, ignore_conflicts=True)
 
