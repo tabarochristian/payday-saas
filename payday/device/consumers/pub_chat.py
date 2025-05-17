@@ -129,8 +129,7 @@ class PubChat(WebsocketConsumer):
             redis_client = redis_cache.client.get_client()
             messages = redis_client.lrange(key, 0, -1)  # Get all queued messages
             if not messages:
-                print(messages)
-                logger.info(f"📤 Flushing {len(messages)} queued commands for {self.sn} empty")
+                logger.info(str(messages))
                 return
 
             logger.info(f"📤 Flushing {len(messages)} queued commands for {self.sn}")
