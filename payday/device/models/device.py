@@ -5,16 +5,16 @@ from core.models import fields, Base
 from django.db import models
 import json
 
-class DeviceStatus(models.TextChoices):
-    DISCONNECTED = "disconnected", _("Disconnected")
-    CONNECTED = "connected", _("Connected")
+#class DeviceStatus(models.TextChoices):
+#    DISCONNECTED = "disconnected", _("Disconnected")
+#    CONNECTED = "connected", _("Connected")
     
     
 class Device(Base):
     """
     Represents a connected device.
     """
-    status = fields.CharField(_("Status"), max_length=255, choices=DeviceStatus.choices, default=DeviceStatus.DISCONNECTED, editable=False)
+    status = fields.CharField(_("Status"), max_length=255, default='disconnected', editable=False)
     # branch = fields.ModelSelectField('employee.branch', verbose_name=_("site"), blank=True, null=True)
     sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, blank=False, null=False)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)

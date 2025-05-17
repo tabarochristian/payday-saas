@@ -36,7 +36,7 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
         # Register Device
         if cmd in ["reg", "unreg"]:
             status_map = {"reg": "connected", "unreg": "disconnected"}
-            status = status_map.get(data.get(cmd, ""), "disconnected")
+            status = status_map.get(data.get(cmd, cmd), "disconnected")
 
             _defaults = {"status": status, "name": data.get("sn", sn)}
             device, created = Device.objects.update_or_create(sn=sn, defaults=_defaults)
