@@ -13,9 +13,9 @@ _thread_locals = threading.local()
 
 @receiver(post_save, sender=Employee)
 def employee_created(sender, instance, created, **kwargs):
-    if Preference.get('CREATE_USER_ON_EMPLOYEE', True) and instance.email:
+    if instance.create_user_on_save and instance.email:
         user = instance.create_user()
     
-    schema = getattr(_thread_locals, "schema", None)
+    schema = TenantMiddleware.get_schema()
     if instance.photo == None or schema == None: return
     send_employee_to_device.delay(schema, instance.pk)
