@@ -5,6 +5,7 @@ from core.utils import set_schema
 from django.db import connection
 from celery import shared_task
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -22,62 +23,68 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
         None
     """
     try:
-        # make sure the schema exist
+        # Validate schema name to prevent SQL injection
+        if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", schema):
+            logger.error(f"🚫 Invalid schema name: '{schema}'")
+            return
+
         key = f"tenant_{schema.lower()}"
-        row = cache.get(key)
-        if not row: return
+        tenant = cache.get(key)
+        if not tenant:
+            logger.warning(f"⛔ Tenant schema '{schema}' not found in cache.")
+            return
 
         set_schema(schema)
         cmd = data.get("cmd")
-
         if not cmd:
-            logger.warning(f"Missing 'cmd' key in data: {data}")
+            logger.warning(f"⚠️ Missing 'cmd' in data: {data}")
             return
 
-        # Register Device
+        # Register or unregister device
         if cmd in ["reg", "unreg"]:
             status_map = {"reg": "connected", "unreg": "disconnected"}
-            status = status_map.get(data.get(cmd, cmd), "disconnected")
+            status = status_map.get(cmd, "disconnected")
 
-            _defaults = {"status": status, "name": data.get("sn", sn)}
+            _defaults = {
+                "status": status,
+                "name": data.get("sn", sn),
+            }
+
             device, created = Device.objects.update_or_create(sn=sn, defaults=_defaults)
-            logger.info(f"Device {sn} {'created' if created else 'updated'} with status '{status}'.")
+            logger.info(f"✅ Device '{sn}' {'created' if created else 'updated'} with status '{status}'.")
 
-        # Process Bulk Logs from `sendlog`
+        # Bulk log insert
         elif cmd == "sendlog":
             records = data.get("record", [])
-            if not records: return
+            if not records:
+                logger.info(f"📭 No log records to insert for device {sn}")
+                return
 
-            # Dynamically fetch the table name from the Django model
-            table_name = Log._meta.db_table  
+            table_name = Log._meta.db_table
 
-            # Prepare SQL insert statement with conflict handling
             sql = f"""
-                INSERT INTO {schema}.{table_name} (sn, timestamp, enroll_id, in_out, mode, event, temperature, verify_mode)
+                INSERT INTO {schema}.{table_name}
+                    (sn, timestamp, enroll_id, in_out, mode, event, temperature, verify_mode)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (sn, timestamp, enroll_id, in_out) DO NOTHING;
             """
 
-            values = [
-                (
-                    sn,
-                    record.get("time"),
-                    record.get("enrollid"),
-                    record.get("inout"),
-                    record.get("mode"),
-                    record.get("event"),
-                    record.get("temp"),
-                    record.get("verifymode"),
-                )
-                for record in records
-            ]
+            values = [(
+                sn,
+                record.get("time"),  # Ensure this is a UTC or naive UTC timestamp
+                record.get("enrollid"),
+                record.get("inout"),
+                record.get("mode"),
+                record.get("event"),
+                record.get("temp"),
+                record.get("verifymode"),
+            ) for record in records]
 
-            # Execute bulk insert with raw SQL
             with connection.cursor() as cursor:
                 cursor.executemany(sql, values)
 
-            logger.info(f"{len(values)} logs inserted for device {sn}, skipping duplicates.")
+            logger.info(f"📦 Inserted {len(values)} logs for device {sn}, skipped duplicates.")
 
     except Exception as e:
-        logger.error(f"Error processing data for device {sn}: {e}", exc_info=True)
+        logger.error(f"💥 Error processing data for device '{sn}' in schema '{schema}': {e}", exc_info=True)
         raise
