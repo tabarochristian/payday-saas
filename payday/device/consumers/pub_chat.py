@@ -89,7 +89,6 @@ class PubChat(WebsocketConsumer):
                 "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
             }
             self.send(text_data=json.dumps(ack))
-
             save_to_db.delay(self.schema, sn, data)
 
         except json.JSONDecodeError as e:
@@ -130,6 +129,8 @@ class PubChat(WebsocketConsumer):
             redis_client = redis_cache.client.get_client()
             messages = redis_client.lrange(key, 0, -1)  # Get all queued messages
             if not messages:
+                print(messages)
+                logger.info(f"📤 Flushing {len(messages)} queued commands for {self.sn} empty")
                 return
 
             logger.info(f"📤 Flushing {len(messages)} queued commands for {self.sn}")
