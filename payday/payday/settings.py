@@ -150,9 +150,18 @@ CACHE_LOCATION = os.getenv('CACHE_LOCATION',  'unique-snowflake')
 CACHES = {
     "default": {
         "LOCATION": CACHE_LOCATION,
-        "BACKEND": CACHE_BACKEND,
+        "BACKEND": CACHE_BACKEND
     }
 }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": dict()
+    }
+}
+
+CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(REDIS_URL)]
 
 # Default user model and authentication
 LOGIN_URL = os.getenv("LOGIN_URL", 'login')

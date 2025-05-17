@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from device.tasks import send_to_device
 from employee.models import Employee
 from core.utils import set_schema
 import base64, logging, requests
@@ -27,15 +28,6 @@ def face_detection_crop_using_thumbor_to_base64(image_url, host="thumbor", port=
     thumbor_url = generate_thumbor_url(image_url, host, port, width, height)
     return fetch_image_as_base64(thumbor_url)
 
-def send_command(payload, host="device", port=7788):
-    """Sends a command to a device with retry handling."""
-    try:
-        response = requests.post(f"http://{host}:{port}/send-command", json=payload)
-        response.raise_for_status()
-    except requests.RequestException as e:
-        logger.error(f"Failed to send data to device {payload.get('sn')}: {e}")
-        raise e
-
 @shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=5, max_retries=3)
 def send_employee_to_device(schema, pk):
     """Sends employee data to a device with error handling and Celery retries."""
@@ -56,12 +48,16 @@ def send_employee_to_device(schema, pk):
     devices = employee.devices.all()
     if not devices: return
 
-    for device in devices:
-        send_command({
+    sent_to_devices = [
+        send_to_device(schema, device.sn, {
             "enrollid": int(employee.registration_number),
             "record": faced_cropped_base_64,
             "name": employee.full_name,
             "cmd": "setuserinfo",
             "sn": device.sn,
             "backupnum": 50
-        })  # Asynchronous task execution with Celery
+        }) 
+        for device in devices
+    ]
+
+    return sent_to_devices

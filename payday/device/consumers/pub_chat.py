@@ -1,84 +1,129 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
-import json, logging
 from datetime import datetime
-from .tasks import save_message_to_db
-from .redis_pool import redis  # ✅ import shared Redis
+import logging
+import json
+
+from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.core.cache import caches
+from device.tasks import save_to_db
 
 logger = logging.getLogger("gateway")
+channel_layer = get_channel_layer()
+redis_cache = caches["default"]  # Sync Redis backend
 
-class PubChat(AsyncWebsocketConsumer):
-    async def connect(self):
-        await self.accept()
-        self.redis = redis  # ✅ reuse connection pool
-        self.sn = None  # Initialize sn
 
-    async def disconnect(self, close_code):
+class PubChat(WebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.schema = "public"
+        self.sn = None
+
+    def connect(self):
+        self.accept()
+        logger.info("🔌 New WebSocket connection established.")
+
+    def disconnect(self, close_code):
         if not self.sn:
             return
 
-        # Remove from Channels group
-        await self.channel_layer.group_discard(f"device_{self.sn}", self.channel_name)
-        
-        # Remove device SN from Redis set of active devices
         try:
-            await self.redis.srem("active_devices", self.sn)
-            logger.info(f"🔴 Device disconnected and removed from active list: {self.sn}")
+            async_to_sync(channel_layer.group_discard)(f"device_{self.sn}", self.channel_name)
         except Exception as e:
-            logger.warning(f"❌ Failed to remove device from active list: {e}")
+            logger.warning(f"❌ Failed to discard from group {self.sn}: {e}")
 
-    async def receive(self, text_data=None, bytes_data=None):
+        try:
+            redis_cache.delete(f"active_device:{self.sn}")
+            save_to_db.delay(self.schema, self.sn, {
+                "sn": self.sn,
+                "cmd": "unreg"
+            })
+            logger.info(f"🔴 Device disconnected: {self.sn}")
+        except Exception as e:
+            logger.error(f"❌ Failed to remove device from Redis: {e}")
+
+    def receive(self, text_data=None, bytes_data=None):
         try:
             data = json.loads(text_data)
             cmd = data.get("cmd")
             sn = data.get("sn")
 
             if not cmd or not sn:
-                logger.warning(f"❌ Failed to process frame: {e}")
-                raise Exception("unknow message")
+                raise ValueError("Missing 'cmd' or 'sn' in message")
 
-            if cmd == "reg" and sn:
-                self.sn = sn
+            self.schema = self._schema_from_host()
+            self.sn = sn
 
-                # Add device SN to Redis set of active devices
-                try:
-                    await self.redis.sadd("active_devices", sn)
-                    logger.info(f"🟢 Device added to active list: {sn}")
-                except Exception as e:
-                    logger.warning(f"❌ Failed to add device to active list: {e}")
-
-                await self.channel_layer.group_add(f"device_{sn}", self.channel_name)
-                logger.info(f"🟢 Device registered: {sn}")
-                await self._flush_queued_commands()
+            if cmd == "reg":
+                self._register_device(sn)
+                add_to_group = async_to_sync(channel_layer.group_add)
+                add_to_group(f"device_{sn}", self.channel_name)
+                self._flush_queued_commands()
 
             ack = {
                 "ret": cmd,
                 "result": True,
-                "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+                "schema": self.schema,
+                "cloudtime": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
             }
-            await self.send(text_data=json.dumps(ack))
-            save_message_to_db.delay(self.sn, text_data, self._schema_from_host())
+            self.send(text_data=json.dumps(ack))
+            save_to_db.delay(self.schema, sn, data)
 
         except Exception as e:
-            logger.warning(f"❌ Failed to process frame: {e}")
-
-    async def send_command(self, event):
-        await self.send(text_data=event["message"])
-
-    async def _flush_queued_commands(self):
-        key = f"queue:{self.sn}"
-        messages = await self.redis.lrange(key, 0, -1)
-        if not messages:
-            return
-
-        for msg in messages:
+            logger.exception(f"❌ Error processing message: {e}")
+            error_data = {"ret": "error", "result": False, "message": str(e)}
             try:
-                await self.send(text_data=msg)
-                await self.redis.lpop(key)
-            except Exception as e:
-                logger.warning(f"❌ Failed to flush command: {e}")
-                break
+                self.send(text_data=json.dumps(error_data))
+            except Exception as send_error:
+                logger.warning(f"❌ Could not send error response: {send_error}")
 
-    def _schema_from_host(self):
-        headers = dict((k.decode(), v.decode()) for k, v in self.scope["headers"])
-        return headers.get("host", "").split(".")[0] if host else "public"
+    def send_command(self, event):
+        message = event.get("message")
+        if not message:
+            return
+        try:
+            self.send(text_data=message)
+        except Exception as e:
+            logger.warning(f"❌ Failed to send queued command: {e}")
+
+    def _register_device(self, sn: str):
+        try:
+            redis_cache.set(f"active_device:{sn}", True, timeout=None)
+            logger.info(f"🟢 Device registered: {sn}")
+        except Exception as e:
+            logger.error(f"❌ Failed to register device {sn}: {e}")
+
+    def _flush_queued_commands(self):
+        key = f"queue:{self.sn}"
+        try:
+            messages = redis_cache.get(key) or []
+            if not isinstance(messages, list):
+                logger.warning(f"⚠️ Unexpected data in queue for {self.sn}, resetting queue.")
+                messages = []
+
+            if not messages:
+                return
+
+            logger.info(f"📤 Flushing {len(messages)} queued commands for {self.sn}")
+            for msg in messages:
+                self.send(text_data=msg)
+
+            redis_cache.delete(key)
+        except Exception as e:
+            logger.error(f"❌ Error flushing queue for {self.sn}: {e}")
+
+    def _schema_from_host(self) -> str:
+        try:
+            headers = {}
+            for k, v in self.scope["headers"]:
+                try:
+                    headers[k.decode()] = v.decode()
+                except UnicodeDecodeError:
+                    continue
+            host = headers.get("host", "")
+            if host:
+                return host.split(".")[0]
+            return "public"
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to extract schema from host: {e}")
+            return "public"
