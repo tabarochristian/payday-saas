@@ -1,6 +1,7 @@
 from django_redis import get_redis_connection
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from celery import shared_task
 import logging, json
 
 logger = logging.getLogger(__name__)  # Configure logging
