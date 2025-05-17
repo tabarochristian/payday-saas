@@ -291,7 +291,7 @@ services:
       - traefik-net
 
   thumbor:
-    image: minimalcompact/thumbor:6.7.5
+    image: thumbor/thumbor:latest
     container_name: payday-thumbor
     restart: unless-stopped
     ports:
