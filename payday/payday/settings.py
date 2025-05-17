@@ -125,6 +125,7 @@ ASGI_APPLICATION = "payday.asgi.application"
 
 DATABASE_URL = 'sqlite:///db.sqlite3'
 DATABASES = {'default': None}
+DEFAULT_SCHEMA = 'default'
 
 # Default database
 DATABASE_URL = os.getenv('DATABASE_URL', default=DATABASE_URL)
@@ -155,6 +156,8 @@ CACHES = {
         "BACKEND": CACHE_BACKEND
     }
 }
+
+DEFAULT_CACHE_ALIAS = 'default'
 
 CHANNEL_LAYERS = {
     "default": {

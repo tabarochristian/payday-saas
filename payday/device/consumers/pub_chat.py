@@ -13,7 +13,7 @@ from device.tasks import save_to_db
 
 logger = logging.getLogger("gateway")
 channel_layer = get_channel_layer()
-redis_cache = caches[settings.DEFAULT_CACHE_ALIAS]  # Configurable cache alias
+redis_cache = caches[settings.DEFAULT_CACHE_ALIAS or 'default']  # Configurable cache alias
 
 
 class PubChat(WebsocketConsumer):
