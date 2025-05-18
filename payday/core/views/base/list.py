@@ -118,5 +118,5 @@ class List(BaseView):
         except (EmptyPage, PageNotAnInteger):
             page_obj = paginator.page(1)
 
-        action_buttons = self.get_action_buttons(obj=obj)
+        action_buttons = self.get_action_buttons()
         return render(request, self.get_template_name(), locals())
