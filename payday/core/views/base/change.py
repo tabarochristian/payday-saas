@@ -55,7 +55,7 @@ class Change(BaseView):
         if not pk:
             raise Http404(_('Aucun identifiant n\'a été fourni'))
 
-        obj = self.get_queryset().select_related('related_field').filter(**{model_class._meta.pk.name: pk}).first()
+        obj = self.get_queryset().select_related().filter(**{model_class._meta.pk.name: pk}).first()
         if not obj:
             logger.warning(f"{model_class._meta.model_name} ID {pk} not found.")
             raise Http404(_('Le {model} #{pk} n\'existe pas').format(model=model_class._meta.model_name, pk=pk))
