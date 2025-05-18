@@ -4,33 +4,37 @@
 <div class="page-heading">
     <div class="card">
         <div class="card-body">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col text-start">
-                    <h3 class="m-0">{{ model_class|getattr:'_meta'|getattr:'verbose_name'|title }}
-                        {% if obj %}#{{ obj.pk }}{% endif %}
+                    <h3 class="m-0">
+                        {{ model_class|getattr:'_meta'|getattr:'verbose_name'|title }}
+                        {% if obj %} #{{ obj.pk }} {% endif %}
                     </h3>
                     {% include 'components/breadcrumb.html' %}
                 </div>
 
                 <div class="col text-end">
                     <div class="btn-group">
-                        {% with self.documents as documents %}
-                            {% if documents %}
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownDocumentBtn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {% trans "Documents" %}
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownDocumentBtn">
-                                    {% for document in documents %}
-                                        <a target="_blank" class="dropdown-item btn-list-action"
-                                            href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' %}"
-                                            onclick="window.open(this.href+'?pk__in='+getSelectedRows('table').join(','), 'print', 'height=600,width=800'); return false;"
-                                        >{{ document.name }}</a>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endwith %}
+                        {% if self.documents %}
+                            <button class="btn btn-primary dropdown-toggle"
+                                    type="button" id="dropdownDocumentBtn"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    aria-label="{% trans 'Documents' %}">
+                                {% trans "Documents" %}
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownDocumentBtn">
+                                {% for document in self.documents %}
+                                    <a target="_blank"
+                                       class="dropdown-item btn-list-action"
+                                       href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' %}"
+                                       onclick="openPrintPopup(this)">
+                                        {{ document.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
-                        {% for button in self.get_action_buttons %}
+                        {% for button in action_buttons %}
                             {{ button.render }}
                         {% endfor %}
                     </div>
@@ -39,3 +43,33 @@
         </div>
     </div>
 </div>
+
+<script>
+    function openPrintPopup(link) {
+        if (!link || !$(link).attr("href")) {
+            console.error("Invalid link element.");
+            return false;
+        }
+
+        const selectedRows = getSelectedRows('table');
+        if (!Array.isArray(selectedRows) || selectedRows.length === 0) {
+            alert("Please select at least one row before printing.");
+            return false;
+        }
+
+        // Ensure rows are properly encoded before passing to the URL
+        const encodedRows = encodeURIComponent(selectedRows.join(','));
+        const printUrl = $(link).attr("href") + "?pk__in=" + encodedRows;
+
+        // Open the print window safely
+        window.open(printUrl, 'print', 'noopener,noreferrer,height=600,width=800');
+        return false;
+    }
+
+    $(document).on("click", ".btn-list-action", function(event) {
+        event.preventDefault();
+        openPrintPopup(this);
+    });
+</script>
+
+

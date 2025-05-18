@@ -1,7 +1,6 @@
+{% load i18n %}
 {% load core %}
 {% load static %}
-
-{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% with alias=model_class|getattr:'_meta'|getattr:'model_name' verbose=model_class|getattr:'_meta'|getattr:'verbose_name' %}
@@ -10,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>
 
 <style>
-    .delete-row{
+    .delete-row {
         display: none;
     }
     .modal-editor { 
@@ -18,21 +17,19 @@
     }
 </style>
 
-
 <{{ form.form_tag }} method="post" enctype="multipart/form-data" class="page-content" id="form-{{ alias }}">
     <div class="card">
         <div class="card-body">
-            <ul class="nav nav-tabs" id="myTab" role="tablist" id="content-tab">
+            <ul class="nav nav-tabs" id="content-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active"
-                       data-bs-toggle="tab" href="#{{ alias }}">
-                       {{ verbose|title }}</a>
+                    <a class="nav-link active" data-bs-toggle="tab" href="#{{ alias }}">
+                        {{ verbose|title }}
+                    </a>
                 </li>
 
                 {% for formset in formsets %}
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link"
-                            data-bs-toggle="tab" href="#{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
+                        <a class="nav-link" data-bs-toggle="tab" href="#{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
                             {{ formset.model|getattr:'_meta'|getattr:'verbose_name_plural'|title }}
                         </a>
                     </li>
@@ -40,25 +37,27 @@
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane fade active show" id="{{ alias }}">
+                <div class="tab-pane fade show active" id="{{ alias }}">
                     <div class="mt-2 pt-2">
                         {% crispy form %}
                     </div>
                 </div>
 
                 {% for formset in formsets %}
-                <div class="tab-pane fade" id="{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
-                    <div class="mt-2 pt-2" id="formset-{{ forloop.counter }}">
-                        {{ formset.non_form_errors }}
-                        {% crispy formset self.inline_formset_helper %}
-                    </div>
+                    <div class="tab-pane fade" id="{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
+                        <div class="mt-2 pt-2" id="formset-{{ forloop.counter }}">
+                            {{ formset.non_form_errors }}
+                            {% crispy formset self.inline_formset_helper %}
+                        </div>
 
-                    {% if not formset.fk.unique %}
-                        <script>
-                            $(() => $('#formset-{{ forloop.counter }} tbody tr').formset({prefix: '{{ formset.prefix }}'}));
-                        </script>
-                    {% endif %}
-                </div>
+                        {% if not formset.fk.unique %}
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    $('#formset-{{ forloop.counter }} tbody tr').formset({ prefix: '{{ formset.prefix }}' });
+                                });
+                            </script>
+                        {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
@@ -68,11 +67,11 @@
 {{ self.keywords|json_script:"keywords" }}
 
 <script>
-    $(document).ready(function() {
-        $("input[type='hidden'][id$='-DELETE']").each(function() {
-            $(this).attr("type", "checkbox");
-            $(this).attr("class", "form-check-input")
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("input[type='hidden'][id$='-DELETE']").forEach(input => {
+            input.type = "checkbox";
+            input.classList.add("form-check-input");
         });
-    });    
+    });
 </script>
 {% endwith %}
