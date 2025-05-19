@@ -119,6 +119,7 @@ class Preview(Change):
             return redirect('payroll:payslips', pk=pk)
 
         # Estimate the processing duration for the payroll.
+        action_buttons = self.get_action_buttons()
         estimation_duration = self.estimate_duration(paid_employees_qs, payroll_obj)
         return render(request, self.template_name, locals())
 
@@ -153,9 +154,9 @@ class Preview(Change):
         # Trigger payroll processing using a background task.
         from payroll.tasks import Payer
         
-        host = request.get_host().split('.')
-        # Payer().run(host[0], pk)
-        Payer().delay(host[0], pk)
+        schema = request.get_host().split('.')[0]
+        Payer().run(schema, pk)
+        # Payer().delay(host[0], pk)
 
         # Redirect to the payslips view.
         return redirect('payroll:payslips', pk=pk)
