@@ -13,20 +13,13 @@ def modelform_factory(model, fields=None, layout=None, form_class_name=None, for
     helper.layout = layout
     helper.form_tag = form_tag
 
-    # Define Meta class dynamically
-    Meta = type(
-        'Meta', 
-        (object,), 
-        {
-            'model': model,
-            'fields': fields or '__all__',
-        }
-    )
-
     form_class_name = form_class_name or f"{model._meta.model_name.capitalize()}ModelForm"
 
     class GeneratedModelForm(forms.ModelForm):
-        Meta = Meta
+        class Meta:
+            model = model  # ✅ Fix: Define model inside the Meta class
+            fields = fields or '__all__'
+
         helper = helper
         form_tag = 'form' if helper.form_tag else 'div'
 
