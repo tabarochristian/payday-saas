@@ -155,9 +155,9 @@ class Change(BaseView):
                     errors.append(str(error))
                     messages.warning(request, formset_error)
 
-            logger.warning(f"{str(errors)}")
-            action_buttons = self.get_action_buttons(obj=obj)
-            return render(request, self.get_template_name(), locals())
+            if errors:
+                action_buttons = self.get_action_buttons(obj=obj)
+                return render(request, self.get_template_name(), locals())
 
         # Save changes
         form.save()
