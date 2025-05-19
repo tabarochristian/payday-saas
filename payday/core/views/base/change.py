@@ -143,9 +143,9 @@ class Change(BaseView):
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
         formsets = list(self.get_formsets(obj))
+        print(formsets)
 
-        _formsets = [form] + formsets
-        if not all(fs.is_valid() or True for fs in _formsets):
+        if not form.is_valid() or not all(fs.is_valid() for fs in formsets):
             for error in form.errors.values():
                 messages.warning(request, error)
 
