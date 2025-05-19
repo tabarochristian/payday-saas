@@ -66,9 +66,15 @@ class Create(BaseView):
             )
         ]
 
-        extra_buttons = [
-            Button(**button) for button in getattr(self.get_model(), 'get_action_buttons', lambda: [])()
-        ]
+        # Handle both property and method cases for get_action_buttons
+        model = self.get_model()
+        get_action_buttons = getattr(model, 'get_action_buttons', None)
+        extra_buttons = []
+        
+        if callable(get_action_buttons):
+            extra_buttons = [Button(**button) for button in get_action_buttons()]
+        elif get_action_buttons is not None:
+            extra_buttons = [Button(**button) for button in get_action_buttons]
         
         return [btn for btn in extra_buttons + buttons if self.request.user.has_perm(btn.permission)]
 
