@@ -18,7 +18,7 @@ class EarlyLeave(Base):
     )
 
     date = fields.DateField(
-        default=now
+        default=now,
         verbose_name=_("date du départ anticipé")
     )
     
