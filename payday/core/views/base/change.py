@@ -141,13 +141,7 @@ class Change(BaseView):
         formsets = self.get_formsets(obj)
         action_buttons = self.get_action_buttons(obj)
         
-        return render(request, self.get_template_name(), {
-            'form': form,
-            'formsets': formsets,
-            'action_buttons': action_buttons,
-            'model_class': model_class,
-            'obj': obj
-        })
+        return render(request, self.get_template_name(), locals())
 
     @transaction.atomic
     def post(self, request, app, model, pk):
@@ -169,7 +163,7 @@ class Change(BaseView):
                 for formset_error in fs.errors:
                     messages.error(request, str(formset_error))
             
-            return render(request, self.get_template_name(), locals()})
+            return render(request, self.get_template_name(), locals())
 
         try:
             # Save changes

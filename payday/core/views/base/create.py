@@ -103,12 +103,7 @@ class Create(BaseView):
         formsets = [formset() for formset in self.formsets()]
         action_buttons = self.get_action_buttons()
         
-        return render(request, self.get_template_name(), {
-            'form': form,
-            'formsets': formsets,
-            'action_buttons': action_buttons,
-            'model_class': model_class
-        })
+        return render(request, self.get_template_name(), locals())
 
     @transaction.atomic
     def post(self, request, app, model):
