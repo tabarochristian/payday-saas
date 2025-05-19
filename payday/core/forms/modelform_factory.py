@@ -13,12 +13,16 @@ def modelform_factory(model, fields=None, layout=None, form_class_name=None, for
     helper.layout = layout
     helper.form_tag = form_tag
 
-    # Define Meta class with fields and exclusions
-    class Meta:
-        model = model
-        fields = fields or '__all__'
+    # Define Meta class dynamically
+    Meta = type(
+        'Meta', 
+        (object,), 
+        {
+            'model': model,
+            'fields': fields or '__all__',
+        }
+    )
 
-    # Create the ModelForm class dynamically
     form_class_name = form_class_name or f"{model._meta.model_name.capitalize()}ModelForm"
 
     class GeneratedModelForm(forms.ModelForm):
@@ -35,9 +39,10 @@ def modelform_factory(model, fields=None, layout=None, form_class_name=None, for
                 employee = Employee.objects.filter(user=user).first()
 
                 for field_name, field in self.fields.items():
-                    if field.queryset.model == get_user_model():
-                        self.fields[field_name].initial = user
-                    elif field.queryset.model == Employee and employee:
-                        self.fields[field_name].initial = employee
+                    if isinstance(field, forms.ModelChoiceField):
+                        if field.queryset.model == get_user_model():
+                            self.fields[field_name].initial = user
+                        elif field.queryset.model == Employee and employee:
+                            self.fields[field_name].initial = employee
 
     return GeneratedModelForm
