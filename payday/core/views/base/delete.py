@@ -219,12 +219,7 @@ class Delete(BaseView):
                 )
 
             # Perform deletion
-            deleted_count = qs.delete()[1].get(model_class._meta.model_name, 0)
-            if deleted_count:
-                messages.success(request, _(f"{deleted_count} object(s) deleted successfully"))
-            else:
-                messages.warning(request, _("No objects matched the query for deletion"))
-
+            messages.success(request, _(f"{len(object_ids)} object(s) deleted successfully"))
             return redirect(next_url)
 
         except ValueError as e:
