@@ -1,8 +1,9 @@
 from django.db import models
 from core.models import Base, fields
+from django.utils.timezone import now
+from django.core.exceptions import ValidationError
 from crispy_forms.layout import Layout, Column, Row
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 
 class Status(models.TextChoices):
     PENDING = "pending", _("en attente")
@@ -17,8 +18,7 @@ class EarlyLeave(Base):
     )
 
     date = fields.DateField(
-        editable=True,
-        auto_now_add=True,
+        default=now
         verbose_name=_("date du départ anticipé")
     )
     
