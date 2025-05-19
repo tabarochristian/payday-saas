@@ -66,16 +66,23 @@ class Create(BaseView):
             )
         ]
 
-        # Handle both property and method cases for get_action_buttons
+        # Handle model-specific extra buttons
         model = self.get_model()
         get_action_buttons = getattr(model, 'get_action_buttons', None)
         extra_buttons = []
         
         if callable(get_action_buttons):
-            extra_buttons = [Button(**button) for button in get_action_buttons()]
+            result = get_action_buttons()
+            if isinstance(result, (list, tuple)):
+                extra_buttons = [Button(**button) for button in result]
+            elif result is not None:
+                extra_buttons = [Button(**result)]
         elif get_action_buttons is not None:
-            extra_buttons = [Button(**button) for button in get_action_buttons]
-        
+            if isinstance(get_action_buttons, (list, tuple)):
+                extra_buttons = [Button(**button) for button in get_action_buttons]
+            else:
+                extra_buttons = [Button(**get_action_buttons)]
+
         return [btn for btn in extra_buttons + buttons if self.request.user.has_perm(btn.permission)]
 
     def get_initial_data(self, request):
