@@ -99,7 +99,7 @@ class Change(BaseView):
         get_action_buttons = getattr(obj, 'get_action_buttons', [])
         extra_buttons = [Button(**button) for button in get_action_buttons]
 
-        return [btn for btn in extra_buttons + buttons if self.request.user.has_perm(btn.permission)]
+        return [btn for btn in extra_buttons + buttons]
 
     def get_formsets(self, obj=None):
         """
