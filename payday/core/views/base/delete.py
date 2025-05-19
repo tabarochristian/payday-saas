@@ -85,10 +85,12 @@ class Delete(BaseView):
         ]
 
         # Handle model-specific extra buttons
+        extra_buttons = []
         model = self.get_model()
-        extra_buttons = getattr(model, 'get_action_buttons', [])
-        extra_buttons = [Button(**button) for button in extra_buttons]
-
+        
+        if hasattr(model, 'get_action_buttons'):
+            extra_buttons = getattr(model, 'get_action_buttons', [])
+            extra_buttons = [Button(**button) for button in extra_buttons]
         return [btn for btn in buttons + extra_buttons]
 
     def _build_query_params(self, request):
