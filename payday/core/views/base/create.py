@@ -62,8 +62,15 @@ class Create(BaseView):
     def get(self, request, app, model):
         """Handles GET requests by initializing the form and inline formsets."""
         model_class = self.get_model()
+
+        initial = {
+            'employee': request.user.employee_set.all().first(),
+            'user': request.user,
+            **request.GET.dict()
+        }
+
         form = modelform_factory(model_class, fields=self.get_form_fields(), request=request)
-        form = form(initial=request.GET.dict())
+        form = form(initial=initial)
         form = self.filter_form(form)
         formsets = [formset() for formset in self.formsets()]
         return render(request, self.get_template_name(), locals())
@@ -72,8 +79,15 @@ class Create(BaseView):
     def post(self, request, app, model):
         """Processes form submissions and ensures atomic transactions."""
         model_class = self.get_model()
+
+        initial = {
+            'employee': request.user.employee_set.all().first(),
+            'user': request.user,
+            **request.GET.dict()
+        }
+
         form = modelform_factory(model_class, fields=self.get_form_fields(), request=request)
-        form = form(request.POST, request.FILES)
+        form = form(initial=initial, request.POST, request.FILES)
         form = self.filter_form(form)
         formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
 
