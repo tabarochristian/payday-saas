@@ -124,7 +124,7 @@ class Change(BaseView):
 
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(instance=obj))
-        formsets = list(self.get_formsets(obj))
+        formsets = list(self.formsets())
         
         action_buttons = self.get_action_buttons(obj=obj)
         return render(request, self.get_template_name(), locals())
@@ -142,7 +142,10 @@ class Change(BaseView):
 
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
-        formsets = list(self.get_formsets(obj))
+        formsets = self.formsets()
+
+        for fs in formsets:
+            print(f"IS VALID : {fs.is_valid()}")
 
         is_valid_formset = bool(formsets) and any(not fs.is_valid() for fs in formsets)
         if not form.is_valid() or is_valid_formset:

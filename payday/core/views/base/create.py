@@ -71,7 +71,7 @@ class Create(BaseView):
         form = modelform_factory(model_class, fields=self.get_form_fields())
         form = form(initial=initial)
         form = self.filter_form(form)
-        formsets = [formset() for formset in self.formsets()]
+        formsets = list(self.formsets())
         return render(request, self.get_template_name(), locals())
 
     @transaction.atomic
@@ -87,7 +87,7 @@ class Create(BaseView):
         form = modelform_factory(model_class, fields=self.get_form_fields())
         form = form(request.POST, request.FILES, initial=initial)
         form = self.filter_form(form)
-        formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
+        formsets = list(self.formsets())
 
         is_valid_formset = bool(formsets) and any(not fs.is_valid() for fs in formsets)
         if not form.is_valid() or is_valid_formset:
