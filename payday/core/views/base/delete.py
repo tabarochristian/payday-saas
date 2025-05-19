@@ -86,8 +86,8 @@ class Delete(BaseView):
 
         # Handle model-specific extra buttons
         model = self.get_model()
-        get_action_buttons = getattr(model, 'get_action_buttons', [])
-        extra_buttons = [Button(**button) for button in get_action_buttons]
+        extra_buttons = getattr(model, 'get_action_buttons', [])
+        extra_buttons = [Button(**button) for button in extra_buttons]
 
         return [btn for btn in buttons + extra_buttons]
 
@@ -137,26 +137,36 @@ class Delete(BaseView):
         Raises:
             Http404: If no query parameters are provided.
         """
-        model_class = self.get_model()
-        query_params = self._build_query_params(request)
+        try:
+            model_class = self.get_model()
+            query_params = self._build_query_params(request)
 
-        if not query_params:
-            logger.error(f"No query parameters provided for delete action on {model_class._meta.model_name}")
-            raise Http404(_("Query is required for delete action"))
+            if not query_params:
+                logger.error(f"No query parameters provided for delete action on {model_class._meta.model_name}")
+                raise Http404(_("Query is required for delete action"))
 
-        # Extract and remove 'next' URL parameter
-        next_url = query_params.pop('next', self.next or reverse_lazy(
-            'core:list', kwargs={'app': app, 'model': model_class._meta.model_name}
-        ))
+            # Extract and remove 'next' URL parameter
+            next_url = query_params.pop('next', self.next or reverse_lazy(
+                'core:list', kwargs={'app': app, 'model': model_class._meta.model_name}
+            ))
 
-        # Build queryset with optimization
-        qs = self.get_queryset().filter(**query_params).select_related()
-        if qs.count() > self.MAX_DELETE_LIMIT:
-            messages.error(request, _(f"Cannot delete more than {self.MAX_DELETE_LIMIT} objects at once."))
-            return redirect(next_url)
+            # Build queryset with optimization
+            qs = self.get_queryset().filter(**query_params).select_related()
+            if qs.count() > self.MAX_DELETE_LIMIT:
+                messages.error(request, _(f"Cannot delete more than {self.MAX_DELETE_LIMIT} objects at once."))
+                return redirect(next_url)
 
-        action_buttons = self.get_action_buttons()
-        return render(request, self.template_name, locals())
+            action_buttons = self.get_action_buttons()
+            return render(request, self.template_name, locals())
+
+        except ValueError as e:
+            logger.error(f"Invalid query parameters for delete action: {str(e)}")
+            messages.error(request, str(e))
+            return redirect(self.next or reverse_lazy('core:home'))
+        except Exception as e:
+            logger.error(f"Error processing GET request for delete action: {str(e)}")
+            messages.error(request, _("Une erreur est survenue lors du chargement de la page de suppression."))
+            return redirect(self.next or reverse_lazy('core:home'))
 
     @transaction.atomic
     def post(self, request, app, model):

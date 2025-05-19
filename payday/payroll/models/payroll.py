@@ -21,8 +21,6 @@ class PayrollStatus(models.TextChoices):
     IN_PROGRESS = ('IN_PROGRESS', _('en cours'))
     COMPLETED = ('COMPLETED', _('terminé'))
     ERROR = ('ERROR', _('erreur'))
-    
-
 
 class Payroll(Base):
     additional_items = models.FileField(verbose_name=_('éléments additionnels'), upload_to=upload_directory_file, blank=True, null=True, default=None)
