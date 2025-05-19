@@ -89,7 +89,8 @@ class Create(BaseView):
         form = self.filter_form(form)
         formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
 
-        if not all(formset.is_valid() for formset in [form] + formsets):
+        _formsets = [form] + formsets
+        if not all(fs.is_valid() for fs in _formsets):
             messages.warning(request, _("Veuillez corriger les erreurs avant de soumettre."))
             return render(request, self.get_template_name(), locals())
 

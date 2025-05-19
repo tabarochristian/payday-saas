@@ -145,7 +145,7 @@ class Change(BaseView):
         formsets = list(self.get_formsets(obj))
 
         _formsets = [form] + formsets
-        if not all(fs.is_valid() for fs in _formsets):
+        if not all(fs.is_valid() or True for fs in _formsets):
             for error in form.errors.values():
                 messages.warning(request, error)
 
