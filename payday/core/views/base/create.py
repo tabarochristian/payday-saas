@@ -64,7 +64,7 @@ class Create(BaseView):
         model_class = self.get_model()
 
         initial = {
-            'employee': request.user.employee or None,
+            'employee': getattr(request.user, 'employee', None),
             'user': request.user,
             **request.GET.dict()
         }
@@ -81,7 +81,7 @@ class Create(BaseView):
         model_class = self.get_model()
 
         initial = {
-            'employee': request.user.employee or None,
+            'employee': getattr(request.user, 'employee', None),
             'user': request.user,
             **request.GET.dict()
         }
