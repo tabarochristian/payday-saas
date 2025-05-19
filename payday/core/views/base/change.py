@@ -161,6 +161,7 @@ class Change(BaseView):
             for fs in formsets:
                 for formset_error in fs.errors:
                     messages.error(request, str(formset_error))
+            action_buttons = self.get_action_buttons(obj)
             return render(request, self.get_template_name(), locals())
 
         try:
