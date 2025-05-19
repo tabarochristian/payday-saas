@@ -35,7 +35,7 @@ class Employee(Change):
         missed_fields = [field for field in public_fields if not getattr(employee_instance, field, None)]
         return modelform_factory(model_class, fields=missed_fields, layout=Layout(*missed_fields)) if missed_fields else None
 
-    def get_action_buttons(self):
+    def get_action_buttons(self, obj=None):
         """Append a 'Print' button to action buttons dynamically."""
         buttons = super().get_action_buttons()
         print_button = Button(
