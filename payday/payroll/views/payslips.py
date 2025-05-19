@@ -25,6 +25,9 @@ class Payslips(Change):
     template_name = 'payroll/payslips.html'
     PAGINATION_COUNT = 100
 
+    def get_model(self):
+        return apps.get_model('payroll', model_name='payslip')
+
     def get_action_buttons(self):
         """
         Generate the list of action buttons for the payslip view.
