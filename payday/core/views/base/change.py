@@ -106,7 +106,7 @@ class Change(BaseView):
         """
         Lazily generate formsets for better memory efficiency.
         """
-        return (fs(instance=obj) for fs in self.formsets())
+        return [fs(instance=obj) for fs in self.formsets()]
 
     def get(self, request, app, model, pk):
         """
@@ -124,7 +124,8 @@ class Change(BaseView):
 
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(instance=obj))
-        formsets = list(self.get_formsets(obj))
+        formsets = self.get_formsets(obj)
+        print(formsets)
         
         action_buttons = self.get_action_buttons(obj=obj)
         return render(request, self.get_template_name(), locals())
@@ -142,11 +143,10 @@ class Change(BaseView):
 
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
-        formsets = list(self.get_formsets(obj))
+        formsets = self.get_formsets(obj)
+        print(formsets)
 
         if not form.is_valid() or not all(fs.is_valid() for fs in formsets):
-            print(form.errors)
-            print(form.non_field_errors())
             for error in form.errors.values():
                 messages.warning(request, error)
 
