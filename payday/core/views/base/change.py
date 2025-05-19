@@ -152,7 +152,6 @@ class Change(BaseView):
 
             for fs in formsets:
                 print(fs.errors)
-                print(fs.non_field_errors())
                 for formset_error in fs.errors:
                     messages.warning(request, formset_error)
 
