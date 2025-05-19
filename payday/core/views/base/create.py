@@ -65,7 +65,6 @@ class Create(BaseView):
 
         initial = {
             'employee': getattr(request.user, 'employee', None),
-            'user': request.user,
             **request.GET.dict()
         }
 
@@ -82,7 +81,6 @@ class Create(BaseView):
 
         initial = {
             'employee': getattr(request.user, 'employee', None),
-            'user': request.user,
             **request.GET.dict()
         }
 
