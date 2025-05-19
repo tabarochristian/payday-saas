@@ -87,7 +87,7 @@ class Leave(Base):
             )
         ).get("taken", 0) or 0
 
-        if self.type_of_leave.max_duration and (total_taken_leave.days + self.duration) > self.type_of_leave.max_duration:
+        if self.type_of_leave.max_duration and (total_taken_leave + self.duration) > self.type_of_leave.max_duration:
             raise ValidationError(_("vous avez atteint la limite maximale de congé ({}) pour ce type.").format(self.type_of_leave.max_duration))
 
         if self.type_of_leave.eligibility_after_days:
