@@ -137,8 +137,8 @@ class Change(BaseView):
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(instance=obj))
         formsets = self.get_formsets(obj)
+
         action_buttons = self.get_action_buttons(obj)
-        
         return render(request, self.get_template_name(), locals())
 
     @transaction.atomic
@@ -161,6 +161,7 @@ class Change(BaseView):
                 for formset_error in fs.errors:
                     messages.error(request, str(formset_error))
             
+            action_buttons = self.get_action_buttons(obj)
             return render(request, self.get_template_name(), locals())
 
         try:
@@ -184,4 +185,6 @@ class Change(BaseView):
         except Exception as e:
             logger.error(f"Error updating {model_class._meta.model_name} ID {pk}: {str(e)}")
             messages.error(request, _("Une erreur est survenue lors de la mise à jour."))
+            
+            action_buttons = self.get_action_buttons(obj)
             return render(request, self.get_template_name(), locals())
