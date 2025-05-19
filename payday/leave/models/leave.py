@@ -80,7 +80,7 @@ class Leave(Base):
         total_taken_leave = Leave.objects.filter(
             type_of_leave=self.type_of_leave,
             employee=self.employee,
-            status=Leave.Status.APPROVED
+            status=Status.APPROVED
         ).aggregate(
             taken=models.Sum(
                 ExpressionWrapper(F("end_date") - F("start_date"), output_field=DurationField())
