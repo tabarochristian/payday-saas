@@ -1,4 +1,3 @@
-```python
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import gettext as _
 from django.core.paginator import Paginator
