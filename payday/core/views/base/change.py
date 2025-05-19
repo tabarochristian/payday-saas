@@ -144,11 +144,7 @@ class Change(BaseView):
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
         formsets = list(self.get_formsets(obj))
 
-        for fs in formsets:
-            print(f"IS VALID : {fs.is_valid()}")
-
-        is_valid_formset = bool(formsets) and any(not fs.is_valid() for fs in formsets)
-        if not form.is_valid() or is_valid_formset:
+        if not all(formset.is_valid() for formset in [form] + formsets):
             for error in form.errors.values():
                 messages.warning(request, error)
 
