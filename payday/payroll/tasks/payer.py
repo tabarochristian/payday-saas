@@ -56,8 +56,12 @@ class Payer(Task):
         ))
 
         # split special_items to each employee
-        self.special_items = pd.DataFrame(self.special_items) \
-            .groupby('employee').apply(lambda x: x.to_dict(orient='records')).to_dict()
+        if not self.special_items:  # ✅ Checks if it's empty
+            self.special_items = {}  # ✅ Avoids processing empty DataFrame
+        else:
+            self.special_items = pd.DataFrame(self.special_items) \
+                .groupby('employee').apply(lambda x: x.to_dict(orient='records')).to_dict()
+
 
         self.employees = PaidEmployee.objects.filter(payroll=self.payroll)
         self.employees = self.employees.select_related('employee').values()
