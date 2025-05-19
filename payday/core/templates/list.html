@@ -9,7 +9,7 @@
 {% include 'components/change/heading.html' %}
 
 <div class="page-content">
-    {% if self.widgets %}
+    {% comment %}{% if self.widgets %}
     <div class="row">
         {% for widget in self.widgets %}
             <div class="{{ widget.column }}">
@@ -25,7 +25,7 @@
             </div>
         {% endfor %}
     </div>
-    {% endif %}
+    {% endif %}{% endcomment %}
 
     <div class="row">
         <div class="{% if self.get_list_filter %}col-md-9{% else %}col{% endif %} col-sm-12 col-xs-12">
