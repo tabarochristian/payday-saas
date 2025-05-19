@@ -299,4 +299,3 @@ class Payslips(Change):
         except Exception as e:
             logger.error(f"Error filtering queryset: {str(e)}")
             return queryset
-```
