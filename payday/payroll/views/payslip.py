@@ -154,7 +154,7 @@ class Payslip(Change):
             items = employee_obj.itempaid_set.all().select_related('employee').order_by('code')
             ItemPaidForm = modelform_factory(
                 models.ItemPaid,
-                exclude=[field.name for field in Base._meta.fields] + ['id', 'payslip', 'rate', 'time', 'employee']
+                # exclude=[field.name for field in Base._meta.fields] + ['id', 'payslip', 'rate', 'time', 'employee']
             )
             form = self.configure_form_fields(ItemPaidForm())
             action_buttons = self.get_action_buttons(employee_obj)
