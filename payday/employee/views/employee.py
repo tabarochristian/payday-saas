@@ -9,114 +9,57 @@ from django.apps import apps
 
 
 class Employee(Change):
-    """
-    A specialized change view for Employee objects.
-
-    This view extends the base Change view to include employee-specific logic:
-      - It customizes the list display fields.
-      - It provides a dynamic form for missing public fields.
-      - It injects an additional print button into the action buttons.
-      - It offers a helper method to retrieve the employee's attendance records for the current year.
+    """Specialized change view for Employee objects with custom behavior."""
     
-    The view also ensures that URL keyword arguments are set appropriately for the Employee model.
-    """
     template_name = "employee/change.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        """Ensure that 'app' and 'model' are set before calling the parent method."""
+        kwargs.update({'app': 'employee', 'model': 'employee'})  # ✅ Sets missing keys
+        self.kwargs = kwargs  # ✅ Ensures instance has updated keyword arguments
+        return super().dispatch(request, *args, **kwargs)
+
     def get_list_display_fields(self):
-        """
-        Retrieve the list of model fields to be displayed based on the Employee model's list_display.
-        
-        Returns:
-            list: A sorted list of field objects from the Employee model that appear in list_display.
-        """
+        """Retrieve fields in `list_display`, preserving their order."""
         model_class = apps.get_model('employee', 'employee')
         list_display = getattr(model_class, 'list_display', [])
-        list_display_order = {field: i for i, field in enumerate(list_display)}
-        return sorted(
-            [field for field in model_class._meta.fields if field.name in list_display],
-            key=lambda field: list_display_order[field.name]
-        )
-    
+        fields = {field.name: field for field in model_class._meta.get_fields() if field.name in list_display}
+        return [fields[name] for name in list_display if name in fields]  # Preserves order
+
     def get_missed_value_form(self):
-        """
-        Build a dynamic modelform for public fields where the current Employee instance is missing a value.
-        
-        Public fields include: spouse, payment_account, physical_address, and emergency_information.
-        
-        Returns:
-            A dynamically generated modelform instance containing only the missing fields, or None if no field is missing.
-        """
+        """Build a dynamic form for public fields missing values."""
         public_fields = ["spouse", "payment_account", "physical_address", "emergency_information"]
         model_class = apps.get_model('employee', 'employee')
-        employee_instance = model_class.objects.get(pk=self.kwargs['pk'])
-        missed_fields = [field for field in public_fields if not getattr(employee_instance, field)]
-        if not missed_fields:
-            return None
-        FormClass = modelform_factory(model_class, fields=missed_fields, layout=Layout(*missed_fields))
-        return FormClass()
-    
+        try:
+            employee_instance = model_class.objects.get(pk=self.kwargs['pk'])
+        except model_class.DoesNotExist:
+            return None  # Avoids unnecessary queries if employee doesn't exist
+
+        missed_fields = [field for field in public_fields if not getattr(employee_instance, field, None)]
+        return modelform_factory(model_class, fields=missed_fields, layout=Layout(*missed_fields)) if missed_fields else None
+
     def get_action_buttons(self):
-        """
-        Get the list of action buttons for the employee change view.
-        
-        In addition to the buttons provided by the parent Change view, a "Print" button is added
-        at the beginning of the list.
-        
-        Returns:
-            list: A list of Button instances filtered by user permissions.
-        """
-        # Get buttons from the parent view.
+        """Append a 'Print' button to action buttons dynamically."""
         buttons = super().get_action_buttons()
-        # Configure the Print button.
-        print_button = Button(**{
-            'text': _('Imprimer'),
-            'tag': 'a',
-            'url': reverse_lazy('employee:print', kwargs={'pk': self.kwargs['pk']}),
-            'classes': 'btn btn-light-success',
-        })
-        buttons.insert(0, print_button)
-        return buttons
+        print_button = Button(
+            tag='a',
+            text=_('Imprimer'),
+            classes='btn btn-light-success',
+            url=reverse_lazy('employee:print', kwargs={'pk': self.kwargs['pk']})
+        )
+        return [print_button] + buttons  # Inserts at the start efficiently
 
     def attendances(self):
-        """
-        Retrieve the current Employee instance's attendance records for the current year.
-        
-        Returns:
-            list: A list of attendance records marked as 'attended' for the current year.
-        """
+        """Retrieve attendance records for the current year."""
         employee_instance = self._get_object()
-        attendance_qs = employee_instance.attendance_set.all().attended(checked_at__year=now().year)
-        return list(attendance_qs)
+        return list(employee_instance.attendance_set.filter(checked_at__year=now().year, status='attended'))  # Fixed query chaining issue
 
     def get(self, request, pk):
-        """
-        Handle GET requests for the employee change view.
-
-        Ensures that the view's URL keyword arguments are set correctly for the Employee model
-        before delegating to the parent's get() method.
-        
-        Args:
-            request (HttpRequest): The incoming HTTP GET request.
-            pk (int): The primary key of the Employee instance.
-        
-        Returns:
-            HttpResponse: The response generated by the parent Change view.
-        """
+        """Ensure keyword arguments are correctly set before delegating to parent method."""
         self.kwargs.update({'app': 'employee', 'model': 'employee'})
         return super().get(request, self.kwargs['app'], self.kwargs['model'], pk)
-    
-    def post(self, request, pk):
-        """
-        Handle POST requests to update the Employee instance.
 
-        Updates URL keyword arguments for the Employee model and passes control to the parent's post() method.
-        
-        Args:
-            request (HttpRequest): The incoming HTTP POST request.
-            pk (int): The primary key of the Employee instance.
-        
-        Returns:
-            HttpResponseRedirect: A redirect response upon successful update, or re-rendered form on failure.
-        """
+    def post(self, request, pk):
+        """Ensure keyword arguments are set before delegating to parent method."""
         self.kwargs.update({'app': 'employee', 'model': 'employee'})
         return super().post(request, self.kwargs['app'], self.kwargs['model'], pk)
