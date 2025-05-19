@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from crispy_forms.layout import Layout, Row, Column
 from django.utils.translation import gettext as _
-
 from core.models import fields, Base
 import glob
 

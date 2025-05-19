@@ -539,7 +539,7 @@ class Migration(migrations.Migration):
                     core.models.fields.imagefield.ImageField(
                         blank=True,
                         null=True,
-                        upload_to=core.utils.upload_directory_file.upload_directory_file,
+                        upload_to=core.utils.upload_directory_file,
                         verbose_name="photo",
                     ),
                 ),
@@ -784,7 +784,7 @@ class Migration(migrations.Migration):
                 (
                     "document",
                     core.models.fields.filefield.FileField(
-                        upload_to=core.utils.upload_directory_file.upload_directory_file,
+                        upload_to=core.utils.upload_directory_file,
                         verbose_name="nom du document",
                     ),
                 ),

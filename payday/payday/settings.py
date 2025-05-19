@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "core",
     "device",
     
+    "leave",
     "payroll",
     "employee"
 ]
