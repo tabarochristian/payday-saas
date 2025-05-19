@@ -33,7 +33,7 @@ class Payslips(Change):
         Returns:
             Model: The Payslip model from the payroll app.
         """
-        return apps.get_model('payroll', model_name='payslip')
+        return apps.get_model('payroll', model_name='paidemployee')
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -245,7 +245,8 @@ class Payslips(Change):
 
             # Get query parameters and filter queryset
             query_params = self._get_query_params(request)
-            qs = payroll_obj.paidemployee_set.all().select_related('payroll').prefetch_related('employee')
+            qs = payroll_obj.paidemployee_set.all()\
+                .select_related('payroll').prefetch_related('employee')
             filter_set = PayslipFilter(query_params, queryset=qs)
             filtered_qs = self._filter_queryset(filter_set.qs, query_params)
 
