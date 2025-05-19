@@ -217,6 +217,7 @@ class Delete(BaseView):
                 )
 
             # Perform deletion
+            qs.delete()
             messages.success(request, _(f"{len(object_ids)} object(s) deleted successfully"))
             return redirect(next_url)
 
