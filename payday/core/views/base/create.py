@@ -1,9 +1,11 @@
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.shortcuts import render, redirect
+
 from django.contrib.admin.models import ADDITION
+from django.shortcuts import render, redirect
 from django.db import transaction
+
 from core.forms import modelform_factory, InlineFormSetHelper
 from core.forms.button import Button
 from .base import BaseView
@@ -13,98 +15,84 @@ class Create(BaseView):
     """
     View for creating a new instance of a model, with support for inline formsets.
     """
+
     next = None
     action = ["add"]
     template_name = "create.html"
     inline_formset_helper = InlineFormSetHelper()
 
+    def dispatch(self, request, *args, **kwargs):
+        """Permission check before processing the request."""
+        model_class = self.get_model()
+        add_perm = f"{model_class._meta.app_label}.add_{model_class._meta.model_name}"
+
+        if not request.user.has_perm(add_perm):
+            return redirect(reverse_lazy("core:home"))
+
+        return super().dispatch(request, *args, **kwargs)
+
     def get_action_buttons(self):
-        """
-        Build and return the list of action buttons for the create view.
-        This typically includes a "Cancel" button, a "Save" button, and any
-        extra buttons defined on the model.
-        """
+        """Generates action buttons dynamically based on user permissions."""
         kwargs = {'app': self.kwargs['app'], 'model': self.kwargs['model']}
-        
-        # Cancel button: redirects back to the list view.
-        cancel_button = Button(**{
-            'text': _('Annuler'),
-            'tag': 'a',
-            'url': reverse_lazy('core:list', kwargs=kwargs),
-            'classes': 'btn btn-light-danger',
-            'permission': 'delete'
-        })
-        # Save button: submits the form.
-        save_button = Button(**{
-            'text': _('Sauvegarder'),
-            'tag': 'button',
-            'classes': 'btn btn-success',
-            # Use double quotes for the outer f-string to allow single quotes inside.
-            'permission': f"{kwargs['app']}.add_{kwargs['model']}",
-            'attrs': {
-                'type': 'submit',
-                'form': f"form-{kwargs['model']}"
-            }
-        })
-        # Append any additional buttons from the model.
-        extra_buttons = []
-        buttons_from_model = getattr(self.get_model(), 'get_action_buttons()', [])
-        extra_buttons = [Button(**button) for button in buttons_from_model]
-        
-        return [cancel_button, save_button] + extra_buttons
+        user = self.request.user
+
+        buttons = [
+            Button(
+                text=_('Annuler'),
+                tag='a',
+                url=reverse_lazy('core:list', kwargs=kwargs),
+                classes='btn btn-light-danger',
+                permission=f"{kwargs['app']}.delete_{kwargs['model']}"
+            ),
+            Button(
+                text=_('Sauvegarder'),
+                tag='button',
+                classes='btn btn-success',
+                permission=f"{kwargs['app']}.add_{kwargs['model']}",
+                attrs={'type': 'submit', 'form': f"form-{kwargs['model']}"}
+            ),
+        ]
+
+        extra_buttons = [
+            Button(**button) for button in getattr(self.get_model(), 'get_action_buttons', lambda: [])()
+        ]
+
+        return [btn for btn in (*extra_buttons, *buttons) if user.has_perm(btn.permission)]
 
     def get(self, request, app, model):
-        """
-        Handle GET requests by initializing the form and any configured inline formsets.
-        The form initial values are taken from GET parameters.
-        """
+        """Handles GET requests by initializing the form and inline formsets."""
         model_class = self.get_model()
-
-        FormClass = modelform_factory(model_class, fields=self.get_form_fields())
-        form = FormClass(initial=request.GET.dict())
+        form = modelform_factory(model_class, fields=self.get_form_fields(), request=request)
+        form = form(initial=request.GET.dict())
         form = self.filter_form(form)
-        
-        # Instantiate inline formsets without POST data.
         formsets = [formset() for formset in self.formsets()]
         return render(request, self.get_template_name(), locals())
-    
-    # @transaction.atomic
+
+    @transaction.atomic
     def post(self, request, app, model):
-        """
-        Process the form submission (POST). Validate the main form and inline formsets,
-        save the model instance, and then save all inline instances, associating them
-        with the main instance. Logs the addition action and redirects to the list view.
-        """
+        """Processes form submissions and ensures atomic transactions."""
         model_class = self.get_model()
-
-        FormClass = modelform_factory(model_class, fields=self.get_form_fields())
-        form = FormClass(request.POST or None, request.FILES or None)
+        form = modelform_factory(model_class, fields=self.get_form_fields(), request=request)
+        form = form(request.POST, request.FILES)
         form = self.filter_form(form)
-        
-        # Instantiate inline formsets with POST data.
-        formsets = [formset(request.POST or None, request.FILES or None) for formset in self.formsets()]
+        formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
 
-        if not all(fs.is_valid() for fs in [form] + formsets):
-            # Add warnings for any errors and re-render the form.
-            for error in form.errors:
-                messages.warning(request, str(error))
+        if not form.is_valid() or any(not fs.is_valid() for fs in formsets):
+            messages.warning(request, _("Veuillez corriger les erreurs avant de soumettre."))
             return render(request, self.get_template_name(), locals())
 
-        # Save main form instance.
+        # Save main instance
         instance = form.save()
-        # Save any inline formset instances.
+
+        # Save inline instances and link them to main instance
         for formset in formsets:
-            inline_instances = formset.save(commit=False)
-            for obj in inline_instances:
+            for obj in formset.save(commit=False):
                 setattr(obj, formset.fk.name, instance)
                 obj.save()
 
-        # Log the addition.
-        message = _('Ajout du/de {model} #{pk}')
+        # Log addition
+        message = _('Ajout du/de {model} #{pk}').format(model=model_class._meta.model_name, pk=instance.pk)
         self.log(model_class, form, action=ADDITION, change_message=self.generate_change_message(instance, form.instance))
-        messages.success(request, message.format(model=model_class._meta.model_name, pk=instance.pk))
+        messages.success(request, message)
 
-        # Determine redirect URL.
-        redirect_url = reverse_lazy('core:list', kwargs={'app': app, 'model': model_class._meta.model_name})
-        next_param = request.GET.dict().get('next')
-        return redirect(next_param if next_param else redirect_url)
+        return redirect(request.GET.get('next', reverse_lazy('core:list', kwargs={'app': app, 'model': model_class._meta.model_name})))
