@@ -98,13 +98,15 @@
          </div>
          <div id="main">
             <header class='mb-0'>
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-light-{{ message.tags }} fw-bold mb-0" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                {% block messages %}
+                  {% if messages %}
+                     {% for message in messages %}
+                           <div class="alert alert-light-{{ message.tags }} fw-bold mb-0" role="alert">
+                              {{ message }}
+                           </div>
+                     {% endfor %}
+                  {% endif %}
+                {% endblock messages %}
                 <nav class="navbar navbar-expand navbar-light navbar-top p-0">
                     <div class="container-fluid">
                         <a href="#" class="sidebar-toggler burger-btn d-block">
