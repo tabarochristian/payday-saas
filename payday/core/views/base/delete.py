@@ -108,7 +108,8 @@ class Delete(BaseView):
             ValueError: If query parameters contain invalid field names.
         """
         query_params = {}
-        model_fields = {field.name for field in self.get_model()._meta.fields}
+        model_fields = ['pk']
+        model_fields += list({field.name for field in self.get_model()._meta.fields})
 
         for key, value in request.GET.dict().items():
             # Extract field name from lookup (e.g., 'id__in' -> 'id')
