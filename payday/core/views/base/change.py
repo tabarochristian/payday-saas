@@ -19,8 +19,8 @@ class Change(BaseView):
     Enhanced view for updating model instances with improved permission handling,
     error management, and form processing.
     """
-    template_name = "change.html"
     inline_formset_helper = InlineFormSetHelper()
+    template_name = "change.html"
     action = ["change"]
 
     def dispatch(self, request, *args, **kwargs):
@@ -95,8 +95,8 @@ class Change(BaseView):
         ]
 
         # Handle model-specific extra buttons
-        get_action_buttons = getattr(obj, 'get_action_buttons', [])
-        extra_buttons = [Button(**button) for button in get_action_buttons]
+        extra_buttons = getattr(obj, 'get_action_buttons', [])
+        extra_buttons = [Button(**button) for button in extra_buttons]
 
         return [btn for btn in extra_buttons + buttons]
 
@@ -149,6 +149,7 @@ class Change(BaseView):
         model_class = self.get_model()
         obj = self._get_object()
         
+        action_buttons = self.get_action_buttons(obj)
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
         formsets = [formset(request.POST, request.FILES, instance=obj) for formset in self.formsets()]
@@ -160,8 +161,6 @@ class Change(BaseView):
             for fs in formsets:
                 for formset_error in fs.errors:
                     messages.error(request, str(formset_error))
-            
-            action_buttons = self.get_action_buttons(obj)
             return render(request, self.get_template_name(), locals())
 
         try:
@@ -185,6 +184,4 @@ class Change(BaseView):
         except Exception as e:
             logger.error(f"Error updating {model_class._meta.model_name} ID {pk}: {str(e)}")
             messages.error(request, _("Une erreur est survenue lors de la mise à jour."))
-            
-            action_buttons = self.get_action_buttons(obj)
             return render(request, self.get_template_name(), locals())
