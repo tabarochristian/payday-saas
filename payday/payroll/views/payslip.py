@@ -21,6 +21,15 @@ class Payslip(Change):
     """
     template_name = "payroll/payslip.html"
 
+    def get_model(self):
+        """
+        Returns the Payslip model.
+
+        Returns:
+            Model: The Payslip model from the payroll app.
+        """
+        return apps.get_model('payroll', model_name='paidemployee')
+
     def get_action_buttons(self):
         """
         Generate and return the list of action buttons for the payslip view.
