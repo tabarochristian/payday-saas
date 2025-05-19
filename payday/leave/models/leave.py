@@ -91,6 +91,6 @@ class Leave(Base):
             raise ValidationError(_("vous avez atteint la limite maximale de congé ({}) pour ce type.").format(self.type_of_leave.max_duration))
 
         if self.type_of_leave.eligibility_after_days:
-            days_since_joining = (self.start_date - self.employee.date_joined).days
+            days_since_joining = (self.start_date - self.employee.date_of_join).days
             if days_since_joining < self.type_of_leave.eligibility_after_days:
                 raise ValidationError(_("vous devez attendre {} jours après votre embauche pour demander ce type de congé.").format(self.type_of_leave.eligibility_after_days))
