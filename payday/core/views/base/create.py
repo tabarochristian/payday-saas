@@ -87,7 +87,7 @@ class Create(BaseView):
         }
 
         form = modelform_factory(model_class, fields=self.get_form_fields(), request=request)
-        form = form(initial=initial, request.POST, request.FILES)
+        form = form(request.POST, request.FILES, initial=initial)
         form = self.filter_form(form)
         formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
 
