@@ -81,10 +81,9 @@ class Change(BaseView):
                 classes='btn btn-light-danger',
                 permission=f"{model_permission_prefix}.delete",
                 url=reverse_lazy('core:delete', kwargs={
-                    'app': self.kwargs['app'],
                     'model': self.kwargs['model'],
-                    'pk': obj.pk
-                })
+                    'app': self.kwargs['app'],
+                }) + f'?pk__in={self.kwargs['pk']}'
             ),
             Button(
                 tag='button',
