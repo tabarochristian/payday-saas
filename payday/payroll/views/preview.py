@@ -28,7 +28,7 @@ class Preview(Change):
     template_name = 'payroll/preview.html'
 
     def get_model(self):
-        return app.get_model('payroll', model_name='payroll')
+        return apps.get_model('payroll', model_name='payroll')
 
     def get_action_buttons(self):
         """
