@@ -112,6 +112,7 @@ class Create(BaseView):
         Processes POST requests with atomic transactions and comprehensive error handling.
         """
         model_class = self.get_model()
+        action_buttons = self.get_action_buttons()
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(
             request.POST,
