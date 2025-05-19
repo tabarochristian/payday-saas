@@ -144,13 +144,13 @@ class Change(BaseView):
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
         formsets = list(self.get_formsets(obj))
 
-        if not form.is_valid(): #or not all(fs.is_valid() for fs in formsets):
+        if not form.is_valid() or any(not fs.is_valid() for fs in formsets):
             for error in form.errors.values():
                 messages.warning(request, error)
 
-            #for fs in formsets:
-            #    for formset_error in fs.errors:
-            #        messages.warning(request, formset_error)
+            for fs in formsets:
+                for formset_error in fs.errors:
+                    messages.warning(request, formset_error)
 
             action_buttons = self.get_action_buttons(obj=obj)
             return render(request, self.get_template_name(), locals())

@@ -10,7 +10,7 @@ class Status(models.TextChoices):
     REJECTED = "rejected", _("rejeté")
 
 class EarlyLeave(Base):
-    employee = fields.ForeignKey(
+    employee = fields.ModelSelectField(
         "employee.employee",
         on_delete=models.PROTECT,
         verbose_name=_("employé")

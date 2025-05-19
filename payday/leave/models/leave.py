@@ -12,13 +12,13 @@ class Status(models.TextChoices):
     REJECTED = "rejected", _("rejeté")
 
 class Leave(Base):
-    employee = fields.ForeignKey(
+    employee = fields.ModelSelectField(
         "employee.employee",
         on_delete=models.PROTECT,
         verbose_name=_("employé")
     )
 
-    type_of_leave = fields.ForeignKey(
+    type_of_leave = fields.ModelSelectField(
         "leave.typeofleave",
         on_delete=models.CASCADE,
         verbose_name=_("type de congé")
