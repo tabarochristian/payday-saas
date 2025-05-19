@@ -13,11 +13,8 @@ class Employee(Change):
     
     template_name = "employee/change.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        """Ensure that 'app' and 'model' are set before calling the parent method."""
-        kwargs.update({'app': 'employee', 'model': 'employee'})  # ✅ Sets missing keys
-        self.kwargs = kwargs  # ✅ Ensures instance has updated keyword arguments
-        return super().dispatch(request, *args, **kwargs)
+    def get_model(self):
+        return apps.get_model('employee', model_name='employee')
 
     def get_list_display_fields(self):
         """Retrieve fields in `list_display`, preserving their order."""
