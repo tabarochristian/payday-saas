@@ -144,16 +144,21 @@ class Change(BaseView):
         form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
         formsets = list(self.get_formsets(obj))
 
-        if not form.is_valid() or any(not fs.is_valid() for fs in formsets):
-            for error in form.errors.values():
-                messages.warning(request, error)
+        if not form.is_valid() or not formsets or any(not fs.is_valid() for fs in formsets):  # ✅ Simplified condition
+            # Log individual field errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.warning(request, f"{field}: {error}")  # ✅ Shows which field has errors
 
+            # Handle formset errors properly
             for fs in formsets:
-                for formset_error in fs.errors:
-                    messages.warning(request, formset_error)
+                for field, errors in fs.errors.items():
+                    for error in errors:
+                        messages.warning(request, f"Formset Error - {field}: {error}")  # ✅ More descriptive formset errors
 
             action_buttons = self.get_action_buttons(obj=obj)
-            return render(request, self.get_template_name(), locals())
+            return render(request, self.get_template_name(), {'form': form, 'formsets': formsets, 'action_buttons': action_buttons})
+
 
         # Save changes
         form.save()
