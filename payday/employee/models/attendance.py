@@ -12,12 +12,12 @@ class Attendance(Base):
 
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
     list_display = ('device', 'employee', 'checked_at')
-    list_filter = ('device', 'checked_at',)
+    list_filter = ('device', 'checked_at')
 
     layout = Layout(
+        'checked_at',
         'employee',
         'device',
-        'checked_at'
     )
 
     objects = AttendanceManager()
@@ -26,6 +26,7 @@ class Attendance(Base):
         unique_together = ('employee', 'checked_at')
         verbose_name_plural = _('presences')
         verbose_name = _('presence')
+        managed = False
 
     @property
     def name(self):
