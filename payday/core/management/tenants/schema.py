@@ -58,7 +58,8 @@ class SchemaManager:
         user = User.objects.create_superuser(
             is_active=True,
             is_staff=True,
-            email=email
+            email=email,
+            password=password
         )
         user.set_password(password)
         user.save()
