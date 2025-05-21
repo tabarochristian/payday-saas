@@ -19,9 +19,9 @@ class Device(Base):
     sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, blank=False, null=False)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)
 
-    list_display = ("id", "branch", "name", "sn", "status")
-    layout = Layout("branch", "sn", "name")
-    list_filter = ("status", "branch")
+    list_display = ("id", "name", "sn", "status")
+    layout = Layout("sn", "name")
+    list_filter = ("status",)
 
     class Meta:
         verbose_name_plural = _("terminals")
