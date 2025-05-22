@@ -25,6 +25,7 @@ class Attendance(Base):
     class Meta:
         unique_together = ('employee', 'checked_at')
         verbose_name_plural = _('presences')
+        db_table = 'employee_attendance'
         verbose_name = _('presence')
         managed = False
 
