@@ -137,7 +137,7 @@ class Employee(BaseEmployee):
         return model.objects.filter(**{'employee__registration_number': self.registration_number})
     
     def attendances(self, filter = {}):
-        attendance = apps.get('employee', model_name='attendance')
+        attendance = apps.get_model('employee', 'attendance')
         return attendance.objects.filter(employee=self).filter(**filter)
     
     @property
