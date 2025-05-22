@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             """
             -- Create the view with grouped data
+            DROP VIEW IF EXISTS employee_attendance;
             CREATE VIEW OR REPLACE employee_attendance AS
             SELECT
                 ROW_NUMBER() OVER () AS id, -- Generates an incremental ID
