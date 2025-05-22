@@ -136,8 +136,9 @@ class Employee(BaseEmployee):
         model = apps.get_model('payroll', 'payslip')
         return model.objects.filter(**{'employee__registration_number': self.registration_number})
     
-    def attendances(self, period=None):
-        return list()
+    def attendances(self, filter = {}):
+        attendance = apps.get('employee', model_name='attendance')
+        return attendance.objects.filter(employee=self).filter(**filter)
     
     @property
     def get_action_buttons(self):

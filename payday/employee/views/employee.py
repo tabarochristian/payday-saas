@@ -48,8 +48,8 @@ class Employee(Change):
 
     def attendances(self):
         """Retrieve attendance records for the current year."""
-        employee_instance = self._get_object()
-        return list(employee_instance.attendance_set.filter(checked_at__year=now().year, status='attended'))  # Fixed query chaining issue
+        instance = self._get_object()
+        return list(instance.attendances().values())
 
     def get(self, request, pk):
         """Ensure keyword arguments are correctly set before delegating to parent method."""
