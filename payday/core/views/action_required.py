@@ -18,6 +18,9 @@ class ActionRequired(List):
     """
     action = ['view']
 
+    def get_model(self):
+        return apps.get_model('core', model_name='actionrequired')
+
     def get_action_buttons(self):
         """
         Overridden to hide any action buttons for this view.
