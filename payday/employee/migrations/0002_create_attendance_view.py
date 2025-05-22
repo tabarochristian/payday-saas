@@ -3,14 +3,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('employee', '0001_initial'),  # Replace with the latest migration name
+        ('your_app_name', '0001_initial'),  # Replace with the latest migration name
     ]
 
     operations = [
         migrations.RunSQL(
             """
-            -- Drop view if it exists
-            DROP VIEW IF EXISTS employee_attendance;
+            DO $$ 
+            BEGIN
+                -- Drop view if it exists
+                IF EXISTS (SELECT 1 FROM pg_views WHERE viewname = 'employee_attendance') THEN
+                    EXECUTE 'DROP VIEW employee_attendance';
+                END IF;
+
+                -- Drop table if it exists
+                IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'employee_attendance') THEN
+                    EXECUTE 'DROP TABLE employee_attendance';
+                END IF;
+            END $$;
 
             -- Create the view with grouped data
             CREATE VIEW employee_attendance AS
