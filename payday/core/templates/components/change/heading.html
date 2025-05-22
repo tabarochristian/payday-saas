@@ -46,8 +46,15 @@
 
 <script>
     function openPrintPopup(link) {
-        if (!link || !$(link).attr("href")) {
+        if (!link) {
             console.error("Invalid link element.");
+            return false;
+        }
+
+        // Try getting href or data-action attributes
+        const actionUrl = $(link).attr("href") || $(link).data("action");
+        if (!actionUrl) {
+            console.error("No valid action URL found.");
             return false;
         }
 
@@ -59,10 +66,18 @@
 
         // Ensure rows are properly encoded before passing to the URL
         const encodedRows = encodeURIComponent(selectedRows.join(','));
-        const printUrl = $(link).attr("href") + "?pk__in=" + encodedRows;
+        const printUrl = actionUrl + "?pk__in=" + encodedRows;
 
         // Open the print window safely
-        window.open(printUrl, 'print', 'noopener,noreferrer,height=600,width=800');
+        const printWindow = window.open(printUrl, 'print', 'noopener,noreferrer,height=600,width=800');
+
+        // Refresh the page when print window is closed
+        if (printWindow) {
+            printWindow.onbeforeunload = function() {
+                window.location.reload();
+            };
+        }
+
         return false;
     }
 
@@ -70,6 +85,7 @@
         event.preventDefault();
         openPrintPopup(this);
     });
+
 </script>
 
 

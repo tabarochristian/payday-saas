@@ -155,7 +155,7 @@ class Exporter(BaseView):
         model_field_names = [field.name for field in model_class._meta.fields]
 
         # Build query dictionary from GET parameters (only include recognized fields).
-        query_params = equest.GET.dict()
+        query_params = request.GET.dict()
         qs = qs.filter(**query_params)
 
         # Apply additional filtering using a filter set.

@@ -40,14 +40,14 @@ class List(BaseView):
                 tag='button',
                 text=_('Supprimer'),
                 permission=f"{model_permission_prefix}.delete",
-                classes='btn btn-light-danger selected btn-list-action',
+                classes='btn btn-light-danger btn-list-action',
                 attrs={'data-action': reverse_lazy('core:delete', kwargs={'app': app_label, 'model': model_name})}
             ),
             Button(
                 tag='button',
                 text=_('Exporter'),
                 permission=f"{model_permission_prefix}.view",
-                classes='btn btn-light-danger selected btn-list-action',
+                classes='btn btn-light-warning btn-list-action',
                 attrs={'data-action': reverse_lazy('core:exporter', kwargs={'app': app_label, 'model': model_name})}
             ),
             Button(
