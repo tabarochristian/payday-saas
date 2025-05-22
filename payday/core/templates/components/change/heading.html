@@ -59,27 +59,19 @@
         }
 
         const selectedRows = getSelectedRows();
-        if (!Array.isArray(selectedRows) || selectedRows.length === 0) {
-            alert("Please select at least one row before printing.");
+        if (!selectedRows.length) {
+            // alert("Please select at least one row before printing.");
+            window.location.href = printUrl;
             return false;
         }
 
-        // Ensure rows are properly encoded before passing to the URL
-        const encodedRows = encodeURIComponent(selectedRows.join(','));
-        const printUrl = actionUrl + "?pk__in=" + encodedRows;
+        // Build the print URL
+        const printUrl = `${actionUrl}?pk__in=${encodeURIComponent(selectedRows.join(','))}`;
 
-        // Open the print window safely
-        const printWindow = window.open(printUrl, 'print', 'noopener,noreferrer,height=600,width=800');
-
-        // Refresh the page when print window is closed
-        if (printWindow) {
-            printWindow.onbeforeunload = function() {
-                window.location.reload();
-            };
-        }
-
-        return false;
+        // Redirect instead of opening a new window
+        window.location.href = printUrl;
     }
+
 
     $(document).on("click", ".btn-list-action", function(event) {
         event.preventDefault();
