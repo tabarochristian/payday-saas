@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             """
             -- Create the view with grouped data
-            CREATE VIEW OR REPLACE woubou.employee_attendance AS
+            CREATE VIEW OR REPLACE employee_attendance AS
             SELECT
                 ROW_NUMBER() OVER () AS id, -- Generates an incremental ID
                 d.id AS device_id, -- Fetching the actual device_id from device_device
@@ -24,11 +24,11 @@ class Migration(migrations.Migration):
                 l.enroll_id AS created_by_id, -- Assuming employee ID as creator
                 MIN(l.timestamp) AS updated_at, -- Using timestamp from Log
                 MIN(l.timestamp) AS created_at  -- Using timestamp from Log
-            FROM woubou.device_log l
-            LEFT JOIN woubou.device_device d ON l.sn = d.sn -- Mapping `sn` to actual `device_id`
-            INNER JOIN woubou.employee_employee e ON l.enroll_id = e.registration_number::INTEGER -- Ensure enroll_id exists in employee table
+            FROM device_log l
+            LEFT JOIN device_device d ON l.sn = d.sn -- Mapping `sn` to actual `device_id`
+            INNER JOIN employee_employee e ON l.enroll_id = e.registration_number::INTEGER -- Ensure enroll_id exists in employee table
             GROUP BY l.enroll_id, d.id, DATE(l.timestamp);
             """,
-            reverse_sql="DROP VIEW IF EXISTS woubou.employee_attendance CASCADE;"  # Revert migration by removing the view safely
+            reverse_sql="DROP VIEW IF EXISTS employee_attendance CASCADE;"  # Revert migration by removing the view safely
         )
     ]
