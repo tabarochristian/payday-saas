@@ -48,8 +48,7 @@ class Employee(Change):
 
     def attendances(self):
         """Retrieve attendance records for the current year."""
-        instance = self._get_object()
-        return list(instance.attendances().values())
+        return list(self._get_object().attendances().values())
 
     def get(self, request, pk):
         """Ensure keyword arguments are correctly set before delegating to parent method."""
