@@ -99,8 +99,11 @@
 
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
 <script>
-    $(function() {
+    $(document).ready(function() {
+        // Suppress DataTable errors
         $.fn.dataTable.ext.errMode = 'none';
+
+        // Initialize DataTable with improved settings
         const table = new DataTable('table', {
             responsive: true,
             paging: false,
@@ -111,13 +114,22 @@
             dom: '<"top"f>rt<"bottom"lp><"clear">'
         });
 
-        $('#select-all-checkbox').on('click', function() {
-            $('input[type="checkbox"].row-checkbox').prop('checked', this.checked);
+        // "Select All" Checkbox logic
+        $('#select-all-checkbox').on('change', function() {
+            $('.row-checkbox').prop('checked', this.checked);
         });
 
-        $('table').on('change', 'input.row-checkbox', function() {
-            const allChecked = $('.row-checkbox').length === $('.row-checkbox:checked').length;
-            $('#select-all-checkbox').prop('indeterminate', !allChecked).prop('checked', allChecked);
+        // Update "Select All" checkbox state dynamically
+        $('table').on('change', '.row-checkbox', function() {
+            const allRows = $('.row-checkbox').length;
+            const checkedRows = $('.row-checkbox:checked').length;
+
+            $('#select-all-checkbox')
+                .prop('indeterminate', checkedRows > 0 && checkedRows < allRows)
+                .prop('checked', checkedRows === allRows);
         });
     });
+
+    // Function to retrieve selected row IDs
+    const getSelectedRows = () => $('input.row-checkbox:checked').map((_, el) => $(el).closest('tr').data('row-id')).get();
 </script>

@@ -58,7 +58,7 @@
             return false;
         }
 
-        const selectedRows = getSelectedRows('table');
+        const selectedRows = getSelectedRows();
         if (!Array.isArray(selectedRows) || selectedRows.length === 0) {
             alert("Please select at least one row before printing.");
             return false;
