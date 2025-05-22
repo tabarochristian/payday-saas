@@ -15,7 +15,7 @@
         <div class="card-body p-0 p-4 pb-3">
             <div class="col">
                 <div id="attendances-chart"></div>
-                {{ self.attendancces|json_script:'attendances' }}
+                {{ self.attendances|json_script:'attendances' }}
                 <script>
                     const getMonthName = monthNumber => new Date(0, monthNumber).toLocaleString('{{ LANGUAGE_CODE }}', { month: 'long' });
                     const attendances = JSON.parse(document.getElementById('attendances').textContent).map((e) => ({
