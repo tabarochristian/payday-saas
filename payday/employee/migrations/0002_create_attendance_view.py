@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             """
             -- Create the view with grouped data
-            CREATE VIEW employee_attendance AS
+            CREATE VIEW or REPLACE employee_attendance AS
             SELECT
                 ROW_NUMBER() OVER () AS id, -- Generates an incremental ID
                 d.id AS device_id, -- Fetching the actual device_id from device_device
