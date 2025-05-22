@@ -19,7 +19,7 @@
                 <script>
                     const getMonthName = monthNumber => new Date(0, monthNumber).toLocaleString('{{ LANGUAGE_CODE }}', { month: 'long' });
                     const attendances = JSON.parse(document.getElementById('attendances').textContent).map((e) => ({
-                        date: new Date(e.checked_at__date),
+                        date: new Date(e.checked_at),
                         count: e.count,
                     }));
     
