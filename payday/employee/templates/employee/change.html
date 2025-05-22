@@ -20,7 +20,7 @@
                     const getMonthName = monthNumber => new Date(0, monthNumber).toLocaleString('{{ LANGUAGE_CODE }}', { month: 'long' });
                     const attendances = JSON.parse(document.getElementById('attendances').textContent).map((e) => ({
                         date: new Date(e.checked_at__date),
-                        count: e.attended,
+                        count: e.count,
                     }));
     
                     new ApexCharts(document.querySelector('#attendances-chart'), {

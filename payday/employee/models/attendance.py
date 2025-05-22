@@ -9,6 +9,7 @@ class Attendance(Base):
     device = fields.ModelSelectField('device.Device', verbose_name=_('dispositif'), blank=True, null=True, on_delete=models.SET_NULL)
     employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employé'))
     checked_at = fields.DateTimeField(verbose_name=_('vérifié à'))
+    count = fields.IntegerField(verbose_name=_("presence"))
 
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
     list_display = ('device', 'employee', 'checked_at')
