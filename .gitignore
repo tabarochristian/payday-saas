@@ -8,4 +8,4 @@ __pycache__/
 *.pyd
 *.pdb
 
-saas.env
+.env
