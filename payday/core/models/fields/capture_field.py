@@ -3,6 +3,7 @@ from django.forms.widgets import Widget
 from django.db import models
 from django import forms
 
+
 class CaptureWidget(Widget):
     allow_multiple_selected = False
     template_name = 'widgets/capture-field.html'
@@ -45,6 +46,8 @@ class CaptureWidget(Widget):
         document.addEventListener('DOMContentLoaded', function() {
             const containers = document.querySelectorAll('.webcam-capture-container');
 
+            console.log(containers)
+
             containers.forEach(container => {
                 const videoId = container.querySelector('video').id;
                 const captureId = container.querySelector('button.capture').id;
@@ -61,6 +64,7 @@ class CaptureWidget(Widget):
                 const retakeButton = document.getElementById(retakeId);
 
                 const existingValue = $(imageInput).data('url');
+                console.log("Existing value URL:", existingValue);
 
                 let stream;
 
@@ -146,12 +150,13 @@ class CaptureWidget(Widget):
         });
         </script>
         '''
-        
+
+
 class CaptureField(models.ImageField):
     def __init__(self, *args, **kwargs):
         self.inline = kwargs.pop('inline', False)
         super().__init__(*args, **kwargs)
-        
+
     def formfield(self, **kwargs):
         kwargs['widget'] = CaptureWidget
         return super().formfield(**kwargs)

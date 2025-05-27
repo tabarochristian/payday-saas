@@ -106,7 +106,7 @@ class Create(BaseView):
         
         return render(request, self.get_template_name(), locals())
 
-    @transaction.atomic
+    # @transaction.atomic
     def post(self, request, app, model):
         """
         Processes POST requests with atomic transactions and comprehensive error handling.
@@ -121,15 +121,15 @@ class Create(BaseView):
         ))
         formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
 
-        # Validate forms and formsets
-        if not (form.is_valid() and all(fs.is_valid() for fs in formsets) and self.validate_form(form, formsets)):
-            for error in form.errors.values():
-                messages.error(request, str(error))
-            for fs in formsets:
-                for formset_error in fs.errors:
-                    messages.error(request, str(formset_error))
+        # # Validate forms and formsets
+        # if not (form.is_valid() and all(fs.is_valid() for fs in formsets) and self.validate_form(form, formsets)):
+        #     for error in form.errors.values():
+        #         messages.error(request, str(error))
+        #     for fs in formsets:
+        #         for formset_error in fs.errors:
+        #             messages.error(request, str(formset_error))
             
-            return render(request, self.get_template_name(), locals())
+        #     return render(request, self.get_template_name(), locals())
 
         try:
             # Save main instance

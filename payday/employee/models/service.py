@@ -12,7 +12,7 @@ class Service(Base):
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
 
     search_fields = ('sub_direction__name', 'name')
-    list_display = ('id', 'subdirection', 'name')
+    list_display = ('id', 'sub_direction', 'name')
     list_filter = ('sub_direction',)
     
     layout = Layout(
