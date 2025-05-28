@@ -107,10 +107,13 @@ class Delete(BaseView):
         """
         query_params = {}
         model_fields = ['pk']
+
+        query = request.GET.dict()
+        query.pop('next', None)
+
         model_fields += list({field.name for field in self.get_model()._meta.fields})
 
-        for key, value in request.GET.dict().items():
-            # Extract field name from lookup (e.g., 'id__in' -> 'id')
+        for key, value in query.items():
             field_name = key.split('__')[0]
             if field_name not in model_fields:
                 logger.warning(f"Invalid field in query parameter: {field_name}")
