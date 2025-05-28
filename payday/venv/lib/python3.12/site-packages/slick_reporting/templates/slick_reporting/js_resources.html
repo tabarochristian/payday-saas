@@ -1,0 +1,12 @@
+{% load i18n static slick_reporting_tags %}
+
+{% get_slick_reporting_settings as slick_reporting_settings %}
+
+{% add_jquery %}
+{% get_slick_reporting_media as media %}
+{{ media }}
+
+<link rel="stylesheet" type="text/css"
+      href="{{ slick_reporting_settings.FONT_AWESOME.CSS_URL }}"/>
+
+{{ slick_reporting_settings|json_script:"slick_reporting_settings" }}
