@@ -1,62 +1,82 @@
-{% extends 'base.html' %}
+{# templates/payroll/payslips.html #}
 
-{% load core %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 {% load humanize %}
 {% load mathfilters %}
 {% load crispy_forms_filters %}
 
+{% block title %}
+    {% trans "Fiches de paie" %}
+{% endblock %}
+
 {% block content %}
+    {% include 'components/change/heading.html' %}
 
-{% include 'components/change/heading.html' %}
+    <div class="page-content container-fluid">
+        <section class="mb-4">
+            <!-- Error alerts -->
+            {% for error in obj.metadata.errors %}
+                <div class="alert alert-warning fw-bold mb-3" role="alert">
+                    {{ error.message }}
+                </div>
+            {% endfor %}
 
-<div class="page-content">
-    <section>
-        {% for error in obj.metadata.errors %}
-            <div class="alert alert-light-warning fw-bold mb-3" role="alert">
-                {{ error.message }}
-            </div>
-        {% endfor %}
-    
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title mb-0">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ payroll_obj.get_status_display|title }}</h3>
-                            <small>{% trans 'Status' %}</small>
+            <!-- Summary cards -->
+            <div class="row g-3 mb-4">
+                <!-- Status -->
+                <div class="col-md-4 col-sm-12">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="mb-0">{{ payroll_obj.get_status_display|title }}</h5>
+                            <small class="text-muted">{% trans "Statut" %}</small>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">
-                                {{ qs.count|intcomma }}
-                                <small>
-                                    {{  qs.count|pluralize:'fiche de paie' }}
+                <!-- Employee Count -->
+                <div class="col-md-4 col-sm-12">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="mb-0">
+                                {{ qs.count|intcomma }} 
+                                <small class="text-muted ms-1">
+                                    {% blocktrans count counter=qs.count %}
+                                        fiche de paie
+                                    {% plural %}
+                                        fiches de paie
+                                    {% endblocktrans %}
                                 </small>
-                            </h3>
-                            <small>{% trans 'Fiches de paie' %}</small>
+                            </h5>
+                            <small class="text-muted">{% trans "Fiches de paie" %}</small>
                         </div>
-                        
-                        <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ overall_net|intcomma }}</h3>
-                            <small>{% trans 'Net à payer global' %}</small>
+                    </div>
+                </div>
+
+                <!-- Total Net Pay -->
+                <div class="col-md-4 col-sm-12">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="mb-0">{{ overall_net|intcomma }}</h5>
+                            <small class="text-muted">{% trans "Net à payer global" %}</small>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col">
+
+            <!-- Main Content Area -->
             <div class="row">
-                <div class="col-md-9 col-sm-12">
+                <div class="col-lg-9 col-md-12">
+                    <!-- Table Component -->
                     {% include "components/list_table.html" %}
                 </div>
-                
-                {% include "components/list_filter.html" %}
-            </div>
-        </div>
-    </section>
-</div>
 
+                <!-- Filter Sidebar -->
+                <div class="col-lg-3 col-md-12">
+                    {% include "components/list_filter.html" %}
+                </div>
+            </div>
+        </section>
+    </div>
 {% endblock %}

@@ -106,7 +106,7 @@ class Create(BaseView):
         
         return render(request, self.get_template_name(), locals())
 
-    @transaction.atomic
+    # @transaction.atomic
     def post(self, request, app, model):
         """
         Processes POST requests with atomic transactions and comprehensive error handling.

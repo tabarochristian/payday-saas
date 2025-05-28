@@ -1,162 +1,158 @@
-from datetime import timedelta
+# payroll/views/preview.py
 
+from datetime import timedelta
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.translation import gettext as _
-from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
+from django.contrib import messages
+from django.db.models import Model
+from django.conf import settings
 from django.apps import apps
+
 
 from core.forms.button import Button
 from core.views import Change
+import logging
 
-# Constants for payroll statuses
-PAYROLL_STATUSES = (
-    "IN_PROGRESS",
-    "COMPLETED",
-    "ERROR"
-)
+logger = logging.getLogger(__name__)
+
 
 class Preview(Change):
     """
     A view to preview payroll operations before finalizing the payslip process.
-
-    This view renders a preview page for a payroll instance. If the payroll
-    has already been processed (its status is within PAYROLL_STATUSES), the user
-    is redirected to the payslips view. Otherwise, the view estimates the duration
-    required to process the payroll and renders a preview page with action buttons.
+    
+    Features:
+      - Redirects if payroll already processed
+      - Estimates duration based on employee/item count
+      - Dynamically generates action buttons
+      - Triggers async payroll processing
     """
-    template_name = 'payroll/preview.html'
+    template_name = "payroll/preview.html"
+    PAYROLL_STATUSES = ("IN_PROGRESS", "COMPLETED", "ERROR")
 
     def get_model(self):
-        return apps.get_model('payroll', model_name='payroll')
+        """Returns the Payroll model."""
+        return apps.get_model("payroll", model_name="payroll")
 
     def get_action_buttons(self):
         """
-        Construct and return the list of action buttons for the preview page.
-
-        This method modifies the inherited action buttons by removing the last two
-        default buttons and adding a custom button that allows the user to 
-        "Commencer la paie" (start the payroll processing).
-
-        Returns:
-            list: A list of Button objects configured with appropriate tags, URLs, classes, and permissions.
+        Returns custom action buttons for the preview page.
+        Removes default Save/Delete buttons and adds 'Start Payroll' button.
         """
-        # Retrieve keyword arguments.
+        logger.debug("Generating action buttons for preview view.")
         kwargs = self.kwargs
-        # Get the base action buttons from the parent Change view.
+
+        # Get parent buttons and remove last two (Save/Delete)
         buttons = super().get_action_buttons()
-        # Remove the last two default buttons (using negative slicing for clarity).
-        buttons = buttons[:-2]
+        buttons = buttons[:-1]  # Remove last two buttons safely
 
-        # Define a custom "Start Payroll" (Commencer la paie) button.
-        start_payroll_button = Button(
-            tag='button',
-            classes='btn btn-success',
-            text=_('Commencer la paie'),
-            permission=f'{kwargs["app"]}.change_{kwargs["model"]}',
+        start_button = Button(
+            tag="button",
+            classes="btn btn-success",
+            text=_("Commencer la paie"),
+            permission=f"{kwargs['app']}.change_{kwargs['model']}",
             attrs={
-                'type': 'submit',
-                'form': f'form-{kwargs["model"]}',
-                'name': 'status',
-                'value': 'IN_PROGRESS',
-            }
+                "type": "submit",
+                "form": f"form-{kwargs['model']}",
+                "name": "status",
+                "value": "IN_PROGRESS",
+            },
         )
-        buttons.append(start_payroll_button)
-        return buttons
+        buttons.append(start_button)
 
-    def estimate_duration(self, queryset, payroll_obj):
+        return [btn for btn in buttons if btn.permission and self.request.user.has_perm(btn.permission)]
+
+    def estimate_duration(self, queryset, payroll_obj) -> timedelta:
         """
-        Estimate the duration needed for payroll processing based on the number of items.
-
-        It retrieves the total count of items from two models (item and legalitem) and
-        multiplies it by the count of paid employee records (from the queryset) with a constant factor.
+        Estimate time required to process this payroll based on number of employees and items.
 
         Args:
-            queryset (QuerySet): Queryset containing paid employee records.
-            payroll_obj: The payroll instance.
+            queryset (QuerySet): PaidEmployee queryset
+            payroll_obj (Payroll): Payroll instance
 
         Returns:
-            timedelta: A timedelta object representing the estimated processing duration.
+            timedelta: Estimated duration
         """
-        # Retrieve the item models.
-        item_model = apps.get_model('payroll', 'item')
-        legal_item_model = apps.get_model('payroll', 'legalitem')
-        # Compute the total count of items from both models.
-        total_items = item_model.objects.count() + legal_item_model.objects.count()
-        # Multiply total items by the number of paid employees and constant factor (3ms).
-        return timedelta(milliseconds=total_items * queryset.count() * 3)
+        try:
+            item_model = apps.get_model("payroll", "item")
+            legal_item_model = apps.get_model("payroll", "legalitem")
+            total_items = item_model.objects.count() + legal_item_model.objects.count()
+            duration = timedelta(milliseconds=total_items * queryset.count() * 3)
+            logger.info(f"Estimated processing duration: {duration}")
+            return duration
+        except Exception as e:
+            logger.warning(f"Failed to estimate duration: {e}")
+            return timedelta(seconds=0)
 
     def get(self, request, pk):
         """
-        Handle GET requests to preview a payroll instance.
+        Handles GET requests to show payroll preview.
 
-        The method performs the following steps:
-          1. Sets the view's app/model keyword arguments appropriately.
-          2. Retrieves the payroll object for the given primary key.
-          3. Retrieves the related paid employee records.
-          4. If the payroll status indicates it is already processed, redirects the user to the payslips view.
-          5. Otherwise, estimates the processing duration and renders the preview template.
-
-        Args:
-            request (HttpRequest): The incoming GET request.
-            pk (int): The primary key of the payroll instance.
-
-        Returns:
-            HttpResponse: The rendered preview page.
+        If the payroll has already been processed, redirects to payslips view.
+        Otherwise, prepares context and renders the preview template.
         """
-        # Set URL kwargs for the payroll model.
-        app = 'payroll'
-        self.kwargs.update({'app': 'payroll', 'model': 'payroll'})
-        model_class = apps.get_model('payroll', 'payroll')
-        payroll_obj = get_object_or_404(model_class, pk=pk)
+        logger.info(f"User {request.user} requested payroll preview for ID={pk}")
 
-        # Retrieve all related paid employee records.
-        paid_employee_model = apps.get_model('payroll', 'paidemployee')
-        paid_employees_qs = paid_employee_model.objects.filter(payroll=payroll_obj)
+        try:
+            self.kwargs.update({"app": "payroll", "model": "payroll"})
+            model_class = self.get_model()
+            payroll_obj = get_object_or_404(model_class, pk=pk)
 
-        # If payroll status is already set (i.e., processed/stopped), redirect.
-        if payroll_obj.status in PAYROLL_STATUSES:
-            return redirect('payroll:payslips', pk=pk)
+            paid_employee_model = apps.get_model("payroll", "paidemployee")
+            paid_employees_qs = paid_employee_model.objects.filter(payroll=payroll_obj)
 
-        # Estimate the processing duration for the payroll.
-        action_buttons = self.get_action_buttons()
-        estimation_duration = self.estimate_duration(paid_employees_qs, payroll_obj)
-        return render(request, self.template_name, locals())
+            if payroll_obj.status in self.PAYROLL_STATUSES:
+                logger.info(f"Payroll ID={pk} already processed. Redirecting to payslips.")
+                return redirect("payroll:payslips", pk=pk)
+
+            estimation_duration = self.estimate_duration(paid_employees_qs, payroll_obj)
+            action_buttons = self.get_action_buttons()
+
+            logger.debug("Rendering payroll preview template.")
+            return render(request, self.template_name, locals())
+
+        except Exception as e:
+            logger.error(f"GET request failed for Payroll ID={pk}: {str(e)}", exc_info=True)
+            messages.error(request, _("Échec du chargement de l'aperçu de la paie"))
+            return redirect(reverse_lazy("core:home"))
 
     def post(self, request, pk):
         """
-        Handle POST requests to update the payroll status and trigger payroll processing.
+        Handle POST to update payroll status and trigger background processing.
 
-        The method changes the payroll status if specified in the POST data (and valid),
-        logs the change, and then triggers the payroll processing via a background task.
-
-        Args:
-            request (HttpRequest): The incoming POST request.
-            pk (int): The primary key of the payroll instance to update.
-
-        Returns:
-            HttpResponseRedirect: A redirect to the payslips view.
+        Changes payroll status to IN_PROGRESS and triggers async payroll generation.
         """
-        # Set URL kwargs for the payroll model.
-        app = 'payroll'
-        self.kwargs.update({'app': 'payroll', 'model': 'payroll'})
-        model_class = apps.get_model('payroll', 'payroll')
-        payroll_obj = get_object_or_404(model_class, pk=pk)
+        logger.info(f"User {request.user} triggered payroll processing for ID={pk}")
 
-        # Retrieve POST data and determine the requested status.
-        data = request.POST.dict()
-        status = data.get('status')
-        if status and status in PAYROLL_STATUSES:
-            messages.success(request, _('La paie a commencé'))
-            payroll_obj.status = status
-            payroll_obj.save()
+        try:
+            self.kwargs.update({"app": "payroll", "model": "payroll"})
+            model_class = self.get_model()
+            payroll_obj = get_object_or_404(model_class, pk=pk)
 
-        # Trigger payroll processing using a background task.
-        from payroll.tasks import Payer
-        
-        schema = request.get_host().split('.')[0]
-        Payer().run(schema, pk)
-        # Payer().delay(host[0], pk)
+            data = request.POST.dict()
+            new_status = data.get("status")
 
-        # Redirect to the payslips view.
-        return redirect('payroll:payslips', pk=pk)
+            if new_status and new_status in self.PAYROLL_STATUSES:
+                payroll_obj.status = new_status
+                payroll_obj.save(update_fields=["status"])
+                messages.success(request, _("La paie a commencé."))
+
+            # Trigger async payroll processing
+            from payroll.tasks import Payer
+            host = request.get_host().split(".")[0]
+            logger.info(f"Triggering async payroll processor for schema: {host}, payroll_id={pk}")
+            payer = Payer()
+
+            # Fetch the debug setting with a default of False for better safety
+            debug_mode = getattr(settings, "DEBUG", False)
+
+            # Use a ternary operator for cleaner execution logic
+            action = payer.run if debug_mode else payer.delay
+            action(host, pk)
+
+            return redirect("payroll:payslips", pk=pk)
+
+        except Exception as e:
+            logger.exception(f"POST request failed for Payroll ID={pk}: {str(e)}")
+            messages.error(request, _("Une erreur est survenue lors du démarrage de la paie."))
+            return redirect(reverse_lazy("core:home"))

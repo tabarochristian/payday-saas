@@ -73,7 +73,8 @@ INSTALLED_APPS = [
     
     "leave",
     "payroll",
-    "employee"
+    "employee",
+    "easypay"
 ]
 
 MIDDLEWARE = [
@@ -160,14 +161,15 @@ CACHES = {
 
 DEFAULT_CACHE_ALIAS = 'default'
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": dict()
+if not DEBUG:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": dict()
+        }
     }
-}
 
-CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(REDIS_URL)]
+    CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(REDIS_URL)]
 
 # Default user model and authentication
 LOGIN_URL = os.getenv("LOGIN_URL", 'login')

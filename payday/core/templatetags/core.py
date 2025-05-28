@@ -91,3 +91,9 @@ def qs_sum_of(qs, field):
 def qs_limit(qs, limit):
     if not qs: return qs
     return qs[:limit]
+
+@register.filter(name="model_attr")
+def get_model_fields(model, attr):
+    if meta := getattr(model, '_meta', None):
+        return getattr(meta, attr, None)
+    return None

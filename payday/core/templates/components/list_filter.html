@@ -3,18 +3,16 @@
 {% load humanize %}
 {% load crispy_forms_filters %}
 
-<div class="col-md-3 col-sm-12">
-    <div class="card">
-        <div class="card-body" id="filter-card">
-            <div class="card-title d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">{% trans 'Filtre' %}</h3>
-                <button type="submit" form="filter-form" class="btn btn-primary btn-sm">{% trans 'Soumettre' %}</button>
-            </div>
-            <hr>
-            <form method="GET" id="filter-form">
-                {{ filter_set.form|crispy }}
-            </form>
+<div class="card">
+    <div class="card-body" id="filter-card">
+        <div class="card-title d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">{% trans 'Filtre' %}</h3>
+            <button type="submit" form="filter-form" class="btn btn-primary btn-sm">{% trans 'Soumettre' %}</button>
         </div>
+        <hr>
+        <form method="GET" id="filter-form">
+            {{ filter_set.form|crispy }}
+        </form>
     </div>
 </div>
 

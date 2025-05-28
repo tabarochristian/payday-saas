@@ -1,180 +1,200 @@
-from django.utils.translation import gettext as _
+# payroll/views/synthesis.py
+
+from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render, redirect, get_object_or_404
 from django.apps import apps
+from django.db.models import Model
 import pandas as pd
-import json
 from core.views import BaseView
+from django.contrib import messages
+from django.urls import reverse_lazy
+import logging
 
-# Helper functions with descriptive names.
+logger = logging.getLogger(__name__)
+
+
 def intcomma(value):
     """
-    Format a numeric value with commas and two decimal places.
-    
-    Args:
-        value (int|float): The numeric value to format.
-    
-    Returns:
-        str: The formatted string if value is a number; otherwise, returns the value as-is.
+    Format numeric value with commas.
     """
-    return f"{value:,.2f}" if isinstance(value, (int, float)) else value
+    if isinstance(value, (int, float)):
+        return f"{value:,.2f}"
+    return str(value) if value is not None else ""
+
 
 def get_name_of_fields(field_list):
     """
-    Retrieve a list of field names from a list of field objects.
-    
-    Args:
-        field_list (list): List of Django field objects.
-    
-    Returns:
-        list: List of field names.
+    Extract field names from Django model fields.
     """
     return [field.name for field in field_list]
 
 
 class Synthesis(BaseView):
     """
-    A view to generate a pivot-table synthesis report exported as an HTML table.
-    
-    This view processes employee paid data by pivoting on selected row and column fields,
-    aggregating the 'net' values using a specified function, and then adding totals thru rows 
-    and columns. The resulting DataFrame is formatted and converted to HTML.
+    A class-based view that generates synthesis reports using pivot tables.
+
+    Features:
+      - User selects row/column fields via POST
+      - Aggregation function can be 'sum', 'mean', etc.
+      - Uses Pandas for dynamic data transformation
+      - Renders result in HTML table
     """
     action = ["view"]
     template_name = "payroll/synthesis.html"
     template_name_field_selector = "payroll/field_selector.html"
-    
-    def get_field_verbose(self, model, field):
+
+    def get_field_verbose(self, model, field: str):
         """
-        Recursively retrieves the verbose name of a (possibly nested) field.
-        
-        Args:
-            model: The Django model class.
-            field (str): The field name (possibly nested using '__').
-            
-        Returns:
-            str: The verbose name of the field (in lowercase).
+        Recursively retrieve verbose name for nested field (e.g., employee__branch__name).
         """
-        parts = field.split('__')
-        if len(parts) == 1:
-            return model._meta.get_field(parts[0]).verbose_name.lower()
-        related_model = model._meta.get_field(parts[0]).related_model
-        return self.get_field_verbose(related_model, '__'.join(parts[1:]))
-    
+        parts = field.split("__")
+        current_model = model
+        current_field = None
+
+        try:
+            for part in parts:
+                current_field = current_model._meta.get_field(part)
+                if current_field.is_relation:
+                    current_model = current_field.related_model
+            return current_field.verbose_name.lower()
+        except Exception as e:
+            logger.warning(f"Field '{field}' does not exist on {model.__name__}: {str(e)}")
+            return field  # fallback
+
     def get_field(self, model, field):
         """
-        Recursively retrieves a Django field object given a (possibly nested) field name.
-        
-        Args:
-            model: The Django model class.
-            field (str): The field name (possibly nested using '__').
-        
-        Returns:
-            Field: The Django field object.
+        Recursively retrieves the field object for nested fields.
         """
-        parts = field.split('__')
-        if len(parts) == 1:
-            return model._meta.get_field(parts[0])
-        related_model = model._meta.get_field(parts[0]).related_model
-        return self.get_field(related_model, '__'.join(parts[1:]))
-    
+        parts = field.split("__")
+        current_model = model
+
+        try:
+            for part in parts[:-1]:
+                current_model = current_model._meta.get_field(part).related_model
+            return current_model._meta.get_field(parts[-1])
+        except Exception as e:
+            logger.warning(f"Failed to get field '{field}': {str(e)}")
+            raise Http404(_("Champ introuvable"))
+
     def get(self, request, func, pk):
         """
-        Render the field selector template, which allows the user to choose which
-        fields to include in the synthesis export.
-        
-        Args:
-            request (HttpRequest): The incoming GET request.
-            func (str): The name of the aggregation function to use (e.g., 'sum').
-            pk (int): The primary key of the payroll instance.
-            
-        Returns:
-            HttpResponse: The rendered field selector page.
+        Render the field selector template where user chooses pivot dimensions.
         """
-        # Retrieve the paidemployee model for payroll.
-        model_class = apps.get_model('payroll', 'paidemployee')
-        return render(request, self.template_name_field_selector, locals())
-    
+        logger.info(f"User {request.user} requested synthesis field selection for Payroll ID={pk}")
+
+        try:
+            self.kwargs.update({"app": "payroll", "model": "paidemployee"})
+            model_class = apps.get_model("payroll", "paidemployee")
+            payroll_obj = get_object_or_404(model_class.payroll.field.remote_field.model, id=pk)
+
+            return render(request, self.template_name_field_selector, {
+                "pk": pk,
+                "func": func,
+                "payroll_obj": payroll_obj,
+                "model_class": model_class,
+                "model_class_meta": model_class._meta,
+                "title": _("Sélectionnez les champs pour la synthèse"),
+            })
+
+        except Exception as e:
+            logger.error(f"GET request failed for Synthesis view: {str(e)}", exc_info=True)
+            messages.error(request, _("Échec du chargement de la sélection de champ."))
+            return redirect(reverse_lazy("core:home"))
+
     def post(self, request, func, pk):
         """
-        Process the synthesis export form submission, generate a pivot table based on the
-        user's selection, and render the result as HTML.
-        
-        Steps:
-         1. Retrieve the payroll object using pk.
-         2. Get the related paidemployee data for that payroll.
-         3. Determine which fields the user selected for export (ensuring 'net' is included).
-         4. Create a pivot table using pandas with the specified aggregation function.
-         5. Append row and column totals.
-         6. Format the DataFrame and convert it to an HTML table.
-         7. Render the final synthesis using the template.
-        
-        Args:
-            request (HttpRequest): The incoming POST request.
-            func (str): The aggregation function to use (e.g., 'sum', 'mean', etc.).
-            pk (int): The primary key of the payroll object.
-        
-        Returns:
-            HttpResponse: The rendered synthesis page.
+        Handle POST requests to generate a synthesis report (pivot table) based on selected fields.
         """
-        # Get the payroll object.
-        payroll_model = apps.get_model('payroll', 'payroll')
-        payroll_obj = payroll_model.objects.get(pk=pk)
+        logger.info(f"User {request.user} submitted synthesis form for Payroll ID={pk}, func={func}")
         
-        # Retrieve the paidemployee records related to the payroll.
-        model_class = apps.get_model('payroll', 'paidemployee')
-        qs = payroll_obj.paidemployee_set.all().select_related().prefetch_related()
-        
-        # Extract the selected field names from the POST data, ignoring the CSRF token.
-        post_dict = request.POST.dict()
-        selected_fields = [value for key, value in post_dict.items() if key != 'csrfmiddlewaretoken']
-        if 'net' not in selected_fields:
-            selected_fields.append('net')
-        
-        qs = qs.filter(payroll=payroll_obj)
-        data = qs.values(*selected_fields)
-        
-        # Map each selected field to its verbose name.
-        field_verbose_map = {field: self.get_field_verbose(model_class, field) for field in selected_fields}
-        
-        # Create a DataFrame from the query results.
-        df = pd.DataFrame.from_records(data)
-        
-        # Create a pivot table from the DataFrame.
-        pivot_index = request.POST.get('column')
-        pivot_columns = request.POST.get('row')
-        df_pivot = df.pivot_table(
-            index=pivot_index, 
-            columns=pivot_columns, 
-            values='net', 
-            aggfunc=func, 
-            fill_value=0
-        )
-        
-        # Add a Total column (sum across rows).
-        df_pivot['Total'] = df_pivot.sum(axis=1)
-        # Create a total row (sum across columns).
-        total_row = df_pivot.sum(axis=0)
-        total_row.name = 'Total'
-        # Append the total row to the pivot table.
-        df_pivot = pd.concat([df_pivot, total_row.to_frame().T])
-        
-        # Reset index for better readability.
-        df_pivot.reset_index(inplace=True)
-        # Rename columns using the verbose names.
-        df_pivot.rename(columns=field_verbose_map, inplace=True)
-        # Remove the multi-index name.
-        df_pivot.columns.name = None
+        try:
+            # Load models
+            payroll_model = apps.get_model("payroll", "payroll")
+            paidemployee_model = apps.get_model("payroll", "paidemployee")
 
-        if func == 'sum':
-            # Apply numeric formatting if the aggregation function is sum.
-            df_pivot = df_pivot.applymap(intcomma)
-        
-        # Rename the index column to a more human-readable name.
-        row_field_verbose = self.get_field_verbose(model_class, request.POST.get('row'))
-        df_pivot.rename(columns={'index': row_field_verbose.title()}, inplace=True)
-        
-        # Convert the pivot table to an HTML table with bootstrap styles.
-        html_table = df_pivot.to_html(index=False, classes='table table-striped mt-3')
-        # Adjust styling as necessary.
-        html_table = html_table.replace('text-align: right;', 'text-align: left;')
-        return render(request, self.template_name, locals())
+            # Get payroll object
+            payroll_obj = get_object_or_404(payroll_model, id=pk)
+
+            # Query related paid employees
+            qs = paidemployee_model.objects.filter(payroll=payroll_obj)
+            if not qs.exists():
+                messages.warning(request, _("Aucune donnée trouvée pour ce rapport"))
+                return redirect(request.META.get("HTTP_REFERER", reverse_lazy("core:home")))
+
+            # Process selected fields
+            post_dict = request.POST.dict()
+            selected_fields = [v for k, v in post_dict.items() if k != "csrfmiddlewaretoken"]
+
+            if not selected_fields:
+                messages.warning(request, _("Veuillez sélectionner au moins un champ."))
+                return redirect(request.META.get("HTTP_REFERER", reverse_lazy("core:home")))
+
+            if "net" not in selected_fields:
+                selected_fields.append("net")
+
+            # Retrieve values
+            data = list(qs.values(*selected_fields))
+
+            if not data:
+                messages.warning(request, _("Aucune donnée disponible pour ces filtres."))
+                return redirect(request.META.get("HTTP_REFERER", reverse_lazy("core:home")))
+
+            df = pd.DataFrame(data)
+            pivot_index = request.POST.get("column")
+            pivot_columns = request.POST.get("row")
+
+            if not pivot_index or not pivot_columns:
+                messages.warning(request, _("Vous devez spécifier un champ en colonne et un champ en ligne."))
+                return redirect(request.META.get("HTTP_REFERER", reverse_lazy("core:home")))
+
+            # Build pivot table
+            try:
+                df_pivot = df.pivot_table(
+                    index=pivot_index,
+                    columns=pivot_columns,
+                    values="net",
+                    aggfunc=func,
+                    fill_value=0
+                )
+            except Exception as e:
+                logger.error(f"Pivot table generation failed: {str(e)}")
+                messages.error(request, _("Échec de la génération du tableau croisé dynamique."))
+                return redirect(request.META.get("HTTP_REFERER", reverse_lazy("core:home")))
+
+            # Add totals
+            df_pivot["Total"] = df_pivot.sum(axis=1)
+            total_row = df_pivot.sum(axis=0)
+            total_row.name = "Total"
+            df_pivot = pd.concat([df_pivot, pd.DataFrame([total_row])])
+
+            # Rename column names to verbose labels
+            field_verbose_map = {
+                field: self.get_field_verbose(paidemployee_model, field) for field in selected_fields
+            }
+            df_pivot.reset_index(inplace=True)
+            df_pivot.rename(columns=field_verbose_map, inplace=True)
+            df_pivot.columns.name = None
+
+            # Format numbers if sum
+            if func == "sum":
+                df_pivot = df_pivot.applymap(intcomma)
+
+            # Prepare final context
+            row_verbose = self.get_field_verbose(paidemployee_model, pivot_columns)
+            col_verbose = self.get_field_verbose(paidemployee_model, pivot_index)
+
+            return render(request, self.template_name, {
+                "html_table": df_pivot.to_html(index=False, classes="table table-striped mt-3").replace(
+                    'text-align: right;', 'text-align: left;'
+                ),
+                "title": _("Synthèse par ") + func,
+                "payroll_obj": payroll_obj,
+                "row_label": row_verbose.title(),
+                "col_label": col_verbose.title(),
+                "func": func,
+            })
+
+        except Exception as e:
+            logger.exception(f"POST request failed for Synthesis ID={pk}: {str(e)}")
+            messages.error(request, _("Une erreur est survenue lors de la génération de la synthèse."))
+            return redirect(reverse_lazy("core:home"))

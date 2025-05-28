@@ -1,24 +1,32 @@
+# payroll/views/canvas.py or wherever appropriate
+
+from employee.models import Employee
 from django.http import HttpResponse
 from core.views import BaseView
-from employee.models import Employee
 import pandas as pd
+
 from django.utils.text import slugify
-import json
+from django.db.models import Value as V
+from django.db.models.functions import Concat
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.http import Http404
+from django.db import models
+
+# Import logging
+import logging
+logger = logging.getLogger(__name__)
+
 
 class Canvas(BaseView):
     """
-    A view for generating Excel exports of employee data in various formats.
+    A high-performance view for generating Excel exports of employee data.
 
-    This view supports several export methods:
-      - tracker(): Generates an Excel file ("canvas.xlsx") that groups employee
-                   tracker data by a specified column (default: branch).
-      - benefits(): Generates an Excel file ("canvas-items-to-pay.xlsx") based on
-                    a predefined set of headers describing benefit-related items.
-
-    The exported Excel files are created on the fly using pandas and xlsxwriter.
+    Supports:
+        - tracker(): Exports grouped employee tracker data (grouped by branch).
+        - benefits(): Exports predefined benefit templates.
     """
-    
-    # Predefined headers for benefits export.
+
     headers = [{
         'matricule': None,
         "type d'element": 1,
@@ -32,121 +40,131 @@ class Canvas(BaseView):
         'est payable': 1,
     }]
 
-    def tracker(self):
+    def get(self, request, actor):
         """
-        Generate an Excel file that exports employee tracker data.
-
-        The method performs the following steps:
-          1. Constructs query parameters from the GET request.
-          2. Retrieves employees satisfying these parameters.
-          3. Builds a list of dictionaries with selected employee fields plus default values
-             for additional columns (e.g. absence-related columns).
-          4. Converts the data into a pandas DataFrame.
-          5. If the DataFrame is not empty, sorts and groups the data by 'branch' and writes
-             each group to a separate sheet in an Excel workbook.
-
-        Returns:
-            HttpResponse: An HTTP response with the generated Excel file as an attachment.
+        Dispatch to export method dynamically based on `actor`.
         """
-        # Construct query parameters from request GET data
-        query_params = {
-            key: value.split(',') if '__in' in key else value
-            for key, value in self.request.GET.dict().items() if value
-        }
-        if not query_params:
-            # If no query parameters are available, warn and redirect.
-            messages.warning(self.request, _("Impossible de trouver le modèle d'objet"))
+        logger.info(f"User {request.user} is attempting to access export method: {actor}")
+        export_method = getattr(self, actor, None)
+
+        if not export_method or not callable(export_method):
+            logger.warning(f"Export method '{actor}' not found in Canvas view.")
+            raise Http404("Export method not found")
+
+        try:
+            result = export_method()
+            logger.info(f"Successfully executed export method: {actor}")
+            return result
+        except Exception as e:
+            logger.error(f"Error occurred in export method '{actor}': {str(e)}", exc_info=True)
+            messages.error(request, f"Erreur lors de l'exécution de l'export '{actor}': {str(e)}")
             return redirect(self.request.META.get('HTTP_REFERER'))
 
-        # Retrieve employee objects based on query parameters.
-        qs = Employee.objects.filter(**query_params).values(
-            'registration_number', 'last_name', 'middle_name', 'branch__name', 'grade__name'
-        )
+    def tracker(self):
+        """
+        Generate Excel file grouped by branch from filtered employee data.
+        """
+        logger.info("Starting export: tracker")
 
-        # Define additional columns for which default values are set.
-        additional_columns = ['absence', 'absence.justifiee']
-        # For now, assume no columns should get a 'None' default rather than numeric zero.
-        field_no_numbers = []
+        query_params = {
+            key: value.split(',') if '__in' in key else value
+            for key, value in self.request.GET.items() if value
+        }
 
-        # Build a list of data dictionaries for each employee.
-        data = [{
-            'registration_number': obj['registration_number'],
-            'last_name': obj['last_name'],
-            'middle_name': obj['middle_name'],
-            'grade': obj['grade__name'],
-            'branch': obj['branch__name'],
-            **{col: None if col in field_no_numbers else 0 for col in additional_columns}
-        } for obj in qs]
+        if not query_params:
+            logger.warning("No query parameters provided for tracker export")
+            messages.warning(self.request, "Impossible de trouver le modèle d'objet")
+            return redirect(self.request.META.get('HTTP_REFERER'))
 
-        # Specify the field on which to group the data.
-        group_by = 'branch'
-        # Convert the list of dictionaries to a pandas DataFrame.
-        df = pd.read_json(json.dumps(data), dtype={'registration_number': str})
+        logger.debug(f"Applying filters: {query_params}")
 
-        if not df.empty:
-            # Sort the data by grade, registration number, last name, and middle name.
-            df = df.sort_values(
-                by=['grade', 'registration_number', 'last_name', 'middle_name'],
-                ascending=[True, True, True, True]
+        # Efficient field selection using only needed fields
+        try:
+            qs = Employee.objects.filter(**query_params).annotate(
+                full_name=Concat('last_name', V(' '), 'middle_name'),
+                branch_name=models.F('branch__name'),
+                grade_name=models.F('grade__name')
+            ).values(
+                'registration_number',
+                'full_name',
+                'branch_name',
+                'grade_name'
             )
-            # Group the DataFrame by the specified column.
-            df = df.groupby(group_by)
+        except Exception as e:
+            logger.error(f"Query error in tracker export: {e}", exc_info=True)
+            messages.error(self.request, "Erreur dans les paramètres de filtre.")
+            return redirect(self.request.META.get('HTTP_REFERER'))
 
-        # Initialize HTTP response for an Excel file download.
-        response = HttpResponse(content_type='application/xlsx')
-        response['Content-Disposition'] = 'attachment; filename="canvas.xlsx"'.lower()
+        if not qs.exists():
+            logger.warning("No employees matched the filters in tracker export")
+            messages.warning(self.request, "Aucun employé trouvé avec les filtres appliqués.")
+            return redirect(self.request.META.get('HTTP_REFERER'))
 
-        with pd.ExcelWriter(response) as writer:
-            if group_by:
-                # Write each group to a separate sheet.
-                for group_value, group_df in df:
-                    # Use slugify to generate a valid sheet name.
-                    sheet_name = slugify(str(group_value))
-                    group_df.to_excel(writer, sheet_name=sheet_name, index=False)
-            else:
-                # If not grouped, export all data to a single sheet.
-                df.to_excel(writer, sheet_name='global', index=False)
-        return response
+        # Convert directly to DataFrame without intermediate list/dict step
+        df = pd.DataFrame(qs)
+        df.rename(columns={
+            'branch_name': 'branch',
+            'grade_name': 'grade'
+        }, inplace=True)
+
+        additional_columns = ['absence', 'absence.justifiee']
+        for col in additional_columns:
+            df[col] = 0  # Set default values
+
+        logger.debug(f"Loaded {len(df)} records for export.")
+
+        # Sort once before grouping
+        df.sort_values(by=['grade', 'registration_number', 'full_name'], ascending=[True, True, True], inplace=True)
+
+        group_by = 'branch'
+
+        # Initialize response
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="canvas.xlsx"'
+
+        try:
+            with pd.ExcelWriter(response, engine='xlsxwriter') as writer:
+                if group_by in df.columns:
+                    logger.info(f"Grouping data by '{group_by}' and writing sheets...")
+                    # Group by specified column and write each group to separate sheet
+                    for group_value, group_df in df.groupby(group_by):
+                        sheet_name = slugify(str(group_value))[:31]  # Sheet names are limited to 31 chars
+                        logger.debug(f"Writing sheet: {sheet_name} with {len(group_df)} rows")
+                        group_df.to_excel(writer, sheet_name=sheet_name, index=False)
+                else:
+                    logger.debug("No valid group column. Exporting all data to single sheet.")
+                    df.to_excel(writer, sheet_name='global', index=False)
+
+            logger.info("Tracker export completed successfully.")
+            return response
+        except Exception as e:
+            logger.error(f"Error during Excel generation: {str(e)}", exc_info=True)
+            messages.error(self.request, "Erreur lors de la génération du fichier Excel.")
+            return redirect(self.request.META.get('HTTP_REFERER'))
 
     def benefits(self):
         """
-        Generate an Excel file for benefit export based on predefined headers.
-
-        This method:
-          1. Converts the predefined headers to a DataFrame.
-          2. Writes the DataFrame to an Excel workbook with a single sheet.
-
-        Returns:
-            HttpResponse: An HTTP response with the generated Excel file as an attachment.
+        Generate an Excel template for benefit items.
         """
-        # Convert headers to a DataFrame.
-        df = pd.read_json(json.dumps(self.headers))
-        # Prepare the HTTP response with the appropriate content type.
-        response = HttpResponse(content_type='application/xlsx')
-        response['Content-Disposition'] = 'attachment; filename="canvas-items-to-pay.xlsx"'.lower()
+        logger.info("Starting export: benefits")
 
-        with pd.ExcelWriter(response) as writer:
-            df.to_excel(writer, sheet_name='global', index=False)
-        return response
+        try:
+            df = pd.DataFrame(self.headers)
+            logger.debug(f"Generated benefits template with {len(df.columns)} columns")
+        except Exception as e:
+            logger.error(f"Failed to load benefit headers: {str(e)}", exc_info=True)
+            messages.error(self.request, "Échec de chargement des en-têtes.")
+            return redirect(self.request.META.get('HTTP_REFERER'))
 
-    def get(self, request, actor):
-        """
-        Dynamically dispatch to the specified export actor method.
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="canvas-items-to-pay.xlsx"'
 
-        The 'actor' parameter determines which export functionality to execute
-        (e.g., "tracker" or "benefits"). If the specified actor is not callable, raises a 404 error.
-        
-        Args:
-            request (HttpRequest): The incoming HTTP GET request.
-            actor (str): The name of the method to invoke.
-        
-        Returns:
-            HttpResponse: The output of the selected export method.
-        
-        Raises:
-            Http404: If the actor is not found or not callable.
-        """
-        export_method = getattr(self, actor, None)
-        if not export_method or not callable(export_method):
-            raise Http404("Page not found")
-        return export_method()
+        try:
+            with pd.ExcelWriter(response, engine='xlsxwriter') as writer:
+                df.to_excel(writer, sheet_name='global', index=False)
+            logger.info("Benefits export completed successfully.")
+            return response
+        except Exception as e:
+            logger.error(f"Error during benefits export: {str(e)}", exc_info=True)
+            messages.error(self.request, "Échec de la génération du fichier Excel.")
+            return redirect(self.request.META.get('HTTP_REFERER'))

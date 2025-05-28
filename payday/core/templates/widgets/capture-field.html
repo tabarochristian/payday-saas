@@ -1,16 +1,24 @@
-<div class="row webcam-capture-container">
-    <div class="col-4 col-xs-12 text-center">
-        <div class="img-thumbnail">
-            <canvas id="canvas-{{ widget.name }}" style="display:none;width: 100% !important;"></canvas>
-            <video id="video-{{ widget.name }}" style="width: 100% !important;%" autoplay></video>
+<div class="webcam-capture-container" id="container-{{ widget.name }}">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-4 col-12 text-center">
+            <div class="img-thumbnail">
+                <canvas id="canvas-{{ widget.name }}" style="display: none; width: 100%; max-width: 100%;" aria-label="Captured image preview"></canvas>
+                <video id="video-{{ widget.name }}" style="width: 100%; max-width: 100%;" autoplay aria-label="Webcam video feed"></video>
+            </div>
         </div>
-    </div>
-    <div class="col-8 col-xs-12">
-        <input type="file" class="form-control mb-3" name="{{ widget.name }}" id="{{ widget.name }}" accept="image/*" {% if widget.value %}data-url="{{ widget.value.url }}"{% endif %} />
-        <select class="form-control mb-3" id="device-select-{{ widget.name }}">
-            <option>Choose video source</option>
-        </select>
-        <button class="btn btn-success capture" type="button" id="capture-{{ widget.name }}" style="display:inline-block;">Capture Photo</button>
-        <button class="btn btn-primary retake" type="button" id="retake-{{ widget.name }}" style="display:none;">Retake Photo</button>
+        <div class="col-md-8 col-12">
+            <input type="file" class="form-control mb-3" name="{{ widget.name }}" id="{{ widget.name }}"
+                   accept="image/*" {% if widget.value %}data-url="{{ widget.value }}"{% endif %}
+                   aria-label="Image file input" {% if widget.is_required %}required{% endif %}>
+            <select class="form-control mb-3" id="device-select-{{ widget.name }}" aria-label="Select video source">
+                <option value="">Choose video source</option>
+            </select>
+            <div class="btn-group">
+                <button class="btn btn-success capture" type="button" id="capture-{{ widget.name }}"
+                        style="display: inline-block;" aria-label="Capture photo">Capture Photo</button>
+                <button class="btn btn-primary retake" type="button" id="retake-{{ widget.name }}"
+                        style="display: none;" aria-label="Retake photo">Retake Photo</button>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,35 +1,61 @@
-from django.db import migrations
+from django.db import migrations, connection
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('employee', '0001_initial'),  # Replace with the latest migration name
+        ('employee', '0001_initial'),  # Adjust as needed
     ]
 
+    def apply_migration(apps, schema_editor):
+        # Determine the correct SQL based on database engine
+        if connection.vendor == 'postgresql':
+            schema_editor.execute("DROP VIEW IF EXISTS employee_attendance;")
+            schema_editor.execute("""
+                CREATE VIEW employee_attendance AS
+                SELECT
+                    ROW_NUMBER() OVER (ORDER BY l.timestamp) AS id,
+                    d.id AS device_id,
+                    l.enroll_id AS employee_id,
+                    DATE(l.timestamp) AS checked_at,
+                    COUNT(l.enroll_id) AS count,
+                    MIN(l.timestamp) AS first_checked_at,
+                    MAX(l.timestamp) AS last_checked_at,
+                    '{}'::jsonb AS _metadata,
+                    l.enroll_id AS updated_by_id,
+                    l.enroll_id AS created_by_id,
+                    MIN(l.timestamp) AS updated_at,
+                    MIN(l.timestamp) AS created_at
+                FROM device_log l
+                LEFT JOIN device_device d ON l.sn = d.sn
+                INNER JOIN employee_employee e ON l.enroll_id = e.registration_number::INTEGER
+                GROUP BY l.enroll_id, d.id, DATE(l.timestamp);
+            """)
+        else:  # SQLite
+            schema_editor.execute("DROP VIEW IF EXISTS employee_attendance;")
+            schema_editor.execute("""
+                CREATE VIEW employee_attendance AS
+                SELECT
+                    ROW_NUMBER() OVER (ORDER BY l.timestamp) AS id,
+                    d.id AS device_id,
+                    l.enroll_id AS employee_id,
+                    DATE(l.timestamp) AS checked_at,
+                    COUNT(l.enroll_id) AS count,
+                    MIN(l.timestamp) AS first_checked_at,
+                    MAX(l.timestamp) AS last_checked_at,
+                    json('{}') AS _metadata,
+                    l.enroll_id AS updated_by_id,
+                    l.enroll_id AS created_by_id,
+                    MIN(l.timestamp) AS updated_at,
+                    MIN(l.timestamp) AS created_at
+                FROM device_log l
+                LEFT JOIN device_device d ON l.sn = d.sn
+                INNER JOIN employee_employee e ON l.enroll_id = CAST(e.registration_number AS INTEGER)
+                GROUP BY l.enroll_id, d.id, DATE(l.timestamp);
+            """)
+
+    def reverse_migration(apps, schema_editor):
+        schema_editor.execute("DROP VIEW IF EXISTS employee_attendance;")
+
     operations = [
-        migrations.RunSQL(
-            """
-            -- Create the view with grouped data
-            DROP VIEW IF EXISTS employee_attendance;
-            CREATE VIEW employee_attendance AS
-            SELECT
-                ROW_NUMBER() OVER () AS id, -- Generates an incremental ID
-                d.id AS device_id, -- Fetching the actual device_id from device_device
-                l.enroll_id AS employee_id,
-                DATE(l.timestamp) AS checked_at, -- Extract only the date part
-                COUNT(l.enroll_id) AS count, -- Count occurrences per employee per date
-                MIN(l.timestamp) AS first_checked_at, -- Earliest log for the day
-                MAX(l.timestamp) AS last_checked_at, -- Latest log for the day
-                '{}'::jsonb AS _metadata, -- Default empty JSON
-                l.enroll_id AS updated_by_id, -- Assuming employee ID as updater
-                l.enroll_id AS created_by_id, -- Assuming employee ID as creator
-                MIN(l.timestamp) AS updated_at, -- Using timestamp from Log
-                MIN(l.timestamp) AS created_at  -- Using timestamp from Log
-            FROM device_log l
-            LEFT JOIN device_device d ON l.sn = d.sn -- Mapping `sn` to actual `device_id`
-            INNER JOIN employee_employee e ON l.enroll_id = e.registration_number::INTEGER -- Ensure enroll_id exists in employee table
-            GROUP BY l.enroll_id, d.id, DATE(l.timestamp);
-            """,
-            reverse_sql="DROP VIEW IF EXISTS employee_attendance CASCADE;"  # Revert migration by removing the view safely
-        )
+        migrations.RunPython(apply_migration, reverse_migration)
     ]

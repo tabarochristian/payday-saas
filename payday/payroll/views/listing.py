@@ -1,101 +1,134 @@
+# payroll/views/listing.py or wherever appropriate
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.apps import apps
 import pandas as pd
-import json
 from core.views import BaseView
+from django.db.models import F
+import logging
 
-# Define a helper function to format numbers with commas.
+logger = logging.getLogger(__name__)
+
+
 def intcomma(value):
     """
-    Format a numeric value with commas.
-    
+    Format a numeric value with commas safely.
+
     Args:
-        value (numeric): The number to format.
-        
+        value (float|int): The number to format.
+
     Returns:
-        str: The formatted string.
+        str: Formatted string or '0' if invalid.
     """
-    return "{:,}".format(round(abs(value), 2))
+    if pd.isna(value) or value is None:
+        return "0"
+    try:
+        # Ensure value is numeric before formatting
+        numeric_value = float(abs(value))
+        return "{:,}".format(round(numeric_value, 2))
+    except (ValueError, TypeError):
+        return str(value)
 
 
 class Listing(BaseView):
     """
-    A view for generating a payroll listing exported as an HTML table.
+    A performance-optimized view for generating a payroll listing as an HTML table.
 
-    This view retrieves payroll item data based on a given 'code' (passed as a GET
-    parameter) and the specified payroll (identified by primary key). It then processes 
-    the data using pandas to calculate totals, apply numeric formatting, rename columns, 
-    and finally convert the result into an HTML table.
+    Features:
+      - Retrieves payroll item data based on code and payroll ID
+      - Aggregates employee contributions
+      - Formats numbers safely
+      - Renders HTML table dynamically using Pandas
     """
+
     def get(self, request, pk):
-        # Retrieve the Payroll and ItemPaid models.
-        Payroll = apps.get_model('payroll', 'payroll')
-        ItemPaid = apps.get_model('payroll', 'itempaid')
+        """
+        Handles GET requests to generate and display the listing report.
+        """
+        logger.info(f"User {request.user} requested payroll listing for Payroll ID={pk}")
 
-        # Extract query parameters from the GET request.
-        query_params = request.GET.dict()
+        try:
+            Payroll = apps.get_model("payroll", "Payroll")
+            ItemPaid = apps.get_model("payroll", "ItemPaid")
 
-        # Retrieve the Payroll object; raise 404 if not found.
-        payroll_obj = get_object_or_404(Payroll, id=pk)
-        
-        # Extract the 'code' parameter, then remove it from the query dict.
-        code = query_params.pop('code', None)
-        if not code:
-            messages.warning(request, 'Item not found.')
-            return redirect(reverse_lazy('payroll:payslips', kwargs={'pk': payroll_obj.pk}))
+            # Retrieve the payroll object or raise 404
+            payroll_obj = get_object_or_404(Payroll, id=pk)
+            logger.debug(f"Found Payroll: {payroll_obj}")
 
-        # Retrieve the item by its code from either Item or LegalItem (fallback).
-        # Importing these models here to avoid circular imports.
-        from payroll.models import Item, LegalItem
-        item = Item.objects.filter(code=code).first() or LegalItem.objects.filter(code=code).first()
+            # Get 'code' from query parameters
+            code = request.GET.get("code")
+            if not code:
+                logger.warning("No 'code' provided in request.")
+                messages.warning(request, "Code de l'élément non fourni.")
+                return redirect(reverse_lazy("payroll:payslips", kwargs={"pk": payroll_obj.pk}))
 
-        # Retrieve ItemPaid records related to this payroll that match the given code.
-        itempaid_qs = ItemPaid.objects.filter(code=code, employee__payroll=payroll_obj).values(
-            'employee__registration_number',
-            'employee__last_name',
-            'employee__middle_name',
-            'amount_qp_employee',
-            'amount_qp_employer'
-        )
-        
-        # Convert the queryset to a pandas DataFrame.
-        df = pd.DataFrame(list(itempaid_qs))
+            # Try to find matching item
+            from payroll.models import Item, LegalItem
+            item = Item.objects.filter(code=code).first() or LegalItem.objects.filter(code=code).first()
 
-        # Calculate the total amounts for employee and employer contributions.
-        sum_amount_qp_employee = df['amount_qp_employee'].sum() if not df.empty else 0
-        sum_amount_qp_employer = df['amount_qp_employer'].sum() if not df.empty else 0
+            if not item:
+                logger.warning(f"No item found with code={code}")
+                messages.warning(request, "Élément introuvable.")
+                return redirect(reverse_lazy("payroll:payslips", kwargs={"pk": payroll_obj.pk}))
 
-        # Create a DataFrame representing a row with the totals.
-        total_df = pd.DataFrame({
-            'employee__registration_number': ['Total'],
-            'employee__last_name': [''],
-            'employee__middle_name': [''],
-            'amount_qp_employee': [sum_amount_qp_employee],
-            'amount_qp_employer': [sum_amount_qp_employer]
-        })
+            logger.debug(f"Found item: {item.code} - {item.name}")
 
-        # Append the totals row to the data.
-        df = pd.concat([df, total_df], ignore_index=True)
+            # Fetch related ItemPaid records
+            itempaid_qs = ItemPaid.objects.filter(
+                code=code,
+                employee__payroll=payroll_obj
+            ).annotate(
+                registration_number=F('employee__registration_number'),
+                last_name=F('employee__last_name'),
+                middle_name=F('employee__middle_name')
+            ).values_list(
+                'registration_number',
+                'last_name',
+                'middle_name',
+                'amount_qp_employee',
+                'amount_qp_employer'
+            )
 
-        # Apply numeric formatting to the specified columns.
-        for column in ['amount_qp_employee', 'amount_qp_employer']:
-            df[column] = df[column].apply(intcomma)
+            if not itempaid_qs.exists():
+                logger.info(f"No data found for item '{code}' under Payroll ID={pk}")
+                messages.info(request, "Aucune donnée trouvée pour cet élément.")
+                return redirect(reverse_lazy("payroll:payslips", kwargs={"pk": payroll_obj.pk}))
 
-        # Map original column names to desired header names.
-        column_mapping = {
-            'employee__registration_number': 'matricule',
-            'employee__last_name': 'nom',
-            'employee__middle_name': 'post nom',
-            'amount_qp_employee': 'montant qqe',
-            'amount_qp_employer': 'montant qqp'
-        }
-        df.columns = [column_mapping.get(col, col) for col in df.columns]
+            # Convert directly to DataFrame
+            columns = ['registration_number', 'last_name', 'middle_name', 'amount_qp_employee', 'amount_qp_employer']
+            df = pd.DataFrame(list(itempaid_qs), columns=columns)
 
-        # Convert the DataFrame to an HTML table with appropriate styling.
-        html_table = df.to_html(index=False, classes='table table-striped mt-3')
-        html_table = html_table.replace(
-            '<th>', '<th style="text-align: left;" class="text-capitalize">'
-        )
-        return render(request, "payroll/listing.html", locals())
+            # Add total row
+            total_row = {
+                "registration_number": "Total",
+                "last_name": "",
+                "middle_name": "",
+                "amount_qp_employee": intcomma(df["amount_qp_employee"].sum()),
+                "amount_qp_employer": intcomma(df["amount_qp_employer"].sum())
+            }
+
+            df = pd.concat([df, pd.DataFrame([total_row])], ignore_index=True)
+
+            # Rename columns for better readability in template
+            column_mapping = {
+                "registration_number": "Matricule",
+                "last_name": "Nom",
+                "middle_name": "Postnom",
+                "amount_qp_employee": "Montant QQP Employé",
+                "amount_qp_employer": "Montant QQP Employeur",
+            }
+            df.rename(columns=column_mapping, inplace=True)
+
+            # Generate styled HTML table
+            html_table = df.to_html(index=False, classes="table table-striped mt-3")
+            html_table = html_table.replace('<th>', '<th style="text-align: left;" class="text-capitalize">')
+
+            logger.info(f"Generated listing for item '{code}' with {len(df)} rows.")
+            return render(request, "payroll/listing.html", locals())
+
+        except Exception as e:
+            logger.error(f"Error generating listing for Payroll ID={pk}, code='{code}': {e}", exc_info=True)
+            messages.error(request, f"Erreur lors de la génération du listing: {str(e)}")
+            return redirect(reverse_lazy("payroll:payslips", kwargs={"pk": pk}))

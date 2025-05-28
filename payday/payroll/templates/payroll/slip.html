@@ -1,4 +1,5 @@
-{% load core %}
+{# templates/payroll/slip.html #}
+
 {% load i18n %}
 {% load static %}
 {% load humanize %}
@@ -7,179 +8,240 @@
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "Fiche de paie" %} - {{ obj.employee.name }}{% endblock %}</title>
 
-      <title>{% trans "Fiche de paie" %} - {{ obj.employee.name }}</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
-      <style>
-        body{
+    <style>
+        body {
             font-size: 11px;
+            margin: 0;
+            padding: 0;
         }
+
         .page-break {
             page-break-after: always;
         }
-      </style>
-   </head>
-   
-   <body>
+
+        .payslip-table th,
+        .payslip-table td {
+            vertical-align: middle;
+        }
+
+        .organization-logo {
+            max-height: 60px;
+            width: auto;
+        }
+
+        dl.row dt,
+        dl.row dd {
+            margin-bottom: 0.2rem;
+        }
+
+        @media print {
+            body {
+                font-size: 12px;
+            }
+
+            .page-break {
+                page-break-after: always;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="container-fluid mt-3 mb-5">
+
+    {% block content %}
         {% for obj in qs %}
-        <div class="page-break">
-            <div class="container-fluid">
-                <img src="{{ obj.created_by.organization.logo.url }}" alt="{{ obj.created_by.organization.name }}" class="img-fluid" width="256">
-                <hr>
+            <div class="page-break">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-6">
+                        {% if obj.employee.organization.logo %}
+                            <img src="{{ obj.employee.organization.logo.url }}"
+                                 alt="{{ obj.employee.organization.name }}"
+                                 class="organization-logo img-fluid mb-3"
+                                 loading="lazy">
+                        {% endif %}
+                    </div>
+                    <div class="col-6 text-end no-print">
+                        <small>{% trans "Généré le" %}: {% now "d/m/Y" %}</small>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-6">
                         <dl class="row">
                             <dt class="col-4">{% trans "Matricule" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.registration_number }}</dd>
-    
+
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.full_name }}</dd>
-    
+
                             <dt class="col-4">{% trans "Fonction" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.position.name|default:'-' }}</dd>
-    
+                            <dd class="col-8 mb-0">: {{ obj.employee.position.name|default:"-" }}</dd>
+
                             <dt class="col-4">{% trans "Catégorie" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.grade.category|default:'-' }}</dd>
-    
+                            <dd class="col-8 mb-0">: {{ obj.employee.grade.category|default:"-" }}</dd>
+
                             <dt class="col-4">{% trans "Sit. Fam." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.marital_status }} {% trans "with" %} {{ obj.employee.children_set.all.count }}</dd>
-    
+                            <dd class="col-8 mb-0">: {{ obj.employee.marital_status }} {% trans "avec" %} {{ obj.employee.children_set.count }}</dd>
+
                             <dt class="col-4">{% trans "N. Sec. Social" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:"-" }}</dd>
                         </dl>
                     </div>
-                    <div class="col">
+
+                    <div class="col-6">
                         <dl class="row">
                             <dt class="col-4">{% trans "Banque" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payer_name|default:"-" }}</dd>
-    
+
                             <dt class="col-4">{% trans "Compte" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payment_account|default:"-" }}</dd>
-    
+
                             <dt class="col-4">{% trans "Salaire bar." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.grade.category|default:'-' }}</dd>
-    
+                            <dd class="col-8 mb-0">: {{ obj.employee.grade.category|default:"-" }}</dd>
+
                             <dt class="col-4">{% trans "Taux appl." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.payroll.metadata.taux|default:'no applicable' }}</dd>
-    
+                            <dd class="col-8 mb-0">: {{ obj.payroll.metadata.taux|default:_("non applicable") }}</dd>
+
                             <dt class="col-4">{% trans "Date engag." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.date_of_join|title }}</dd>
-    
+                            <dd class="col-8 mb-0">: {{ obj.employee.date_of_join|date:"d/m/Y" }}</dd>
+
                             <dt class="col-4">{% trans "Centre" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.branch.name|default:'-' }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.branch.name|default:"-" }}</dd>
                         </dl>
                     </div>
                 </div>
-                <hr class="mt-0 mb-0">
+
+                <hr class="mt-0 mb-2">
+
                 <div class="row">
-                    {% with obj.itempaid_set.all as items %}
-                    <div class="col">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">{% trans "Code" %}</th>
-                                    <th scope="col">{% trans "Libellé" %}</th>
-                                    <th scope="col">{% trans "Taux" %}</th>
-                                    <th scope="col">{% trans "Temps" %}</th>
-                                    <th scope="col text-uppercase">{% trans "À payer" %}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in items %}
-                                    {% if item.type_of_item > -1 %}
+                    {% with items=obj.itempaid_set.all %}
+                        <div class="col-6">
+                            <table class="table table-striped payslip-table">
+                                <thead class="table-light">
                                     <tr>
-                                        <td>{{ item.code }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.rate }}</td>
-                                        <td>{{ item.time }}</td>
-                                        <td>{{ item.amount_qp_employee }}</td>
+                                        <th scope="col">{% trans "Code" %}</th>
+                                        <th scope="col">{% trans "Libellé" %}</th>
+                                        <th scope="col">{% trans "Taux" %}</th>
+                                        <th scope="col">{% trans "Temps" %}</th>
+                                        <th scope="col">{% trans "À payer" %}</th>
                                     </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-    
-                    <div class="col">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">{% trans "Code" %}</th>
-                                    <th scope="col">{% trans "Libellé" %}</th>
-                                    <th scope="col text-uppercase">{% trans "Retenir" %}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in items %}
-                                    {% if item.type_of_item == -1 and item.amount_qp_employee != 0 %}
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                        {% if item.type_of_item > -1 %}
+                                            <tr>
+                                                <td>{{ item.code }}</td>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.rate }}</td>
+                                                <td>{{ item.time }}</td>
+                                                <td>{{ item.amount_qp_employee|floatformat:"0"|intcomma }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-6">
+                            <table class="table table-striped payslip-table">
+                                <thead class="table-light">
                                     <tr>
-                                        <td>{{ item.code }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.amount_qp_employee|default:0|abs|floatformat:"0"|intcomma }}</td>
+                                        <th scope="col">{% trans "Code" %}</th>
+                                        <th scope="col">{% trans "Libellé" %}</th>
+                                        <th scope="col">{% trans "Retenir" %}</th>
                                     </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                        {% if item.type_of_item == -1 and item.amount_qp_employee != 0 %}
+                                            <tr>
+                                                <td>{{ item.code }}</td>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.amount_qp_employee|abs|floatformat:"0"|intcomma }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endwith %}
                 </div>
-    
-    
-                <div class="row">
-                    <div class="col">
+
+                <div class="row mt-2">
+                    <div class="col-6">
                         <dl class="row">
                             <dt class="col-4">{% trans "Plafond CNSS" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.social_security_threshold|floatformat:"0"|intcomma }}</dd>
-    
+
                             <dt class="col-4">{% trans "Brut imposable" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.taxable_gross|floatformat:"0"|intcomma }}</dd>
                         </dl>
                     </div>
-                    <div class="col text-end">
-                        <h3 class="mb-0">{% trans "NET A PAYER" %} : {{ obj.net|floatformat:"0"|intcomma }}</h3>
-                        <small>({% trans "Currency" %})</small>
+                    <div class="col-6 text-end">
+                        <h3 class="mb-0 fs-5">
+                            {% trans "NET A PAYER" %}: 
+                            <span class="text-decoration-underline">
+                                {{ obj.net|floatformat:"0"|intcomma }}
+                            </span>
+                        </h3>
+                        <small>({{ obj.currency }})</small>
                     </div>
-                </div>   
-            
-                <hr class="mt-3 mb-3">
-    
-                <div class="col">
-                    <dl class="row">
-                        <dt class="col-3">{% trans "Grade" %}</dt>
-                        <dd class="col-9 mb-0">: {{ obj.employee.grade.name }}</dd>
-    
-                        <dt class="col-3">{% trans "Periode" %}</dt>
-                        <dd class="col-9 mb-0">: {{ obj.payroll.start_dt }} / {{ obj.payroll.end_dt }}</dd>
-                    </dl>
                 </div>
-    
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>{% trans "Matricule" %}</th>
-                            <th>{% trans "Nom complet" %}</th>
-                            <th>{% trans "Centre" %}</th>
-                            <th>{% trans "Net à payer" %}</th>
-                            <th>{% trans "Signature" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="height: 50px;">
-                            <td>{{ obj.employee.registration_number }}</td>
-                            <td>{{ obj.employee.last_name }} {{ obj.employee.middle_name }}</td>
-                            <td>{{ obj.employee.branch.name }}</td>
-                            <td>{{ obj.net|floatformat:"0"|intcomma }}</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <hr class="mt-3 mb-3">
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <dl class="row">
+                            <dt class="col-3">{% trans "Grade" %}</dt>
+                            <dd class="col-9 mb-0">: {{ obj.employee.grade.name }}</dd>
+
+                            <dt class="col-3">{% trans "Période" %}</dt>
+                            <dd class="col-9 mb-0">
+                                : {{ obj.payroll.start_dt|date:"d/m/Y" }} – {{ obj.payroll.end_dt|date:"d/m/Y" }}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col">
+                        <table class="table table-striped table-sm">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>{% trans "Matricule" %}</th>
+                                    <th>{% trans "Nom complet" %}</th>
+                                    <th>{% trans "Centre" %}</th>
+                                    <th>{% trans "Net à payer" %}</th>
+                                    <th>{% trans "Signature" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="height: 50px;">
+                                    <td>{{ obj.employee.registration_number }}</td>
+                                    <td>{{ obj.employee.last_name }} {{ obj.employee.middle_name }}</td>
+                                    <td>{{ obj.employee.branch.name }}</td>
+                                    <td>{{ obj.net|floatformat:"0"|intcomma }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
         {% endfor %}
-   </body>
+    {% endblock %}
+</body>
 </html>

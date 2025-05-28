@@ -33,7 +33,9 @@
         </div>
         
         {% if self.get_list_filter %}
-            {% include "components/list_filter.html" %}
+            <div class="col-3">
+                {% include "components/list_filter.html" %}
+            </div>
         {% endif %}
     </div>
 </div>

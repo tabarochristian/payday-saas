@@ -3,7 +3,7 @@ from core.models import Menu, ActionRequired
 from django.urls import reverse_lazy
 from django.apps import apps
 
-TARGET_APPS = ["employee", "payroll", "leave"]
+TARGET_APPS = ["employee", "payroll", "leave", "easypay"]
 EXCLUDED_MODELS = {"child", "device", "document", "education", 
 "itempaid", "paidemployee", "specialemployeeitem", "advancesalarypayment"}
 

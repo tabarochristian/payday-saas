@@ -2,7 +2,6 @@ from crispy_forms.bootstrap import FieldWithButtons, Field, StrictButton
 from crispy_forms.layout import Layout, Row, Column
 
 from django.utils.translation import gettext as _
-from django.urls import reverse_lazy
 from django.db import models
 
 from core.models.fields import ModelSelect2Multiple

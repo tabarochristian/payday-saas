@@ -1,52 +1,80 @@
-<html>
-   <body>
-    {% load humanize %}
-    {% load mathfilters %}
-    {% with obj.statistic as statistic %}
-      <p>&nbsp;</p>
-      <h1 style="text-align: center;"><strong>Rapport de Paie - {{ obj.name }}</strong></h1>
-      <h2 style="text-align: center;"><strong>ONATRA S.A.</strong></h2>
-      <h3><strong>Informations G&eacute;n&eacute;rales</strong></h3>
-      <ul>
-         <li><strong>Nom de l'Entreprise</strong> : ONATRA S.A.</li>
-         <li><strong>P&eacute;riode de Paie</strong> : {{ obj.start_dt }} - {{ obj.end_dt }}</li>
-         <li><strong>Nombre de Zones</strong> : {{ statistic.branches.count }}</li>
-         <li><strong>Taux de change appliqu&eacute; (1 USD = CDF) :&nbsp;</strong>{{ obj.metadata.taux|intcomma }}</li>
-         <li><strong>Bareme :&nbsp;</strong>2024</li>
-      </ul>
-      <h3><strong>Sommaire du Rapport</strong></h3>
-      <ul>
-         <li><strong>Total des Salaires Bruts</strong> : {{ statistic.gross|intcomma }}</li>
-         <li><strong>Total des D&eacute;ductions</strong> : {{ statistic.deductibles|intcomma }}</li>
-         <li><strong>Total des Salaires Nets</strong> : {{ statistic.net|intcomma }}</li>
-         <li><strong>Nombre Total d'Employ&eacute;s</strong> : {{ statistic.payslips.count|intcomma }}</li>
-         <li><strong>Banques </strong>: {{ statistic.branches.count }}</li>
-      </ul>
+{# templates/payroll/rapport_paie.html #}
 
-      {{ statistic.impact|safe }}
-      {{ statistic.legals|safe }}
-      {{ statistic.impact_legal_total|safe }}
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% load mathfilters %}
 
-      <h3>D&eacute;tails des Branches</h3>
-      <ul>
-         <li>Voir document en annexes</li>
-      </ul>
-      <h3>D&eacute;tails des Employ&eacute;s par Banque</h3>
-      <ul>
-         <li>Voir document en annexes</li>
-      </ul>
-      <h3>D&eacute;tails des Employ&eacute;s par Banque</h3>
-      <ul>
-         <li>Voir document en annexes</li>
-      </ul>
-      <h3>D&eacute;tails des Employ&eacute;s par Code Activites</h3>
-      <ul>
-         <li>Voir document en annexes</li>
-      </ul>
-      <h3><strong>Statistiques Globales par Elements de paies</strong></h3>
-      <ul>
-         <li>Voir document en annexes</li>
-      </ul>
-      {% endwith %}
-   </body>
-</html>
+{% block title %}
+    {% trans "Rapport de Paie" %} - {{ obj.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <!-- Report Header -->
+        <div class="text-center mb-4">
+            <h1><strong>{% trans "Rapport de Paie -" %} {{ obj.name }}</strong></h1>
+            <h2><strong>ONATRA S.A.</strong></h2>
+        </div>
+
+        <!-- General Info -->
+        <h3><strong>{% trans "Informations Générales" %}</strong></h3>
+        <ul class="list-unstyled mb-4">
+            <li><strong>{% trans "Nom de l'Entreprise" %}</strong>: ONATRA S.A.</li>
+            <li><strong>{% trans "Période de Paie" %}</strong>: {{ obj.start_dt }} – {{ obj.end_dt }}</li>
+            <li><strong>{% trans "Nombre de Zones" %}</strong>: {{ statistic.branches.count|intcomma }}</li>
+            <li><strong>{% trans "Taux de change appliqué (1 USD = CDF)" %}</strong>: {{ obj.metadata.taux|intcomma }}</li>
+            <li><strong>{% trans "Barème" %}</strong>: 2024</li>
+        </ul>
+
+        <!-- Summary Section -->
+        <h3><strong>{% trans "Sommaire du Rapport" %}</strong></h3>
+        <ul class="list-unstyled mb-4">
+            <li><strong>{% trans "Total des Salaires Bruts" %}</strong>: {{ statistic.gross|intcomma }}</li>
+            <li><strong>{% trans "Total des Déductions" %}</strong>: {{ statistic.deductibles|intcomma }}</li>
+            <li><strong>{% trans "Total des Salaires Nets" %}</strong>: {{ statistic.net|intcomma }}</li>
+            <li><strong>{% trans "Nombre Total d'Employés" %}</strong>: {{ statistic.payslips.count|intcomma }}</li>
+            <li><strong>{% trans "Banques" %}</strong>: {{ statistic.branches.count|intcomma }}</li>
+        </ul>
+
+        <!-- Embedded Tables -->
+        {% if statistic.impact %}
+            <div class="table-responsive mb-4">
+                {{ statistic.impact|safe }}
+            </div>
+        {% endif %}
+
+        {% if statistic.legals %}
+            <div class="table-responsive mb-4">
+                {{ statistic.legals|safe }}
+            </div>
+        {% endif %}
+
+        {% if statistic.impact_legal_total %}
+            <div class="table-responsive mb-4">
+                {{ statistic.impact_legal_total|safe }}
+            </div>
+        {% endif %}
+
+        <!-- Details Sections -->
+        <h3>{% trans "Détails des Branches" %}</h3>
+        <ul class="mb-4">
+            <li>{% trans "Voir document en annexes" %}</li>
+        </ul>
+
+        <h3>{% trans "Détails des Employés par Banque" %}</h3>
+        <ul class="mb-4">
+            <li>{% trans "Voir document en annexes" %}</li>
+        </ul>
+
+        <h3>{% trans "Détails des Employés par Code Activités" %}</h3>
+        <ul class="mb-4">
+            <li>{% trans "Voir document en annexes" %}</li>
+        </ul>
+
+        <h3><strong>{% trans "Statistiques Globales par Éléments de paie" %}</strong></h3>
+        <ul class="mb-4">
+            <li>{% trans "Voir document en annexes" %}</li>
+        </ul>
+    </div>
+{% endblock %}

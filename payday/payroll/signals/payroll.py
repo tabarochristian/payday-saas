@@ -18,8 +18,7 @@ def payroll_created(sender, instance, created, **kwargs):
     if not created: return
     
     # Duplicate payroll employees
-    duplicator = PayrollProcessor(instance)
-    duplicator.duplicate()
+    PayrollProcessor(instance).process()
 
     # start process of creating payroll employee
     # Payer().run(instance.id)

@@ -1,127 +1,154 @@
-{% extends 'base.html' %}
+{# templates/payroll/payslips.html #}
 
-{% load core %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 {% load humanize %}
 {% load mathfilters %}
 {% load crispy_forms_filters %}
 
+{% block title %}
+    {% trans "Fiches de paie" %}
+{% endblock %}
+
 {% block content %}
+    {% include 'components/change/heading.html' %}
 
-{% include 'components/change/heading.html' %}
+    <div class="page-content container-fluid">
+        <!-- Styles -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.min.css ">
 
-<div class="page-content">
-    
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" >
-    <link ref="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css" >
+        <section class="mb-4">
+            <form method="post" id="form-{{ self.kwargs.model }}" enctype="multipart/form-data">
+                {% csrf_token %}
+            </form>
 
-    <section>
-        <form method="post" enctype="multipart/form-data" class="page-content" id="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}">
-            {% csrf_token %}
-        </form>
-        
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title mb-0">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ payroll_obj.get_status_display|title }}</h3>
-                            <small>{% trans 'Status' %}</small>
-                        </div>
-
-                        <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ paid_employees_qs.count|intcomma }}</h3>
-                            <small>{% trans 'Employee(s)' %}</small>
-                        </div>
-                        
-                        <div class="col-md-4 col-sm-12 mb-2">
-                            <h3 class="mb-0">{{ estimation_duration|naturaltime }}</h3>
-                            <small>{% trans 'Estimation du temps de calule' %}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
+            <!-- Summary Card -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4 col-sm-12">
+                    <div class="card shadow-sm h-100">
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr class="text-uppercase">
-                                            <th>{% trans 'Matricule' %}</th>
-                                            <th>{% trans 'Full name' %}</th>
-                                            <th>{% trans 'Branch' %}</th>
-                                            <th>{% trans 'Grade' %}</th>
-                                            <th>{% trans 'Child(ren)' %}</th>
-                                            <th>{% trans 'Working days' %}</th>
-                                            <th>{% trans 'Attendance' %}</th>
-                                        </tr>
-                                    </thead>
-                
-                                    <tbody>
-                                        {% for obj in paid_employees_qs %}
-                                        <tr data-id="{{ obj.id }}">
-                                            <td>{{ obj.registration_number }}</td>
-                                            <td>{{ obj.full_name }}</td>
-                                            <td>{{ obj.branch }}</td>
-                                            <td>{{ obj.grade }}</td>
-                                            <td>{{ obj.children }}</td>
-                                            <td>23</td>
-                                            <td>
-                                                <input
-                                                    type="number" 
-                                                    name="attendance" 
-                                                    data-app="payroll"
-                                                    data-model="paidemployee"
-                                                    data-id="{{ obj.id }}"
-                                                    class="form-control attendance-input-field" 
-                                                    min="0" step="1" max="{{ obj.working_days_per_month|default:23 }}"
-                                                    value="{{ obj.attendance|default:obj.working_days_per_month }}" />
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <h5 class="mb-0">{{ payroll_obj.get_status_display|title }}</h5>
+                            <small class="text-muted">{% trans "Statut" %}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="mb-0">{{ paid_employees_qs.count|intcomma }}</h5>
+                            <small class="text-muted">{% trans "Employé(s)" %}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="mb-0">{{ estimation_duration|naturaltime }}</h5>
+                            <small class="text-muted">{% trans "Temps estimé pour le calcul" %}</small>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
 
-<script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('table').DataTable({
-            paging: false
-        });
+            <!-- Table Section -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0" id="paidemployee-table">
+                            <thead class="table-light">
+                                <tr class="text-uppercase">
+                                    <th>{% trans 'Matricule' %}</th>
+                                    <th>{% trans 'Nom complet' %}</th>
+                                    <th>{% trans 'Site' %}</th>
+                                    <th>{% trans 'Grade' %}</th>
+                                    <th>{% trans 'Enfant(ren)' %}</th>
+                                    <th>{% trans 'Jours travaillés' %}</th>
+                                    <th>{% trans 'Présence' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in paid_employees_qs %}
+                                    <tr data-id="{{ obj.id }}">
+                                        <td>{{ obj.registration_number }}</td>
+                                        <td>{{ obj.full_name }}</td>
+                                        <td>{{ obj.branch|default:'-' }}</td>
+                                        <td>{{ obj.grade|default:'-' }}</td>
+                                        <td>{{ obj.children }}</td>
+                                        <td>{{ obj.working_days_per_month|default:23 }}</td>
+                                        <td>
+                                            <input type="number"
+                                                   name="attendance"
+                                                   data-app="payroll"
+                                                   data-model="paidemployee"
+                                                   data-id="{{ obj.id }}"
+                                                   class="form-control attendance-input-field"
+                                                   min="0"
+                                                   step="1"
+                                                   max="{{ obj.working_days_per_month|default:23 }}"
+                                                   value="{{ obj.attendance|default:obj.working_days_per_month }}" />
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4">
+                                            {% trans "Aucun employé trouvé." %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
-        $('.attendance-input-field').on('change', function() {
-            var id = $(this).data('id');
-            var value = $(this).val();
-            var url = "{% url 'api:detail' 'payroll' 'paidemployee' 'xyz' %}";
-            
-            // make sure the value is a valid number
-            if (isNaN(value)) return toastr.error('Veuillez entrer un nombre valide');
+    <!-- Scripts -->
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js "></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.min.js "></script>
+    <script>
+        $(document).ready(function () {
+            $('#paidemployee-table').DataTable({
+                searching: true,
+                ordering: true,
+                paging: false,
+                info: false,
+                columnDefs: [{
+                    targets: '_all',
+                    defaultContent: ''
+                }]
+            });
 
-            $.ajax({
-                url: url.replace('xyz', id),
-                type: 'PATCH',
-                data: {
-                    'attendance': value
-                },
-                success: (data) => toastr.success("L'opération a été effectuée avec succès"),
-                error: (error) => toastr.error("Une erreur s'est produite lors de l'opération ")
+            $('.attendance-input-field').on('change', function () {
+                var $this = $(this);
+                var id = $this.data("id");
+                var value = $this.val();
+                var url = "{% url 'api:detail' app='payroll' model='paidemployee' pk='xyz' %}".replace("xyz", id);
+
+                if (!id || isNaN(value)) {
+                    toastr.error("{% trans 'Veuillez entrer un nombre valide' %}");
+                    return;
+                }
+
+                $.ajax({
+                    url: url,
+                    method: "PATCH",
+                    data: { attendance: value },
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    success: function (data) {
+                        toastr.success("{% trans 'L opération a été effectuée avec succès' %}")
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error("{% trans 'Une erreur s est produite lors de l opération' %}")
+                    }
+                });
             });
         });
-    });
-</script>
-
+    </script>
 {% endblock %}

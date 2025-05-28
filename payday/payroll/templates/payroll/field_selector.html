@@ -1,121 +1,194 @@
-{% extends 'base.html' %}
+{# templates/payroll/field_selector.html #}
 
-{% load core %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% load mathfilters %}
+{% load core %}
 {% load crispy_forms_filters %}
+{% load mathfilters %}
+
+{% block title %}
+    {% trans "Sélectionner les champs d'exportation" %}
+{% endblock %}
 
 {% block content %}
-<div class="page-heading mb-4">
-    <div class="col mb-3">
-        <div class="row">
-            <div class="col text-start">
-                <h3 class="m-0">{% trans 'Exporter' %} {{ model_class|getattr:'_meta'|getattr:'verbose_name'|title }}</h3>
-                {% include 'components/breadcrumb.html' %}
-            </div>
+    <div class="page-heading mb-4">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-sm-12 text-start">
+                    <h3 class="mb-0">
+                        {% trans 'Exporter' %}
+                        {{ model_class_meta.verbose_name|title }}
+                    </h3>
+                    {% include 'components/breadcrumb.html' %}
+                </div>
 
-            <div class="col text-end">
-                <a href="{% url 'core:list' 'payroll' model_class|getattr:'_meta'|getattr:'model_name' %}" class="btn btn-danger">{% trans 'Annuler' %}</a>
-                <button type="submit" form="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}" class="btn btn-success">{% trans 'Exporter' %}</button>
+                <div class="col-md-6 col-sm-12 text-end">
+                    <a href="{% url 'core:list' app='payroll' model=model_class_meta.model_name %}"
+                       class="btn btn-danger me-2">
+                        {% trans 'Annuler' %}
+                    </a>
+                    <button type="submit"
+                            form="form-{{ model_class_meta.model_name }}"
+                            class="btn btn-success">
+                        {% trans 'Exporter' %}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<form method="post" id="form-{{ model_class|getattr:'_meta'|getattr:'model_name' }}">
-    {% csrf_token %}
-    <div class="page-content row">
-        <section class="col col-xs-12">
-            <div class="card">
-                <div class="card-body">
-                    <h6>{% trans "Veuillez sélectionner le champ que vous souhaitez voir figurer dans la **colonne** du tableau" %}</h6>
-                    <ol>
-                        {% for field in model_class|getattr:'_meta'|getattr:'fields' %}
-                            <li>
-                                {% if field.get_internal_type == 'ModelSelectField' %}
-                                    <ol>
-                                        <li><h6>{{ field.verbose_name|title }}</h6></li>
-                                        {% for subfield in field|getattr:'remote_field'|getattr:'model'|getattr:'_meta'|getattr:'fields' %}
-                                            {% if subfield.get_internal_type == 'ModelSelectField' %}
-                                                <ol>
-                                                    <li><h6>{{ subfield.verbose_name|title }}</h6></li>
-                                                    {% for underfield in subfield|getattr:'remote_field'|getattr:'model'|getattr:'_meta'|getattr:'fields' %}
-                                                    <li>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="column" value="{{ field.name }}__{{ subfield.name }}__{{ underfield.name }}" id="column-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}">
-                                                            <label class="form-check-label" for="column-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}"> {{ underfield.verbose_name|title }} </label>
-                                                        </div>
-                                                    </li>
-                                                    {% endfor %}
-                                                </ol>
-                                            {% else %}
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="column" value="{{ field.name }}__{{ subfield.name }}" id="column-{{ field.name }}-{{ subfield.name }}">
-                                                        <label class="form-check-label" for="column-{{ field.name }}-{{ subfield.name }}"> {{ subfield.verbose_name|title }} </label>
+    <form method="post"
+          id="form-{{ model_class_meta.model_name }}"
+          novalidate
+          class="container-fluid page-content pb-5">
+        {% csrf_token %}
+
+        <div class="row">
+            <!-- Column Field Selector -->
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans "Champ en colonne" %}</h5>
+                        <p class="small text-muted mb-3">
+                            {% trans "Veuillez sélectionner le champ à afficher dans la colonne du tableau." %}
+                        </p>
+
+                        {% for field in model_class_meta.fields %}
+                            {% if field.get_internal_type == "ModelSelectField" %}
+                                {% with related=field.remote_field.model %}
+                                    <details open class="mb-3">
+                                        <summary class="fw-bold mb-2">{{ field.verbose_name|title }}</summary>
+                                        <div class="ps-3 border-start">
+                                            {% for subfield in related|model_attr:'fields' %}
+                                                {% if subfield.get_internal_type == "ModelSelectField" %}
+                                                    {% with inner_related=subfield.remote_field.model %}
+                                                        <details class="mb-2">
+                                                            <summary class="text-decoration-underline">
+                                                                {{ subfield.verbose_name|title }}
+                                                            </summary>
+                                                            <ol class="list-unstyled ps-4 mt-2">
+                                                                {% for underfield in inner_related|model_attr:'fields' %}
+                                                                    <li>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                   name="column"
+                                                                                   value="{{ field.name }}__{{ subfield.name }}__{{ underfield.name }}"
+                                                                                   id="column-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}">
+                                                                            <label class="form-check-label"
+                                                                                   for="column-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}">
+                                                                                {{ underfield.verbose_name|title }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ol>
+                                                        </details>
+                                                    {% endwith %}
+                                                {% else %}
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="column"
+                                                               value="{{ field.name }}__{{ subfield.name }}"
+                                                               id="column-{{ field.name }}-{{ subfield.name }}">
+                                                        <label class="form-check-label"
+                                                               for="column-{{ field.name }}-{{ subfield.name }}">
+                                                            {{ subfield.verbose_name|title }}
+                                                        </label>
                                                     </div>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ol>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endwith %}
+                                    </details>
                                 {% else %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="column" value="{{ field.name }}" id="column-{{ field.name }}">
-                                    <label class="form-check-label" for="column-{{ field.name }}"> {{ field.verbose_name|title }} </label>
-                                </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="radio"
+                                               name="column"
+                                               value="{{ field.name }}"
+                                               id="column-{{ field.name }}">
+                                        <label class="form-check-label"
+                                               for="column-{{ field.name }}">
+                                            {{ field.verbose_name|title }}
+                                        </label>
+                                    </div>
                                 {% endif %}
-                            </li>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Row Field Selector -->
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans "Champ en ligne" %}</h5>
+                        <p class="small text-muted mb-3">
+                            {% trans "Veuillez sélectionner le champ à afficher dans la ligne du tableau." %}
+                        </p>
+
+                        {% for field in model_class_meta.fields %}
+                            {% if field.get_internal_type == "ModelSelectField" %}
+                                {% with related=field.remote_field.model %}
+                                    <details open class="mb-3">
+                                        <summary class="fw-bold mb-2">{{ field.verbose_name|title }}</summary>
+                                        <div class="ps-3 border-start">
+                                            {% for subfield in related|model_attr:'fields' %}
+                                                {% if subfield.get_internal_type == "ModelSelectField" %}
+                                                    {% with inner_related=subfield.remote_field.model %}
+                                                        <details class="mb-2">
+                                                            <summary class="text-decoration-underline">
+                                                                {{ subfield.verbose_name|title }}
+                                                            </summary>
+                                                            <ol class="list-unstyled ps-4 mt-2">
+                                                                {% for underfield in inner_related|model_attr:'fields' %}
+                                                                    <li>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                    name="row"
+                                                                                    value="{{ field.name }}__{{ subfield.name }}__{{ underfield.name }}"
+                                                                                    id="row-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}">
+                                                                            <label class="form-check-label"
+                                                                                    for="row-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}">
+                                                                                {{ underfield.verbose_name|title }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ol>
+                                                        </details>
+                                                    {% endwith %}
+                                                {% else %}
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="radio"
+                                                                name="row"
+                                                                value="{{ field.name }}__{{ subfield.name }}"
+                                                                id="row-{{ field.name }}-{{ subfield.name }}">
+                                                        <label class="form-check-label"
+                                                                for="row-{{ field.name }}-{{ subfield.name }}">
+                                                            {{ subfield.verbose_name|title }}
+                                                        </label>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </details>
+                                {% endwith %}
+                            {% else %}
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio"
+                                            name="row"
+                                            value="{{ field.name }}"
+                                            id="row-{{ field.name }}">
+                                    <label class="form-check-label"
+                                            for="row-{{ field.name }}">
+                                        {{ field.verbose_name|title }}
+                                    </label>
+                                </div>
+                            {% endif %}
                         {% endfor %}
-                    </ol>
+                    </div>
                 </div>
             </div>
-        </section>
-        <section class="col col-xs-12">
-            <div class="card">
-                <div class="card-body">
-                    <h6>{% trans "Veuillez sélectionner le champ que vous souhaitez voir figurer dans la **ligne** du tableau" %}</h6>
-                    <ol>
-                        {% for field in model_class|getattr:'_meta'|getattr:'fields' %}
-                            <li>
-                                {% if field.get_internal_type == 'ModelSelectField' %}
-                                    <ol>
-                                        <li><h6>{{ field.verbose_name|title }}</h6></li>
-                                        {% for subfield in field|getattr:'remote_field'|getattr:'model'|getattr:'_meta'|getattr:'fields' %}
-                                            {% if subfield.get_internal_type == 'ModelSelectField' %}
-                                                <ol>
-                                                    <li><h6>{{ subfield.verbose_name|title }}</h6></li>
-                                                    {% for underfield in subfield|getattr:'remote_field'|getattr:'model'|getattr:'_meta'|getattr:'fields' %}
-                                                    <li>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="row" value="{{ field.name }}__{{ subfield.name }}__{{ underfield.name }}" id="row-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}">
-                                                            <label class="form-check-label" for="row-{{ field.name }}-{{ subfield.name }}-{{ underfield.name }}"> {{ underfield.verbose_name|title }} </label>
-                                                        </div>
-                                                    </li>
-                                                    {% endfor %}
-                                                </ol>
-                                            {% else %}
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="row" value="{{ field.name }}__{{ subfield.name }}" id="row-{{ field.name }}-{{ subfield.name }}">
-                                                        <label class="form-check-label" for="row-{{ field.name }}-{{ subfield.name }}"> {{ subfield.verbose_name|title }} </label>
-                                                    </div>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ol>
-                                {% else %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="row" value="{{ field.name }}" id="row-{{ field.name }}">
-                                    <label class="form-check-label" for="row-{{ field.name }}"> {{ field.verbose_name|title }} </label>
-                                </div>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-        </section>
-    </div>
-</form>
-{% endblock %}
+        </div>
+    </form>
+    {% endblock %}

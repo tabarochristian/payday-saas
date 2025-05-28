@@ -1,284 +1,300 @@
-from django.shortcuts import get_object_or_404
+# payroll/tasks/payer.py
+
 from django.conf import settings
+from django.db.models import F, Sum
+from django.apps import apps
+from datetime import datetime
+import pandas as pd
+import itertools
+from typing import Any, Dict, List, Tuple, Optional
+from core.utils import DictToObject, set_schema
+from logging import getLogger
 
 from employee.models import *
 from payroll.models import *
-from django.db import models
 
+logger = getLogger(__name__)
 
-from datetime import datetime
-from payday.celery import app
-from celery import Task
-import pandas as pd
-import itertools
-import os
-
-from core.utils import DictToObject, set_schema
-
-class Payer(Task):
+class Payer:
     """
-    Celery Task to handle payroll processing and payslip generation.
+    A class-based processor that handles payroll computation synchronously or asynchronously,
+    depending on DEBUG setting.
+    
+    Features:
+      - Dynamic schema switching (multi-tenant)
+      - Formula evaluation using restricted `eval`
+      - Tax bracket logic (`ipr_iere`)
+      - Bulk update for performance
     """
-    errors = []
-    name = 'payer'
-    DEBUG = settings.DEBUG
-    WORKERS = os.cpu_count() * (1.0 if DEBUG else 1.5)
 
-    TRANCHES = {
-        0.03: [0, 162000],
-        0.15: [162001, 1800000],
-        0.30: [1800001, 3600000],
-        0.40: [3600001, 9999999999999]
-    }
+    # Tax brackets
+    TRANCHE_RULES = [
+        {"rate": 0.03, "range": (0, 162_000)},
+        {"rate": 0.15, "range": (162_001, 1_800_000)},
+        {"rate": 0.30, "range": (1_800_001, 3_600_000)},
+        {"rate": 0.40, "range": (3_600_001, float("inf"))}
+    ]
 
-    def run(self, schema:str, pk: int, *args, **kwargs) -> None:
-        """
-        Main entry point for the task. Processes the payroll.
-        
-        Args:
-            pk (int): Primary key of the payroll to process.
-        """
-        set_schema(schema)
+    def __init__(self):
+        self.errors = []
         self.now = datetime.now()
-        self.today = self.now.today
-        self.payroll = get_object_or_404(Payroll, pk=pk)
+        self.today = self.now.date()
 
-        self.items = list(Item.objects.all().values())
-        self.legal_items = list(LegalItem.objects.all().values())
-        self.special_items = list(SpecialEmployeeItem.objects.all().annotate(
-            code=models.F('item__code'),
-            name=models.F('item__name'),
-            formula_qp_employee=models.F('amount_qp_employee'),
-            formula_qp_employer=models.F('amount_qp_employer')
-        ).values(
-            'employee', 'code', 'name', 
-            'formula_qp_employee', 'formula_qp_employer', 'end_date'
-        ))
+    def run(self, schema: str, pk: int, *args, **kwargs) -> Dict[str, Any]:
+        """Main entry point — runs sync or async based on DEBUG."""
+        try:
+            debug = getattr(settings, 'DEBUG', True)
+            if not debug:
+                set_schema(schema)
+            self._load_payroll(pk)
 
-        # split special_items to each employee
-        if not self.special_items:  # ✅ Checks if it's empty
-            self.special_items = {}  # ✅ Avoids processing empty DataFrame
-        else:
-            self.special_items = pd.DataFrame(self.special_items) \
-                .groupby('employee').apply(lambda x: x.to_dict(orient='records')).to_dict()
+            if not self.payroll:
+                logger.error(f"Payroll {pk} not found.")
+                raise ValueError(f"Payroll {pk} not found")
 
+            self._load_data()
+            employees, items_list = self._process_all_employees()
+            self._save_processed_items(items_list)
+            self._save_processed_employees(employees)
 
-        self.employees = PaidEmployee.objects.filter(payroll=self.payroll)
-        self.employees = self.employees.select_related('employee').values()
-        self.employees = list(self.employees.values())
-        
-        self.bareme = Grade.objects.all().values('name', '_metadata')
-        self.bareme = {g['name']: g['_metadata'] for g in self.bareme}
+            self.payroll.status = "COMPLETED"
+            self.payroll.save(update_fields=["status"])
+            logger.info(f"Payroll {pk} processed successfully.")
+            return {"result": "success", "employees": len(employees), "items": len(items_list)}
 
-        self.advancesalary = AdvanceSalaryPayment.objects.filter(
-            date__range=[self.payroll.start_dt, self.payroll.end_dt]
-        ).values('advance_salary__employee__registration_number').annotate(
-            amount=models.Sum('amount')
+        except Exception as e:
+            logger.error(f"Error in Payer.run({schema}, {pk}): {str(e)}", exc_info=True)
+            self._mark_payroll_error(pk, str(e))
+            raise
+
+    def _load_payroll(self, pk: int):
+        Payroll = apps.get_model("payroll", "Payroll")
+        try:
+            self.payroll = Payroll.objects.get(id=pk)
+        except Payroll.DoesNotExist:
+            logger.error(f"Payroll with id={pk} does not exist")
+            self.payroll = None
+            raise
+
+    def _load_data(self):
+        self.items = list(apps.get_model("payroll", "Item").objects.values())
+        self.legal_items = list(apps.get_model("payroll", "LegalItem").objects.values())
+
+        special_items_qs = (
+            apps.get_model("payroll", "SpecialEmployeeItem")
+            .objects.annotate(
+                code=F("item__code"),
+                name=F("item__name"),
+                formula_qp_employee=F("amount_qp_employee"),
+                formula_qp_employer=F("amount_qp_employer"),
+            )
+            .values("employee", "code", "name", "formula_qp_employee", "formula_qp_employer", "end_date")
         )
+
+        df = pd.DataFrame(special_items_qs)
+        self.special_items = (
+            df.groupby("employee").apply(lambda x: x.to_dict(orient="records")).to_dict()
+            if not df.empty else {}
+        )
+
+        grade_values = (
+            apps.get_model("employee", "Grade")
+            .objects.all()
+            .values("name", "_metadata")
+        )
+        self.bareme = {g["name"]: g["_metadata"] for g in grade_values}
+
+        advance_qs = (
+            apps.get_model("payroll", "AdvanceSalaryPayment")
+            .objects.filter(date__range=[self.payroll.start_dt, self.payroll.end_dt])
+            .values("advance_salary__employee__registration_number")
+            .annotate(amount=Sum("amount"))
+        )
+
         self.advancesalary = {
-            a['advance_salary__employee__registration_number']: a['amount'] 
-            for a in self.advancesalary
+            item["advance_salary__employee__registration_number"]: item["amount"]
+            for item in advance_qs
         }
 
-        self.process()
-        
-        self.payroll.status = 'COMPLETED'
-        self.payroll.update()
+    def _process_all_employees(self) -> Tuple[List[Dict], List[Dict]]:
+        PaidEmployee = apps.get_model("payroll", "PaidEmployee")
+        employee_values = list(
+            PaidEmployee.objects.filter(payroll=self.payroll)
+            .select_related("employee")
+            .values()
+        )
 
-        print(f'Payroll {self.payroll} processed successfully.')
+        processed_employees = []
+        processed_items = []
 
-    def process(self) -> None:
-        """Process all employees and their items."""
-        employees, items = [], []
+        for employee in employee_values:
+            try:
+                registration_number = employee["registration_number"]
+                employee["advance_salary"] = self.advancesalary.get(registration_number, 0)
+                employee["bareme"] = self.bareme.get(employee["grade"], {})
+                special_items = self.special_items.get(registration_number, [])
 
-        for employee in self.employees:
-            employee['advance_salary'] = self.advancesalary.get(employee['registration_number'], 0)
-            employee['bareme'] = self.bareme.get(employee['grade'], {})
-            
-            special_items = self.special_items.get(employee['registration_number'], [])
-            employee, _items = self.process_employee(employee, special_items)
-            employees.append(employee)
-            items.append(_items)
+                processed_employee, items = self.process_employee(employee, special_items)
 
-        self.save_items(items)
-        self.save_employees(employees)
+                if processed_employee:
+                    processed_employees.append(processed_employee)
+                    processed_items.extend(items)
 
-    def save_items(self, items: list) -> None:
-        """
-        Save the items to the database.
-        
-        Args:
-            items (List[Dict[str, Any]]): List of items to save.
-        """
-        items = list(itertools.chain.from_iterable(items))
-        items = [ItemPaid(**item) for item in items]
-        ItemPaid.objects.bulk_create(items)
+            except Exception as e:
+                logger.warning(f"Error processing employee {employee['id']}: {e}")
+                self.errors.append(str(e))
 
-    def save_employees(self, employees: list) -> None:
-        """
-        Save the employees to the database.
-        
-        Args:
-            employees (List[Dict[str, Any]]): List of employees to save.
-        """
-        attrs = ['net', 'gross', 'taxable_gross', 'social_security_threshold']
-        ids = {employee['id']: employee for employee in employees}
+        return processed_employees, processed_items
+
+    def _save_processed_items(self, items: List[Dict[str, Any]]):
+        if not items:
+            return
+
+        ItemPaid = apps.get_model("payroll", "ItemPaid")
+        valid_items = [item for item in items if item]
+        ItemPaid.objects.bulk_create([ItemPaid(**item) for item in valid_items])
+
+    def _save_processed_employees(self, employees: List[Dict]):
+        if not employees:
+            return
+
+        attrs = ["net", "gross", "taxable_gross", "social_security_threshold"]
+        ids = {emp["id"]: emp for emp in employees}
         objs = PaidEmployee.objects.filter(id__in=ids.keys())
-        
+
         for obj in objs:
             for attr in attrs:
-                value = ids[obj.id][attr]
-                setattr(obj, attr, value)
+                setattr(obj, attr, ids[obj.id][attr])
 
         PaidEmployee.objects.bulk_update(objs, attrs)
 
-    def process_employee(self, employee: dict, special_items: list) -> tuple:
-        """
-        Process the payroll for a single employee.
-        
-        Args:
-            employee (Dict[str, Any]): Employee data to process.
-        
-        Returns:
-            Tuple[Dict[str, Any], List[Dict[str, Any]]]: Processed employee data and items.
-        """
+    def process_employee(self, employee: dict, special_items: list) -> Tuple[Dict, List[Dict]]:
         items = []
-        
+
         for item in self.items:
             _item = self.process_item(employee, items, item)
             if _item:
                 items.append(_item)
-        
+
         for item in special_items:
             _item = self.process_item(employee, items, item)
             if _item:
                 items.append(_item)
 
-        employee['gross'] = sum([item['amount_qp_employee'] for item in items if item['is_payable']])
-
+        employee["gross"] = sum(item["amount_qp_employee"] for item in items if item.get("is_payable", True))
+        
         for legal in self.legal_items:
             _item = self.process_item(employee, items, legal)
             if _item:
                 items.append(_item)
 
-        employee['social_security_threshold'] = sum([item['social_security_amount'] for item in items])
-        employee['net'] = sum([item['amount_qp_employee'] for item in items if item['is_payable']])
-        employee['taxable_gross'] = sum([item['taxable_amount'] for item in items])
-        
+        employee["social_security_threshold"] = sum(item["social_security_amount"] for item in items)
+        employee["net"] = sum(item["amount_qp_employee"] for item in items if item.get("is_payable", True))
+        employee["taxable_gross"] = sum(item["taxable_amount"] for item in items)
+
         return employee, items
 
-    def process_item(self, employee: dict, itemspaid: list, item: dict) -> dict:
-        """
-        Process a single item for an employee.
-        
-        Args:
-            employee (Dict[str, Any]): Employee data.
-            item (Dict[str, Any]): Item data.
-        
-        Returns:
-            Optional[Dict[str, Any]]: Processed item data or None if the condition is not met.
-        """
-        condition = item.get('condition', 'False')
+    def process_item(self, employee: dict, itemspaid: list, item: dict) -> Optional[Dict]:
+        condition = item.get("condition", "True")
         context = {
-            'itemspaid': pd.DataFrame(itemspaid),
-            'employee': DictToObject(employee),
-            'item': DictToObject(item),
-            'payroll': self.payroll,
-            'self': self,
+            "employee": DictToObject(employee),
+            "item": DictToObject(item),
+            "payroll": self.payroll,
+            "self": self,
+            "itemspaid": pd.DataFrame(itemspaid) if itemspaid else pd.DataFrame(),
         }
 
-        condition = self.evaluate_expression(condition, context)
-        condition = condition or 'condition' not in item
+        try:
+            condition_result = eval(condition, {"__builtins__": None}, context)
+        except Exception as e:
+            logger.warning(f"Condition failed for item {item['code']}: {e}")
+            condition_result = False
 
-        if not condition:
+        if not condition_result:
             return None
-        
+
         formula_qp_employee = str(item.get('formula_qp_employee', '0'))
         formula_qp_employer = str(item.get('formula_qp_employer', '0'))
-        time = item.get('time', str(employee['attendance']))
-        context['time'] = time
+        time = item.get("time", str(employee.get("attendance", 0)))
 
-        formula_qp_employee = self.evaluate_expression(formula_qp_employee, context) or 0
-        formula_qp_employer = self.evaluate_expression(formula_qp_employer, context) or 0
-        time = self.evaluate_expression(time, context) or 0
-
-        type_of_item = int(item.get('type_of_item', '1'))
-        formula_qp_employee = formula_qp_employee * type_of_item
-
-        social_security_amount = formula_qp_employee if item.get('is_social_security', False) else 0
-        taxable_amount = formula_qp_employee if item.get('is_taxable', False) else 0
-        rate = (formula_qp_employee / time) if time else 0
-
-        is_payable = item.get('is_payable', True)
-        is_bonus = item.get('is_bonus', False)
-
-        return {
-            'code': item['code'],
-            'name': item['name'],
-            
-            'time': time,
-            'rate': rate,
-
-            'employee_id': employee['id'],
-            'type_of_item': type_of_item,
-
-            'amount_qp_employer': formula_qp_employer,
-            'amount_qp_employee': formula_qp_employee,
-
-            'social_security_amount': social_security_amount,
-            'taxable_amount': taxable_amount,
-            
-            'is_payable': is_payable,
-            'is_bonus': is_bonus
-        }
-
-    def evaluate_expression(self, expression: str, context: dict):
-        """
-        Safely evaluate an expression using the provided context.
-        
-        Args:
-            expression (str): The expression to evaluate.
-            context (Dict[str, Any]): The context for evaluation.
-        
-        Returns:
-            Any: The result of the evaluation.
-        """
         try:
-            return eval(expression, {"__builtins__": None}, context)
+            formula_qp_employee = self.evaluate(formula_qp_employee, context) or 0
+            formula_qp_employer = self.evaluate(formula_qp_employer, context) or 0
+            time = self.evaluate(time, context) or 0
         except Exception as e:
-            self.errors.append(str(e))
+            logger.warning(f"Formula eval failed for {item.get('code')}: {e}")
             return None
 
-    def get_tranche(self, taxable_gross):
-        for percentage, (lower_bound, upper_bound) in self.TRANCHES.items():
-            if lower_bound <= taxable_gross <= upper_bound:
-                return {'percentage': percentage, 'tranche': (lower_bound, upper_bound)}
-        return None
+        type_of_item = int(item.get("type_of_item", 1))
+        amount_qp_employee = formula_qp_employee * type_of_item
+        amount_qp_employer = formula_qp_employer
+        social_security_amount = amount_qp_employee if item.get("is_social_security", False) else 0
+        taxable_amount = amount_qp_employee if item.get("is_taxable", False) else 0
+        rate = amount_qp_employee / time if time else 0
 
-    def ipr_iere(self, payroll, employee, items, item):
-        items = items[items['is_payable'] == True]
+        return {
+            "code": item["code"],
+            "name": item["name"],
+            "time": time,
+            "rate": round(rate, 2),
+            "employee_id": employee["id"],
+            "type_of_item": type_of_item,
+            "amount_qp_employer": amount_qp_employer,
+            "amount_qp_employee": amount_qp_employee,
+            "social_security_amount": social_security_amount,
+            "taxable_amount": taxable_amount,
+            "is_payable": item.get("is_payable", True),
+            "is_bonus": item.get("is_bonus", False),
+        }
 
-        social_security_threshold = items.loc[(items['is_bonus'] == False), 'social_security_amount'].sum()
-        taxable_gross = items.loc[(items['is_bonus'] == False), 'taxable_amount'].sum()
+    def evaluate(self, expr: str, context: dict) -> Optional[float]:
+        try:
+            result = eval(expr, {"__builtins__": None}, context)
+            return float(result) if isinstance(result, (int, float)) else result
+        except Exception as e:
+            logger.warning(f"Evaluation error: {expr} → {e}")
+            return None
 
-        social_security_threshold = social_security_threshold * 0.05
-        taxable_amount = taxable_gross - social_security_threshold
-        tranche = self.get_tranche(taxable_amount)
+    def get_tranche(self, taxable_gross: float):
+        for rule in self.TRANCHE_RULES:
+            lower, upper = rule["range"]
+            if lower <= taxable_gross <= upper:
+                return {"percentage": rule["rate"], "tranche": (lower, upper)}
+        return {"percentage": 0.40, "tranche": (3_600_001, float("inf"))}
 
-        taxable_amount -= tranche['tranche'][0]
-        taxable_amount *= tranche['percentage']
-        taxable_amount += 4860
-        
-        taxable_bonus = items.loc[(items['is_bonus'] == True), 'taxable_amount'].sum()
-        taxable_bonus = taxable_bonus * 0.03
-        
-        taxable_amount = taxable_amount + taxable_bonus
+    def ipr_iere(self, payroll, employee, items, item) -> float:
+        df = pd.DataFrame(items)
+        df = df[df["is_payable"] == True]
 
-        dependant = employee.children + (1 if employee.marital_status == 'MARRIED' else 0)
-        dependant = taxable_amount * (0.02 * dependant)
-        taxable_amount -= dependant
+        social_security_threshold = df.loc[df["is_bonus"] == False, "social_security_amount"].sum()
+        taxable_gross = df.loc[df["is_bonus"] == False, "taxable_amount"].sum()
 
-        return round(taxable_amount, 2)
+        social_security_threshold *= 0.05
+        taxable_gross -= social_security_threshold
+        tranche = self.get_tranche(taxable_gross)
 
+        taxable_gross -= tranche["tranche"][0]
+        taxable_gross *= tranche["rate"]
+        taxable_gross += 4860
 
-app.register_task(Payer())
+        bonus_df = df.loc[df["is_bonus"] == True, "taxable_amount"].sum()
+        taxable_bonus = bonus_df * 0.03
+        taxable_gross += taxable_bonus
+
+        dependant_count = employee.get("children", 0) + (
+            1 if employee.get("marital_status") == "MARRIED" else 0
+        )
+        dependant_adjustment = taxable_gross * (0.02 * dependant_count)
+        taxable_gross -= dependant_adjustment
+
+        return round(taxable_gross, 2)
+
+    def _mark_payroll_error(self, pk: int, message: str):
+        Payroll = apps.get_model("payroll", "Payroll")
+        try:
+            payroll = Payroll.objects.get(pk=pk)
+            payroll.status = "ERROR"
+            payroll.metadata["errors"] = payroll.metadata.get("errors", []) + [{"message": message}]
+            payroll.save(update_fields=["status", "metadata"])
+        except Exception as e:
+            logger.error(f"Failed to mark payroll {pk} as ERROR: {e}")

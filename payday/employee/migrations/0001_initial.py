@@ -580,7 +580,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "photo",
-                    core.models.fields.imagefield.ImageField(
+                    core.models.fields.capture_field.CaptureField(
                         blank=True,
                         null=True,
                         upload_to=core.utils.upload_directory_file,

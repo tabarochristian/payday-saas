@@ -1,4 +1,5 @@
-{% load core %}
+{# templates/payroll/synthesis.html #}
+
 {% load i18n %}
 {% load static %}
 {% load humanize %}
@@ -7,68 +8,174 @@
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthèse - {{ payroll_obj.name }}</title>
 
-      <title>Synthesis-{{ payroll_obj.name }}-{{ field.verbose_name|title }}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap @5.3.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+          crossorigin="anonymous">
 
-      <style>
-        body{
+    <style>
+        /* Base Styles */
+        body {
             font-size: 12px;
+            margin: 0 auto;
+            max-width: 960px;
+            padding: 20px;
         }
-        .watermark{
-            z-index: -1 !important;
-            position: fixed !important;
-            top: 50% !important;
-            left: 50% !important;
-            color:  rgba(0,0,0, 0.1) !important;
-            transform: rotate(-45deg);
+
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 0;
         }
-        .watermark-title-text{
-            font-size: 3.5rem !important;
+
+        /* Watermark (only visible when printing) */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            color: rgba(0, 0, 0, 0.05);
+            font-size: 6rem;
+            pointer-events: none;
+            user-select: none;
+            z-index: -1;
+            display: none;
         }
-      </style>
-   </head>
-   <body>
 
-    <div class="container-fluid">
+        @media print {
+            .watermark {
+                display: block !important;
+            }
 
-        <div class="row">
-            <div class="col">
-                <div>
-                    <h3>{{ organization.name|default:'Payday' }}</h3>
-                </div>
-                <div>
-                    <h6 class="mb-0">{% trans 'Direction des ressources humaines' %}</h6>
-                </div>
-            </div>
-            <div class="col text-end">
-                <h3 class="mb-0">{% trans 'Synthesis' %}
-                    ({% if func == 'count' %}{% trans "Nombre" %}{% else %}{% trans "Somme" %}{% endif %})
-                </h3>
-                <small>{% trans 'Generated on' %} {% now 'M d, Y' %}</small>
-            </div>
-        </div>
+            body {
+                font-size: 14px;
+                margin: 0;
+                padding: 0;
+            }
 
-        <div class="col text-center">
-            <h2 class="mb-0">{{ payroll_obj.name }}</h2>
-            <small>
-                <b>{{ payroll_obj.start_dt }}</b>
-                to
-                <b>{{ payroll_obj.end_dt }}</b>
-            </small>
-            <h4>
-                {% for field in fields %}
-                    {{ field|title }} {% if not forloop.last %} / {% endif %}
-                {% endfor %}
-            </h4>
-        </div>
+            thead {
+                display: table-header-group;
+            }
 
-        <div class="col">{{ html_table|safe }}</div>
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                background-color: #f0f0f0 !important;
+            }
+
+            table td, table th {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            text-align: center;
+            vertical-align: middle !important;
+            padding: 6px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f5f5f5;
+        }
+
+        tfoot {
+            font-weight: bold;
+            background-color: #f8f8f8;
+        }
+
+        caption {
+            caption-side: top;
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: bold;
+        }
+
+        .table-responsive {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Watermark -->
+    <div class="watermark d-print-block">Document interne</div>
+
+    <!-- Report Header -->
+    <div class="header">
+        <h2><strong>Synthèse de Paie</strong></h2>
+        <p>{{ payroll_obj.name }}</p>
+        <p class="mb-0">
+            <span class="info-label">{% trans "Période du" %}:</span>
+            <span>{{ payroll_obj.start_dt|date:'d/m/Y' }}</span>
+            &nbsp;{% trans "au" %}&nbsp;
+            <span>{{ payroll_obj.end_dt|date:'d/m/Y' }}</span>
+        </p>
+        <p>
+            <span class="info-label">{% trans "Généré le" %}:</span> {{ now|date:'d/m/Y H:i' }}
+        </p>
     </div>
 
+    <!-- Organization Info -->
+    <div class="info-row text-center">
+        <h4>{{ organization.name|default:"Payday" }}</h4>
+        <small>{% trans 'Direction des Ressources Humaines' %}</small>
+    </div>
 
-   </body>
+    <!-- Summary Info -->
+    <div class="info-row mb-4">
+        <p class="mb-0">
+            <span class="info-label">{% trans "Type de synthèse" %}:</span>
+            {% if func == 'count' %}
+                {% trans "Nombre d'employés" %}
+            {% else %}
+                {% trans "Somme des montants" %}
+            {% endif %}
+        </p>
+        <p>
+            <span class="info-label">{% trans "Champs utilisés" %}:</span>
+            {% for field in fields %}
+                {{ field|title }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+
+    <!-- Main Table -->
+    <div class="table-responsive">
+        {{ html_table|safe }}
+    </div>
+
+</body>
 </html>
