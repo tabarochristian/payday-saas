@@ -11,9 +11,6 @@ from django.db import models
 def mobile_payment_order_created(sender, instance, created, **kwargs):
     if not created: return
 
-    annotate_fields = {
-    }
-
     qs = PaidEmployee.objects.filter(
         payment_method = 'MOBILE MONEY',
         payroll = instance.payroll,
