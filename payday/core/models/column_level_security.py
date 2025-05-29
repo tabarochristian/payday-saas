@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from core.models import Base, fields
 from django.core.cache import cache
 
-class FieldPermission(Base):
+class ColumnLevelSecurity(Base):
     """
     Model to handle field permissions for users and groups.
     """
@@ -22,7 +22,7 @@ class FieldPermission(Base):
         help_text=_('Le groupe auquel cette permission est attribuée.'),
         editable=False
     )
-    field_content_type = fields.ForeignKey(
+    content_type = fields.ForeignKey(
         'contenttypes.contenttype',
         verbose_name=_("type de contenu"),
         limit_choices_to={'app_label__in': ['core', 'employee', 'payroll']},
@@ -55,7 +55,7 @@ class FieldPermission(Base):
         CrispyRow(
             Column('group'),
             Column('user'),
-            Column('field_content_type'),
+            Column('content_type'),
         ),
         Fieldset(
             _('Row'),
@@ -95,18 +95,18 @@ class FieldPermission(Base):
 
     class Meta:
         unique_together = (
-            ('user', 'field_content_type', 'field'),
-            ('group', 'field_content_type', 'field'),
+            ('user', 'content_type', 'field'),
+            ('group', 'content_type', 'field'),
         )
-        verbose_name = _('filtrage des champs')
-        verbose_name_plural = _('filtrage des champs')
+        verbose_name = _("Filtrage dynamique des colones")
+        verbose_name_plural = _("Filtrage dynamique des colones")
 
     @property
     def name(self):
         """
         Return the name representation of the FieldPermission instance.
         """
-        return f"{self.field_content_type.model} | {self.field} | {self.user or self.group}"
+        return f"{self.content_type.model} | {self.field} | {self.user or self.group}"
 
     def __str__(self):
         return self.name

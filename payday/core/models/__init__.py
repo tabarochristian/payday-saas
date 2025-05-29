@@ -9,9 +9,9 @@ from .menu import Menu
 from .template import Template
 from .preference import Preference
 
-from .field_permission import FieldPermission
-from .importer import Importer, ImporterStatus
+from .column_level_security import ColumnLevelSecurity
 from .row_level_security import RowLevelSecurity
+from .importer import Importer, ImporterStatus
 
 from .action_required import ActionRequired
 from .workflow import Workflow

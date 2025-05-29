@@ -37,6 +37,7 @@ class TenantMiddleware:
             logger.warning(f"Schema {schema} is not active")
             return self.redirect_to_default()
 
+        request.schema = schema
         thread.schema = schema
         request.tenant = row
     

@@ -72,14 +72,14 @@ class Change(BaseView):
             List of Button objects for permitted actions.
         """
         obj = obj or self._get_object()
-        model_permission_prefix = f"{self.kwargs['app']}.{self.kwargs['model']}"
+        app_label, model_name = self.kwargs['app'], self.kwargs['model']
         
         buttons = [
             Button(
                 tag='a',
                 text=_('Supprimer'),
                 classes='btn btn-light-danger',
-                permission=f"{model_permission_prefix}.delete",
+                permission=f"{app_label}.delete_{model_name}",
                 url=reverse_lazy('core:delete', kwargs={
                     'model': self.kwargs['model'],
                     'app': self.kwargs['app'],
@@ -89,7 +89,7 @@ class Change(BaseView):
                 tag='button',
                 text=_('Sauvegarder'),
                 classes='btn btn-light-success',
-                permission=f"{model_permission_prefix}.change",
+                permission=f"{app_label}.change_{model_name}",
                 attrs={'type': 'submit', 'form': f"form-{self.kwargs['model']}"}
             )
         ]
@@ -99,19 +99,6 @@ class Change(BaseView):
         extra_buttons = [Button(**button) for button in extra_buttons]
 
         return [btn for btn in extra_buttons + buttons]
-
-    def get_formsets(self, obj=None):
-        """
-        Generates formsets lazily with proper initialization.
-        
-        Args:
-            obj: Model instance to bind formsets to.
-            
-        Returns:
-            List of initialized formset instances.
-        """
-        obj = obj or self._get_object()
-        return [formset(instance=obj) for formset in self.formsets()]
 
     def validate_form(self, form, formsets):
         """
@@ -136,9 +123,10 @@ class Change(BaseView):
 
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
         form = self.filter_form(FormClass(instance=obj))
-        formsets = self.get_formsets(obj)
 
+        formsets = [formset(instance=obj) for formset in self.formsets()]
         action_buttons = self.get_action_buttons(obj)
+        
         return render(request, self.get_template_name(), locals())
 
     @transaction.atomic

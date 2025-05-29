@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from core.filters import filter_set_factory
 from core.forms.button import Button
+from django.contrib import messages
 from .base import BaseView
 import logging
 
@@ -33,20 +34,19 @@ class List(BaseView):
         Build action buttons dynamically based on user permissions.
         """
         app_label, model_name = self.kwargs['app'], self.kwargs['model']
-        model_permission_prefix = f"{app_label}.{model_name}"
 
         action_buttons = [
             Button(
                 tag='button',
                 text=_('Supprimer'),
-                permission=f"{model_permission_prefix}.delete",
+                permission=f"{app_label}.delete_{model_name}",
                 classes='btn btn-light-danger btn-list-action',
                 attrs={'data-action': reverse_lazy('core:delete', kwargs={'app': app_label, 'model': model_name})}
             ),
             Button(
                 tag='button',
                 text=_('Exporter'),
-                permission=f"{model_permission_prefix}.view",
+                permission=f"{app_label}.view_{model_name}",
                 classes='btn btn-light-warning btn-list-action',
                 attrs={'data-action': reverse_lazy('core:exporter', kwargs={'app': app_label, 'model': model_name})}
             ),
@@ -54,7 +54,7 @@ class List(BaseView):
                 tag='a',
                 text=_('Ajouter'),
                 classes='btn btn-light-success',
-                permission=f"{model_permission_prefix}.add",
+                permission=f"{app_label}.add_{model_name}",
                 url=reverse_lazy('core:create', kwargs={'app': app_label, 'model': model_name})
             ),
         ]

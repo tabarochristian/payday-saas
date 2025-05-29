@@ -77,26 +77,43 @@ class FielderMixin:
     def filter_form(self, form):
         """
         Apply user-based field permission filtering to the given form.
+        
         For each field that the user does not have permission to modify,
-        mark the widget as readonly and apply a dark background class.
+        mark the widget as readonly and apply a visual class (e.g., bg-dark).
         
         Args:
-            form: Either a form instance or class; if a class, it is instantiated.
-
+            form: Either a form class or instance
+            
         Returns:
-            The filtered form instance.
+            The filtered form instance
         """
-        # Instantiate the form if a form class is passed.
-        form_instance = form() if isinstance(form, type) else form
-        permission_dict = self.request.user.get_user_field_permission(
-            app=form_instance.Meta.model._meta.app_label,
-            model=form_instance.Meta.model._meta.model_name
-        )
-        for field, has_permission in permission_dict.items():
-            if not has_permission:
-                # Mark the field as read-only and change style
-                form_instance.fields[field].widget.attrs['readonly'] = True
-                form_instance.fields[field].widget.attrs['class'] = 'bg-dark'
+        # Instantiate if a class was passed
+        if isinstance(form, type):
+            form_instance = form()
+        else:
+            form_instance = form
+
+        model_meta = form_instance.Meta.model._meta
+        app_label = model_meta.app_label
+        model_name = model_meta.model_name
+
+        # Get field-level permissions from user utility
+        permission_dict = self.request.user.get_user_field_permission(app=app_label, model=model_name)
+
+        # Add extra protected fields (like 'employee')
+        permission_dict = {key: value for key, value in permission_dict.items() if value}
+        protected_fields = set(permission_dict.keys())
+        if 'employee' in form_instance.fields:
+            protected_fields.add('employee')
+
+        # Apply read-only and styling to restricted fields
+        for field_name in protected_fields:
+            if field_name in form_instance.fields:
+                form_instance.fields[field_name].widget.attrs.update({
+                    'readonly': True,
+                    'class': 'bg-dark'
+                })
+
         return form_instance
 
     def get_form_fields(self, model=None):

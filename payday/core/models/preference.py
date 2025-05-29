@@ -5,15 +5,17 @@ from django.core.cache import cache
 from core.models import fields
 from .base import Base
 
-def preferences():
-    return cache.get('PREFERENCES', default=[])
+PREFERENCES = [
+    ('DEFAULT_USER_ROLE:STR', _('DEFAULT_USER_ROLE:STR')),
+    ('DEFAULT_USER_PASSWORD:STR', _('DEFAULT_USER_PASSWORD:STR'))
+]
 
 class Preference(Base):
     key = fields.CharField(
         verbose_name=_('clé'),
         max_length=100,
         unique=True,
-        # choices=preferences
+        choices=PREFERENCES
     )
 
     value = fields.CharField(

@@ -26,13 +26,14 @@ class RowLevelSecurity(Base):
         editable=False
     )
     
-    row_content_type = fields.ForeignKey(
+    content_type = fields.ForeignKey(
         'contenttypes.contenttype',
         verbose_name=_("type de contenu"),
         limit_choices_to={'app_label__in': ['core', 'employee', 'payroll']},
         inline=True,
         help_text=_("Le modèle auquel cette règle de filtrage est associée."),
     )
+    
     field = fields.CharField(
         verbose_name=_("champ"),
         max_length=255,
@@ -53,7 +54,7 @@ class RowLevelSecurity(Base):
         CrispyRow(
             Column('group'),
             Column('user'),
-            Column('row_content_type'),
+            Column('content_type'),
         ),
         Fieldset(
             _('Row'),
@@ -96,9 +97,12 @@ class RowLevelSecurity(Base):
         """
         Return the name representation of the RowLevelSecurity instance.
         """
-        return f"{self.user} - {self.row_content_type}"
+        return f"{self.user} - {self.content_type}"
 
     class Meta:
-        verbose_name = _("filtrage des lignes")
-        verbose_name_plural = _("filtrage des lignes")
-        unique_together = ("row_content_type", "user", "field")
+        verbose_name = _("Filtrage dynamique des lignes")
+        verbose_name_plural = _("Filtrage dynamique des lignes")
+        unique_together = (
+            ('user', 'content_type', 'field'),
+            ('group', 'content_type', 'field'),
+        )

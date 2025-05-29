@@ -8,72 +8,15 @@
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 
-<div class="page-content">
+<div id="widgets-container" class="page-content">
+    <h1 class="mb-3">Hi! {{ request.user.employee.full_name }}</h1>
     <div class="row">
+
         {% for widget in widgets %}
-            <div class="{{ widget.column }}">
-                {{ widget.content }}
-            </div>
-        {% empty %}
-            <div class="col">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h4>{% trans 'Aucun widget(s)' %}</h4>
-                    </div>
-                </div>
+            <div class="widget-item {{ widget.column }}">
+                {{ widget.content|safe }}
             </div>
         {% endfor %}
     </div>
 </div>
-
-{% comment %}
- {{ menus|json_script:"menus" }}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.css" />
-<script>
-    $(function() {
-        // Initial Steps for IntroJS
-        steps = [
-            {
-                element: '.menu',
-                intro: "{% trans "Menu de navigation pour accéder aux différentes pages" %}"
-            },
-            {
-                element: '.lang-switcher-dropdown-menu',
-                intro: "{% trans "Changer la langue" %}"
-            },
-            {
-                element: '.user-menu',
-                intro: "{% trans "Utilisateur connecté" %}"
-            }
-        ];
-
-        // Configure slugify to remove special characters (replace with empty string)
-        const options = {
-            remove: /[*+~.()'"!:@]/g
-        };
-    
-        // Generate Results Array
-        results = JSON.parse(document.getElementById('menus').textContent).flatMap(menu => 
-            menu.children && Array.isArray(menu.children) ? menu.children.map(child => ({
-                element: `#submenu-item-${slugify(child.title.toLowerCase(), options)}`,
-                intro: child.description || "No description available"
-            }))
-            : {
-                element: `#menu-item-${menu.title}`,
-                intro: menu.description || "No description available"
-            }
-        );
-
-        // Initialize IntroJS
-        introJs().setOptions({
-            steps: steps.concat(results),
-            dontShowAgain: localStorage.getItem(window.location.pathname) !== null
-         }).oncomplete(() => {
-            localStorage.setItem(window.location.pathname, true);
-         }).start();
-    });
-</script>
-{% endcomment %}
-
 {% endblock %}

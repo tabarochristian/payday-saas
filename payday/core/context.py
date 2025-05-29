@@ -1,35 +1,39 @@
 from django.utils.translation import gettext as _
-from core.models import Menu, ActionRequired
+from core.models import ActionRequired
 from django.urls import reverse_lazy
 from django.apps import apps
 
 TARGET_APPS = ["employee", "payroll", "leave", "easypay"]
-EXCLUDED_MODELS = {"child", "device", "document", "education", 
-"itempaid", "paidemployee", "specialemployeeitem", "advancesalarypayment"}
+EXCLUDED_MODELS = ("child", "device", "document", "education", 
+                   "itempaid", "paidemployee", "specialemployeeitem", "advancesalarypayment")
 
 def base(request):
-    if not request.user.is_authenticated: return {}
+    if not request.user.is_authenticated:
+        return {}
 
+    # Get models from allowed apps, excluding certain models
     apps_models = {
         app: [model for model in app.get_models() if model._meta.model_name not in EXCLUDED_MODELS]
         for app in apps.get_app_configs() if app.label in TARGET_APPS
     }
-    
-    menu = [{
-        'class': 'active',
-        'href': f'#{app.label}',
-        'title': app.verbose_name,
-        # 'icon': f'bi-{getattr(app, "icon", "default-icon")}',  # Ensure safe reference
-        'children': [
-            {
-                'title': model._meta.verbose_name,
-                'permission': f'{app.label}.view_{model._meta.model_name}',
-                'href': reverse_lazy('core:list', kwargs={'app': app.label, 'model': model._meta.model_name})
-            }
-            for model in apps_models[app] if request.user.has_perm(f'{app.label}.view_{model._meta.model_name}')
-        ]
-    }
-    for app in apps_models.keys()]
+
+    # Construct menu dynamically
+    menu = [
+        {
+            "class": "active",
+            "href": f"#{app.label}",
+            "title": app.verbose_name,
+            "children": [
+                {
+                    "title": model._meta.verbose_name,
+                    "permission": f"{app.label}.view_{model._meta.model_name}",
+                    "href": reverse_lazy("core:list", kwargs={"app": app.label, "model": model._meta.model_name}),
+                }
+                for model in apps_models.get(app, []) if request.user.has_perm(f"{app.label}.view_{model._meta.model_name}")
+            ],
+        }
+        for app in apps_models.keys()
+    ]
     
     menu.insert(0, dict({
         'title': _('Tableau de bord'),
@@ -155,40 +159,3 @@ def action_required(request):
     if not is_devices: 
         data['count'] += 1
     return data
-
-"""
-from django.db.models import Case, When, Value, CharField, Sum
-from django.shortcuts import render
-from .models import Payroll
-from django.utils import timezone
-
-def get_payroll_data(request):
-    payroll_data = Payroll.objects.annotate(
-        month=Case(
-            When(start_dt__month=1, then=Value('January')),
-            When(start_dt__month=2, then=Value('February')),
-            When(start_dt__month=3, then=Value('March')),
-            When(start_dt__month=4, then=Value('April')),
-            When(start_dt__month=5, then=Value('May')),
-            When(start_dt__month=6, then=Value('June')),
-            When(start_dt__month=7, then=Value('July')),
-            When(start_dt__month=8, then=Value('August')),
-            When(start_dt__month=9, then=Value('September')),
-            When(start_dt__month=10, then=Value('October')),
-            When(start_dt__month=11, then=Value('November')),
-            When(start_dt__month=12, then=Value('December')),
-            output_field=CharField(),
-        )
-    ).values('month').annotate(
-        total_amount=Sum('amount')
-    ).values('month', 'total_amount')
-
-    # Convert to a format that can be used by the frontend chart
-    payroll_data = list(payroll_data)
-
-    context = {
-        'payroll_data': payroll_data
-    }
-    return render(request, 'payroll_chart.html', context)
-
-"""

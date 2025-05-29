@@ -17,7 +17,7 @@
     }
 </style>
 
-<{{ form.form_tag }} method="post" enctype="multipart/form-data" class="page-content" id="form-{{ alias }}">
+<{{ form.form_tag|default:'form' }} method="post" enctype="multipart/form-data" class="page-content" id="form-{{ alias }}">
     <div class="card">
         <div class="card-body">
             <ul class="nav nav-tabs" id="content-tab" role="tablist">
@@ -71,6 +71,12 @@
         document.querySelectorAll("input[type='hidden'][id$='-DELETE']").forEach(input => {
             input.type = "checkbox";
             input.classList.add("form-check-input");
+        });
+        $('select[readonly]').each(function () {
+            $(this).select2();
+            $(this).on('select2:opening', function (e) {
+                e.preventDefault(); // Prevents dropdown from opening
+            });
         });
     });
 </script>

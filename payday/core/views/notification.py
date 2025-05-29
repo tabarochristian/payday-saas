@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.apps import apps
 from core import views as core_views
 from django.http.request import QueryDict
+from django.apps import apps
 
 
 class Notifications(core_views.List):
@@ -18,6 +19,10 @@ class Notifications(core_views.List):
         action (list): The list of allowed actions for this view (e.g., ['view']).
     """
     action = ['view']
+
+    def get_model(self):
+        app, model = 'notifications', 'notification'
+        return apps.get_model(app, model_name=model)
 
     def get_action_buttons(self):
         """
@@ -74,5 +79,7 @@ class Notifications(core_views.List):
         request.GET = QueryDict(query_string)
 
         # Update the URL keyword arguments to use the correct app and model.
-        self.kwargs.update({'app': 'notifications', 'model': 'notification'})
+        self.kwargs.setdefault('app', 'notifications')
+        self.kwargs.setdefault('model', 'notification')
+
         return super().get(request, app='notifications', model='notification')

@@ -4,10 +4,12 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.utils.translation import gettext as _
 from core.forms import InlineFormSetHelper  # May be used by BaseView or extended later
-from .base import BaseView
+from .base import Change
+from core.forms.button import Button
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
-class PasswordChange(BaseView):
+class PasswordChange(Change):
     """
     A view dedicated to handling password change requests for the authenticated user.
 
@@ -20,10 +22,37 @@ class PasswordChange(BaseView):
         template_name (str): The template path for rendering the password change form.
         inline_formset_helper: A helper instance (unused in this view, but available for consistency).
     """
-    template_name = "registration/password_change.html"
+    template_name = "change.html"
     inline_formset_helper = InlineFormSetHelper()
 
-    def get(self, request):
+    def get_model(self):
+        return get_user_model()
+
+    def dispatch(self, request, *args, **kwargs):
+        return PermissionRequiredMixin.dispatch(self, request, *args, **kwargs)
+
+    def get_action_buttons(self, obj=None):
+        """
+        Generates action buttons based on user permissions and model configuration.
+        
+        Args:
+            obj: Model instance to generate buttons for.
+            
+        Returns:
+            List of Button objects for permitted actions.
+        """
+
+        return [
+            Button(
+                tag='button',
+                permission=True,
+                text=_('Sauvegarder'),
+                classes='btn btn-light-success',
+                attrs={'type': 'submit', 'form': f"form-{self.kwargs['model']}"}
+            )
+        ]
+
+    def get(self, request, app='core', model='user'):
         """
         Handle GET requests by initializing and rendering the PasswordChangeForm.
 
@@ -34,12 +63,20 @@ class PasswordChange(BaseView):
             HttpResponse: The rendered password change form.
         """
         # Get the currently authenticated user.
-        user = request.user
+        self.kwargs.update({
+            'app': app,
+            'model': model
+        })
+        obj = request.user
+        model_class = get_user_model()
         # Initialize the form with the current user. No POST data is provided in GET requests.
+
+        user = obj
         form = PasswordChangeForm(user)
+        action_buttons = self.get_action_buttons(obj)
         return render(request, self.template_name, locals())
 
-    def post(self, request):
+    def post(self, request, app='core', model='user'):
         """
         Process POST requests to update the user's password.
 
@@ -57,16 +94,15 @@ class PasswordChange(BaseView):
             with errors or redirecting to the home page on success.
         """
         # Get the authenticated user.
-        user = request.user
+        obj = request.user
+        model_class = get_user_model()
         # Instantiate the PasswordChangeForm with POST data.
-        form = PasswordChangeForm(user, request.POST)
+        form = PasswordChangeForm(obj, request.POST)
         if not form.is_valid():
             # Show a warning message if the form has errors.
             messages.warning(request, _('Veuillez remplir le formulaire correctement'))
-            context = {
-                'form': form,
-            }
-            return render(request, self.template_name, context)
+            action_buttons = self.get_action_buttons(obj)
+            return render(request, self.template_name, locals())
 
         # If form validation succeeds, update the password.
         updated_user = form.save()

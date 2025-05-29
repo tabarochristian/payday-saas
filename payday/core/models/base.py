@@ -9,7 +9,7 @@ from api.serializers import model_serializer_factory
 from core.utils import DictToObject
 from core.models import fields
 
-from core.models.managers import CustomManager
+from core.models.managers import PaydayManager
 
 class Base(models.Model):
     #history = HistoricalRecords(
@@ -51,7 +51,7 @@ class Base(models.Model):
     layout = Layout()
     list_filter = ()
 
-    objects = CustomManager()
+    objects = PaydayManager()
 
     @property
     def get_action_buttons(self):

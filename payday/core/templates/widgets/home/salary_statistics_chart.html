@@ -1,0 +1,38 @@
+<div class="card shadow-sm border-0">
+    <div class="card-body text-start">
+        <h5 class="text-primary">Statistiques des salaires</h5>
+        <hr>
+        <div style="max-height: 750px;">
+            <canvas id="payrollChart" style="width: 100%;height: 100%;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js "></script>
+
+<!-- Inject payroll data safely -->
+{{ payroll_data|json_script:"payroll-data" }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const raw = JSON.parse(document.getElementById('payroll-data').textContent);
+        const ctx = document.getElementById('payrollChart').getContext('2d');
+
+        const labels = raw.names;
+        const data = raw.amounts;
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Salaires',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+    });
+</script>

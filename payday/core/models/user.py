@@ -54,7 +54,7 @@ class User(AbstractUser):
     objects = UserManager()
     REQUIRED_FIELDS = ()
     
-    inlines = ('core.fieldpermission', 'core.rowlevelsecurity')
+    inlines = ('core.columnlevelsecurity', 'core.rowlevelsecurity')
     list_display = ('id', 'email', 'is_active')
     
     search_fields = ('id', 'email',)
@@ -90,32 +90,40 @@ class User(AbstractUser):
     def get_user_rls(self, app, model, *args, **kwargs):
         if self.is_superuser:
             return {}
-        
-        groups = self.groups.all()
-        rowlevelsecurity = apps.get_model('core', 'rowlevelsecurity')
-        rls = rowlevelsecurity.objects.filter(
-            content_type__app_label = app,
-            content_type__model = model
-        ).filter(user=self, group__in=groups, *args, **kwargs).values('field', 'value').distinct()
-        return {item['field']: item['value'] for item in rls}
+
+        RowLevelSecurity = apps.get_model('core', model_name='rowlevelsecurity')
+        groups = self.groups.all() or []
+
+        rls_rules = (
+            RowLevelSecurity.objects
+            .filter(
+                content_type__app_label = app,
+                content_type__model = model,
+            ).filter(
+                models.Q(user=self) | models.Q(group__in=groups)
+            )
+            .values_list('field', 'value')
+        )
+
+        return {field: value for field, value in rls_rules}
     
     def get_user_field_permission(self, app, model, *args, **kwargs):
         if self.is_superuser:
             return {}
         
-        groups = self.groups.all()
-        fieldpermission = apps.get_model('core', 'fieldpermission')
-        fields = fieldpermission.objects.filter(
+        groups = self.groups.all() or []
+        columnlevelsecurity = apps.get_model('core', 'columnlevelsecurity')
+
+        fields = columnlevelsecurity.objects.filter(
             content_type__app_label = app,
             content_type__model = model
-        ).filter(user=self, group__in=groups, *args, **kwargs).values('field', 'can_view', 'can_edit').distinct()
-        return {item['field']: all([item['can_view'], item['can_edit']]) for item in fields}
+        ).filter(
+            models.Q(user=self) | models.Q(group__in=groups)
+        ).values('field', 'can_view')
+        return {item['field']: item['can_view'] for item in fields}
 
     def get_absolute_url(self):
         return reverse_lazy(
             'core:change', 
             kwargs={'app': self._meta.app_label, 'model': self._meta.model_name, 'pk': self.pk}
         )
-
-#from simple_history import register
-#register(User)

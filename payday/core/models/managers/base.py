@@ -1,57 +1,101 @@
+# payday/managers.py
+
 from django.db import models
+from django.contrib.auth import get_user_model
+from core.utils import get_rls_filters
 from functools import reduce
 from operator import or_
-import pandas as pd
+from collections import deque
+from django.db.models.fields.reverse_related import ForeignObjectRel
 
-class CustomQuerySet(models.QuerySet):
-    def related_to(self, user=None, *args, **kwargs):
-        # Check if required parameters are provided
-        # return super().all(*args, **kwargs)
-
-        if user is None:
+class PaydayQuerySet(models.QuerySet):
+    def for_user(self, user=None):
+        """
+        Returns only the objects accessible by the given user.
+        Combines:
+            - User relation detection (direct or deeply nested)
+            - Row-level security (RLS) filters
+        """
+        user = user or self._get_current_user()
+        if not user or not user.is_authenticated:
             return self.none()
-    
-        qs = super().all(*args, **kwargs)
+
         if user.is_superuser or user.is_staff:
-            return qs
-        
-        # find in the model all field or subfield related to the user model
-        related_fields = [
-            field.name for field in qs.model._meta.fields
-            if field.is_relation and field.related_model._meta.model_name.lower() == 'user'
-        ]
+            return self.all()
 
-        # find in the model all nested field related to the user model
-        nested_related_fields = [
-            f"{field.name}__{subfield.name}" for field in qs.model._meta.fields
-            if field.is_relation for subfield in field.related_model._meta.fields
-            if subfield.is_relation and subfield.related_model._meta.model_name.lower() == 'user'
-        ]
+        # Step 1: Apply automatic user-related field filtering (deep nesting support)
+        qs = self._apply_user_relation_filter(user)
 
-        # combine related and nested related fields
-        all_related_fields = related_fields + nested_related_fields
-        
-        # Apply filters on all related fields 
-        filters = [models.Q(**{field: user}) for field in all_related_fields] 
-        combined_filter = reduce(or_, filters) 
-        return qs.filter(combined_filter)
+        # Step 2: Apply RLS-style dynamic filters if available
+        rls_filters = get_rls_filters(user, self.model)
+        if rls_filters:
+            try:
+                qs = qs.filter(**rls_filters)
+            except Exception as e:
+                # Optional: log warning here
+                pass
 
-    def to_table(self, fields=None):
-        def get_field(field):
-            return field.split('__')[0]
+        return qs.distinct()
 
-        fields = fields or self.model.list_display or [field.name for field in self.model._meta.fields]
-        fields = [f'{field}__name' if self.model._meta.get_field(field).is_relation else field for field in fields]
+    def _get_current_user(self):
+        """
+        Retrieve current user from middleware/context.
+        Replace with your actual implementation.
+        """
+        try:
+            from django_currentuser.middleware import get_current_user
+            return get_current_user()
+        except ImportError:
+            return None
 
-        columns = [self.model._meta.get_field(get_field(field)).verbose_name for field in fields]
-        df = pd.DataFrame.from_records(self.values(*fields))
-        df.columns = columns
+    def _apply_user_relation_filter(self, user):
+        """
+        Detect all paths (direct or deeply nested) that relate to the User model.
+        Applies filter to only include records related to the given user.
+        Works for any depth: level 1, 2, 3+, safely and efficiently.
+        """
+        if not user or not user.is_authenticated:
+            return self.none()
 
-        return df.to_html(classes='col table table-striped table-bordered table-hover')
+        model = self.model
+        visited = set()
+        queue = deque()
+        valid_paths = []
 
-class CustomManager(models.Manager):
+        # Start BFS from each direct relation of the current model
+        for field in model._meta.get_fields():
+            if field.is_relation and not isinstance(field, ForeignObjectRel):
+                queue.append((field.name, field.related_model))
+
+        while queue:
+            path, related_model = queue.popleft()
+
+            if path in visited:
+                continue
+            visited.add(path)
+
+            if related_model == get_user_model():
+                valid_paths.append(path)
+                continue
+
+            for field in related_model._meta.get_fields():
+                if field.is_relation and not isinstance(field, ForeignObjectRel):
+                    new_path = f"{path}__{field.name}"
+                    queue.append((new_path, field.related_model))
+
+        if not valid_paths:
+            return self.none()
+
+        # Build ORed Q objects: user is in any of these paths
+        filters = [models.Q(**{f"{p}": user}) for p in valid_paths]
+        combined_filter = reduce(or_, filters)
+
+        return self.filter(combined_filter).distinct()
+
+
+class PaydayManager(models.Manager):
     def get_queryset(self):
-        return CustomQuerySet(self.model, using=self._db)
-    
-    def related_to(self, user=None, *args, **kwargs):
-        return self.get_queryset().related_to(user, *args, **kwargs)
+        return PaydayQuerySet(self.model, using=self._db)
+
+    def for_user(self, user=None):
+        return self.get_queryset().for_user(user)

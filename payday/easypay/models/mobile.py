@@ -32,7 +32,7 @@ class Mobile(Base):
         blank=True,
         null=True,
         default=None,
-        on_delete=models.CASCADE
+        on_delete=models.SET_NULL
     )
 
     count = fields.IntegerField(

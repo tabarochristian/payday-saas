@@ -5,7 +5,7 @@ from django import forms
 
 class ImageWidget(Widget):
     allow_multiple_selected = False
-    template_name = 'widgets/image-field.html'
+    template_name = 'fields/image-field.html'
 
     def format_value(self, value):
         """File input never renders a value."""

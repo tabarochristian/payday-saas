@@ -15,6 +15,7 @@ class ModelSelectField(models.ForeignKey):
     def formfield(self, **kwargs):
         to_field = getattr(self, 'foreign_related_fields', None)
         to_field = to_field[0].name if to_field else 'pk'
+
         kwargs['widget'] = autocomplete.ModelSelect2(url=reverse_lazy('api:autocomplete', kwargs = {
             'to_field': to_field,
             'app': self.remote_field.model._meta.app_label,
@@ -23,4 +24,5 @@ class ModelSelectField(models.ForeignKey):
             'data-minimum-input-length': 2,
             'data-theme': 'bootstrap-5'
         })
+
         return super().formfield(**kwargs)

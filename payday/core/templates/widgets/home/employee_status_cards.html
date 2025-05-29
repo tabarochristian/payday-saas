@@ -1,0 +1,10 @@
+{% for statistic in statistics %}
+    <a href="{% url 'core:list' 'employee' 'employee' %}?status__name={{ statistic.status__name }}" class="text-decoration-none">
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-start">
+                <h3 class="text-primary">{{ statistic.status__name }}</h3>
+                <h5 class="text-muted">Nombre d'employés: <strong>{{ statistic.count }}</strong></h5>
+            </div>
+        </div>
+    </a>
+{% endfor %}

@@ -26,6 +26,9 @@
          .tox-promotion{
             display: none !important;
          }
+         .errorlist{
+            margin: 0;
+         }
       </style>
 
    </head>
@@ -101,12 +104,13 @@
                 {% block messages %}
                   {% if messages %}
                      {% for message in messages %}
-                           <div class="alert alert-light-{{ message.tags }} fw-bold mb-0" role="alert">
+                           <div class="alert alert-light-{{ message.tags|default:'warning' }} fw-bold mb-0 p-2" role="alert">
                               {{ message }}
                            </div>
                      {% endfor %}
                   {% endif %}
-                {% endblock messages %}
+               {% endblock messages %}
+
                 <nav class="navbar navbar-expand navbar-light navbar-top p-0">
                     <div class="container-fluid">
                         <a href="#" class="sidebar-toggler burger-btn d-block">

@@ -1,0 +1,20 @@
+<div class="card shadow-sm border-0">
+    <div class="card-body text-start">
+        <h5 class="text-primary">Congés en attente</h5>
+        <hr>
+        {% if leaves %}
+            <ul class="list-group">
+                {% for leave in leaves %}
+                    <a href="{% url 'core:change' 'leave' 'leave' leave.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ leave.employee.name }}</strong> ({{ leave.status }})
+                            <p class="text-muted mb-0">Du {{ leave.start_date }} au {{ leave.end_date }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Aucune demande en attente.</p>
+        {% endif %}
+    </div>
+</div>

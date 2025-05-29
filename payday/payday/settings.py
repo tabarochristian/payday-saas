@@ -180,7 +180,8 @@ LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", 'core:home')
 
 # Backend
 AUTHENTICATION_BACKENDS = [
-    "payday.backends.AuthBackend"
+    "django.contrib.auth.backends.ModelBackend"
+    #"payday.backends.AuthBackend"
 ]
 
 # Password validation

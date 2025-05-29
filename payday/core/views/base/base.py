@@ -53,6 +53,8 @@ class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, Logger
             app=model_class._meta.app_label,
             model=model_class._meta.model_name
         )
+        if hasattr(model_class.objects, 'for_user'):
+            return model_class.objects.for_user(user=self.request.user)
         return model_class.objects.filter(**user_rls)
 
     def get_permission_required(self):
@@ -122,8 +124,8 @@ class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, Logger
                 if not field.is_relation:
                     _keywords.append({
                         'name': f'{model_class._meta.model_name}.{field.verbose_name.lower()}',
+                        'value': f'{model_class._meta.model_name}.{field.name}',
                         'meta': model_class._meta.verbose_name.lower(),
-                        'value': f'{model_class._meta.model_name}.{field.name}'
                     })
                 else:
                     # If the field is a relation and has a related model, iterate through its fields.

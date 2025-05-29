@@ -161,12 +161,12 @@ class Employee(BaseEmployee):
             from django.apps import apps
             
             preference = apps.get_model('core', 'preference')
-            group = preference.get('DEFAULT_PERMISSION_GROUP')
+            group = preference.get('DEFAULT_USER_ROLE:STR')
             group = Group.objects.filter(name=group).first()
             if group: user.groups.add(group)
 
-            password = preference.get('DEFAULT_USER_PASSWORD')
-            if not password: 
+            password = preference.get('DEFAULT_USER_PASSWORD:STR')
+            if not password:
                 user.set_password(password)
                 user.save()
                 

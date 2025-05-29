@@ -40,11 +40,10 @@ class Device(Base):
 
     @staticmethod
     def get_action_required():
-        messages = []
         qs = Device.objects.all()
         return [{
-            "app": "employee",
+            "app": "device",
             "model": "device",
             "title": _("No device found"),
-            "description": _("You need to add a device to the system.")
+            "description": _("No attendance device found")
         }] if not qs.exists() else []

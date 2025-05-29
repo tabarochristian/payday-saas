@@ -20,7 +20,7 @@ def mobile_payment_order_created(sender, instance, created, **kwargs):
         full_name=Concat('last_name', models.Value(' '), 'middle_name'),
     ).values(
         'mobile_number',
-        'full_name'
+        'full_name',
         'net'
     )
     

@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from django.db import transaction
 from core.forms.button import Button
+from django.db import connection
 from .base import BaseView
 import logging
 
@@ -169,8 +170,29 @@ class Delete(BaseView):
             messages.error(request, _("Une erreur est survenue lors du chargement de la page de suppression."))
             return redirect(self.next or reverse_lazy('core:home'))
 
-    @transaction.atomic
-    def post(self, request, app, model):
+    def force_deletion(self, model, ids):
+        # Ensure IDs are valid and non-empty
+        if not ids or not all(isinstance(i, int) for i in ids):
+            raise ValueError("Invalid ID list provided")
+
+        # Get schema from request or default to 'public'
+        schema = getattr(self.request, 'schema', None)
+
+        # Get table name safely
+        table_name = getattr(self.request, 'schema', '')
+        table_name +=model._meta.db_table
+
+        # Execute deletion securely with parameterized query
+        with connection.cursor() as cursor:
+            # Correct parameterized SQL formatting
+            sql = f"DELETE FROM {table_name} WHERE id IN ({', '.join(['%s'] * len(ids))})"
+
+            # Execute safely with properly formatted parameters
+            cursor.execute(sql, tuple(ids))
+
+
+    # @transaction.atomic
+    def post(self, request, app, model, force=False):
         """
         Handles POST requests by validating query parameters, performing deletion,
         logging the action, and redirecting.
@@ -219,8 +241,11 @@ class Delete(BaseView):
                     action_flag=DELETION,
                 )
 
-            # Perform deletion
-            qs.delete()
+            if not force:
+                qs.delete()
+            else:
+                self.force_deletion(model_class, object_ids)
+
             messages.success(request, _(f"{len(object_ids)} object(s) deleted successfully"))
             return redirect(next_url)
 
@@ -229,6 +254,8 @@ class Delete(BaseView):
             messages.error(request, str(e))
             return redirect(self.next or reverse_lazy('core:home'))
         except Exception as e:
+            if not force:
+                return self.post(request, app, model, force=True)
             logger.error(f"Error processing POST request for delete action: {str(e)}")
             messages.error(request, _("Une erreur est survenue lors de la suppression."))
             return redirect(self.next or reverse_lazy('core:home'))

@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.db import models
 
 class CaptureWidget(Widget):
-    template_name = 'widgets/capture-field.html'
+    template_name = 'fields/capture-field.html'
     allow_multiple_selected = False
 
     def __init__(self, attrs=None):
