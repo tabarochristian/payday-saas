@@ -28,6 +28,8 @@ def mobile_payment_order_created(sender, instance, created, **kwargs):
         'id'
     )
 
+    print('hello word')
+
     for employee in employees:
         payload = {
             "phonenumber": str(employee["mobile_number"]),
