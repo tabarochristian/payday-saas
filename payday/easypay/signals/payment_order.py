@@ -28,13 +28,11 @@ def mobile_payment_order_created(sender, instance, created, **kwargs):
         'id'
     )
 
-    print('hello word')
-
     for employee in employees:
         payload = {
             "phonenumber": str(employee["mobile_number"]),
             "first_name": employee["full_name"].split()[0],
-            "last_name": employee["full_name"].split()[0],
+            "last_name": employee["full_name"].split()[1],
             "account": "2956481",
             "currency": "CDF",
             "amount": float(employee['net']),
@@ -57,7 +55,7 @@ def mobile_payment_order_created(sender, instance, created, **kwargs):
                 "https://api.onafriq.com/api/v5/payments", json=payload, headers=headers, timeout=10)
             response.raise_for_status()
             print("Paiement réussi pour", employee["full_name"])
-            print("Détails du paiement:", response.json())
+            # print("Détails du paiement:", response.json())
         except requests.RequestException as e:
             print("Erreur lors du paiement de",
                   employee["full_name"], ":", str(e))
