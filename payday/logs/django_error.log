@@ -49412,3 +49412,59 @@ Traceback (most recent call last):
   File "/usr/lib/python3.12/json/encoder.py", line 180, in default
     raise TypeError(f'Object of type {o.__class__.__name__} '
 TypeError: Object of type TemporaryUploadedFile is not JSON serializable
+ERROR 2025-05-30 16:21:57,802 log Internal Server Error: /api/sync/rollapp/employee
+Traceback (most recent call last):
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/api/views/employee_sync.py", line 45, in post
+    "registration_number": self.alphanum_to_numeric(data.get("idBiometrique")),
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: EmployeeSyncWithRollApp.alphanum_to_numeric() takes 1 positional argument but 2 were given
+ERROR 2025-05-30 16:24:21,330 log Internal Server Error: /api/sync/rollapp/employee
+Traceback (most recent call last):
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/venv/lib/python3.12/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/teddy/projects/sycamore/payday/payday-saas/payday/api/views/employee_sync.py", line 45, in post
+    "registration_number": self.alphanum_to_numeric(data.get("idBiometrique"))[:50],
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+TypeError: 'int' object is not subscriptable

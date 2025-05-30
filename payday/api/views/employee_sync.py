@@ -8,6 +8,12 @@ from api.serializer import EmployeeSerializer
 class EmployeeSyncWithRollApp(APIView):
     # permission_classes = [permissions.IsAuthenticated]
 
+    def alphanum_to_numeric(self, s: str) -> int:
+        if not s:
+            return 0
+
+        return (''.join(str(ord(c)).zfill(3) for c in s))
+
     def post(self, request, *args, **kwargs):
         data = request.data
         client_api_key = request.headers.get("X-Api-Key", None)
@@ -36,7 +42,7 @@ class EmployeeSyncWithRollApp(APIView):
         employee_data = {
             "created_at": now(),
             "updated_at": now(),
-            "registration_number": data.get("idBiometrique"),
+            "registration_number": self.alphanum_to_numeric(data.get("idBiometrique"))[:50],
             "social_security_number": data.get("NumDocument"),
             "date_of_birth": data.get("DatNais"),
             "gender": "MALE" if data.get("Sexe") == "M" else "FEMALE",
