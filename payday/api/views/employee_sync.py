@@ -6,10 +6,22 @@ from api.serializer import EmployeeSerializer
 
 
 class EmployeeSyncWithRollApp(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         data = request.data
+        client_api_key = request.headers.get("X-Api-Key", None)
+
+        if not client_api_key or client_api_key != "RklOR0VSUFJJTlQAAABJAAIAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4":
+            return Response(
+                {"error": "api key is required and must be valid."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        if not data:
+            return Response(
+                {"error": "Aucun données reçues."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         required_fields = [
             "idBiometrique", "NumDocument", "DatNais", "Sexe", "Etat_civil",
