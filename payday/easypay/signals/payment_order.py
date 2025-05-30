@@ -63,9 +63,9 @@ def mobile_payment_order_created(sender, instance, created, **kwargs):
 
         if not payments:
             instance.status = "COMPLETED"
-            instance.save(update_fields=["status"])
-            return
-
+            return instance.save(update_fields=["status"])
+            
+        debug_mode = getattr(settings, "DEBUG", True)
         send_payment = send_mobile_payment if debug_mode else send_mobile_payment.delay
         send_payment(instance.payroll.id, payments)
         

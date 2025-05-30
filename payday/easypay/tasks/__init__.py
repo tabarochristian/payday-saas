@@ -1,1 +1,1 @@
-from easypay.tasks.onafriq import send_mobile_payment
+from .onafriq import send_mobile_payment
