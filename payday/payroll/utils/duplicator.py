@@ -18,6 +18,7 @@ class PayrollProcessor:
     """
 
     def __init__(self, payroll, schema='public'):
+        print(schema)
         self.payroll = payroll
         self.employee_fields = []
         self.exclude_fields = {
