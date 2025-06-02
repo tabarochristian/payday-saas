@@ -100,7 +100,7 @@ class Command(BaseCommand):
         email_service: 'EmailService'
     ) -> None:
         """
-        Orchestrate tenant creation with atomic transaction.
+        Orchestrate tenant creation
         """
         lago_client.create_customer(schema, email, name)
         self.stdout.write(self.style.SUCCESS(f'Created Lago customer for schema "{schema}"'))
