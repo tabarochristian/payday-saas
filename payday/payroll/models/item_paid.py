@@ -23,8 +23,8 @@ class ItemPaid(Base):
     social_security_amount = models.FloatField(_('plafond de la sécurité sociale'), default=0)
     taxable_amount = models.FloatField(_('montant imposable'), default=0)
 
+    is_payable = models.BooleanField(_('est payable'), help_text=_('Cet élément est payable et comptabilisable, mais il n\'est pas liquide.'), default=True)
     is_bonus = models.BooleanField(_('est une prime'), help_text=_('Cet élément est un bonus'), default=False)
-    is_payable = models.BooleanField(_('est payable'), help_text=_('Cet élément est payable'), default=True)
 
     list_display = ('payslip', 'code', 'name', 'amount_qp_employee', 'amount_qp_employer')
     list_filter = ('payslip__employee__registration_number', 'is_bonus', 'is_payable', 'type_of_item')

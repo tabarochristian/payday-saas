@@ -49468,3 +49468,126 @@ Traceback (most recent call last):
     "registration_number": self.alphanum_to_numeric(data.get("idBiometrique"))[:50],
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
 TypeError: 'int' object is not subscriptable
+ERROR 2025-06-02 05:53:54,573 log Internal Server Error: /activity-log
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/list.py", line 23, in dispatch
+    model_class = self.get_model()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/base.py", line 93, in get_model
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-06-02 05:53:54,578 runserver [35;1mHTTP GET /activity-log 500 [0.03, 127.0.0.1:52786][0m
+ERROR 2025-06-02 07:52:30,713 log Internal Server Error: /payroll/preview/1
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/change.py", line 36, in dispatch
+    return redirect(reverse_lazy('core:read', kwargs=kwargs))
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/shortcuts.py", line 172, in resolve_url
+    to = str(to)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 119, in __str__
+    return str(self.__cast())
+               ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 110, in __cast
+    return func(*self._args, **self._kw)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'read' with keyword arguments '{'pk': '1'}' not found. 1 pattern(s) tried: ['read/(?P<app>[^/]+)/(?P<model>[^/]+)/(?P<pk>[^/]+)\\Z']
+ERROR 2025-06-02 07:52:30,717 runserver [35;1mHTTP GET /payroll/preview/1 500 [0.04, 127.0.0.1:55877][0m
+ERROR 2025-06-02 07:52:31,905 log Internal Server Error: /payroll/preview/1
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/views/base/change.py", line 36, in dispatch
+    return redirect(reverse_lazy('core:read', kwargs=kwargs))
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/shortcuts.py", line 172, in resolve_url
+    to = str(to)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 119, in __str__
+    return str(self.__cast())
+               ~~~~~~~~~~~^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 110, in __cast
+    return func(*self._args, **self._kw)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'read' with keyword arguments '{'pk': '1'}' not found. 1 pattern(s) tried: ['read/(?P<app>[^/]+)/(?P<model>[^/]+)/(?P<pk>[^/]+)\\Z']
+ERROR 2025-06-02 07:52:31,909 runserver [35;1mHTTP GET /payroll/preview/1 500 [0.03, 127.0.0.1:55877][0m

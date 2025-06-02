@@ -1,0 +1,640 @@
+2025-06-02 06:07:52,421 - ERROR - App 'your_app' not found!
+2025-06-02 06:08:01,145 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:08:01,145 - INFO - Seeding model: Grade
+2025-06-02 06:08:58,452 - ERROR - App 'your_app' not found!
+2025-06-02 06:09:06,631 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:09:06,631 - INFO - Seeding model: Grade
+2025-06-02 06:09:06,657 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:09:06,657 - INFO - Seeding model: Status
+2025-06-02 06:09:06,660 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:09:06,660 - INFO - Seeding model: Branch
+2025-06-02 06:09:06,664 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:09:06,664 - INFO - Seeding model: Agreement
+2025-06-02 06:09:06,668 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:09:06,668 - INFO - Seeding model: Direction
+2025-06-02 06:09:06,672 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:09:06,672 - INFO - Seeding model: Designation
+2025-06-02 06:09:06,675 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:09:06,675 - INFO - Seeding model: SubDirection
+2025-06-02 06:09:06,679 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:09:06,679 - INFO - Seeding model: Service
+2025-06-02 06:09:06,684 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:09:06,684 - INFO - Seeding model: Education
+2025-06-02 06:09:06,690 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:09:06,690 - INFO - Seeding model: Document
+2025-06-02 06:09:06,695 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:09:06,695 - INFO - Seeding model: Child
+2025-06-02 06:09:06,702 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:09:06,702 - INFO - Seeding model: Attendance
+2025-06-02 06:09:51,539 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:09:51,539 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:10:00,695 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:10:00,696 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:10:51,902 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:10:51,902 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:11:26,364 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:11:26,365 - INFO - Seeding model: Grade
+2025-06-02 06:11:26,407 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:11:26,407 - INFO - Seeding model: Status
+2025-06-02 06:11:26,434 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:11:26,434 - INFO - Seeding model: Branch
+2025-06-02 06:11:26,461 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:11:26,461 - INFO - Seeding model: Agreement
+2025-06-02 06:11:26,489 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:11:26,489 - INFO - Seeding model: Direction
+2025-06-02 06:11:26,516 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:11:26,516 - INFO - Seeding model: Designation
+2025-06-02 06:11:26,544 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:11:26,544 - INFO - Seeding model: SubDirection
+2025-06-02 06:11:26,581 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:11:26,581 - INFO - Seeding model: Service
+2025-06-02 06:11:26,620 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:11:26,620 - INFO - Seeding model: Education
+2025-06-02 06:11:26,676 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:11:26,676 - INFO - Seeding model: Document
+2025-06-02 06:11:26,727 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:11:26,727 - INFO - Seeding model: Child
+2025-06-02 06:11:26,778 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:11:26,778 - INFO - Seeding model: Attendance
+2025-06-02 06:11:52,170 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:11:52,170 - INFO - Seeding model: Grade
+2025-06-02 06:11:52,220 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:11:52,220 - INFO - Seeding model: Status
+2025-06-02 06:11:52,247 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:11:52,248 - INFO - Seeding model: Branch
+2025-06-02 06:11:52,275 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:11:52,275 - INFO - Seeding model: Agreement
+2025-06-02 06:11:52,304 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:11:52,304 - INFO - Seeding model: Direction
+2025-06-02 06:11:52,330 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:11:52,330 - INFO - Seeding model: Designation
+2025-06-02 06:11:52,358 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:11:52,359 - INFO - Seeding model: SubDirection
+2025-06-02 06:11:52,396 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:11:52,396 - INFO - Seeding model: Service
+2025-06-02 06:11:52,434 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:11:52,434 - INFO - Seeding model: Education
+2025-06-02 06:11:52,489 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:11:52,489 - INFO - Seeding model: Document
+2025-06-02 06:11:52,541 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:11:52,541 - INFO - Seeding model: Child
+2025-06-02 06:11:52,593 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:11:52,593 - INFO - Seeding model: Attendance
+2025-06-02 06:12:14,132 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:12:14,133 - INFO - Seeding model: Grade
+2025-06-02 06:12:14,186 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:12:14,186 - INFO - Seeding model: Status
+2025-06-02 06:12:14,215 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:12:14,215 - INFO - Seeding model: Branch
+2025-06-02 06:12:14,243 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:12:14,243 - INFO - Seeding model: Agreement
+2025-06-02 06:12:14,273 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:12:14,273 - INFO - Seeding model: Direction
+2025-06-02 06:12:14,301 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:12:14,301 - INFO - Seeding model: Designation
+2025-06-02 06:12:14,330 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:12:14,330 - INFO - Seeding model: SubDirection
+2025-06-02 06:12:14,369 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:12:14,369 - INFO - Seeding model: Service
+2025-06-02 06:12:14,409 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:12:14,409 - INFO - Seeding model: Education
+2025-06-02 06:12:14,466 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:12:14,466 - INFO - Seeding model: Document
+2025-06-02 06:12:14,518 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:12:14,518 - INFO - Seeding model: Child
+2025-06-02 06:12:14,572 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:12:14,572 - INFO - Seeding model: Attendance
+2025-06-02 06:12:41,395 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:12:41,396 - INFO - Seeding model: Grade
+2025-06-02 06:12:41,446 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:12:41,446 - INFO - Seeding model: Status
+2025-06-02 06:12:41,473 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:12:41,473 - INFO - Seeding model: Branch
+2025-06-02 06:12:41,500 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:12:41,500 - INFO - Seeding model: Agreement
+2025-06-02 06:12:41,529 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:12:41,529 - INFO - Seeding model: Direction
+2025-06-02 06:12:41,555 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:12:41,555 - INFO - Seeding model: Designation
+2025-06-02 06:12:41,584 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:12:41,584 - INFO - Seeding model: SubDirection
+2025-06-02 06:12:41,621 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:12:41,621 - INFO - Seeding model: Service
+2025-06-02 06:12:41,659 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:12:41,659 - INFO - Seeding model: Education
+2025-06-02 06:12:41,714 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:12:41,714 - INFO - Seeding model: Document
+2025-06-02 06:12:41,766 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:12:41,766 - INFO - Seeding model: Child
+2025-06-02 06:12:41,817 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:12:41,817 - INFO - Seeding model: Employee
+2025-06-02 06:12:41,991 - WARNING - Skipping duplicate entries for model Employee
+2025-06-02 06:12:41,991 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:13:20,418 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:13:20,418 - INFO - Seeding model: Grade
+2025-06-02 06:13:20,482 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:13:20,482 - INFO - Seeding model: Status
+2025-06-02 06:13:20,511 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:13:20,511 - INFO - Seeding model: Branch
+2025-06-02 06:13:20,539 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:13:20,539 - INFO - Seeding model: Agreement
+2025-06-02 06:13:20,568 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:13:20,568 - INFO - Seeding model: Direction
+2025-06-02 06:13:20,594 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:13:20,594 - INFO - Seeding model: Designation
+2025-06-02 06:13:20,622 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:13:20,622 - INFO - Seeding model: SubDirection
+2025-06-02 06:13:20,659 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:13:20,660 - INFO - Seeding model: Service
+2025-06-02 06:13:20,697 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:13:20,698 - INFO - Seeding model: Education
+2025-06-02 06:13:20,753 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:13:20,753 - INFO - Seeding model: Document
+2025-06-02 06:13:20,804 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:13:20,804 - INFO - Seeding model: Child
+2025-06-02 06:13:20,856 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:13:20,856 - INFO - Seeding model: Employee
+2025-06-02 06:13:21,053 - WARNING - Skipping duplicate entries for model Employee
+2025-06-02 06:13:21,053 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:13:52,631 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:13:52,631 - INFO - Seeding model: Grade
+2025-06-02 06:13:52,682 - WARNING - Skipping duplicate entries for model Grade
+2025-06-02 06:13:52,682 - INFO - Seeding model: Status
+2025-06-02 06:13:52,709 - WARNING - Skipping duplicate entries for model Status
+2025-06-02 06:13:52,709 - INFO - Seeding model: Branch
+2025-06-02 06:13:52,736 - WARNING - Skipping duplicate entries for model Branch
+2025-06-02 06:13:52,736 - INFO - Seeding model: Agreement
+2025-06-02 06:13:52,764 - WARNING - Skipping duplicate entries for model Agreement
+2025-06-02 06:13:52,764 - INFO - Seeding model: Direction
+2025-06-02 06:13:52,790 - WARNING - Skipping duplicate entries for model Direction
+2025-06-02 06:13:52,790 - INFO - Seeding model: Designation
+2025-06-02 06:13:52,819 - WARNING - Skipping duplicate entries for model Designation
+2025-06-02 06:13:52,819 - INFO - Seeding model: SubDirection
+2025-06-02 06:13:52,856 - WARNING - Skipping duplicate entries for model SubDirection
+2025-06-02 06:13:52,856 - INFO - Seeding model: Service
+2025-06-02 06:13:52,894 - WARNING - Skipping duplicate entries for model Service
+2025-06-02 06:13:52,894 - INFO - Seeding model: Education
+2025-06-02 06:13:52,949 - WARNING - Skipping duplicate entries for model Education
+2025-06-02 06:13:52,949 - INFO - Seeding model: Document
+2025-06-02 06:13:53,000 - WARNING - Skipping duplicate entries for model Document
+2025-06-02 06:13:53,000 - INFO - Seeding model: Child
+2025-06-02 06:13:53,051 - WARNING - Skipping duplicate entries for model Child
+2025-06-02 06:13:53,051 - INFO - Seeding model: Employee
+2025-06-02 06:13:53,226 - WARNING - Skipping duplicate entries for model Employee
+2025-06-02 06:13:53,226 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:15:13,172 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:15:13,172 - INFO - Seeding model: Grade
+2025-06-02 06:17:14,763 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:17:14,763 - INFO - Seeding model: Grade
+2025-06-02 06:18:13,964 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:18:13,964 - INFO - Seeding model: Grade
+2025-06-02 06:18:47,256 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:18:47,256 - INFO - Seeding model: Grade
+2025-06-02 06:19:25,470 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:19:25,470 - INFO - Seeding model: Grade
+2025-06-02 06:19:40,056 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:19:40,056 - INFO - Seeding model: Grade
+2025-06-02 06:20:01,882 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:20:01,882 - INFO - Seeding model: Grade
+2025-06-02 06:20:13,647 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:20:13,647 - INFO - Seeding model: Grade
+2025-06-02 06:20:13,700 - INFO - Successfully created 100 records for model Grade
+2025-06-02 06:20:13,700 - INFO - Seeding model: Status
+2025-06-02 06:20:13,729 - INFO - Successfully created 100 records for model Status
+2025-06-02 06:20:13,729 - INFO - Seeding model: Branch
+2025-06-02 06:20:13,760 - INFO - Successfully created 100 records for model Branch
+2025-06-02 06:20:13,760 - INFO - Seeding model: Agreement
+2025-06-02 06:20:13,790 - INFO - Successfully created 100 records for model Agreement
+2025-06-02 06:20:13,790 - INFO - Seeding model: Direction
+2025-06-02 06:20:13,819 - INFO - Successfully created 100 records for model Direction
+2025-06-02 06:20:13,819 - INFO - Seeding model: Designation
+2025-06-02 06:20:13,851 - INFO - Successfully created 100 records for model Designation
+2025-06-02 06:20:13,851 - INFO - Seeding model: SubDirection
+2025-06-02 06:20:13,917 - INFO - Successfully created 100 records for model SubDirection
+2025-06-02 06:20:13,917 - INFO - Seeding model: Service
+2025-06-02 06:20:13,970 - INFO - Successfully created 100 records for model Service
+2025-06-02 06:20:13,970 - INFO - Seeding model: Education
+2025-06-02 06:20:14,032 - INFO - Successfully created 100 records for model Education
+2025-06-02 06:20:14,032 - INFO - Seeding model: Document
+2025-06-02 06:20:14,091 - INFO - Successfully created 100 records for model Document
+2025-06-02 06:20:14,091 - INFO - Seeding model: Child
+2025-06-02 06:20:14,148 - INFO - Successfully created 100 records for model Child
+2025-06-02 06:20:14,148 - INFO - Seeding model: Employee
+2025-06-02 06:21:40,809 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:21:40,810 - INFO - Seeding model: Grade
+2025-06-02 06:21:58,547 - INFO - Starting fake data seeding for app: employee
+2025-06-02 06:21:58,547 - INFO - Seeding model: Grade
+2025-06-02 06:21:58,579 - INFO - Successfully created 100 records for model Grade
+2025-06-02 06:21:58,579 - INFO - Seeding model: Status
+2025-06-02 06:21:58,606 - INFO - Successfully created 100 records for model Status
+2025-06-02 06:21:58,606 - INFO - Seeding model: Branch
+2025-06-02 06:21:58,633 - INFO - Successfully created 100 records for model Branch
+2025-06-02 06:21:58,633 - INFO - Seeding model: Agreement
+2025-06-02 06:21:58,660 - INFO - Successfully created 100 records for model Agreement
+2025-06-02 06:21:58,660 - INFO - Seeding model: Direction
+2025-06-02 06:21:58,685 - INFO - Successfully created 100 records for model Direction
+2025-06-02 06:21:58,685 - INFO - Seeding model: Designation
+2025-06-02 06:21:58,712 - INFO - Successfully created 100 records for model Designation
+2025-06-02 06:21:58,712 - INFO - Seeding model: SubDirection
+2025-06-02 06:21:58,756 - INFO - Successfully created 100 records for model SubDirection
+2025-06-02 06:21:58,756 - INFO - Seeding model: Service
+2025-06-02 06:21:58,802 - INFO - Successfully created 100 records for model Service
+2025-06-02 06:21:58,802 - INFO - Seeding model: Education
+2025-06-02 06:21:58,856 - INFO - Successfully created 100 records for model Education
+2025-06-02 06:21:58,857 - INFO - Seeding model: Document
+2025-06-02 06:21:58,906 - INFO - Successfully created 100 records for model Document
+2025-06-02 06:21:58,906 - INFO - Seeding model: Child
+2025-06-02 06:21:58,957 - INFO - Successfully created 100 records for model Child
+2025-06-02 06:21:58,957 - INFO - Seeding model: Employee
+2025-06-02 06:21:59,205 - INFO - Successfully created 100 records for model Employee
+2025-06-02 06:21:59,205 - INFO - Fake data seeding completed successfully.
+2025-06-02 06:40:40,060 - INFO - New grades created successfully.
+2025-06-02 06:40:40,060 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 06:43:02,808 - INFO - New grades created successfully.
+2025-06-02 06:43:02,808 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:02:28,608 - INFO - Returning existing grades.
+2025-06-02 07:02:28,609 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:02:28,611 - INFO - New statuses created successfully.
+2025-06-02 07:02:28,611 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:02:28,612 - INFO - New branches created successfully.
+2025-06-02 07:02:28,612 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:02:28,613 - INFO - New agreements created successfully.
+2025-06-02 07:02:28,613 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:02:28,614 - INFO - Nouvelles directions créées avec succès.
+2025-06-02 07:02:28,614 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:02:28,614 - INFO - Retour des directions existantes.
+2025-06-02 07:02:28,614 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:02:46,296 - INFO - Returning existing grades.
+2025-06-02 07:02:46,297 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:02:46,297 - INFO - Returning existing statuses.
+2025-06-02 07:02:46,297 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:02:46,297 - INFO - Returning existing branches.
+2025-06-02 07:02:46,297 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:02:46,297 - INFO - Returning existing agreements.
+2025-06-02 07:02:46,297 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:02:46,297 - INFO - Retour des directions existantes.
+2025-06-02 07:02:46,297 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:02:46,297 - INFO - Retour des directions existantes.
+2025-06-02 07:02:46,297 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:02:46,362 - INFO - 100 nouveaux employés créés avec succès.
+2025-06-02 07:03:31,916 - INFO - Returning existing grades.
+2025-06-02 07:03:31,917 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:03:31,917 - INFO - Returning existing statuses.
+2025-06-02 07:03:31,917 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:03:31,917 - INFO - Returning existing branches.
+2025-06-02 07:03:31,917 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:03:31,917 - INFO - Returning existing agreements.
+2025-06-02 07:03:31,918 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:31,918 - INFO - Retour des directions existantes.
+2025-06-02 07:03:31,918 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:31,918 - INFO - Retour des directions existantes.
+2025-06-02 07:03:31,918 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:03:31,918 - INFO - Retour de 100 employés existants.
+2025-06-02 07:03:42,448 - INFO - Returning existing grades.
+2025-06-02 07:03:42,449 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:03:42,449 - INFO - Returning existing statuses.
+2025-06-02 07:03:42,449 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:03:42,449 - INFO - Returning existing branches.
+2025-06-02 07:03:42,449 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:03:42,449 - INFO - Returning existing agreements.
+2025-06-02 07:03:42,449 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:42,449 - INFO - Retour des directions existantes.
+2025-06-02 07:03:42,449 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:42,449 - INFO - Retour des directions existantes.
+2025-06-02 07:03:42,449 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:03:42,513 - INFO - 100 nouveaux employés créés avec succès.
+2025-06-02 07:03:44,335 - INFO - Returning existing grades.
+2025-06-02 07:03:44,336 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:03:44,336 - INFO - Returning existing statuses.
+2025-06-02 07:03:44,336 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:03:44,336 - INFO - Returning existing branches.
+2025-06-02 07:03:44,336 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:03:44,336 - INFO - Returning existing agreements.
+2025-06-02 07:03:44,336 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:44,336 - INFO - Retour des directions existantes.
+2025-06-02 07:03:44,336 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:44,336 - INFO - Retour des directions existantes.
+2025-06-02 07:03:44,336 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:03:44,395 - INFO - 100 nouveaux employés créés avec succès.
+2025-06-02 07:03:45,952 - INFO - Returning existing grades.
+2025-06-02 07:03:45,953 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:03:45,953 - INFO - Returning existing statuses.
+2025-06-02 07:03:45,953 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:03:45,953 - INFO - Returning existing branches.
+2025-06-02 07:03:45,953 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:03:45,953 - INFO - Returning existing agreements.
+2025-06-02 07:03:45,953 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:45,953 - INFO - Retour des directions existantes.
+2025-06-02 07:03:45,953 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:03:45,953 - INFO - Retour des directions existantes.
+2025-06-02 07:03:45,953 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:03:46,011 - INFO - 100 nouveaux employés créés avec succès.
+2025-06-02 07:07:50,697 - INFO - Returning existing grades.
+2025-06-02 07:07:50,697 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:07:50,698 - INFO - Returning existing statuses.
+2025-06-02 07:07:50,698 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:07:50,698 - INFO - Returning existing branches.
+2025-06-02 07:07:50,698 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:07:50,698 - INFO - Returning existing agreements.
+2025-06-02 07:07:50,698 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:07:50,698 - INFO - Retour des directions existantes.
+2025-06-02 07:07:50,698 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:07:50,698 - INFO - Retour des directions existantes.
+2025-06-02 07:07:50,698 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:07:50,959 - INFO - 500 nouveaux employés créés avec succès.
+2025-06-02 07:07:50,959 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:08:17,937 - INFO - Returning existing grades.
+2025-06-02 07:08:17,937 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:08:17,938 - INFO - Returning existing statuses.
+2025-06-02 07:08:17,938 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:08:17,938 - INFO - Returning existing branches.
+2025-06-02 07:08:17,938 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:08:17,938 - INFO - Returning existing agreements.
+2025-06-02 07:08:17,938 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:08:17,938 - INFO - Retour des directions existantes.
+2025-06-02 07:08:17,938 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:08:17,938 - INFO - Retour des directions existantes.
+2025-06-02 07:08:17,938 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:08:18,198 - INFO - 500 nouveaux employés créés avec succès.
+2025-06-02 07:08:18,198 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:08:18,198 - ERROR - Modèle 'LeaveType' introuvable dans l'application 'employee'. Vérifiez la configuration.
+2025-06-02 07:08:18,198 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:09:24,180 - INFO - Returning existing grades.
+2025-06-02 07:09:24,181 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:09:24,181 - INFO - Returning existing statuses.
+2025-06-02 07:09:24,181 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:09:24,181 - INFO - Returning existing branches.
+2025-06-02 07:09:24,181 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:09:24,181 - INFO - Returning existing agreements.
+2025-06-02 07:09:24,182 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:09:24,182 - INFO - Retour des directions existantes.
+2025-06-02 07:09:24,182 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:09:24,182 - INFO - Retour des directions existantes.
+2025-06-02 07:09:24,182 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:09:24,182 - INFO - Retour des employees.
+2025-06-02 07:09:41,122 - INFO - Returning existing grades.
+2025-06-02 07:09:41,123 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:09:41,123 - INFO - Returning existing statuses.
+2025-06-02 07:09:41,123 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:09:41,123 - INFO - Returning existing branches.
+2025-06-02 07:09:41,123 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:09:41,123 - INFO - Returning existing agreements.
+2025-06-02 07:09:41,123 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:09:41,124 - INFO - Retour des directions existantes.
+2025-06-02 07:09:41,124 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:09:41,124 - INFO - Retour des directions existantes.
+2025-06-02 07:09:41,124 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:09:41,162 - INFO - Retour des employees.
+2025-06-02 07:09:41,162 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:09:41,162 - ERROR - Modèle 'LeaveType' introuvable dans l'application 'employee'. Vérifiez la configuration.
+2025-06-02 07:09:41,162 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:10:10,805 - INFO - Returning existing grades.
+2025-06-02 07:10:10,806 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:10:10,806 - INFO - Returning existing statuses.
+2025-06-02 07:10:10,806 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:10:10,806 - INFO - Returning existing branches.
+2025-06-02 07:10:10,806 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:10:10,806 - INFO - Returning existing agreements.
+2025-06-02 07:10:10,806 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:10:10,807 - INFO - Retour des directions existantes.
+2025-06-02 07:10:10,807 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:10:10,807 - INFO - Retour des directions existantes.
+2025-06-02 07:10:10,807 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:10:10,845 - INFO - Retour des employees.
+2025-06-02 07:10:10,845 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:10:10,845 - ERROR - Modèle 'LeaveType' introuvable dans l'application 'employee'. Vérifiez la configuration.
+2025-06-02 07:10:10,845 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:10:21,473 - INFO - Returning existing grades.
+2025-06-02 07:10:21,474 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:10:21,474 - INFO - Returning existing statuses.
+2025-06-02 07:10:21,474 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:10:21,474 - INFO - Returning existing branches.
+2025-06-02 07:10:21,474 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:10:21,474 - INFO - Returning existing agreements.
+2025-06-02 07:10:21,474 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:10:21,475 - INFO - Retour des directions existantes.
+2025-06-02 07:10:21,475 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:10:21,475 - INFO - Retour des directions existantes.
+2025-06-02 07:10:21,475 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:10:21,513 - INFO - Retour des employees.
+2025-06-02 07:10:21,513 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:10:21,514 - INFO - Nouveaux types de congé créés avec succès.
+2025-06-02 07:10:21,514 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:35:24,938 - INFO - Returning existing grades.
+2025-06-02 07:35:24,938 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:35:24,938 - INFO - Returning existing statuses.
+2025-06-02 07:35:24,938 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:35:24,939 - INFO - Returning existing branches.
+2025-06-02 07:35:24,939 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:35:24,939 - INFO - Returning existing agreements.
+2025-06-02 07:35:24,939 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:35:24,939 - INFO - Retour des directions existantes.
+2025-06-02 07:35:24,939 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:35:24,939 - INFO - Retour des directions existantes.
+2025-06-02 07:35:24,939 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:35:24,981 - INFO - Retour des employees.
+2025-06-02 07:35:24,982 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:35:24,982 - INFO - Retour des types de congé existants.
+2025-06-02 07:35:24,982 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:35:24,984 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 07:35:24,984 - INFO - 4 legal payslip created or retrieved successfully.
+2025-06-02 07:43:50,549 - INFO - Returning existing grades.
+2025-06-02 07:43:50,549 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:43:50,549 - INFO - Returning existing statuses.
+2025-06-02 07:43:50,549 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:43:50,550 - INFO - Returning existing branches.
+2025-06-02 07:43:50,550 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:43:50,550 - INFO - Returning existing agreements.
+2025-06-02 07:43:50,550 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:43:50,550 - INFO - Retour des directions existantes.
+2025-06-02 07:43:50,550 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:43:50,550 - INFO - Retour des directions existantes.
+2025-06-02 07:43:50,550 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:43:50,589 - INFO - Retour des employees.
+2025-06-02 07:43:50,590 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:43:50,590 - INFO - Retour des types de congé existants.
+2025-06-02 07:43:50,590 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:43:50,590 - INFO - Retour des éléments légaux existants pour la fiche de paie.
+2025-06-02 07:43:50,590 - INFO - 4 legal paysli element created or retrieved successfully
+2025-06-02 07:44:03,895 - INFO - Returning existing grades.
+2025-06-02 07:44:03,895 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:44:03,895 - INFO - Returning existing statuses.
+2025-06-02 07:44:03,895 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:44:03,896 - INFO - Returning existing branches.
+2025-06-02 07:44:03,896 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:44:03,896 - INFO - Returning existing agreements.
+2025-06-02 07:44:03,896 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:44:03,896 - INFO - Retour des directions existantes.
+2025-06-02 07:44:03,896 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:44:03,896 - INFO - Retour des directions existantes.
+2025-06-02 07:44:03,896 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:44:03,935 - INFO - Retour des employees.
+2025-06-02 07:44:03,935 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:44:03,935 - INFO - Retour des types de congé existants.
+2025-06-02 07:44:03,935 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:44:03,935 - INFO - Retour des éléments légaux existants pour la fiche de paie.
+2025-06-02 07:44:03,935 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 07:44:03,937 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 07:44:03,937 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 07:46:07,662 - INFO - New grades created successfully.
+2025-06-02 07:46:07,662 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:46:07,663 - INFO - New statuses created successfully.
+2025-06-02 07:46:07,663 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:46:07,664 - INFO - New branches created successfully.
+2025-06-02 07:46:07,664 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:46:07,665 - INFO - New agreements created successfully.
+2025-06-02 07:46:07,665 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:46:07,666 - INFO - Nouvelles directions créées avec succès.
+2025-06-02 07:46:07,666 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:46:07,666 - INFO - Retour des directions existantes.
+2025-06-02 07:46:07,666 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:46:07,921 - INFO - 500 nouveaux employés créés avec succès.
+2025-06-02 07:46:07,921 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:46:07,922 - INFO - Nouveaux types de congé créés avec succès.
+2025-06-02 07:46:07,922 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:46:07,924 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 07:46:07,924 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 07:46:07,925 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 07:46:07,925 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 07:52:17,964 - INFO - New grades created successfully.
+2025-06-02 07:52:17,964 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 07:52:17,965 - INFO - New statuses created successfully.
+2025-06-02 07:52:17,965 - INFO - 4 status created or retrieved successfully.
+2025-06-02 07:52:17,967 - INFO - New branches created successfully.
+2025-06-02 07:52:17,967 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 07:52:17,969 - INFO - New agreements created successfully.
+2025-06-02 07:52:17,969 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:52:17,970 - INFO - Nouvelles directions créées avec succès.
+2025-06-02 07:52:17,970 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 07:52:17,970 - INFO - Retour des directions existantes.
+2025-06-02 07:52:17,970 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 07:52:18,228 - INFO - 500 nouveaux employés créés avec succès.
+2025-06-02 07:52:18,228 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 07:52:18,229 - INFO - Nouveaux types de congé créés avec succès.
+2025-06-02 07:52:18,229 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 07:52:18,231 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 07:52:18,231 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 07:52:18,232 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 07:52:18,232 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 08:33:18,867 - INFO - Returning existing grades.
+2025-06-02 08:33:18,869 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 08:33:18,869 - INFO - Returning existing statuses.
+2025-06-02 08:33:18,869 - INFO - 4 status created or retrieved successfully.
+2025-06-02 08:33:18,869 - INFO - Returning existing branches.
+2025-06-02 08:33:18,869 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 08:33:18,869 - INFO - Returning existing agreements.
+2025-06-02 08:33:18,869 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 08:33:18,870 - INFO - Retour des directions existantes.
+2025-06-02 08:33:18,870 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 08:33:18,870 - INFO - Retour des directions existantes.
+2025-06-02 08:33:18,870 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 08:33:18,888 - INFO - Retour des employees.
+2025-06-02 08:33:18,888 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 08:33:18,889 - INFO - Retour des types de congé existants.
+2025-06-02 08:33:18,889 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 08:33:18,890 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 08:33:18,890 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 08:33:18,891 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 08:33:18,891 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 09:19:24,217 - INFO - New grades created successfully.
+2025-06-02 09:19:24,218 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 09:19:24,219 - INFO - New statuses created successfully.
+2025-06-02 09:19:24,219 - INFO - 4 status created or retrieved successfully.
+2025-06-02 09:19:24,220 - INFO - New branches created successfully.
+2025-06-02 09:19:24,220 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 09:19:24,221 - INFO - New agreements created successfully.
+2025-06-02 09:19:24,221 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 09:19:24,222 - INFO - Nouvelles directions créées avec succès.
+2025-06-02 09:19:24,222 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 09:19:24,222 - INFO - Retour des directions existantes.
+2025-06-02 09:19:24,222 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 09:19:24,480 - INFO - 500 nouveaux employés créés avec succès.
+2025-06-02 09:19:24,480 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 09:19:24,482 - INFO - Nouveaux types de congé créés avec succès.
+2025-06-02 09:19:24,482 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 09:19:24,483 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 09:19:24,483 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 09:19:24,485 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 09:19:24,485 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 10:56:55,116 - INFO - Returning existing grades.
+2025-06-02 10:56:55,117 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 10:56:55,117 - INFO - Returning existing statuses.
+2025-06-02 10:56:55,117 - INFO - 4 status created or retrieved successfully.
+2025-06-02 10:56:55,117 - INFO - Returning existing branches.
+2025-06-02 10:56:55,117 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 10:56:55,117 - INFO - Returning existing agreements.
+2025-06-02 10:56:55,117 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 10:56:55,118 - INFO - Retour des directions existantes.
+2025-06-02 10:56:55,118 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 10:56:55,118 - INFO - Retour des directions existantes.
+2025-06-02 10:56:55,118 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 10:56:55,133 - INFO - Retour des employees.
+2025-06-02 10:56:55,133 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 10:56:55,134 - INFO - Retour des types de congé existants.
+2025-06-02 10:56:55,134 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 10:56:55,137 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 10:56:55,137 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 10:56:55,139 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 10:56:55,139 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 11:09:13,610 - INFO - Returning existing grades.
+2025-06-02 11:09:13,612 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 11:09:13,613 - INFO - Returning existing statuses.
+2025-06-02 11:09:13,613 - INFO - 4 status created or retrieved successfully.
+2025-06-02 11:09:13,613 - INFO - Returning existing branches.
+2025-06-02 11:09:13,613 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 11:09:13,613 - INFO - Returning existing agreements.
+2025-06-02 11:09:13,613 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 11:09:13,613 - INFO - Retour des directions existantes.
+2025-06-02 11:09:13,613 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 11:09:13,613 - INFO - Retour des directions existantes.
+2025-06-02 11:09:13,613 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 11:09:13,663 - INFO - 50 nouveaux employés créés avec succès.
+2025-06-02 11:09:13,663 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 11:09:13,663 - INFO - Retour des types de congé existants.
+2025-06-02 11:09:13,663 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 11:09:13,664 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 11:09:13,665 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 11:09:13,665 - INFO - Retour des éléments de fiche de paie existants.
+2025-06-02 11:09:13,665 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 12:51:59,152 - INFO - New grades created successfully.
+2025-06-02 12:51:59,152 - INFO - 4 grades created or retrieved successfully.
+2025-06-02 12:51:59,155 - INFO - New statuses created successfully.
+2025-06-02 12:51:59,155 - INFO - 4 status created or retrieved successfully.
+2025-06-02 12:51:59,157 - INFO - New branches created successfully.
+2025-06-02 12:51:59,157 - INFO - 4 branch created or retrieved successfully.
+2025-06-02 12:51:59,159 - INFO - New agreements created successfully.
+2025-06-02 12:51:59,159 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 12:51:59,160 - INFO - Nouvelles directions créées avec succès.
+2025-06-02 12:51:59,160 - INFO - 4 agreement created or retrieved successfully.
+2025-06-02 12:51:59,161 - INFO - Retour des directions existantes.
+2025-06-02 12:51:59,161 - INFO - 4 designation created or retrieved successfully.
+2025-06-02 12:51:59,205 - INFO - 50 nouveaux employés créés avec succès.
+2025-06-02 12:51:59,205 - INFO - 4 employee created or retrieved successfully.
+2025-06-02 12:51:59,207 - INFO - Nouveaux types de congé créés avec succès.
+2025-06-02 12:51:59,207 - INFO - 4 leave created or retrieved successfully.
+2025-06-02 12:51:59,208 - INFO - Nouveaux éléments légaux de la fiche de paie créés avec succès.
+2025-06-02 12:51:59,208 - INFO - 4 payslip elements created or retrieved successfully
+2025-06-02 12:51:59,211 - INFO - Nouveaux éléments de fiche de paie créés avec succès.
+2025-06-02 12:51:59,211 - INFO - 4 payslip elements created or retrieved successfully.
+2025-06-02 13:14:47,847 - INFO - core.management.commands.seed - Starting data seeding process
+2025-06-02 13:14:47,875 - INFO - core.management.commands.seed - Created 4 new grades
+2025-06-02 13:14:47,875 - INFO - core.management.commands.seed - Processed 4 grades
+2025-06-02 13:14:47,878 - INFO - core.management.commands.seed - Created 5 new statuses
+2025-06-02 13:14:47,878 - INFO - core.management.commands.seed - Processed 5 statuses
+2025-06-02 13:14:47,879 - INFO - core.management.commands.seed - Created 5 new branches
+2025-06-02 13:14:47,880 - INFO - core.management.commands.seed - Processed 5 branches
+2025-06-02 13:14:47,881 - INFO - core.management.commands.seed - Created 5 new agreements
+2025-06-02 13:14:47,881 - INFO - core.management.commands.seed - Processed 5 agreements
+2025-06-02 13:14:47,882 - INFO - core.management.commands.seed - Created 5 new directions
+2025-06-02 13:14:47,883 - INFO - core.management.commands.seed - Processed 5 directions
+2025-06-02 13:14:47,883 - INFO - core.management.commands.seed - Created 5 new designations
+2025-06-02 13:14:47,884 - INFO - core.management.commands.seed - Processed 5 designations
+2025-06-02 13:14:47,905 - INFO - core.management.commands.seed - Created 50 new employees
+2025-06-02 13:14:47,907 - INFO - core.management.commands.seed - Processed 50 employees
+2025-06-02 13:14:47,909 - INFO - core.management.commands.seed - Created 6 new leave types
+2025-06-02 13:14:47,909 - INFO - core.management.commands.seed - Processed 6 leave types
+2025-06-02 13:14:47,911 - INFO - core.management.commands.seed - Created 4 new legal payslip elements
+2025-06-02 13:14:47,911 - INFO - core.management.commands.seed - Processed 4 legal payslip elements
+2025-06-02 13:14:47,913 - INFO - core.management.commands.seed - Created 5 new payslip elements
+2025-06-02 13:14:47,914 - INFO - core.management.commands.seed - Processed 5 payslip elements
+2025-06-02 13:14:47,914 - INFO - core.management.commands.seed - Data seeding completed successfully

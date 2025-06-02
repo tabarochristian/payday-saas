@@ -8,16 +8,16 @@ from core.models import fields
 from core.models import Base
 
 class Service(Base):
-    sub_direction = fields.ModelSelectField(SubDirection, verbose_name=_('sous-direction'), on_delete=models.CASCADE)
+    subdirection = fields.ModelSelectField(SubDirection, verbose_name=_('sous-direction'), on_delete=models.CASCADE)
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
 
-    search_fields = ('sub_direction__name', 'name')
+    search_fields = ('subdirection', 'name')
     list_display = ('id', 'subdirection', 'name')
-    list_filter = ('sub_direction',)
+    list_filter = ('subdirection',)
     
     layout = Layout(
         Row(
-            Column('sub_direction'),
+            Column('subdirection'),
             Column('name')
         ),
     )

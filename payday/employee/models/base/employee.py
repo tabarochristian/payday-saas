@@ -26,7 +26,7 @@ class Employee(Base):
     grade = fields.ModelSelectField('employee.grade', verbose_name=_('grade'), blank=True, null=True, on_delete=models.SET_NULL)
 
     # linked field
-    sub_direction = fields.ModelSelectField('employee.subdirection', verbose_name=_('sous-direction'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
+    subdirection = fields.ModelSelectField('employee.subdirection', verbose_name=_('sous-direction'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
     direction = fields.ModelSelectField('employee.direction', verbose_name=_('direction'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
     service = fields.ModelSelectField('employee.service', verbose_name=_('service'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
 
@@ -56,7 +56,7 @@ class Employee(Base):
 
     list_filter = ('agreement', 'date_of_join', 'direction', 'branch', 'designation', 'gender', 'marital_status', 'branch', 'status')
     search_fields = ('registration_number', 'social_security_number', 'agreement__name',
-                    'designation__name', 'grade__name', 'direction__name', 'sub_direction__name',
+                    'designation__name', 'grade__name', 'direction__name', 'subdirection__name',
                     'service__name', 'first_name', 'middle_name', 'last_name', 'spouse',
                     'mobile_number', 'physical_address', 'emergency_information',
                     'branch__name', 'payment_account', 'comment')
@@ -77,7 +77,7 @@ class Employee(Base):
         ),
         Row(
             Column('direction'),
-            Column('sub_direction'),
+            Column('subdirection'),
             Column('service'),
         ),
         Row(

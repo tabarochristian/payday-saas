@@ -13,6 +13,9 @@ class ActivityLog(List):
     rendering.
     """
 
+    def get_model(self):
+        return LogEntry
+
     def get_list_display(self, model):
         """
         Define the fields to be displayed and order them according to a fixed priority.
@@ -43,6 +46,9 @@ class ActivityLog(List):
         """
         # Provide filtering on content type, action flag, and the timestamp of the action.
         return ['content_type', 'action_flag', 'action_time']
+
+    def get_action_buttons(self):
+        return []
 
     def get(self, request):
         """

@@ -5,6 +5,7 @@ from payroll.utils import PayrollProcessor
 from payroll.models import Payroll
 from django.db import models
 from django.apps import apps
+import threading
 
 
 @receiver(pre_save, sender=Payroll)
@@ -15,7 +16,9 @@ def payroll_create(sender, instance, **kwargs):
 @receiver(post_save, sender=Payroll)
 def payroll_created(sender, instance, created, **kwargs):
     if not created: return
-    PayrollProcessor(instance).process()
+    # PayrollProcessor(instance).process()
+    threading.Thread(target=PayrollProcessor(instance).process, daemon=True).start()
+    
     
 
 @receiver(post_delete, sender=Payroll)

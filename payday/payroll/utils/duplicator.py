@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 import pandas as pd
 import validators
+import time
 import os
 from typing import Any, Dict, List, Optional
 
@@ -23,9 +24,12 @@ class PayrollProcessor:
             "id", "user", "created_at", "updated_at",
             "created_by", "updated_by", "photo", "email", "phone", "create_user_on_save"
         }
-
+        
     def process(self):
         """Main entry point to start processing."""
+        time.sleep(1)
+        self.statues = self.payroll.employee_status.all()\
+            .values_list('name', flat=True).distinct()
         df = self._get_employee_data()
         df = self._merge_with_native_attendance(df)
         df = self._merge_with_canvas_attendance(df)
@@ -57,9 +61,11 @@ class PayrollProcessor:
             ),
             "children": models.functions.Coalesce(models.Count("child"), models.Value(0)),
         }
-        
+    
         return (
-            EmployeeModel.objects.annotate(**annotate_fields).values(*fields, *annotate_fields.keys())
+            EmployeeModel.objects.filter(status__name__in=self.statues)\
+            .annotate(**annotate_fields)\
+            .values(*fields, *annotate_fields.keys())
         )
 
 

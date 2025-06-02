@@ -31,9 +31,9 @@ class Command(BaseCommand):
         Execute the tenant creation process.
         """
         schema: str = kwargs['schema'].lower()
+        name: Optional[str] = kwargs['name']
         email: str = kwargs['email']
         plan: str = kwargs['plan']
-        name: Optional[str] = kwargs['name']
 
         # Initialize services
         schema_manager = SchemaManager()

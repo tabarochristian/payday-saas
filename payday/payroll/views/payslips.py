@@ -60,7 +60,9 @@ class Payslips(Change):
         payment = paid_employee.objects.filter(payroll=obj).values("payment_method").annotate(
             count=Count("payment_method"),
             amount=Sum("net")
-        )[0] or {}
+        )
+        payment = payment[0] or []
+
 
         # Main buttons
         buttons = [

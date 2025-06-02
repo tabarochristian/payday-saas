@@ -19,6 +19,7 @@ class LegalItem(Base):
     formula_qp_employee = AceField(mode='python', verbose_name=_('formule/montant quote part employee'), default='0')
 
     condition = AceField(mode='python', verbose_name=_('condition'), default='0')
+    is_actif = models.BooleanField(_('est actif'), help_text=_('Cet élément est actif'), default=True)    
 
     list_display = ('code', 'type_of_item', 'name')
     list_filter = ('type_of_item',)

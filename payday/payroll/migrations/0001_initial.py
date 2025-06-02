@@ -685,7 +685,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "sub_direction",
+                    "subdirection",
                     core.models.fields.charfield.CharField(
                         blank=True,
                         default=None,

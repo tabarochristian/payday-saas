@@ -36,7 +36,7 @@ class PaidEmployee(Employee):
     branch = fields.CharField(verbose_name=_('site'), blank=True, null=True, default=None, max_length=255)
     grade = fields.CharField(verbose_name=_('grade'), blank=True, null=True, default=None, max_length=255)
 
-    sub_direction = fields.CharField(verbose_name=_('sous-direction'), blank=True, null=True, default=None, max_length=255)
+    subdirection = fields.CharField(verbose_name=_('sous-direction'), blank=True, null=True, default=None, max_length=255)
     direction = fields.CharField(verbose_name=_('direction'), blank=True, null=True, default=None, max_length=255)
     service = fields.CharField(verbose_name=_('service'), blank=True, null=True, default=None, max_length=255)
 

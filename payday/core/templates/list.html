@@ -9,24 +9,6 @@
 {% include 'components/change/heading.html' %}
 
 <div class="page-content">
-    {% comment %}{% if self.widgets %}
-    <div class="row">
-        {% for widget in self.widgets %}
-            <div class="{{ widget.column }}">
-                {{ widget.render }}
-            </div>
-        {% empty %}
-            <div class="col">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h4>{% trans 'Aucun widget(s)' %}</h4>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}{% endcomment %}
-
     <div class="row">
         <div class="{% if self.get_list_filter %}col-md-9{% else %}col{% endif %} col-sm-12 col-xs-12">
             {% include "components/list_table.html" %}

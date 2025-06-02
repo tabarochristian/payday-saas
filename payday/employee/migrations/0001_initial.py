@@ -1295,7 +1295,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="service",
-            name="sub_direction",
+            name="subdirection",
             field=core.models.fields.model_select_field.ModelSelectField(
                 default=None,
                 null=True,
@@ -1306,7 +1306,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="employee",
-            name="sub_direction",
+            name="subdirection",
             field=core.models.fields.model_select_field.ModelSelectField(
                 blank=True,
                 default=None,

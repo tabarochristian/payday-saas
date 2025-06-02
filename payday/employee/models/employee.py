@@ -83,7 +83,7 @@ class Employee(BaseEmployee):
             ),
             Row(
                 Column('direction', css_class="col-md-4"),
-                Column('sub_direction', css_class="col-md-4"),
+                Column('subdirection', css_class="col-md-4"),
                 Column('service', css_class="col-md-4"),
             ),
             Row(
