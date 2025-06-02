@@ -77,8 +77,8 @@ class Command(BaseCommand):
             lago_client.delete_customer(schema)
             self.stdout.write(self.style.SUCCESS(f'Deleted Lago customer for schema "{schema}"'))
 
-            schema_manager.delete_superuser(schema)
-            self.stdout.write(self.style.SUCCESS(f'Deleted superuser for schema "{schema}"'))
+            #schema_manager.delete_superuser(schema)
+            #self.stdout.write(self.style.SUCCESS(f'Deleted superuser for schema "{schema}"'))
 
             schema_manager.drop_schema(schema)
             self.stdout.write(self.style.SUCCESS(f'Dropped schema "{schema}"'))
