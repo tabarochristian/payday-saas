@@ -100,22 +100,23 @@ class Command(BaseCommand):
         email_service: 'EmailService'
     ) -> None:
         """
-        Orchestrate tenant creation
+        Orchestrate tenant creation with atomic transaction.
         """
-        lago_client.create_customer(schema, email, name)
-        self.stdout.write(self.style.SUCCESS(f'Created Lago customer for schema "{schema}"'))
-        
-        lago_client.assign_plan(schema, plan)
-        self.stdout.write(self.style.SUCCESS(f'Assigned plan "{plan}" to schema "{schema}"'))
+        with transaction.atomic():
+            lago_client.create_customer(schema, email, name)
+            self.stdout.write(self.style.SUCCESS(f'Created Lago customer for schema "{schema}"'))
+            
+            lago_client.assign_plan(schema, plan)
+            self.stdout.write(self.style.SUCCESS(f'Assigned plan "{plan}" to schema "{schema}"'))
 
-        schema_manager.create_schema(schema)
-        self.stdout.write(self.style.SUCCESS(f'Created schema "{schema}"'))
+            schema_manager.create_schema(schema)
+            self.stdout.write(self.style.SUCCESS(f'Created schema "{schema}"'))
 
-        schema_manager.apply_migrations(schema)
-        self.stdout.write(self.style.SUCCESS(f'Applied migrations for schema "{schema}"'))
+            schema_manager.apply_migrations(schema)
+            self.stdout.write(self.style.SUCCESS(f'Applied migrations for schema "{schema}"'))
 
-        user = schema_manager.create_superuser(schema, email, password)
-        self.stdout.write(self.style.SUCCESS(f'Created superuser "{email}" for schema "{schema}"'))
+            user = schema_manager.create_superuser(schema, email, password)
+            self.stdout.write(self.style.SUCCESS(f'Created superuser "{email}" for schema "{schema}"'))
 
-        email_service.send_welcome_email(schema, user, password, name, plan)
-        self.stdout.write(self.style.SUCCESS(f'Sent welcome and password reset emails to "{email}"'))
+            email_service.send_welcome_email(schema, user, password, name, plan)
+            self.stdout.write(self.style.SUCCESS(f'Sent welcome and password reset emails to "{email}"'))
