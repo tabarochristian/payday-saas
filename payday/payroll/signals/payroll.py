@@ -7,6 +7,8 @@ from django.db import models
 from django.apps import apps
 import threading
 
+from core.middleware import TenantMiddleware
+
 
 @receiver(pre_save, sender=Payroll)
 def payroll_create(sender, instance, **kwargs):
@@ -16,8 +18,8 @@ def payroll_create(sender, instance, **kwargs):
 @receiver(post_save, sender=Payroll)
 def payroll_created(sender, instance, created, **kwargs):
     if not created: return
-    # PayrollProcessor(instance).process()
-    threading.Thread(target=PayrollProcessor(instance).process, daemon=True).start()
+    schema = TenantMiddleware.get_schema() or "public"
+    threading.Thread(target=PayrollProcessor(schema, instance).process, daemon=True).start()
     
     
 

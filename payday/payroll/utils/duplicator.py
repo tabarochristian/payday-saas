@@ -17,7 +17,7 @@ class PayrollProcessor:
     Handles payroll computation by merging employee data with attendance.
     """
 
-    def __init__(self, payroll):
+    def __init__(self, payroll, schema='public'):
         self.payroll = payroll
         self.employee_fields = []
         self.exclude_fields = {
