@@ -35,7 +35,7 @@ class PayrollProcessor:
         logger.info(f"Starting payroll processing for payroll ID {self.payroll.id}")
         start_time = time.time()
         try:
-            self.statuses = self.payroll.employee_status.all().values_list('name', flat=True).distinct()
+            self.statuses = ["en service"] #self.payroll.employee_status.all().values_list('name', flat=True).distinct()
             logger.debug(f"Retrieved {len(self.statuses)} employee statuses")
             df = self._get_employee_data()
             df = self._merge_with_native_attendance(df)
