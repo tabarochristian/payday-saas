@@ -143,7 +143,7 @@ services:
       - "8000:8000"
     healthcheck:
       test: ["CMD", "true"]
-      interval: 30s
+      interval: 15s
       timeout: 10s
       retries: 3
     labels:
