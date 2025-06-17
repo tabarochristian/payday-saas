@@ -20,8 +20,8 @@ def saved(sender, instance, created, **kwargs):
     default_password = default_password or 'payday-pwd'
     EmailService().send_welcome_email(
         password = default_password,
-        user = instance,
         tenant_name='www',
+        user = instance,
         schema = 'www',
         plan = '-'
     )
