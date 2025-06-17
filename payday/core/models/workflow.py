@@ -7,7 +7,7 @@ from django.db import models
 
 class Workflow(Base):
     name = fields.CharField(_('nom'), max_length=100)
-    model = fields.ModelSelectField(
+    content_type = fields.ModelSelectField(
         "contenttypes.contenttype",
         on_delete=models.CASCADE, 
         verbose_name=_('modèle associé')
@@ -15,15 +15,15 @@ class Workflow(Base):
     condition = fields.AceField(
         mode='python',
         verbose_name=_('condition applicable à ce workflow'),
-        default='None'
+        default='True'
     )
     users = fields.ModelSelect2Multiple(
         get_user_model(),
         verbose_name=_("validateur(s)")
     )
 
-    layout = Layout('name', 'model', 'condition', 'users')
-    list_display = ('id', 'name', 'model', 'condition')
+    layout = Layout('name', 'content_type', 'condition', 'users')
+    list_display = ('id', 'name', 'content_type', 'condition')
 
     class Meta:
         verbose_name_plural = _('workflows')

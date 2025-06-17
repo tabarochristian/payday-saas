@@ -120,6 +120,18 @@ def base(request):
         #    'description': _('Mettez en place des tâches automatisées.')
         #}, 
         {
+            'title': _('Flux d’approbation'),
+            'permission': 'core.view_workflow',
+            'description': _('Étapes de validation'),
+            'href': reverse_lazy('core:list', kwargs={'app':'core', 'model':'workflow'}),
+        },
+        {
+            'title': _('Approbation'),
+            'description': _('Approval'),
+            'permission': 'core.view_approval',
+            'href': reverse_lazy('core:list', kwargs={'app':'core', 'model':'approval'}),
+        },
+        {
             'title': _('Journal d\'activité'),
             'href': reverse_lazy('core:activity-log'),
             'permission': 'admin.view_logentry',

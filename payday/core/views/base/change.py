@@ -35,7 +35,6 @@ class Change(BaseView):
             messages.warning(request, _("Vous n'avez pas la permission de modifier cet objet."))
             return redirect(reverse_lazy('core:read', kwargs=kwargs))
         
-        self.next = request.GET.get('next')
         return super().dispatch(request, *args, **kwargs)
 
     def _get_object(self):
@@ -164,7 +163,8 @@ class Change(BaseView):
             messages.success(request, _('Le {model} #{pk} a été mis à jour avec succès').format(
                 model=model_class._meta.model_name, pk=pk))
             
-            return redirect(self.next or reverse_lazy('core:list', kwargs={
+            next = request.GET.dict().get('next', None)
+            return redirect(next or reverse_lazy('core:list', kwargs={
                 'app': app,
                 'model': model_class._meta.model_name
             }))

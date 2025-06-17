@@ -8,10 +8,10 @@ from django.conf import settings
 from django.views import View
 from django.apps import apps
 
-from core.views.mixins import FielderMixin, LoggerMixin, DocumentMixin  # Import your custom mixins
+from core.views.mixins import FielderMixin, LoggerMixin, DocumentMixin, WorkflowMixin  # Import your custom mixins
 
 
-class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, LoggerMixin, DocumentMixin, View):
+class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, LoggerMixin, DocumentMixin, WorkflowMixin, View):
     """
     Base view providing common functionality such as permission checking,
     queryset building, model retrieval, logging, and keyword generation.
@@ -19,6 +19,9 @@ class BaseView(LoginRequiredMixin, PermissionRequiredMixin, FielderMixin, Logger
     actions = []                      # List of allowed actions, e.g. ["add", "delete", "view"]
     template_name = None              # Default template name (can be overridden)
     DEBUG = settings.DEBUG
+
+    def _get_object(self):
+        return None
 
     def get_actions(self):
         """

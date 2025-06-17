@@ -7,6 +7,7 @@ from core.forms import modelform_factory
 from core.forms.button import Button
 from core.models import Preference
 from .change import Change
+from .base import BaseView
 
 class Read(Change):
     """
@@ -21,13 +22,14 @@ class Read(Change):
         If not, redirect to the home page with a warning message.
         """
         model_class = self.get_model()
-        view_perm = f"{model_class._meta.app_label}.view_{model_class._meta.model_name}"
+        _perm = f"{model_class._meta.app_label}.view_{model_class._meta.model_name}"
 
-        if not request.user.has_perm(view_perm):
-            messages.warning(request, _("You do not have permission to view this page."))
+        if not request.user.has_perm(_perm):
+            messages.warning(request, _("Vous n'avez pas la permission de modifier cet objet."))
             return redirect(reverse_lazy("core:home"))
 
-        return super().dispatch(request, *args, **kwargs)
+        return BaseView.dispatch(self, request, *args, **kwargs)
+
     
     def get_action_buttons(self, obj=None):
         """

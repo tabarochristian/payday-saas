@@ -9,7 +9,11 @@ from api.serializers import model_serializer_factory
 from core.utils import DictToObject
 from core.models import fields
 
+from django.contrib.contenttypes.models import ContentType
+from django.apps import apps
+
 from core.models.managers import PaydayManager
+from itertools import chain
 
 class Base(models.Model):
     #history = HistoricalRecords(
@@ -71,6 +75,62 @@ class Base(models.Model):
 
     def __str__(self):
         return str(self.name) if self.name else super().__str__()
+
+    def save(self, *args, **kwargs):
+        is_new = self._state.adding
+        super().save(*args, **kwargs)
+        if not is_new:
+            return
+
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        Workflow = apps.get_model('core', 'Workflow')
+        Approval = apps.get_model('core', 'Approval')
+
+        workflows = Workflow.objects.filter(
+            content_type=content_type
+        ).prefetch_related("users")
+
+        # Filter only workflows whose condition is empty or evaluates to True
+        valid_workflows = [
+            wf for wf in workflows
+            if not wf.condition or eval(wf.condition, {
+                **locals(),
+                **{'obj': self, 'model': self._meta.model_name}
+            })
+        ]
+
+        # Fetch existing approvals for this object with status='pending'
+        existing_pairs = Approval.objects.filter(
+            content_type=content_type,
+            object_id=self.pk,
+            status='pending'
+        ).values_list(
+            'user_id', 
+            'content_type_id',
+            'object_id',
+            'status', 
+            'workflow_id'
+        )
+
+        existing_pairs = list(existing_pairs)
+        print(existing_pairs)
+        approvals_to_create = []
+
+        for wf in valid_workflows:
+            for user in wf.users.all():
+                pair = [user.pk, wf.content_type.id, self.pk, "pending"]
+                _obj = Approval(content_type=content_type, object_id=self.pk, status="pending", workflow=wf, user=user)
+                if pair not in existing_pairs:
+                    existing_pairs.append(pair)
+                    approvals_to_create.append(_obj)
+        
+        print(approvals_to_create)
+        print(existing_pairs)
+        if approvals_to_create:
+            Approval.objects.bulk_create(approvals_to_create)
+
+
+
 
     @staticmethod
     def get_action_required():

@@ -2,38 +2,54 @@
 {% load i18n %}
 
 <div class="page-heading">
-    <div class="card">
+
+    <!-- Main Header Card -->
+    <div class="card mb-3">
         <div class="card-body">
             <div class="row align-items-center">
+                <!-- Title and Breadcrumb -->
                 <div class="col text-start">
                     <h3 class="m-0">
-                        {{ model_class|getattr:'_meta'|getattr:'verbose_name'|title }}
-                        {% if obj %} #{{ obj.pk }} {% endif %}
+                        {{ model_class|getattr:"_meta"|getattr:"verbose_name"|title }}
+                        {% if obj %} #{{ obj.pk }}{% endif %}
                     </h3>
                     {% include 'components/breadcrumb.html' %}
                 </div>
 
+                <!-- Action Buttons and Document Dropdown -->
                 <div class="col text-end">
-                    <div class="btn-group">
-                        {% if self.documents %}
-                            <button class="btn btn-primary dropdown-toggle"
-                                    type="button" id="dropdownDocumentBtn"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    aria-label="{% trans 'Documents' %}">
-                                {% trans "Documents" %}
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownDocumentBtn">
-                                {% for document in self.documents %}
-                                    <a target="_blank"
-                                       class="dropdown-item btn-list-action"
-                                       href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' %}"
-                                       onclick="openPrintPopup(this)">
-                                        {{ document.name }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                    <div class="btn-group" role="group">
+                        {# Show documents only if obj.status is approved and all approvals are approved #}
+                        {% with all_approved=True %}
+                            {% for approver in self.approval_users %}
+                                {% with approval=self.approvals|get_obj_pk:approver.pk %}
+                                    {% if not approval or approval.status != "approved" %}
+                                        {% with all_approved=False %}
+                                        {% endwith %}
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                            {% if obj.status == "approved" and all_approved and self.documents %}
+                                <button class="btn btn-primary dropdown-toggle"
+                                        id="dropdownDocumentBtn"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    {% trans "Documents" %}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownDocumentBtn">
+                                    {% for document in self.documents %}
+                                        <li>
+                                            <a class="dropdown-item" target="_blank"
+                                               href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' %}?pk={{ obj.pk }}">
+                                                {{ document.name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
 
+                        <!-- Extra Action Buttons -->
                         {% for button in action_buttons %}
                             {{ button.render }}
                         {% endfor %}
@@ -42,40 +58,103 @@
             </div>
         </div>
     </div>
+
+    <!-- Approval Section -->
+    {% if obj and request.user in self.approval_users %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{% trans "Processus d’approbation" %}</h5>
+                <span class="badge bg-light text-dark">#{{ obj.pk }}</span>
+            </div>
+
+            <div class="card-body">
+                <!-- Approver List -->
+                <h6 class="text-muted mb-3">{% trans "Liste des validateurs" %}</h6>
+                <ul class="list-group mb-4">
+                    {% for approval in self.approvals %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ approval.user.get_full_name|default:approval.user.username }}
+                            <a href="{% url 'core:change' 'core' 'approval' approval.pk %}" class="text-decoration-none">
+                                <span class="badge p-2 ps-3 pe-3 
+                                    bg-{{ approval.is_approved|yesno:'success,secondary' }}">
+                                    #{{ approval.pk }} – {% trans approval.get_status_display %}
+                                </span>
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">
+                            {% trans "Aucun validateur défini." %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% with user_can_approve=self.user_can_approve %}
+                    <!-- Approval Form or Messages -->
+                    {% if user_can_approve %}
+                        <form method="post" id="approval-form" action="{% url 'core:change' 'core' 'approval' user_can_approve.pk %}?next={{ request.path }}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="comment-{{ obj.pk }}" class="form-label">
+                                    {% trans "Commentaire (facultatif)" %}
+                                </label>
+                                <textarea class="form-control" id="comment-{{ obj.pk }}" name="comment" rows="3"
+                                        placeholder="{% trans 'Ajoutez un commentaire...' %}"></textarea>
+                            </div>
+
+                            <!-- Hidden Fields -->
+                            <input type="hidden" name="content_type" value="{{ self.user_can_approve.content_type.pk }}">
+                            <input type="hidden" name="user" value="{{ request.user.pk }}">
+                            <input type="hidden" name="object_id" value="{{ obj.pk }}">
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" name="status" form="approval-form" value="approved" class="btn btn-light-success">
+                                    ✅ {% trans "Approuver" %}
+                                </button>
+                                <button type="submit" name="status" form="approval-form" value="rejected" class="btn btn-light-danger">
+                                    ❌ {% trans "Rejeter" %}
+                                </button>
+                            </div>
+                        </form>
+                    {% elif request.user == obj.created_by %}
+                        <div class="alert alert-warning mt-3">
+                            ⚠ {% trans "Vous ne pouvez pas/plus approuver cette demande." %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mt-3">
+                            ℹ️ {% trans "Vous n’êtes pas autorisé à valider cette demande." %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    {% endif %}
 </div>
 
+<!-- JavaScript for print buttons -->
 <script>
-    function openPrintPopup(link) {
-        if (!link) {
-            console.error("Invalid link element.");
-            return false;
-        }
+    function openPrintPopup(linkElement) {
+        const actionUrl = $(linkElement).attr("href") || $(linkElement).data("action");
 
-        // Try getting href or data-action attributes
-        const actionUrl = $(link).attr("href") || $(link).data("action");
         if (!actionUrl) {
             console.error("No valid action URL found.");
             return false;
         }
 
-        const selectedRows = getSelectedRows();
-        if (!selectedRows.length) {
-            window.location.href = printUrl;
+        let printUrl = actionUrl;
+
+        if (typeof getSelectedRows === 'function') {
+            const selectedIds = getSelectedRows();
+            if (selectedIds.length > 0) {
+                printUrl += `?pk__in=${encodeURIComponent(selectedIds.join(','))}`;
+            }
         }
 
-        // Build the print URL
-        const printUrl = `${actionUrl}?pk__in=${encodeURIComponent(selectedRows.join(','))}`;
-
-        // Redirect instead of opening a new window
         window.location.href = printUrl;
+        return false;
     }
 
-
-    $(document).on("click", ".btn-list-action", function(event) {
+    $(document).on("click", ".btn-list-action", function (event) {
         event.preventDefault();
         openPrintPopup(this);
     });
-
 </script>
-
-

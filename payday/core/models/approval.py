@@ -1,22 +1,63 @@
+import logging, re
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.layout import Layout, Column, Row
+from core.models.managers import PaydayManager
+from django.db.models import QuerySet
+from django.urls import reverse_lazy
+from django.db import transaction
 from core.models import fields
+from django.apps import apps
 
+logger = logging.getLogger(__name__)
+
+class ApprovalQuerySet(QuerySet):
+    def __getattr__(self, attr):
+        pattern = (
+            r"get(?:_status_(?P<status>\w+))?"
+            r"(?:_content_type_(?P<app_label>[a-z0-9_]+)_(?P<model>[a-z0-9_]+))?$"
+        )
+        match = re.match(pattern, attr)
+        if not match:
+            raise AttributeError(f"{self.__class__.__name__} has no attribute {attr}")
+
+        status = match.group("status")
+        app_label = match.group("app_label")
+        model = match.group("model")
+
+        def dynamic_method():
+            qs = self
+            if status:
+                qs = qs.filter(status=status)
+            if app_label and model:
+                try:
+                    ct = ContentType.objects.get(app_label=app_label, model=model)
+                    qs = qs.filter(content_type=ct)
+                except ContentType.DoesNotExist:
+                    return self.none()
+            return qs
+
+        return dynamic_method
+
+class ApprovalManager(models.Manager):
+    def get_queryset(self):
+        return ApprovalQuerySet(self.model, using=self._db)
 
 class Approval(models.Model):
     workflow = fields.ModelSelectField(
         "core.workflow",
-        on_delete=models.SET_NULL,  # Prevent deletion of approval records
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         verbose_name=_("workflow")
     )
+
     user = fields.ModelSelectField(
         get_user_model(),
-        on_delete=models.PROTECT,  # Ensure users linked to approvals cannot be deleted
+        on_delete=models.PROTECT,
         verbose_name=_("approver")
     )
 
@@ -25,9 +66,11 @@ class Approval(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("model")
     )
-    object_id = fields.PositiveIntegerField(
-        verbose_name=_("object id")
+
+    object_id = models.PositiveIntegerField(
+        verbose_name=_("object ID")
     )
+
     content_object = GenericForeignKey(
         "content_type", 
         "object_id"
@@ -36,13 +79,14 @@ class Approval(models.Model):
     status = fields.CharField(
         max_length=10,
         choices=[
-            ("pending", _("Pending")),
-            ("approved", _("Approved")),
-            ("rejected", _("Rejected")),
+            ("pending", _("En attente")),
+            ("approved", _("Approuvé")),
+            ("rejected", _("Rejeté")),
         ],
         default="pending",
         verbose_name=_("status")
     )
+
     comment = fields.TextField(
         null=True,
         blank=True,
@@ -52,23 +96,50 @@ class Approval(models.Model):
 
     layout = Layout(
         'workflow',
-        Row(
-            Column('content_type'),
-            Column('object_id')
-        ),
+        Row(Column('content_type'), Column('object_id')),
         'user',
         'status',
         'comment'
     )
 
-    list_display = (
-        'id', 
-        'workflow', 
-        'content_object', 
-        'status', 
-        'updated_at'
-    )
+    list_display = ('id', 'workflow', 'content_object', 'object_id', 'status', 'updated_at')
+    objects = ApprovalManager()
+
+    @property
+    def is_approved(self):
+        return self.status in {"approved"}
+
+    def get_absolute_url(self):
+        return reverse_lazy("core:change", kwargs={
+            "model": self.content_type.model,
+            "app": self.content_type.app_label,
+            "pk": self.object_id
+        })
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        # Fetch all remaining approvals for this object that aren't "approved"
+        outstanding = Approval.objects.filter(
+            content_type=self.content_type,
+            object_id=self.object_id
+        ).exclude(
+            status="approved"
+        )
+
+        if outstanding.exists():
+            return
+
+        try:
+            # If all are approved, update the related object's status
+            obj = self.content_object
+            if hasattr(obj, "status"):
+                obj.status = "approved"
+                obj.save(update_fields=["status"])
+        except Exception as e:
+            logger.error("Can't update the status: %s", e)
 
     class Meta:
-        verbose_name_plural = _("approvals")
         verbose_name = _("approval")
+        verbose_name_plural = _("approvals")
+        unique_together = ('user', 'status', 'content_type', 'object_id')

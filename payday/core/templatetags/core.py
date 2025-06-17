@@ -97,3 +97,7 @@ def get_model_fields(model, attr):
     if meta := getattr(model, '_meta', None):
         return getattr(meta, attr, None)
     return None
+
+@register.filter
+def get_obj_pk(qs, pk):
+    return qs.filter(pk=pk).first()
