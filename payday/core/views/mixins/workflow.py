@@ -51,22 +51,16 @@ class WorkflowMixin:
         workflows = Workflow.objects.filter(content_type=content_type).prefetch_related('users')
 
         user_pks = set()
+        obj = self._get_object() or None
         for wf in workflows:
-            condition = wf.condition
-            if callable(condition):
-                try:
-                    if condition(self):
-                        user_pks.update(wf.users.values_list('pk', flat=True))
-                except Exception:
-                    continue
-            else:
-                if not condition:
-                    user_pks.update(wf.users.values_list('pk', flat=True))
-                else:
-                    continue
+            condition = eval(wf.condition, {
+                **locals(),
+                **{'obj':obj}
+            })
+            if not condition: continue
+            user_pks.update(wf.users.values_list('pk', flat=True))
 
-        User = get_user_model()
-        return User.objects.filter(pk__in=user_pks).distinct()
+        return get_user_model().objects.filter(pk__in=user_pks).distinct()
 
     @property
     def approvals(self) -> QuerySet:
