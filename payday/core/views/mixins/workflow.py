@@ -41,27 +41,24 @@ class WorkflowMixin:
         return self._content_type_cache
 
     def get_workflow_users_for_model(self) -> QuerySet:
-        if not self._model_allowed():
+        if not self._model_allowed() or not self.content_type:
             return get_user_model().objects.none()
 
-        content_type = self.content_type
-        if content_type is None:
-            return get_user_model().objects.none()
-
-        workflows = Workflow.objects.filter(content_type=content_type).prefetch_related('users')
-
-        user_pks = set()
         obj = self._get_object() or None
-        
-        for wf in workflows:
-            condition = eval(wf.condition, {
-                **locals(),
-                **{'obj':obj}
-            })
-            if not condition: continue
-            user_pks.update(wf.users.values_list('pk', flat=True))
+
+        workflows = Workflow.objects.filter(
+            content_type=self.content_type
+        ).prefetch_related('users')
+
+        user_pks = {
+            user_pk
+            for wf in workflows
+            if eval(wf.condition, {"obj": obj, "self": self})
+            for user_pk in wf.users.values_list('pk', flat=True)
+        }
 
         return get_user_model().objects.filter(pk__in=user_pks).distinct()
+
 
     @property
     def approvals(self) -> QuerySet:
