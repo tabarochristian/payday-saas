@@ -52,6 +52,7 @@ class WorkflowMixin:
 
         user_pks = set()
         obj = self._get_object() or None
+        
         for wf in workflows:
             condition = eval(wf.condition, {
                 **locals(),
