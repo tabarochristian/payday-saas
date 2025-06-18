@@ -1,11 +1,13 @@
-{# templates/payroll/payslips.html #}
-
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 {% load humanize %}
 {% load mathfilters %}
 {% load crispy_forms_filters %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/payslips.css' %}">
+{% endblock %}
 
 {% block title %}
     {% trans "Fiches de paie" %}
@@ -15,7 +17,7 @@
     {% include 'components/change/heading.html' %}
 
     <div class="page-content container-fluid">
-        <section class="mb-4">
+        <section class="mb-3 mb-md-4">
             <!-- Error alerts -->
             {% for error in obj.metadata.errors %}
                 <div class="alert alert-warning fw-bold mb-3" role="alert">
@@ -24,56 +26,49 @@
             {% endfor %}
 
             <!-- Summary cards -->
-            <div class="row g-3 mb-4">
+            <div class="row g-3 mb-3 mb-md-4">
                 <!-- Status -->
-                <div class="col-md-4 col-sm-12">
-                    <div class="card shadow-sm h-100">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card shadow-sm">
                         <div class="card-body">
-                            <h5 class="mb-0">{{ payroll_obj.get_status_display|title }}</h5>
-                            <small class="text-muted">{% trans "Statut" %}</small>
+                            <h5 class="mb-0">{{ obj.get_status_display|title }}</h5>
+                            <small class="text-muted mt-auto">{% trans "Statut" %}</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Employee Count -->
-                <div class="col-md-4 col-sm-12">
-                    <div class="card shadow-sm h-100">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <h5 class="mb-0">
-                                {{ qs.count|intcomma }} 
-                                <small class="text-muted ms-1">
-                                    {% blocktrans count counter=qs.count %}
-                                        fiche de paie
-                                    {% plural %}
-                                        fiches de paie
-                                    {% endblocktrans %}
-                                </small>
+                                {{ self.count|intcomma }} 
                             </h5>
-                            <small class="text-muted">{% trans "Fiches de paie" %}</small>
+                            <small class="text-muted mt-auto">Fiches de paie</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Total Net Pay -->
-                <div class="col-md-4 col-sm-12">
-                    <div class="card shadow-sm h-100">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card shadow-sm">
                         <div class="card-body">
-                            <h5 class="mb-0">{{ overall_net|intcomma }}</h5>
-                            <small class="text-muted">{% trans "Net à payer global" %}</small>
+                            <h5 class="mb-0">{{ obj.overall_net|intcomma }}</h5>
+                            <small class="text-muted mt-auto">{% trans "Net à payer global" %}</small>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Main Content Area -->
-            <div class="row">
-                <div class="col-lg-9 col-md-12">
+            <div class="row g-3">
+                <div class="col-12 col-lg-9">
                     <!-- Table Component -->
                     {% include "components/list_table.html" %}
                 </div>
 
                 <!-- Filter Sidebar -->
-                <div class="col-lg-3 col-md-12">
+                <div class="col-12 col-lg-3">
                     {% include "components/list_filter.html" %}
                 </div>
             </div>

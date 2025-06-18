@@ -28,7 +28,7 @@ class Preview(Change):
       - Triggers async payroll processing
     """
     template_name = "payroll/preview.html"
-    PAYROLL_STATUSES = ("IN_PROGRESS", "COMPLETED", "ERROR")
+    PAYROLL_STATUSES = ("IN_PROGRESS", "COMPLETED", "ERROR", "APPROVED", "REJECTED")
 
     def get_model(self):
         """Returns the Payroll model."""

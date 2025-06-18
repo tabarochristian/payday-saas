@@ -1,4 +1,5 @@
 from django.utils.translation import gettext as _
+from notifications.models import Notification
 from core.models import ActionRequired
 from django.urls import reverse_lazy
 from django.apps import apps
@@ -158,11 +159,9 @@ def base(request):
 
 def notifications(request):
     if not request.user.is_authenticated: return {}
-    notifications = Notification.objects.filter(**{
-        '_to': request.user,
-        'viewed': False
-    }).count()
-    return {'count': notifications}
+    count_notifications = Notification.objects.unread()\
+        .filter(recipient=request.user).count()
+    return {'count': count_notifications}
 
 def action_required(request):
     data = {'count': 0}

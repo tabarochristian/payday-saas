@@ -149,8 +149,7 @@ class Payslip(Change):
             instance.save()
 
             employee_obj.update()
-            if employee_obj.payroll:
-                employee_obj.payroll.update()
+            employee_obj.payroll.update()
 
             messages.success(request, _("L'élément a été ajouté avec succès"))
             next_url = request.META.get("HTTP_REFERER", self.next or reverse_lazy("core:list", kwargs={

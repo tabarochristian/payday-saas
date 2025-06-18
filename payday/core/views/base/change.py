@@ -1,16 +1,15 @@
+from core.forms import modelform_factory, InlineFormSetHelper
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
-from django.http import Http404
-from django.contrib import messages
-from django.urls import reverse_lazy
-from django.db import transaction
 from django.contrib.admin.models import CHANGE
-from core.forms import modelform_factory, InlineFormSetHelper
+from django.urls import reverse_lazy
+from django.contrib import messages
+from django.db import transaction
+from django.http import Http404
+
 from core.forms.button import Button
-from core.models import Preference
 from .base import BaseView
 import logging
-import uuid
 
 logger = logging.getLogger(__name__)
 

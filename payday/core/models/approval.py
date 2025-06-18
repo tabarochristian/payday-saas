@@ -14,6 +14,11 @@ from django.apps import apps
 
 logger = logging.getLogger(__name__)
 
+class Status(models.TextChoices):
+    PENDING = "PENDING", _("EN ATTENTE")
+    APPROVED = "APPROVED", _("APPROUVÉ")
+    REJECTED = "REJECTED", _("REJETÉ")
+
 class ApprovalQuerySet(QuerySet):
     def __getattr__(self, attr):
         pattern = (
@@ -78,12 +83,8 @@ class Approval(models.Model):
 
     status = fields.CharField(
         max_length=10,
-        choices=[
-            ("pending", _("En attente")),
-            ("approved", _("Approuvé")),
-            ("rejected", _("Rejeté")),
-        ],
-        default="pending",
+        choices=Status,
+        default=Status.PENDING,
         verbose_name=_("status")
     )
 
@@ -115,6 +116,41 @@ class Approval(models.Model):
             "app": self.content_type.app_label,
             "pk": self.object_id
         })
+    
+    @staticmethod
+    def get_action_required(user=None):
+        qs = Approval.objects.filter(status=Status.PENDING)
+
+        # Safely apply custom user filter if available
+        if user and callable(getattr(qs, "for_user", None)):
+            qs = qs.for_user(user=user)
+
+        return list(
+            qs.select_related("content_type")
+            .annotate(
+                app=models.F("content_type__app_label"),
+                model=models.F("content_type__model"),
+                pk=models.F("object_id"),
+                title=models.functions.Concat(
+                    models.functions.Upper(models.F("content_type__model")),
+                    models.Value(" n°"),
+                    models.F("object_id"),
+                    output_field=models.CharField()
+                ),
+                description=models.functions.Concat(
+                    models.Value("Approbation requise pour "),
+                    models.F("content_type__model"),
+                    models.Value(" (ID "),
+                    models.F("object_id"),
+                    models.Value(")"),
+                    output_field=models.TextField()
+                ),
+            )
+            .values("app", "model", "title", "description", "pk")
+            .distinct()
+        )
+
+
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -124,7 +160,7 @@ class Approval(models.Model):
             content_type=self.content_type,
             object_id=self.object_id
         ).exclude(
-            status="approved"
+            status="APPROVED"
         )
 
         if outstanding.exists():
@@ -132,9 +168,11 @@ class Approval(models.Model):
 
         try:
             # If all are approved, update the related object's status
+            status = "APPROVED"
             obj = self.content_object
+            print(obj, status)
             if hasattr(obj, "status"):
-                obj.status = "approved"
+                obj.status = status
                 obj.save(update_fields=["status"])
         except Exception as e:
             logger.error("Can't update the status: %s", e)

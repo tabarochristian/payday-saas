@@ -1,11 +1,12 @@
 from crispy_forms.layout import Layout, Column, Row
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
+from core.models import fields
 from django.apps import apps
 from django.db import models
-from django.core.cache import cache
-from core.models import fields
+from itertools import chain
 from .base import Base
+
 
 class ActionRequiredList(list):
     model = 'actionrequired'
@@ -34,34 +35,23 @@ class ActionRequiredList(list):
         return len(self)
 
 class ActionRequiredManager(models.Manager):
-    def cache_queryset(self):
-        """Apply the business logic to fetch the action required."""
-        models_with_action_required = [model for model in apps.get_models() if hasattr(model, 'get_action_required')]
-        
-        data = []
-        for model in models_with_action_required:
-            actions = model.get_action_required()
-            if actions:
-                data.extend(actions)
-
-        # Cache the data for better performance (cache it for 10 minutes)
-        try:
-            cache.set('action_required_data', data, timeout=600)
-        except Exception as e:
-            print(f"Error caching data: {e}")
-        return data
 
     def get_queryset(self):
-        """Return the cached or freshly generated queryset."""
-        cache_key = 'action_required_data'
-        data = cache.get(cache_key)
+        """Aggregate and wrap all action-required entries into model instances."""
+        models_with_action = filter(
+            lambda model: callable(getattr(model, "get_action_required", None)),
+            apps.get_models()
+        )
 
-        if data is None:
-            data = self.cache_queryset()
-        
-        # Convert the data into instances of the model
-        instances = [self.model(**item) for item in data]
+        # Efficiently extract, flatten, and discard falsy returns
+        flattened_data = chain.from_iterable(
+            (result for model in models_with_action if (result := model.get_action_required()))
+        )
+
+        # Instantiate your model with each action payload
+        instances = [self.model(**entry) for entry in flattened_data]
         return ActionRequiredList(instances)
+
 
 class ActionRequired(Base):
     app = fields.CharField(_('application'), max_length=255)
@@ -76,8 +66,14 @@ class ActionRequired(Base):
     objects = ActionRequiredManager()
     list_display = ['app', 'model', 'title', 'description']
 
+
     def get_absolute_url(self):
-        return reverse_lazy('core:list', kwargs={'app': self.app, 'model': self.model})
+        url_name = 'core:change' if getattr(self, 'pk', None) else 'core:list'
+        kwargs = {'app': self.app, 'model': self.model}
+        if url_name == 'core:change':
+            kwargs['pk'] = self.pk
+        return reverse_lazy(url_name, kwargs=kwargs)
+
 
     @staticmethod
     def can_search():

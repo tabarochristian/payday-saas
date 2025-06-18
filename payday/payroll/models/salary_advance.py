@@ -5,13 +5,19 @@ from django.utils.translation import gettext as _
 from core.models import Base
 from django.db import models
 
+class Status(models.TextChoices):
+    PENDING = "PENDING", _("EN ATTENTE")
+    APPROVED = "APPROVED", _("APPROUVÉ")
+    REJECTED = "REJECTED", _("REJETÉ")
+
 class AdvanceSalary(Base):
     employee = ModelSelectField('employee.employee', verbose_name=_('employé'), on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=Status, default=Status.PENDING, editable=False)
     duration = models.IntegerField(_('durée'), help_text=_('nombre de mois'), default=36)
     amount = models.FloatField(_('montant'))
     date = DateField(_('date'))
 
-    list_display = ['employee', 'amount', 'date', 'duration']
+    list_display = ['employee', 'amount', 'date', 'duration', 'status']
     inlines = ['payroll.advancesalarypayment']
 
     layout = Layout(

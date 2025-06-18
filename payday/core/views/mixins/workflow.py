@@ -85,8 +85,7 @@ class WorkflowMixin:
             return get_user_model().objects.none()
 
         user_pks = self.approvals.values_list('user_id', flat=True).distinct()
-        User = get_user_model()
-        return User.objects.filter(pk__in=user_pks)
+        return get_user_model().objects.filter(pk__in=user_pks)
 
     @property
     def user_can_approve(self) -> bool:
@@ -102,7 +101,7 @@ class WorkflowMixin:
         if user_approval is None:
             return False
 
-        if user_approval.status in {'approved', 'rejected'}:
+        if user_approval.status in {'APPROVED', 'REJECTED'}:
             return False
 
         return user_approval

@@ -5,18 +5,17 @@ from core.models import fields, Base
 from django.db import models
 import json
 
-#class DeviceStatus(models.TextChoices):
-#    DISCONNECTED = "disconnected", _("Disconnected")
-#    CONNECTED = "connected", _("Connected")
+class DeviceStatus(models.TextChoices):
+    DISCONNECTED = "disconnected", _("Disconnected")
+    CONNECTED = "connected", _("Connected")
     
     
 class Device(Base):
     """
     Represents a connected device.
     """
-    status = fields.CharField(_("Status"), max_length=255, default='disconnected', editable=False)
-    # branch = fields.ModelSelectField('employee.branch', verbose_name=_("site"), blank=True, null=True)
     sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, blank=False, null=False)
+    status = fields.CharField(_("Status"), max_length=255, default='disconnected', editable=False)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)
 
     list_display = ("id", "name", "sn", "status")
@@ -39,11 +38,13 @@ class Device(Base):
         return self.status == DeviceStatus.DISCONNECTED
 
     @staticmethod
-    def get_action_required():
-        qs = Device.objects.all()
+    def get_action_required(user=None):
+        if Device.objects.only("id").exists():
+            return []
+
         return [{
             "app": "device",
             "model": "device",
-            "title": _("No device found"),
-            "description": _("No attendance device found")
-        }] if not qs.exists() else []
+            "title": _("Aucun appareil trouvé"),
+            "description": _("Aucun appareil de pointage trouvé")
+        }]

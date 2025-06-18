@@ -7,9 +7,9 @@ from django.utils.timezone import now
 from django.db.models import F, ExpressionWrapper, DurationField
 
 class Status(models.TextChoices):
-    PENDING = "pending", _("en attente")
-    APPROVED = "approved", _("approuvé")
-    REJECTED = "rejected", _("rejeté")
+    PENDING = "PENDING", _("EN ATTENTE")
+    APPROVED = "APPROVED", _("APPROUVÉ")
+    REJECTED = "REJECTED", _("REJETÉ")
 
 class Leave(Base):
     employee = fields.ModelSelectField(

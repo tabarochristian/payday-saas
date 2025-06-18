@@ -5,10 +5,11 @@ from django.http import HttpResponse
 from core.views import BaseView
 import pandas as pd
 
-from django.utils.text import slugify
-from django.db.models import Value as V
+from django.db.models import F, Value as V, CharField
 from django.db.models.functions import Concat
+
 from django.shortcuts import redirect
+from django.utils.text import slugify
 from django.contrib import messages
 from django.http import Http404
 from django.db import models
@@ -71,19 +72,17 @@ class Canvas(BaseView):
             for key, value in self.request.GET.items() if value
         }
 
-        if not query_params:
-            logger.warning("No query parameters provided for tracker export")
-            messages.warning(self.request, "Impossible de trouver le modèle d'objet")
-            return redirect(self.request.META.get('HTTP_REFERER'))
-
         logger.debug(f"Applying filters: {query_params}")
 
         # Efficient field selection using only needed fields
         try:
             qs = Employee.objects.filter(**query_params).annotate(
-                full_name=Concat('last_name', V(' '), 'middle_name'),
-                branch_name=models.F('branch__name'),
-                grade_name=models.F('grade__name')
+                full_name=Concat(
+                    F('last_name'), V(' '), F('middle_name'),
+                    output_field=CharField()
+                ),
+                branch_name=F('branch__name'),
+                grade_name=F('grade__name')
             ).values(
                 'registration_number',
                 'full_name',

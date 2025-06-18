@@ -73,12 +73,14 @@
                                                 <td class="text-end">{{ item.social_security_amount|intcomma }}</td>
 
                                                 <td>
-                                                    <a href="{% url 'core:delete' 'payroll' 'itempaid' %}?pk={{ item.pk }}&next={{ request.get_full_path }}"
-                                                       class="btn btn-sm btn-danger"
-                                                       aria-label="{% trans 'Supprimer cet élément' %}"
-                                                       title="{% trans 'Supprimer' %}">
-                                                        {% trans "Supprimer" %}
-                                                    </a>
+                                                    {% if employee_obj.payroll.status != "APPROVED" %}
+                                                        <a href="{% url 'core:delete' 'payroll' 'itempaid' %}?pk={{ item.pk }}&next={{ request.get_full_path }}"
+                                                        class="btn btn-sm btn-danger"
+                                                        aria-label="{% trans 'Supprimer cet élément' %}"
+                                                        title="{% trans 'Supprimer' %}">
+                                                            {% trans "Supprimer" %}
+                                                        </a>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                         {% empty %}
@@ -89,6 +91,7 @@
                                             </tr>
                                         {% endfor %}
 
+                                        {% if employee_obj.payroll.status != "APPROVED" %}
                                         <!-- Inline form for adding new item -->
                                         <tr class="bg-light">
                                             <td>{{ form.type_of_item|as_crispy_field }}</td>
@@ -107,6 +110,7 @@
                                                 </button>
                                             </td>
                                         </tr>
+                                        {% endif %}
 
                                         <!-- Totals row -->
                                         <tr class="table-info fw-bold">

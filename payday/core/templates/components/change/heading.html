@@ -8,7 +8,7 @@
         <div class="card-body">
             <div class="row align-items-center">
                 <!-- Title and Breadcrumb -->
-                <div class="col text-start">
+                <div class="col-4 text-start">
                     <h3 class="m-0">
                         {{ model_class|getattr:"_meta"|getattr:"verbose_name"|title }}
                         {% if obj %} #{{ obj.pk }}{% endif %}
@@ -20,34 +20,24 @@
                 <div class="col text-end">
                     <div class="btn-group" role="group">
                         {# Show documents only if obj.status is approved and all approvals are approved #}
-                        {% with all_approved=True %}
-                            {% for approver in self.approval_users %}
-                                {% with approval=self.approvals|get_obj_pk:approver.pk %}
-                                    {% if not approval or approval.status != "approved" %}
-                                        {% with all_approved=False %}
-                                        {% endwith %}
-                                    {% endif %}
-                                {% endwith %}
-                            {% endfor %}
-                            {% if obj.status == "approved" and all_approved and self.documents %}
-                                <button class="btn btn-primary dropdown-toggle"
-                                        id="dropdownDocumentBtn"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                    {% trans "Documents" %}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownDocumentBtn">
-                                    {% for document in self.documents %}
-                                        <li>
-                                            <a class="dropdown-item" target="_blank"
-                                               href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' %}?pk={{ obj.pk }}">
-                                                {{ document.name }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        {% endwith %}
+                        {% if obj.status == "APPROVED" %}
+                            <button class="btn btn-primary dropdown-toggle"
+                                    id="dropdownDocumentBtn"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                {% trans "Documents" %}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownDocumentBtn">
+                                {% for document in self.documents %}
+                                    <li>
+                                        <a class="dropdown-item" target="_blank"
+                                            href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' %}?pk={{ obj.pk }}">
+                                            {{ document.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                         <!-- Extra Action Buttons -->
                         {% for button in action_buttons %}
@@ -76,7 +66,7 @@
                             {{ approval.user.get_full_name|default:approval.user.username }}
                             <a href="{% url 'core:change' 'core' 'approval' approval.pk %}" class="text-decoration-none">
                                 <span class="badge p-2 ps-3 pe-3 
-                                    bg-{{ approval.is_approved|yesno:'success,secondary' }}">
+                                    bg-{{ approval.is_approved|yesno:'light-success,light-warning' }}">
                                     #{{ approval.pk }} – {% trans approval.get_status_display %}
                                 </span>
                             </a>
@@ -107,10 +97,10 @@
                             <input type="hidden" name="object_id" value="{{ obj.pk }}">
 
                             <div class="d-flex gap-2">
-                                <button type="submit" name="status" form="approval-form" value="approved" class="btn btn-light-success">
+                                <button type="submit" name="status" form="approval-form" value="APPROVED" class="btn btn-light-success">
                                     ✅ {% trans "Approuver" %}
                                 </button>
-                                <button type="submit" name="status" form="approval-form" value="rejected" class="btn btn-light-danger">
+                                <button type="submit" name="status" form="approval-form" value="REJECTED" class="btn btn-light-danger">
                                     ❌ {% trans "Rejeter" %}
                                 </button>
                             </div>

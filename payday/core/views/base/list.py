@@ -109,9 +109,9 @@ class List(BaseView):
         qs = filter_set.hard_filter()
 
         # Apply ordering and pagination
+        page_number = request.GET.get('page', 1)
         order_column = f'-{model_class._meta.pk.name}'
         paginator = Paginator(qs.order_by(order_column), 100)
-        page_number = request.GET.get('page', 1)
 
         try:
             page_obj = paginator.page(page_number)

@@ -90,7 +90,6 @@ class Base(models.Model):
             content_type=content_type
         ).prefetch_related("users")
 
-        # Filter only workflows whose condition is empty or evaluates to True
         valid_workflows = [
             wf for wf in workflows
             if not wf.condition or eval(wf.condition, {
@@ -99,37 +98,34 @@ class Base(models.Model):
             })
         ]
 
-        # Fetch existing approvals for this object with status='pending'
-        existing_pairs = Approval.objects.filter(
+        existing_pairs = set(Approval.objects.filter(
             content_type=content_type,
             object_id=self.pk,
-            status='pending'
+            status='PENDING'
         ).values_list(
-            'user_id', 
+            'user_id',
             'content_type_id',
             'object_id',
-            'status', 
+            'status',
             'workflow_id'
-        )
+        ))
 
-        existing_pairs = list(existing_pairs)
-        print(existing_pairs)
-        approvals_to_create = []
+        status = "PENDING"
+        approvals_to_create = [
+            Approval(
+                content_type=content_type,
+                object_id=self.pk,
+                status=status,
+                workflow=wf,
+                user=user
+            )
+            for wf in valid_workflows
+            for user in wf.users.all()
+            if (user.pk, content_type.id, self.pk, status, wf.pk) not in existing_pairs
+        ]
 
-        for wf in valid_workflows:
-            for user in wf.users.all():
-                pair = [user.pk, wf.content_type.id, self.pk, "pending"]
-                _obj = Approval(content_type=content_type, object_id=self.pk, status="pending", workflow=wf, user=user)
-                if pair not in existing_pairs:
-                    existing_pairs.append(pair)
-                    approvals_to_create.append(_obj)
-        
-        print(approvals_to_create)
-        print(existing_pairs)
-        if approvals_to_create:
-            Approval.objects.bulk_create(approvals_to_create)
-
-
+        if not approvals_to_create: return
+        Approval.objects.bulk_create(approvals_to_create)
 
 
     @staticmethod

@@ -12,6 +12,7 @@ from core.models import Base
 
 intcomma = lambda value: "{:,}".format(round(abs(value), 2))
 leave_empty_for_all = _('laisser vide pour tous')
+    
 
 class PayrollStatus(models.TextChoices):    
     CREATED = ('CREATED', _('créé'))
@@ -20,6 +21,9 @@ class PayrollStatus(models.TextChoices):
     IN_PROGRESS = ('IN_PROGRESS', _('en cours'))
     COMPLETED = ('COMPLETED', _('terminé'))
     ERROR = ('ERROR', _('erreur'))
+
+    APPROVED = "APPROVED", _("APPROUVÉ")
+    REJECTED = "REJECTED", _("REJETÉ")
 
 class Payroll(Base):
     additional_items = models.FileField(verbose_name=_('éléments additionnels'), upload_to=upload_directory_file, blank=True, null=True, default=None)

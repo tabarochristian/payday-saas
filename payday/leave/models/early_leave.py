@@ -6,9 +6,9 @@ from crispy_forms.layout import Layout, Column, Row
 from django.utils.translation import gettext_lazy as _
 
 class Status(models.TextChoices):
-    PENDING = "pending", _("en attente")
-    APPROVED = "approved", _("approuvé")
-    REJECTED = "rejected", _("rejeté")
+    PENDING = "PENDING", _("EN ATTENTE")
+    APPROVED = "APPROVED", _("APPROUVÉ")
+    REJECTED = "REJECTED", _("REJETÉ")
 
 class EarlyLeave(Base):
     employee = fields.ModelSelectField(
