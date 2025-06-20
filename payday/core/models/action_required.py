@@ -68,12 +68,19 @@ class ActionRequired(Base):
 
 
     def get_absolute_url(self):
-        url_name = 'core:change' if getattr(self, 'pk', None) else 'core:list'
+        model = apps.get_model(self.app, model_name=self.model)
         kwargs = {'app': self.app, 'model': self.model}
-        if url_name == 'core:change':
-            kwargs['pk'] = self.pk
-        return reverse_lazy(url_name, kwargs=kwargs)
+        
+        obj = getattr(self, 'pk', None) and model.objects.filter(pk=self.pk).first()
+        
+        if not obj:
+            return reverse_lazy("core:list", kwargs=kwargs)
 
+        if hasattr(obj, "get_absolute_url") and callable(obj.get_absolute_url):
+            return obj.get_absolute_url()
+
+        kwargs['pk'] = self.pk
+        return reverse_lazy("core:change", kwargs=kwargs)
 
     @staticmethod
     def can_search():
