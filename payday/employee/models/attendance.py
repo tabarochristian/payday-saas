@@ -16,8 +16,8 @@ class Attendance(Base):
     count = fields.IntegerField(verbose_name=_("presence"))
 
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
-    list_display = ('device', 'employee', 'checked_at')
-    list_filter = ('device', 'checked_at')
+    list_display = ('device', 'employee', 'checked_at', 'count')
+    list_filter = ('device', 'checked_at', 'count')
 
     layout = Layout(
         'checked_at',
