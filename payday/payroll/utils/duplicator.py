@@ -92,8 +92,8 @@ class PayrollProcessor:
 
             # Ensure string-based registration number
             df["registration_number"] = df["registration_number"].astype(str)
-            df["mobile_number"] = df["mobile_number"].astype(str)
             df["attendance"] = df["working_days_per_month"].fillna(0)
+            df["mobile_number"] = df["mobile_number"].astype(str)
 
             # Rename columns
             df.columns = [self._get_field_name(col) for col in df.columns]
@@ -116,7 +116,8 @@ class PayrollProcessor:
 
             attendances = (
                 Attendance.objects.filter(
-                    checked_at__date__range=(self.payroll.start_dt, self.payroll.end_dt)
+                    checked_at__date__range=(self.payroll.start_dt, self.payroll.end_dt),
+                    count__gte=2
                 )
                 .values("employee__registration_number")
                 .annotate(attendance=models.Count("employee__registration_number"))

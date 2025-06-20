@@ -1,8 +1,7 @@
 from django.utils.translation import gettext as _
 from django.db.models import UniqueConstraint
-from core.models import fields, Base
 from django.db import models
-import json
+from core.models import Base
     
 class Log(Base):
     """
@@ -25,6 +24,8 @@ class Log(Base):
     verify_mode = models.IntegerField(_("Verify Mode"), blank=True, null=True)
     temperature = models.FloatField(_("Temperature"), blank=True, null=True)  # Optional for some devices
     image = models.TextField(_("Punch Image"), blank=True, null=True)  # Base64 encoded image
+
+    list_display = ('sn', 'timestamp', 'in_out', 'enroll_id', 'created_at')
     
     class Meta:
         unique_together = ("sn", "timestamp", "enroll_id", "in_out")
