@@ -35,7 +35,7 @@ class Employee(BaseEmployee):
         editable=False
     )
 
-    photo = fields.CaptureField(
+    photo = fields.ImageField(
         _('photo'), 
         upload_to=upload_directory_file, 
         blank=True, 
