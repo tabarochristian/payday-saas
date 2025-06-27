@@ -44,22 +44,19 @@ class LoggerMixin:
         """
         # Retrieve the list of field names from the new instance.
         field_names = [field.name for field in new_instance._meta.fields]
-        # Convert both instances into dictionaries.
-        old_data = model_to_dict(old_instance, fields=field_names)
-        new_data = model_to_dict(new_instance, fields=field_names)
         
         change_messages = []
         # Compare field values in both dictionaries.
         for field in field_names:
-            old_value = old_data.get(field)
-            new_value = new_data.get(field)
+            old_value = getattr(old_instance, field, None)
+            new_value = getattr(new_instance, field, None)
             if old_value != new_value:
                 # Retrieve a human-readable field name from the model's meta.
                 verbose_name = new_instance._meta.get_field(field).verbose_name
                 message = _(f"Field '{verbose_name}' changed from '{old_value}' to '{new_value}'.")
                 change_messages.append(message)
         
-        return "; ".join(change_messages) if change_messages else None
+        return "\n".join(change_messages) if change_messages else None
 
     def log(self, model, form, action, change_message):
         """
