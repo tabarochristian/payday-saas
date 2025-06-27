@@ -35,7 +35,7 @@ class Group(models.Model):
     )
 
 
-    inlines = ('core.fieldpermission', 'core.rowlevelsecurity')
+    inlines = ('core.columnlevelsecurity', 'core.rowlevelsecurity')
     layout = Layout('name', 'permissions')
 
     class Meta:
