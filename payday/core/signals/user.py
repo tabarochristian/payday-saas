@@ -14,8 +14,8 @@ def save(sender, instance, **kwargs):
 def saved(sender, instance, created, **kwargs):
     if not created: return
     group = Preference.get('DEFAULT_USER_ROLE:STR')
-    if groups := Group.objects.filter(name=group):
-        instance.groups.add(*groups)
+    group =  Group.objects.filter(name=group).first()
+    if group: instance.groups.add(group)
     
     if schema:=TenantMiddleware.get_schema():
         EmailService().send_welcome_email(

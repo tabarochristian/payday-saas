@@ -16,7 +16,7 @@ MARITAl_STATUS = (('MARRIED', _('MARIÉ')), ('SINGLE', _('CÉLIBATAIRE')), ('WID
 
 class Employee(Base):
     social_security_number = fields.CharField(_('numéro de sécurité sociale'), max_length=50, blank=True, null=True, default=None)
-    registration_number = fields.CharField(_('matricule'), max_length=50)
+    registration_number = fields.CharField(_('matricule'), max_length=50, help_text=_("Uniquement des chiffres, sans commencer par 0"))
 
     agreement = fields.ModelSelectField('employee.agreement', verbose_name=_('type de contrat'), on_delete=models.CASCADE)
     date_of_join = fields.DateField(_('date d\'engagement'), help_text='YYYY-MM-DD', null=True, default=None)

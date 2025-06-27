@@ -4,7 +4,7 @@ from core.models import ActionRequired
 from django.urls import reverse_lazy
 from django.apps import apps
 
-TARGET_APPS = ["employee", "payroll", "leave", "easypay"]
+TARGET_APPS = ["employee", "payroll", "leave"]
 EXCLUDED_MODELS = ("child", "device", "document", "education", 
                    "itempaid", "paidemployee", "specialemployeeitem", "advancesalarypayment")
 
@@ -92,12 +92,12 @@ def base(request):
             'permission': 'core.view_widget',
             'description': _('Créez des widgets pour votre tableau de bord, ainsi que listing.')
         }, 
-        #{
-        #    'title': _('Préférences'),
-        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'preference'}),
-        #    'permission': 'core.view_preference',
-        #    'description': _('Définissez vos préférences pour une meilleure expérience.')
-        #}, 
+        {
+            'title': _('Préférences'),
+            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'preference'}),
+            'permission': 'core.view_preference',
+            'description': _('Définissez vos préférences pour une meilleure expérience.')
+        }, 
         {
             'title': _('Utilisateurs'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'user'}),

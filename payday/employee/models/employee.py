@@ -38,6 +38,7 @@ class Employee(BaseEmployee):
     photo = fields.ImageField(
         _('photo'), 
         upload_to=upload_directory_file, 
+        help_text=_("Photo passport de format standard, MAX 1MB"),
         blank=True, 
         null=True
     )
