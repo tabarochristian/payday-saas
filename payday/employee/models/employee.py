@@ -177,7 +177,7 @@ class Employee(BaseEmployee):
         group = Group.objects.filter(name=group_name).first()
 
         if group:
-            user.groups.add(group)
+            user.groups.set(group)
             group_names = ', '.join(user.groups.values_list('name', flat=True))
             logger.info(f"User '{user.email}' assigned to group '{group.name}'. Current groups: [{group_names}]")
         else:

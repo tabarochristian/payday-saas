@@ -25,7 +25,9 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
     group = Group.objects.filter(name=group_name).first()
 
     if group:
-        instance.groups.add(group)
+        instance.groups.set(group)
+        instance.save(update_fields=['groups'])
+
         group_names = ', '.join(instance.groups.all().values_list('name', flat=True))
         logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'. Full group list: [{group_names}]")
     else:
