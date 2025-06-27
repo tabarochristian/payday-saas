@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext as _
 from django.contrib.admin.models import LogEntry
-from django.forms.models import model_to_dict
 from django.utils.encoding import force_str
 
 class LoggerMixin:
