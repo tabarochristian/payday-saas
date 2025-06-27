@@ -55,7 +55,7 @@ class LoggerMixin:
                 message = _(f"Field '{verbose_name}' changed from '{old_value}' to '{new_value}'.")
                 change_messages.append(message)
         
-        return "\n".join(change_messages) if change_messages else None
+        return "\n".join(change_messages) if change_messages else "No change found"
 
     def log(self, model, form, action, change_message):
         """

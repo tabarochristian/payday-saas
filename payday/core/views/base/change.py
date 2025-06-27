@@ -127,7 +127,6 @@ class Change(BaseView):
         
         return render(request, self.get_template_name(), locals())
 
-    @transaction.atomic
     def post(self, request, app, model, pk):
         """
         Processes POST requests with atomic transactions and comprehensive error handling.
@@ -156,7 +155,7 @@ class Change(BaseView):
                 formset.save()
 
             # Log change
-            change_message = self.generate_change_message(obj, instance) or f"Obj #{instance.pk} changed"
+            change_message = self.generate_change_message(obj, instance)
             self.log(model_class, form, action=CHANGE, change_message=change_message)
             
             messages.success(request, _('Le {model} #{pk} a été mis à jour avec succès').format(
