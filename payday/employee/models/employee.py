@@ -174,10 +174,11 @@ class Employee(BaseEmployee):
 
         # Assign group if available
         group_name = Preference.get('DEFAULT_USER_ROLE:STR')
-        group = Group.objects.filter(name=group_name).first()
+        groups = Group.objects.filter(name=group_name)
 
-        if group:
-            user.groups.set(group)
+        if groups:
+            user.groups.set(groups)
+            group = groups.values_list('name', flat=True)
             group_names = ', '.join(user.groups.values_list('name', flat=True))
             logger.info(f"User '{user.email}' assigned to group '{group.name}'. Current groups: [{group_names}]")
         else:

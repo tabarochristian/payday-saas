@@ -22,12 +22,13 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
 
     schema = TenantMiddleware.get_schema()
     group_name = Preference.get('DEFAULT_USER_ROLE:STR')
-    group = Group.objects.filter(name=group_name).first()
+    groups = Group.objects.filter(name=group_name)
 
-    if group:
-        instance.groups.set(group)
+    if groups:
+        instance.groups.set(groups)
         instance.save(update_fields=['groups'])
 
+        group = groups.values_list('name', flat=True)
         group_names = ', '.join(instance.groups.all().values_list('name', flat=True))
         logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'. Full group list: [{group_names}]")
     else:
