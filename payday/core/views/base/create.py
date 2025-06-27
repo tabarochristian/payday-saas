@@ -145,7 +145,8 @@ class Create(BaseView):
             # Log addition
             message = _('Ajout du/de {model} #{pk}').format(
                 model=model_class._meta.model_name, pk=instance.pk)
-            self.log(model_class, form, action=ADDITION, change_message=self.generate_change_message(instance, form.instance))
+            message = self.generate_change_message(instance, form.instance) or f"#Obj {instance.pk} created"
+            self.log(model_class, form, action=ADDITION, change_message=message)
             messages.success(request, message)
             
             return redirect(self.next or reverse_lazy('core:list', kwargs={

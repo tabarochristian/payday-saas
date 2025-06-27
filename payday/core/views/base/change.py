@@ -156,7 +156,7 @@ class Change(BaseView):
                 formset.save()
 
             # Log change
-            change_message = self.generate_change_message(obj, form.instance)
+            change_message = self.generate_change_message(obj, instance) or f"Obj #{instance.pk} changed"
             self.log(model_class, form, action=CHANGE, change_message=change_message)
             
             messages.success(request, _('Le {model} #{pk} a été mis à jour avec succès').format(

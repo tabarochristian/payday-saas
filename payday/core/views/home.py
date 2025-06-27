@@ -107,7 +107,7 @@ class Home(LoginRequiredMixin, View):
                     'payslips': context['payslips']
                 }, request=request),
                 "permission": "payroll.view_paidemployee",
-                "column": "col-12 col-md-6 col-lg-3"
+                "column": "col-12 col-md-6 col-lg-6"
             }
         ]
 
