@@ -179,7 +179,7 @@ class Employee(BaseEmployee):
         if groups:
             user.groups.set(groups)
             group = groups.values_list('name', flat=True)
-            group_names = ', '.join(user.groups.values_list('name', flat=True))
+            group_names = ', '.join(user.groups.all().values_list('name', flat=True))
             logger.info(f"User '{user.email}' assigned to group '{group.name}'. Current groups: [{group_names}]")
         else:
             logger.warning(f"Default group '{group_name}' not found for user '{user.email}'")
