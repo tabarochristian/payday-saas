@@ -19,6 +19,7 @@ class RowLevelSecurity(Base):
         help_text=_("L'utilisateur auquel cette règle de sécurité s'applique."),
         editable=False
     )
+    
     group = fields.ModelSelectField(
         "core.group",
         verbose_name=_('roles'),

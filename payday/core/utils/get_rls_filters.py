@@ -1,6 +1,6 @@
 
 from django.contrib.contenttypes.models import ContentType
-from typing import Dict, Any, Union, List
+from typing import Dict, Any
 from django.apps import apps
 
 def get_rls_filters(user, model_class: type) -> Dict[str, Any]:
@@ -10,12 +10,13 @@ def get_rls_filters(user, model_class: type) -> Dict[str, Any]:
     """
     RowLevelSecurity = apps.get_model('core', model_name='rowlevelsecurity')
     content_type = ContentType.objects.get_for_model(model_class)
+    
 
     rls_rules = (
         RowLevelSecurity.objects
         .filter(
             content_type=content_type,
-            user__in=user.groups.all() or [],
+            user__in=[user],
         )
         .values_list('field', 'value')
     )

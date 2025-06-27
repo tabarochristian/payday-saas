@@ -42,7 +42,7 @@ class LoggerMixin:
                          or None if no changes occurred.
         """
         # Retrieve the list of field names from the new instance.
-        excludes_fields = ["created_at", "updated_at"]
+        excludes_fields = ["created_at", "updated_at", "id", "pk"]
         field_names = [field.name for field in old_instance._meta.fields 
                        if field.name not in excludes_fields]
         
