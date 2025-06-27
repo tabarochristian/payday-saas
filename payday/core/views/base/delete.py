@@ -176,11 +176,12 @@ class Delete(BaseView):
             raise ValueError("Invalid ID list provided")
 
         # Get schema from request or default to 'public'
-        schema = getattr(self.request, 'schema', None)
+        schema = getattr(self.request, 'schema', '')
+        table_name = [schema]
 
         # Get table name safely
-        table_name = getattr(self.request, 'schema', '')
-        table_name +=model._meta.db_table
+        table_name.append(model._meta.db_table)
+        table_name = '.'.join(table_name)
 
         # Execute deletion securely with parameterized query
         with connection.cursor() as cursor:
