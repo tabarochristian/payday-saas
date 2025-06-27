@@ -10,7 +10,9 @@ from core.models import fields
 from django.db import models
 from django.apps import apps
 
-import random
+import random, logging
+
+logger = logging.getLogger(__name__)
 
 def default_registration_number():
     while True:
@@ -152,27 +154,46 @@ class Employee(BaseEmployee):
         }]
     
     def create_user(self):
-        if not self.email: return
-        if self.user: return self.user
+        if not self.email:
+            return
+
+        if self.user:
+            return self.user
+
         from django.contrib.auth import get_user_model
-        
-        user, created = get_user_model().objects.get_or_create(email=self.email)
-        if not created: return
-
-        from django.contrib.auth.models import Group
         from django.apps import apps
-        
-        preference = apps.get_model('core', 'preference')
-        group = preference.get('DEFAULT_USER_ROLE:STR')
-        group = Group.objects.filter(name=group).first()
-        if group: user.groups.add(group)
 
-        password = preference.get('DEFAULT_USER_PASSWORD:STR', 'Kinshasa-2021')
+        UserModel = get_user_model()
+        user, created = UserModel.objects.get_or_create(email=self.email)
+
+        if not created:
+            return user  # return existing user safely
+
+        Preference = apps.get_model('core', 'preference')
+        Group = apps.get_model('core', 'group')
+
+        # Assign group if available
+        group_name = Preference.get('DEFAULT_USER_ROLE:STR')
+        group = Group.objects.filter(name=group_name).first()
+
+        if group:
+            user.groups.add(group)
+            group_names = ', '.join(user.groups.values_list('name', flat=True))
+            logger.info(f"User '{user.email}' assigned to group '{group.name}'. Current groups: [{group_names}]")
+        else:
+            logger.warning(f"Default group '{group_name}' not found for user '{user.email}'")
+
+        # Set password (defaults if missing)
+        password = Preference.get('DEFAULT_USER_PASSWORD:STR', 'Kinshasa-2021')
         user.set_password(password)
         user.save()
-                
+
         self.user = user
         self.save()
+
+        logger.info(f"User instance linked and saved for email: {self.email}")
+        return user
+
 
     class Meta:
         verbose_name = _('employé')

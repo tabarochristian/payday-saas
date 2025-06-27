@@ -5,7 +5,7 @@ from core.models import User, Preference, Group
 from core.middleware import TenantMiddleware
 from core.management.tenants import EmailService
 
-logger = logging.getLogger('user.audit')
+logger = logging.getLogger(__name__)
 
 @receiver(pre_save, sender=User)
 def set_default_user_password(sender, instance, **kwargs):
@@ -26,7 +26,8 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
 
     if group:
         instance.groups.add(group)
-        logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'")
+        group_names = ', '.join(instance.groups.all().values_list('name', flat=True))
+        logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'. Full group list: [{group_names}]")
     else:
         logger.warning(f"Default group '{group_name}' not found for user '{instance.email}'")
 
