@@ -1,29 +1,43 @@
+import logging
+from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
-from core.management.tenants import EmailService
 from core.models import User, Preference, Group
 from core.middleware import TenantMiddleware
-from django.dispatch import receiver
+from core.management.tenants import EmailService
+
+logger = logging.getLogger('user.audit')
 
 @receiver(pre_save, sender=User)
-def save(sender, instance, **kwargs):
-    if instance.password: return
+def set_default_user_password(sender, instance, **kwargs):
+    if instance.password and instance.has_usable_password():
+        return
     if default_password := Preference.get('DEFAULT_USER_PASSWORD:STR'):
         instance.set_password(default_password)
+        logger.info(f"Default password set for user: {instance.email}")
 
 @receiver(post_save, sender=User)
-def saved(sender, instance, created, **kwargs):
-    if not created: return
-    group = Preference.get('DEFAULT_USER_ROLE:STR')
-    group =  Group.objects.filter(name=group).first()
-    if group: instance.groups.add(group)
-    
-    if schema:=TenantMiddleware.get_schema():
-        EmailService().send_welcome_email(
-            password = 'payday-pwd',
-            tenant_name=schema,
-            user = instance,
-            schema = schema,
-            plan = '-'
-        )
-    
+def assign_group_and_send_email(sender, instance, created, **kwargs):
+    if not created:
+        return
 
+    schema = TenantMiddleware.get_schema()
+    group_name = Preference.get('DEFAULT_USER_ROLE:STR')
+    group = Group.objects.filter(name=group_name).first()
+
+    if group:
+        instance.groups.add(group)
+        logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'")
+    else:
+        logger.warning(f"Default group '{group_name}' not found for user '{instance.email}'")
+
+    try:
+        EmailService().send_welcome_email(
+            password='payday-pwd',
+            tenant_name=schema,
+            user=instance,
+            schema=schema,
+            plan='-'
+        )
+        logger.info(f"Welcome email sent to user '{instance.email}' in schema '{schema}'")
+    except Exception as e:
+        logger.error(f"Error sending welcome email to '{instance.email}': {e}")
