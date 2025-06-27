@@ -156,19 +156,19 @@ class Employee(BaseEmployee):
         from django.contrib.auth import get_user_model
         
         user, created = get_user_model().objects.get_or_create(email=self.email)
-        if created:
-            from django.contrib.auth.models import Group
-            from django.apps import apps
-            
-            preference = apps.get_model('core', 'preference')
-            group = preference.get('DEFAULT_USER_ROLE:STR')
-            group = Group.objects.filter(name=group).first()
-            if group: user.groups.add(group)
+        if not created: return
 
-            password = preference.get('DEFAULT_USER_PASSWORD:STR')
-            if not password:
-                user.set_password(password)
-                user.save()
+        from django.contrib.auth.models import Group
+        from django.apps import apps
+        
+        preference = apps.get_model('core', 'preference')
+        group = preference.get('DEFAULT_USER_ROLE:STR')
+        group = Group.objects.filter(name=group).first()
+        if group: user.groups.add(group)
+
+        password = preference.get('DEFAULT_USER_PASSWORD:STR', 'Kinshasa-2021')
+        user.set_password(password)
+        user.save()
                 
         self.user = user
         self.save()

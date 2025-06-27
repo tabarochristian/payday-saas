@@ -1,58 +1,104 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenue chez Payday</title>
-</head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-    <!-- Header -->
-    <tr>
-      <td style="background-color: #007bff; text-align: center; padding: 20px; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-        <img src="https://via.placeholder.com/150x50?text=Payday+Logo" alt="Payday Logo" style="max-width: 150px; height: auto;">
-      </td>
-    </tr>
-    <!-- Content -->
-    <tr>
-      <td style="padding: 30px;">
-        <h1 style="font-size: 24px; color: #007bff; margin: 0 0 20px;">Bienvenue {{ tenant_name|default:"Payday" }} !</h1>
-        <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px;">
-          Bonjour {{ user.email }},
-        </p>
-        <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px;">
-          Nous sommes ravis de vous accueillir ! Votre compte <strong>{{ schema }}</strong> a été créé avec succès sur {{ tenant_name|default:"Payday" }} avec le plan <strong>{{ plan }}</strong>.
-        </p>
-        <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px;">
-          Voici votre mot de passe temporaire pour accéder à votre tableau de bord :
-        </p>
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin: 0 0 20px;">
-          <tr>
-            <td style="font-size: 16px; font-family: monospace; color: #333; text-align: center;">
-              {{ password }}
-            </td>
-          </tr>
-        </table>
-        <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px;">
-          <strong>Important :</strong> Une fois connecté, accédez à votre tableau de bord ici : <a href="{{ protocol }}://{{ schema }}.{{ domain }}" style="color: #007bff;">{{ protocol }}://{{ schema }}.{{ domain }}</a>.
-        </p>
-        <p style="font-size: 16px; line-height: 1.5; margin: 0;">
-          Pour toute question, n’hésitez pas à nous contacter à l’adresse <a href="mailto:{{ support_email }}" style="color: #007bff;">{{ support_email }}</a>.
-        </p>
-      </td>
-    </tr>
-    <!-- Footer -->
-    <tr>
-      <td style="background-color: #f8f9fa; text-align: center; padding: 20px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
-        <p style="font-size: 14px; color: #666; margin: 10px 0;">
-          Merci de faire confiance à {{ tenant_name|default:"Payday" }}.
-        </p>
-        <p style="font-size: 14px; color: #666; margin: 0;">
-          L’équipe {{ tenant_name|default:"Payday" }}<br>
-          <a href="{{ protocol }}://{{ domain }}" style="color: #007bff;">{{ domain }}</a>
-        </p>
-      </td>
-    </tr>
-  </table>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienvenue chez Payday</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellspacing="0"
+      cellpadding="0"
+      style="
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <!-- Header -->
+      <tr>
+        <td
+          style="
+            background-color: #007bff;
+            text-align: center;
+            padding: 20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+          "
+        >
+          <img
+            alt="Payday Logo"
+            src="https://placehold.co/150x150?text=Payday"
+            style="max-width: 150px; height: auto"
+          />
+        </td>
+      </tr>
+      <!-- Content -->
+      <tr>
+        <td style="padding: 30px">
+          <h1 style="font-size: 24px; color: #007bff; margin: 0 0 20px">
+            Bienvenue {{ tenant_name|default:"Payday" }} !
+          </h1>
+          <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px">
+            Bonjour {{ user.email }},
+          </p>
+          <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px">
+            Nous sommes ravis de vous accueillir ! Votre compte
+            <strong>{{ schema }}</strong> a été créé avec succès sur {{
+            tenant_name|default:"Payday" }} avec le plan
+            <strong>{{ plan }}</strong>.
+          </p>
+          <p style="font-size: 16px; line-height: 1.5; margin: 0 0 20px">
+            <strong>Important :</strong> Une fois connecté, accédez à votre
+            tableau de bord ici :
+            <a
+              href="{{ protocol }}://{{ schema }}.{{ domain }}"
+              style="color: #007bff"
+              >{{ protocol }}://{{ schema }}.{{ domain }}</a
+            >.
+          </p>
+          <p style="font-size: 16px; line-height: 1.5; margin: 0">
+            Pour toute question, n’hésitez pas à nous contacter à l’adresse
+            <a href="mailto:{{ support_email }}" style="color: #007bff"
+              >{{ support_email }}</a
+            >.
+          </p>
+        </td>
+      </tr>
+      <!-- Footer -->
+      <tr>
+        <td
+          style="
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+          "
+        >
+          <p style="font-size: 14px; color: #666; margin: 10px 0">
+            Merci de faire confiance à {{ tenant_name|default:"Payday" }}.
+          </p>
+          <p style="font-size: 14px; color: #666; margin: 0">
+            L’équipe {{ tenant_name|default:"Payday" }}<br />
+            <a href="{{ protocol }}://{{ domain }}" style="color: #007bff"
+              >{{ domain }}</a
+            >
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

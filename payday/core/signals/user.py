@@ -1,6 +1,7 @@
 from django.db.models.signals import pre_save, post_save
-from core.models import User, Preference, Group
 from core.management.tenants import EmailService
+from core.models import User, Preference, Group
+from core.middleware import TenantMiddleware
 from django.dispatch import receiver
 
 @receiver(pre_save, sender=User)
@@ -16,14 +17,13 @@ def saved(sender, instance, created, **kwargs):
     if groups := Group.objects.filter(name=group):
         instance.groups.add(*groups)
     
-    default_password = Preference.get('DEFAULT_USER_PASSWORD:STR')
-    default_password = default_password or 'payday-pwd'
-    EmailService().send_welcome_email(
-        password = default_password,
-        tenant_name='www',
-        user = instance,
-        schema = 'www',
-        plan = '-'
-    )
+    if schema:=TenantMiddleware.get_schema():
+        EmailService().send_welcome_email(
+            password = 'payday-pwd',
+            tenant_name=schema,
+            user = instance,
+            schema = schema,
+            plan = '-'
+        )
     
 

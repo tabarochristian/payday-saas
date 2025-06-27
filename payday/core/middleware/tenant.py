@@ -104,33 +104,13 @@ class TenantMiddleware:
             is_active = len(subscriptions) > 0
 
             # Prepare row data
-            row = {
+            return {
+                'schema': schema,
                 'external_id': schema,
                 'is_active': is_active,
-                'lago_id': subscriptions[0].get('lago_customer_id') if subscriptions else None,
-                'name': None,  # Name not available in subscriptions endpoint
                 'created_at': subscriptions[0].get('created_at') if subscriptions else None,
-                'schema': schema
+                'lago_id': subscriptions[0].get('lago_customer_id') if subscriptions else None
             }
-
-            # Optional: Check wallets if no active subscriptions (uncomment if needed)
-            """
-            if not is_active:
-                wallet_response = requests.get(
-                    f"{self.lago_api_url}/api/v1/wallets",
-                    params={"lago_customer_id": row['lago_id']},
-                    headers=headers
-                )
-                wallet_response.raise_for_status()
-                wallets = wallet_response.json().get('wallets', [])
-                is_active = any(
-                    wallet.get('status') == 'active' and not wallet.get('terminated_at')
-                    for wallet in wallets
-                )
-                row['is_active'] = is_active
-            """
-
-            return row
 
         except requests.RequestException as e:
             logger.error(f"Error querying Lago API for schema {schema}: {e}")

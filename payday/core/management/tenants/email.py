@@ -31,7 +31,7 @@ class EmailService:
         """
         Send a welcome email to the user with their temporary password.
         """
-        subject = f"Bienvenue chez {tenant_name or 'Payday'} !"
+        subject = f"Bienvenue sur Payday !"
         context = {
             'user': user,
             'schema': schema,
