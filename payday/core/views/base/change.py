@@ -9,6 +9,7 @@ from django.http import Http404
 
 from core.forms.button import Button
 from .base import BaseView
+from copy import deepcopy
 import logging
 
 logger = logging.getLogger(__name__)
@@ -127,12 +128,14 @@ class Change(BaseView):
         
         return render(request, self.get_template_name(), locals())
 
+    @transaction.atomic
     def post(self, request, app, model, pk):
         """
         Processes POST requests with atomic transactions and comprehensive error handling.
         """
         model_class = self.get_model()
         obj = self._get_object()
+        _obj = deepcopy(obj)
         
         action_buttons = self.get_action_buttons(obj)
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
@@ -155,7 +158,7 @@ class Change(BaseView):
                 formset.save()
 
             # Log change
-            change_message = self.generate_change_message(obj, instance)
+            change_message = self.generate_change_message(_obj, instance)
             self.log(model_class, form, action=CHANGE, change_message=change_message)
             
             messages.success(request, _('Le {model} #{pk} a été mis à jour avec succès').format(

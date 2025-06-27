@@ -42,15 +42,16 @@ class LoggerMixin:
                          or None if no changes occurred.
         """
         # Retrieve the list of field names from the new instance.
-        field_names = [field.name for field in old_instance._meta.fields]
+        excludes_fields = ["created_at", "updated_at"]
+        field_names = [field.name for field in old_instance._meta.fields 
+                       if field.name not in excludes_fields]
+        
         
         change_messages = []
         # Compare field values in both dictionaries.
         for field in field_names:
-            print(field)
             old_value = getattr(old_instance, field, None)
             new_value = getattr(new_instance, field, None)
-            print(old_value, new_value)
             if old_value != new_value:
                 # Retrieve a human-readable field name from the model's meta.
                 verbose_name = new_instance._meta.get_field(field).verbose_name
