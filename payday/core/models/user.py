@@ -34,7 +34,7 @@ class User(AbstractUser):
     )
 
     groups = fields.ModelSelect2Multiple(
-        "auth.group",
+        "core.group",
         verbose_name=_("groups"),
         blank=True,
         help_text=_(

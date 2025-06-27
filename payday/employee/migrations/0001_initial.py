@@ -590,6 +590,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         null=True,
                         upload_to=core.utils.upload_directory_file,
+                        help_text="Photo passport de format standard, MAX 1MB",
                         verbose_name="photo",
                     ),
                 ),

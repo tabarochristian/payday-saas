@@ -106,7 +106,7 @@ def base(request):
         }, {
             'title': _('Roles'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'group'}),
-            'permission': 'auth.view_group',
+            'permission': 'core.view_group',
             'description': _('Gérez les roles de votre organisation.')
         }, {
             'title': _('Terminaux'),

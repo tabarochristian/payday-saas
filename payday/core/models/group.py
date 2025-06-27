@@ -34,7 +34,6 @@ class Group(models.Model):
         related_name="groups"
     )
 
-
     inlines = ('core.columnlevelsecurity', 'core.rowlevelsecurity')
     layout = Layout('name', 'permissions')
 
