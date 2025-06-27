@@ -69,7 +69,7 @@ class LagoClient:
                 'email': email,
                 'external_id': external_id,
                 'name': name or external_id.title(),
-                'currency': getattr(settings, 'DEFAULT_CURRENCY', 'CDF'),
+                'currency': getattr(settings, 'DEFAULT_CURRENCY', 'USD'),
                 'timezone': getattr(settings, 'TIME_ZONE', 'Africa/Kinshasa')
             }
         }

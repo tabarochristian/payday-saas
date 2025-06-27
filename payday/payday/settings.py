@@ -308,7 +308,7 @@ JSON_WIDGET_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.0.0/jsone
 JSON_WIDGET_JS = 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.0.0/jsoneditor.min.js'
 
 # Django Money settings
-DEFAULT_CURRENCY = os.getenv('DEFAULT_CURRENCY', 'CDF')
+DEFAULT_CURRENCY = os.getenv('DEFAULT_CURRENCY', 'USD')
 CURRENCY_CHOICES = [(currency, currency) for currency in ('USD', 'CDF')]
 
 # Django Ace settings
