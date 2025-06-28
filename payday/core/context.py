@@ -76,6 +76,12 @@ def base(request):
         #    'description': _('Faite la disposition de vos menus.')
         #}, 
         {
+            'title': _('Sous-organisation'),
+            'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'suborganization'}),
+            'description': _('Cree une sous-organisation'),
+            'permission': 'core.view_suborganization',
+        },
+        {
             'title': _('Importeur'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'importer'}),
             'permission': 'core.view_menu',

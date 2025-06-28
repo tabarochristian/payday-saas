@@ -1,9 +1,6 @@
 from .views import ApiViewSet
 from django.urls import path
-from rest_framework.routers import DefaultRouter
-from django.urls import path, include
 from .views import *
-
 app_name = 'api'
 
 
@@ -25,4 +22,6 @@ urlpatterns = [
 
     path('sync/rollapp/employee', EmployeeSyncWithRollApp.as_view(),
          name='employee-sync-api'),
+
+    path('session', SetSessionView.as_view(), name='set-session')
 ]

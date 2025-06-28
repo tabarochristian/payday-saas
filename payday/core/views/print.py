@@ -1,11 +1,10 @@
 import re
 import pandas as pd
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
-from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
+from django.template import Context, Template
 from django.contrib import messages
 from django.apps import apps
-from django.template import Context, Template
 
 from core import models
 from core.views import BaseView

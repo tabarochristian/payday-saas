@@ -122,29 +122,32 @@
 
 <!-- JavaScript for print buttons -->
 <script>
-    function openPrintPopup(linkElement) {
-        const actionUrl = $(linkElement).attr("href") || $(linkElement).data("action");
+function openPrintPopup(linkElement) {
+    const $link = $(linkElement);
+    const actionUrl = $link.attr("href") || $link.data("action");
 
-        if (!actionUrl) {
-            console.error("No valid action URL found.");
-            return false;
-        }
-
-        let printUrl = actionUrl;
-
-        if (typeof getSelectedRows === 'function') {
-            const selectedIds = getSelectedRows();
-            if (selectedIds.length > 0) {
-                printUrl += `?pk__in=${encodeURIComponent(selectedIds.join(','))}`;
-            }
-        }
-
-        window.location.href = printUrl;
-        return false;
+    if (!actionUrl) {
+        console.error("No valid action URL found on the clicked element.");
+        return;
     }
 
-    $(document).on("click", ".btn-list-action", function (event) {
-        event.preventDefault();
-        openPrintPopup(this);
-    });
+    let printUrl = actionUrl;
+
+    // Append selected IDs if available
+    if (typeof getSelectedRows === 'function') {
+        const selectedIds = getSelectedRows();
+        if (Array.isArray(selectedIds) && selectedIds.length > 0) {
+            const queryParam = `?pk__in=${encodeURIComponent(selectedIds.join(','))}`;
+            printUrl += actionUrl.includes('?') ? `&${queryParam.slice(1)}` : queryParam;
+        }
+    }
+
+    window.location.href = printUrl;
+}
+
+$(document).on("click", ".btn-list-action", function (event) {
+    event.preventDefault();
+    openPrintPopup(this);
+});
+
 </script>

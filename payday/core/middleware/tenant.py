@@ -1,133 +1,121 @@
-from django.http import HttpResponseRedirect
-from django.core.cache import cache
-from core.utils import set_schema
-from django.conf import settings
-
+import logging
 import threading
 import requests
-import logging
+
+from django.core.cache import cache
+from django.conf import settings
+from django.http import HttpResponseRedirect
+
+from core.utils import set_schema
 
 logger = logging.getLogger(__name__)
-thread = threading.local()
+_thread_locals = threading.local()
 
 class TenantMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.lago_api_key = getattr(settings, 'LAGO_API_KEY', '23e0a6aa-a0a7-4dc9-bec6-e225bf65ec05')
-        self.lago_api_url = getattr(settings, 'LAGO_API_URL', 'http://lago:3000')
-        self.cache_timeout = getattr(settings, 'TENANT_CACHE_TIMEOUT', 60 * 60)
+        self.api_key = getattr(settings, 'LAGO_API_KEY', None)
+        self.api_url = getattr(settings, 'LAGO_API_URL', 'http://lago:3000')
+        self.cache_timeout = getattr(settings, 'TENANT_CACHE_TIMEOUT', 3600)
+        self.default_redirect = getattr(settings, 'DEFAULT_TENANT_REDIRECT_URL', 'http://payday.cd')
+        
+        if not self.api_key:
+            logger.warning("LAGO_API_KEY not configured in settings.")
 
     def __call__(self, request):
-        if getattr(settings, "DEBUG", True):
-            response = self.get_response(request)
-            return response
-        
-        host = request.get_host()
-        schema = self.extract_schema_from_host(host)
+        if getattr(settings, "DEBUG", False):
+            return self.get_response(request)
 
+        schema = self.extract_schema_from_host(request.get_host())
         if not self.is_valid_schema(schema):
-            logger.warning(f"Invalid schema: {schema}")
-            return self.redirect_to_default()
+            logger.warning(f"Invalid or missing schema from host: {request.get_host()}")
+            return self.redirect_to_default("invalid-schema")
 
-        row = self.set_schema_from_cache_or_lago(schema)
-        if not row:
-            return self.redirect_to_default()
-
-        if not (is_active := row.get('is_active', False)):
-            logger.warning(f"Schema {schema} is not active")
-            return self.redirect_to_default()
+        tenant_info = self.get_or_fetch_tenant(schema)
+        if not tenant_info or not tenant_info.get("is_active"):
+            logger.warning(f"Tenant not found or inactive: {schema}")
+            return self.redirect_to_default("inactive-or-missing")
 
         request.schema = schema
-        thread.schema = schema
-        request.tenant = row
-    
+        _thread_locals.schema = schema
+        request.tenant = tenant_info
         set_schema(schema)
+
         return self.get_response(request)
 
     def extract_schema_from_host(self, host):
-        """
-        Extract the schema (subdomain) from the request host.
-        """
-        return host.split(':')[0].split('.')[0]
+        """Extract subdomain from the host, excluding port."""
+        parts = host.split(":")[0].split(".")
+        return parts[0] if len(parts) > 1 else None
 
     def is_valid_schema(self, schema):
-        """
-        Validate the schema (subdomain).
-        """
-        return schema and schema != "www"
+        return schema and schema.lower() != 'www'
 
-    def set_schema_from_cache_or_lago(self, schema):
-        """
-        Set the schema from cache or Lago API.
-        Returns customer data if valid and set, False otherwise.
-        """
-        key = f"tenant_{schema.lower()}"
-        row = cache.get(key)
-        if row:
-            logger.debug(f"Using cached schema for {schema}")
-            return row
+    def get_or_fetch_tenant(self, schema):
+        """Returns tenant from cache or Lago, and stores it back if fetched."""
+        cache_key = f"tenant_{schema.lower()}"
+        tenant = cache.get(cache_key)
+        if tenant:
+            return tenant
 
-        if row := self.set_schema_from_lago(schema):
-            cache.set(key, row, timeout=self.cache_timeout)
-            logger.debug(f"Schema {schema} set and cached")
-            return row
+        tenant = self.fetch_tenant_from_lago(schema)
+        if tenant:
+            cache.set(cache_key, tenant, timeout=self.cache_timeout)
+        return tenant
 
-        return False
-
-    def set_schema_from_lago(self, schema):
-        """
-        Check customer status via Lago API subscriptions endpoint.
-        Returns customer data with is_active status if the customer exists, False otherwise.
-        """
-        if not self.lago_api_key:
-            logger.error("Lago API key not configured")
-            return False
+    def fetch_tenant_from_lago(self, schema):
+        """Fetch subscription info from Lago API and return enriched tenant data."""
+        if not self.api_key:
+            logger.error("Lago API key is missing.")
+            return None
 
         try:
-            # Fetch active subscriptions from Lago
-            headers = {"Authorization": f"Bearer {self.lago_api_key}"}
             response = requests.get(
-                f"{self.lago_api_url}/api/v1/subscriptions",
-                params={"external_customer_id": schema, "status[]": "active"},
-                headers=headers
+                f"{self.api_url}/api/v1/subscriptions",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                params={"external_customer_id": schema}
             )
-            
             if response.status_code == 404:
-                logger.warning(f"Customer {schema} not found in Lago")
-                return False
-            
+                logger.info(f"No subscriptions found for schema: {schema}")
+                return None
+
             response.raise_for_status()
-            subscription_data = response.json()
-            subscriptions = subscription_data.get('subscriptions', [])
+            data = response.json()
+            subscriptions = data.get("subscriptions", [])
 
-            # Determine if customer is active based on subscriptions
-            is_active = len(subscriptions) > 0
+            # Filter active-like subscriptions
+            active_statuses = {"active", "trialing", "in_trial"}
+            active_subs = [s for s in subscriptions if s.get("status") in active_statuses]
 
-            # Prepare row data
+            if not active_subs:
+                logger.info(f"No active subscriptions for schema: {schema}")
+                return {"schema": schema, "is_active": False}
+
+            first_sub = active_subs[0]
             return {
-                'schema': schema,
-                'external_id': schema,
-                'is_active': is_active,
-                'created_at': subscriptions[0].get('created_at') if subscriptions else None,
-                'lago_id': subscriptions[0].get('lago_customer_id') if subscriptions else None
+                "schema": schema,
+                "external_id": schema,
+                "is_active": True,
+                "created_at": first_sub.get("created_at"),
+                "lago_customer_id": first_sub.get("lago_customer_id"),
+                "subscription_status": first_sub.get("status"),
             }
 
         except requests.RequestException as e:
-            logger.error(f"Error querying Lago API for schema {schema}: {e}")
-            return False
+            logger.exception(f"Failed to fetch Lago subscriptions for schema {schema}: {e}")
+            return None
 
-    def redirect_to_default(self):
-        """
-        Redirect to the default URL with an optional error message.
-        """
-        redirect_url = getattr(settings, "DEFAULT_TENANT_REDIRECT_URL", "http://payday.cd")
-        return HttpResponseRedirect(f"{redirect_url}?message=not-found")
+    def redirect_to_default(self, reason="not-found"):
+        """Redirect to the default fallback URL with an error reason."""
+        return HttpResponseRedirect(f"{self.default_redirect}?message={reason}")
 
     @staticmethod
     def get_schema():
-        return getattr(thread, 'schema', None)
+        return getattr(_thread_locals, 'schema', None)
 
-    @staticmethod 
+    @staticmethod
     def get_tenant():
         schema = TenantMiddleware.get_schema()
-        return cache.get(f"tenant_{schema.lower()}", {})
+        if schema:
+            return cache.get(f"tenant_{schema.lower()}", {})
+        return {}

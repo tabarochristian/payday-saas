@@ -1,5 +1,4 @@
 from django_currentuser.db.models import CurrentUserField
-from simple_history.models import HistoricalRecords
 from django.utils.translation import gettext as _
 from crispy_forms.layout import Layout
 from django.urls import reverse_lazy
@@ -10,21 +9,34 @@ from core.utils import DictToObject
 from core.models import fields
 
 from django.contrib.contenttypes.models import ContentType
+from core.models.managers import PaydayManager
 from django.apps import apps
 
-from core.models.managers import PaydayManager
-from itertools import chain
+def get_category_choices():
+    try:
+        Category = apps.get_model('core', 'suborganization')
+        return list(
+            Category.objects.order_by('name')
+            .values_list('pk', 'name')
+            .distinct()
+        )
+    except Exception:
+        return []
 
 class Base(models.Model):
-    #history = HistoricalRecords(
-    #    verbose_name=_('historique'),
-    #    verbose_name_plural=_('historiques')
-    #)
-
     _metadata = fields.JSONField(
         verbose_name=_('metadata'), 
         default=dict, 
         blank=True
+    )
+
+    sub_organization = fields.ChoiceField(
+        verbose_name=_('sous-organization'),
+        choices=get_category_choices,
+        max_length=100,
+        default=None,
+        blank=True,
+        null=True
     )
 
     updated_by = CurrentUserField(
@@ -33,6 +45,7 @@ class Base(models.Model):
         on_update=True,
         editable=False
     )
+
     created_by = CurrentUserField(
         verbose_name=_('créé par'), 
         related_name='%(app_label)s_%(class)s_created_by',
@@ -44,6 +57,7 @@ class Base(models.Model):
         auto_now=True,
         editable=False
     )
+
     created_at = fields.DateTimeField(
         verbose_name=_('créé le/à'), 
         auto_now_add=True,

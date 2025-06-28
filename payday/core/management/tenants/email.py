@@ -36,7 +36,7 @@ class EmailService:
             'user': user,
             'schema': schema,
             'password': password,
-            'tenant_name': tenant_name or schema.title(),
+            'tenant_name': tenant_name or schema,
             'plan': plan,
             'protocol': 'http',
             'domain': getattr(settings, 'DEFAULT_TENANT_REDIRECT_URL', 'http://payday.cd').replace('http://', ''),

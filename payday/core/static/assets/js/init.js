@@ -38,25 +38,55 @@ $(document).ready(() => {
     });
 
     // Change the language
-    $('.lang-item').click(function() {
-        const language = $(this).data('value');
-        const csrfToken = Cookies.get('csrftoken');
+    document.querySelectorAll('li[class$="-item"]').forEach(li => {
+        // Utility function to get cookie by name
+        function getCookie(name) {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith(name + '='));
+            return cookieValue ? decodeURIComponent(cookieValue.split('=')[1]) : null;
+        }
 
-        $.ajax({
-            url: change_language_url,
-            type: 'POST',
-            data: {
-                language: language,
-                // csrfmiddlewaretoken: csrfToken,
-            },
-            async: false,
-            success: () => location.reload(),
-            error: (xhr, status, error) => {
-                toastr.error(`Error: ${error}`);
-                console.log(xhr.responseText);
-                console.log(error);
+        li.addEventListener('click', () => {
+        const method = li.dataset.method || 'POST';
+        const value = li.dataset.value;
+        const key = li.dataset.key;
+        const url = li.dataset.url;
+
+        if (!url || !key || typeof value === 'undefined') {
+            console.error('Missing required data attributes.');
+            return;
+        }
+
+        const csrfToken = getCookie('csrftoken');
+        if (!csrfToken) {
+            console.error('CSRF token not found in cookies.');
+            return;
+        }
+
+        // Construct JSON body
+        const payload = {};
+        payload[key] = value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRFToken', csrfToken); // Required by Django for JSON requests
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log('Success:', xhr.responseText);
+                    location.reload(); // Refresh page on success
+                } else {
+                    console.error('Request failed:', xhr.status, xhr.responseText);
+                }
             }
+        };
+        xhr.send(JSON.stringify(payload));
         });
+
     });
-    
+
+ 
 });

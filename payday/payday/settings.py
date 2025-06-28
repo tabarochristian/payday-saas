@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_htmx",
     "djcelery_email",
-    "simple_history",
     "notifications",
     "api",
     "core",
@@ -90,7 +89,7 @@ MIDDLEWARE = [
     "django_currentuser.middleware.ThreadLocalUserMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
-    "simple_history.middleware.HistoryRequestMiddleware"
+    "core.middleware.SubOrganizationMiddleware",
 ]
 
 if DEBUG:
@@ -215,7 +214,7 @@ LOCALE_PATHS = [BASE_DIR / 'locale']
 
 LANGUAGES = [
     ('fr', 'French'),
-    ('en', 'English'),
+    # ('en', 'English'),
 ]
 
 # Static files (CSS, JavaScript, Images)

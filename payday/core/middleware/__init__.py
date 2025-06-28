@@ -1,1 +1,2 @@
+from .sub_organization import SubOrganizationMiddleware
 from .tenant import TenantMiddleware

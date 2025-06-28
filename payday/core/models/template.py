@@ -24,6 +24,7 @@ class Template(Base):
     )
     
     layout = Layout(
+        'sub_organization',
         Row(Column('content_type'), Column('name')), 
         'content'
     )

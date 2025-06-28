@@ -4,7 +4,6 @@ from core.views import *
 
 app_name = 'core'
 
-
 class LogoutView(views.LogoutView):
     def dispatch(self, request, *args, **kwargs):
         if request.method == 'GET':
@@ -36,5 +35,5 @@ urlpatterns = [
     path('activity-log', ActivityLog.as_view(), name='activity-log'),
 
     path('canvas/download/<str:pk>', Canvas.as_view(), name='canvas-download'),
-    path('action/required', ActionRequired.as_view(), name='action-required')
+    path('action/required', ActionRequired.as_view(), name='action-required'),
 ]

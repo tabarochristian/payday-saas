@@ -1,153 +1,150 @@
-{% load i18n %}
-{% load static %}
+{% load i18n static %}
 {% get_current_language as LANGUAGE_CODE %}
-
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      
-      <title>{{ organization.name|default:'PayDay' }}</title>
-      <script src="{% static 'assets/js/jquery-3.7.0.min.js' %}"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}{{ organization.name|default:"PayDay" }}{% endblock %}</title>
 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-      <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-      <link rel="stylesheet" href="{% static 'assets/css/main/app.css' %}">
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/main/app.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/shared/iconly.css' %}">
 
-      <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.svg' %}" type="image/x-icon">
-      <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/png">
-      <link rel="stylesheet" href="{% static 'assets/css/shared/iconly.css' %}">
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
 
-      <style>
-         html{
-            font-size: 10px;
-         }
-         .tox-promotion{
-            display: none !important;
-         }
-         .errorlist{
-            margin: 0;
-         }
-      </style>
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/png">
 
-   </head>
-   <body>
-      <div id="app">
-         <div id="sidebar" class="active">
+    <!-- Custom Styles -->
+    <style>
+        html { font-size: 10px; }
+        .tox-promotion { display: none !important; }
+        .errorlist { margin: 0; }
+    </style>
+
+    {% block head_css %}{% endblock %}
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
-               <div class="sidebar-header position-relative">
-                  <div class="d-flex justify-content-between align-items-center">
-                     <div class="logo">
-                        {% static 'assets/images/logo/logo.png' as logo %}
-                        <a href="{% url 'core:home' %}"><img style="height: 5rem !important;" src="{{ request.organization.logo.url|default:logo }}" alt="{{ organization.name|default:'payday' }}"></a>
-                     </div>
-
-                     <div class="theme-toggle d-flex gap-2  align-items-center mt-2 d-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
-                           <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2" opacity=".3"></path>
-                              <g transform="translate(-210 -1)">
-                                 <path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path>
-                                 <circle cx="220.5" cy="11.5" r="4"></circle>
-                                 <path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"></path>
-                              </g>
-                           </g>
-                        </svg>
-                        
-                         <div class="form-check form-switch fs-6">
-                           <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" >
-                           <label class="form-check-label" ></label>
+                <div class="sidebar-header position-relative">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="logo">
+                            {% static 'assets/images/logo/logo.png' as logo %}
+                            <a href="{% url 'core:home' %}">
+                                <img src="{{ request.organization.logo.url|default:logo }}" alt="{{ organization.name|default:'PayDay' }}" style="height: 5rem !important;">
+                            </a>
                         </div>
-                        
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                           <path fill="currentColor" d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z"></path>
-                        </svg>
-                     </div>
-
-                     <div class="sidebar-toggler  x">
-                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                     </div>
-                  </div>
-               </div>
-               <div class="sidebar-menu">
-                  <ul class="menu">
-                     <li class="sidebar-title">{% trans 'Menu' %}</li>
-                     {% for el in menus %}
-                         {% if el.children or el.forced %}
-                         <li
-                              id="menu-item-{{ el.title|slugify }}"
-                             class="sidebar-item {% if el.children %}has-sub{% endif %} {% if request.path == el.href %}active{% endif %}">
-                             <a href="{{ el.href }}" class='sidebar-link'>
-                                 <i class="bi {{ el.icon }}"></i>
-                                 <span>{{ el.title|title }}</span>
-                                 {% if el.badge %}<span class="badge bg-danger">{{ el.badge }}</span>{% endif %}
-                             </a>
-                              {% if el.children %}
-                                  <ul class="submenu {{ el.class }}">
-                                     {% for child in el.children %}
-                                          <li id="submenu-item-{{ child.title|slugify }}" class="submenu-item {% if request.path == child.href %}active{% endif %}">
-                                             <a href="{{ child.href }}">{{ child.title|title }}</a>
-                                          </li>
-                                     {% endfor %}
-                                  </ul>
-                              {% endif %}
-                         </li>
-                         {% endif %}
-                     {% endfor %}
-                  </ul>
-               </div>
+                        <div class="sidebar-toggler x">
+                            <a href="#" class="sidebar-hide d-xl-none d-block">
+                                <i class="bi bi-x bi-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">{% trans 'Menu' %}</li>
+                        {% for el in menus %}
+                            {% if el.children or el.forced %}
+                                <li id="menu-item-{{ el.title|slugify }}"
+                                    class="sidebar-item {% if el.children %}has-sub{% endif %} {% if request.path == el.href %}active{% endif %}">
+                                    <a href="{{ el.href }}" class="sidebar-link">
+                                        <i class="bi {{ el.icon }}"></i>
+                                        <span>{{ el.title|title }}</span>
+                                        {% if el.badge %}<span class="badge bg-danger">{{ el.badge }}</span>{% endif %}
+                                    </a>
+                                    {% if el.children %}
+                                        <ul class="submenu {{ el.class }}">
+                                            {% for child in el.children %}
+                                                <li id="submenu-item-{{ child.title|slugify }}" class="submenu-item {% if request.path == child.href %}active{% endif %}">
+                                                    <a href="{{ child.href }}">{{ child.title|title }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-         </div>
-         <div id="main">
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="main">
+            <!-- Header -->
             <header class='mb-0'>
                 {% block messages %}
-                  {% if messages %}
-                     {% for message in messages %}
-                           <div class="alert alert-light-{{ message.tags|default:'warning' }} fw-bold mb-0 p-2" role="alert">
-                              {{ message }}
-                           </div>
-                     {% endfor %}
-                  {% endif %}
-               {% endblock messages %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-light-{{ message.tags|default:'warning' }} fw-bold mb-0 p-2" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endblock %}
 
                 <nav class="navbar navbar-expand navbar-light navbar-top p-0">
                     <div class="container-fluid">
                         <a href="#" class="sidebar-toggler burger-btn d-block">
                             <i class="bi bi-justify fs-3"></i>
                         </a>
-
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                           <ul class="navbar-nav ms-auto mb-lg-0 lang-switcher-dropdown-menu">
-                              <li class="nav-item dropdown me-3">
-                                  <a class="nav-link nav-icon icon-class active dropdown-toggle text-gray-600" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                                      {{ LANGUAGE_CODE|upper }}
-                                  </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                       {% get_available_languages as LANGUAGES %}
-                                       {% for lang in LANGUAGES %}
-                                             <li><a class="dropdown-item lang-item" data-value="{{ lang.0 }}">{{ lang.1 }}</a></li>
+                            <ul class="navbar-nav ms-auto mb-lg-0 lang-switcher-dropdown-menu">
+                                 {% if request.suborganizations %}
+                                 <li class="nav-item dropdown me-5">
+                                    <a class="nav-link dropdown-toggle text-white bg-primary px-3 py-2 rounded d-flex align-items-center"
+                                       href="#" data-bs-toggle="dropdown" 
+                                       title="{% trans 'Sous-organisation' %}">
+                                       <i class="bi bi-diagram-3-fill me-2"></i>
+                                       <strong>{{ request.suborganization|default:"Sous-organisation" }}</strong>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                                       {% for suborganization in request.suborganizations %}
+                                             <li
+                                                class="dropdown-item sub-organization-item" 
+                                                data-value="{{ suborganization.pk }}" 
+                                                data-url="{% url 'api:set-session' %}"
+                                                data-key="sub_organization">
+                                                   {{ suborganization.name }}
+                                             </li>
                                        {% endfor %}
                                     </ul>
-                              </li>
-                           </ul>
-                           <div class="dropdown">
+                                 </li>
+                                {% endif %}
+                                <li class="nav-item dropdown me-3">
+                                    <a class="nav-link dropdown-toggle text-gray-600" href="#" data-bs-toggle="dropdown">
+                                        {{ LANGUAGE_CODE|upper }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        {% get_available_languages as LANGUAGES %}
+                                        {% for lang in LANGUAGES %}
+                                            <li
+                                                data-url="{% url 'set_language' %}"
+                                                class="dropdown-item lang-item" 
+                                                data-value="{{ lang.0 }}" 
+                                                data-key="language">
+                                                {{ lang.1 }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
                                             <h6 class="mb-0 text-gray-600">{{ request.user.employee.last_name|default:request.user }}</h6>
-                                            <p class="mb-0 text-sm text-gray-600">{{ request.user.employee.designation|default:'No designation' }}</p>
+                                            <p class="mb-0 text-sm text-gray-600">{{ request.user.employee.designation|default:"No designation" }}</p>
                                         </div>
-                                        {% comment %}<div class="user-img d-flex align-items-center">
-                                          <div class="avatar avatar-md">
-                                             <img src="{% static "assets/images/faces/1.jpg" %}">
-                                          </div>
-                                        </div>{% endcomment %}
                                     </div>
                                 </a>
                             </div>
@@ -155,60 +152,51 @@
                     </div>
                 </nav>
             </header>
-            
-            {% block content %}
-            {% endblock %}
+
+            <!-- Page Content -->
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+
+            <!-- Footer -->
             <footer>
-               <div class="footer clearfix mb-0 text-muted">
-                  <div class="float-start">
-                     <p>{% now 'Y' %} &copy; PayDay</p>
-                  </div>
-                  <div class="float-end">
-                     <p style="font-size: 9px">{% trans 'Crafted with' %} <span class="text-danger"><i class="bi bi-heart"></i></span></p>
-                  </div>
-               </div>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>{% now "Y" %} &copy; PayDay</p>
+                    </div>
+                    <div class="float-end">
+                        <p style="font-size: 9px">{% trans 'Crafted with' %} <span class="text-danger"><i class="bi bi-heart"></i></span></p>
+                    </div>
+                </div>
             </footer>
-         </div>
-      </div>
-      <div id="modal" class="modal fade">
-         <div id="dialog" class="modal-dialog" hx-target="this"></div>
-      </div>
+        </div>
+    </div>
 
-      {% comment %}{% if not self.DEBUG %}<!--Start of Tawk.to Script-->
-      <script type="text/javascript">
-         var Tawk_API = Tawk_API || {};
-         var Tawk_LoadStart = new Date();
-
-         (function () {
-            var s1 = document.createElement('script');
-            var s0 = document.getElementsByTagName('script')[0];
-
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/6776d9c3af5bfec1dbe5e824/1igk459sb';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-
-            s0.parentNode.insertBefore(s1, s0);
-         })();
-      </script>
-      <!--End of Tawk.to Script-->
-      {% endif %}{% endcomment %}
-   </body>
+    <!-- Modal Placeholder -->
+    <div id="modal" class="modal fade">
+        <div id="dialog" class="modal-dialog" hx-target="this"></div>
+    </div>
 
    <script>
-      var change_language_url = "{% url "set_language" %}";
       var language = "{{ LANGUAGE_CODE }}";
    </script>
 
-   <script src="https://unpkg.com/htmx.org@1.6.1" defer></script>
-   <script src="{% static 'assets/js/bootstrap.js' %}"></script>
-   <script src="{% static 'assets/js/app.js' %}"></script>
-   
-   <script src="https://cdn.jsdelivr.net/npm/dirrty@1.0.0/dist/jquery.dirrty.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
-   <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
-   <script src="{% static "assets/js/init.js" %}"></script>
+    <!-- Core JS Libraries -->
+    <script src="{% static 'assets/js/jquery-3.7.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.js' %}" defer></script>
+    <script src="{% static 'assets/js/app.js' %}" defer></script>
 
+    <!-- External JS -->
+    <script src="https://unpkg.com/htmx.org@1.6.1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dirrty@1.0.0/dist/jquery.dirrty.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js" defer></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js" defer></script>
+
+    <!-- Initialization -->
+    <script src="{% static 'assets/js/init.js' %}" defer></script>
+
+    {% block custom_scripts %}{% endblock %}
+</body>
 </html>

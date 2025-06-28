@@ -2,8 +2,10 @@ import logging
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from core.models import User, Preference, Group
-from core.middleware import TenantMiddleware
+
 from core.management.tenants import EmailService
+from core.middleware import TenantMiddleware
+
 
 logger = logging.getLogger(__name__)
 
@@ -26,13 +28,9 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
 
     if groups:
         instance.groups.set(groups)
-        instance.save(update_fields=['groups'])
-
         group = groups.values_list('name', flat=True)
         group_names = ', '.join(instance.groups.all().values_list('name', flat=True))
         logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'. Full group list: [{group_names}]")
-    else:
-        logger.warning(f"Default group '{group_name}' not found for user '{instance.email}'")
 
     try:
         EmailService().send_welcome_email(
