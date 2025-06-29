@@ -14,7 +14,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   redis:
     container_name: payday-redis
@@ -27,7 +27,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   mariadb:
     container_name: payday-mariadb
@@ -45,7 +45,7 @@ services:
     expose:
       - 3306
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   pgbouncer:
     container_name: payday-pgbouncer
@@ -66,7 +66,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   wordpress:
     container_name: payday-wordpress
@@ -97,7 +97,7 @@ services:
       - "traefik.http.routers.wordpress-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.wordpress.loadbalancer.server.port=80"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   minio:
     container_name: payday-minio
@@ -121,7 +121,7 @@ services:
       - "traefik.http.routers.minio-console-http.priority=1000"
       - "traefik.http.routers.minio-console-https.rule=Host(`minio.payday.cd`)"
       - "traefik.http.routers.minio-console-https.entrypoints=websecure"
-      - "traefik.http.routers.minio-console-https.service=minio-console"
+      - "traefik.http.routers.minio-console-holdbalancer.server.port=9001"
       - "traefik.http.routers.minio-console-https.priority=1000"
       - "traefik.http.routers.minio-console-https.tls=true"
       - "traefik.http.routers.minio-console-https.tls.certresolver=letsencrypt"
@@ -142,7 +142,7 @@ services:
       - "traefik.http.routers.minio-bucket-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.minio-bucket.loadbalancer.server.port=9000"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   saas:
     container_name: payday-saas
@@ -177,9 +177,10 @@ services:
       - "traefik.http.routers.saas-https.rule=HostRegexp(`{subdomain:[a-z]+}.payday.cd`)"
       - "traefik.http.routers.saas-https.tls=true"
       - "traefik.http.routers.saas-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.saas-https.tls.domains[0].main=*.payday.cd"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   celery:
     container_name: payday-celery
@@ -201,7 +202,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   flower:
     container_name: payday-flower
@@ -230,7 +231,7 @@ services:
       - "traefik.http.routers.flower-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.flower.loadbalancer.server.port=5555"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   lago:
     container_name: payday-lago
@@ -279,7 +280,7 @@ services:
       - "traefik.http.middlewares.lago-cors.headers.accessControlMaxAge=100"
       - "traefik.http.middlewares.lago-cors.headers.addVaryHeader=true"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
   thumbor:
     image: thumbororg/thumbor:latest
@@ -311,7 +312,7 @@ services:
       - "traefik.http.routers.thumbor-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.thumbor.loadbalancer.server.port=8888"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
     volumes:
       - ./thumbor/storage:/app/storage
 
@@ -326,6 +327,8 @@ services:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik-certs:/letsencrypt
+    env_file:
+      - ./traefik.env
     depends_on:
       - wordpress
       - minio
@@ -351,7 +354,7 @@ services:
       - "traefik.http.routers.traefik-https.tls=true"
       - "traefik.http.routers.traefik-https.tls.certresolver=letsencrypt"
     networks:
-      - traefik-net
+      - payday-saas_traefik-net
 
 volumes:
   wordpress_data:
@@ -361,5 +364,5 @@ volumes:
   traefik-certs:
 
 networks:
-  traefik-net:
+  payday-saas_traefik-net:
     driver: bridge
