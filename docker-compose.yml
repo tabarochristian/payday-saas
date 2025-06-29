@@ -304,8 +304,8 @@ services:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik-certs:/letsencrypt
-    env_file:
-      - traefik.env
+    environment:
+      - DO_AUTH_TOKEN=dop_v1_e501192ce470dfcdf27b086e23944f30bd809e92dde8c52c29260d43130a0976
     depends_on:
       - wordpress
       - minio
