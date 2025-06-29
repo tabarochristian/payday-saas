@@ -5,40 +5,72 @@ global:
 entryPoints:
   web:
     address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
     transport:
       respondingTimeouts:
-        readTimeout: 0
-        writeTimeout: 0
-        idleTimeout: 0
+        readTimeout: 30s
+        writeTimeout: 30s
+        idleTimeout: 120s
+
   websecure:
     address: ":443"
     transport:
       respondingTimeouts:
-        readTimeout: 0
-        writeTimeout: 0
-        idleTimeout: 0
+        readTimeout: 30s
+        writeTimeout: 30s
+        idleTimeout: 120s
+    http:
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "*.payday.cd"
+            sans:
+              - "payday.cd"
 
 api:
   dashboard: true
-  insecure: false  # Secure dashboard access via HTTPS
+  insecure: false  # Ensure a secure endpoint, consider using a middleware/auth
 
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: "christian@tabaro.me"  # Replace with your email
+      email: "christian@tabaro.me"
       storage: "/letsencrypt/acme.json"
-      httpChallenge:
-        entryPoint: web
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: "0s"
 
 providers:
   docker:
+    endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    network: traefik-net  # Match Docker Compose network
-    constraints: "!Label(`traefik.enable`, `false`)"
+    network: "traefik-net"
+    constraints: "Label(`traefik.enable`, `true`)"
 
 log:
-  level: DEBUG  # Keep for troubleshooting; consider INFO for production
+  level: INFO  # DEBUG in dev, INFO in production
 
 accessLog:
   filePath: "/var/log/traefik/access.log"
   bufferingSize: 100
+  fields:
+    defaultMode: keep
+    headers:
+      defaultMode: redact
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      cipherSuites:
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+      sniStrict: true
