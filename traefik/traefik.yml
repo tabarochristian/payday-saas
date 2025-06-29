@@ -43,7 +43,7 @@ certificatesResolvers:
       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: digitalocean
-        delayBeforeCheck: "0s"
+        delayBeforeCheck: "30s"
 
 providers:
   docker:
@@ -52,7 +52,7 @@ providers:
     constraints: "Label(`traefik.enable`, `true`)"
 
 log:
-  level: INFO
+  level: DEBUG
 
 accessLog:
   filePath: "/var/log/traefik/access.log"
