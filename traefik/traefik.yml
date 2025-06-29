@@ -28,8 +28,6 @@ entryPoints:
         certResolver: letsencrypt
         domains:
           - main: "*.payday.cd"
-            sans:
-              - "payday.cd"
 
 api:
   dashboard: true
@@ -44,6 +42,9 @@ certificatesResolvers:
       dnsChallenge:
         provider: digitalocean
         delayBeforeCheck: "30s"
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
 
 providers:
   docker:
