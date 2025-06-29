@@ -305,7 +305,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik-certs:/letsencrypt
     environment:
-      - DO_AUTH_TOKEN=dop_v1_35fdf76e3758f668b7eabe39713a3ea806933a229953d535da7f897e580f5c9a
+      - DO_AUTH_TOKEN=dop_v1_eb32095b58542f15793ccbb4243adc2fb17cdd78fe8b1a7533a238d7389b2532
     depends_on:
       - wordpress
       - minio
