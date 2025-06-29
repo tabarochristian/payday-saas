@@ -26,6 +26,10 @@ entryPoints:
     http:
       tls:
         certResolver: letsencrypt
+        domains:
+          - main: "*.payday.cd"
+            sans:
+              - "payday.cd"
 
 api:
   dashboard: true
@@ -43,11 +47,6 @@ certificatesResolvers:
         resolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
-      certificates:
-        - domains:
-            - main: "*.payday.cd"
-              sans:
-                - "payday.cd"
 
 providers:
   docker:
