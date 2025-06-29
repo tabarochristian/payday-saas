@@ -306,7 +306,6 @@ services:
       - traefik-certs:/letsencrypt
     environment:
       - DO_AUTH_TOKEN=${DO_AUTH_TOKEN}
-      
     depends_on:
       - wordpress
       - minio
