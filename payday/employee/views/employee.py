@@ -13,12 +13,14 @@ class Employee(Change):
     
     template_name = "employee/change.html"
 
-    def get_model(self):
-        return apps.get_model('employee', model_name='employee')
+    @property
+    def model_class(self):
+        """Return the model class from URL kwargs."""
+        return apps.get_model("employee", model_name="employee")
 
     def get_list_display_fields(self):
         """Retrieve fields in `list_display`, preserving their order."""
-        model_class = apps.get_model('employee', 'employee')
+        model_class = self.model_class
         list_display = getattr(model_class, 'list_display', [])
         fields = {field.name: field for field in model_class._meta.get_fields() if field.name in list_display}
         return [fields[name] for name in list_display if name in fields]  # Preserves order
@@ -26,7 +28,7 @@ class Employee(Change):
     def get_missed_value_form(self):
         """Build a dynamic form for public fields missing values."""
         public_fields = ["spouse", "payment_account", "physical_address", "emergency_information"]
-        model_class = apps.get_model('employee', 'employee')
+        model_class = self.model_class
         try:
             employee_instance = model_class.objects.get(pk=self.kwargs['pk'])
         except model_class.DoesNotExist:

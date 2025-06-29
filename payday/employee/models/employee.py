@@ -54,9 +54,7 @@ class Employee(BaseEmployee):
 
     registration_number = fields.CharField(
         _('matricule'), 
-        max_length=50, 
-        primary_key=True, 
-        unique=True, 
+        max_length=50,
         default=default_registration_number
     )
 
@@ -136,7 +134,7 @@ class Employee(BaseEmployee):
     )
 
     def payslips(self):
-        model = apps.get_model('payroll', 'payslip')
+        model = apps.get_model('payroll', 'paidemployee')
         return model.objects.filter(**{'employee__registration_number': self.registration_number})
     
     def attendances(self, filter = {}):
@@ -146,10 +144,10 @@ class Employee(BaseEmployee):
     @property
     def get_action_buttons(self):
         return [{
-            'url': reverse_lazy('core:list', kwargs={'app': 'payroll', 'model': 'payslip'}) + '?employee__registration_number=' + self.registration_number,
-            'permission': 'payroll.view_payslip',
-            'classes': 'btn btn-light-info',
+            'url': reverse_lazy('core:list', kwargs={'app': 'payroll', 'model': 'paidemployee'}) + f'?employee__registration_number={self.registration_number}',
+            'permission': 'payroll.view_paidemployee',
             'text': _('bulletins de paie').title(),
+            'classes': 'btn btn-light-info',
             'tag': 'a',
         }]
     
@@ -199,3 +197,4 @@ class Employee(BaseEmployee):
     class Meta:
         verbose_name = _('employé')
         verbose_name_plural = _('employés')
+        unique_together = ["sub_organization", "registration_number"]

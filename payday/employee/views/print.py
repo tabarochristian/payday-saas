@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from core.views import BaseView
+from core.views import BaseViewMixin
+
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.admin.models import LogEntry
 from employee.models import Employee
 
 
-class EmployeePrint(BaseView):
+class EmployeePrint(BaseViewMixin):
     """
     A view for printing an employee's details along with its activity logs.
 

@@ -19,8 +19,9 @@ class Notifications(core_views.List):
         action (list): The list of allowed actions for this view (e.g., ['view']).
     """
     action = ['view']
-
-    def get_model(self):
+    
+    @property
+    def model_class(self):
         app, model = 'notifications', 'notification'
         return apps.get_model(app, model_name=model)
 
@@ -41,7 +42,7 @@ class Notifications(core_views.List):
         Returns:
             list: A sorted list of field objects, based on a predefined ordering.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         list_display = ['actor', 'verb', 'description', 'unread', 'timestamp']
         list_display_order = {field: i for i, field in enumerate(list_display)}
         # Filter the model's fields to include only those specified in "list_display" and sort them.

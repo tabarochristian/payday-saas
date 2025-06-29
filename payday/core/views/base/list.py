@@ -6,12 +6,12 @@ from django.urls import reverse_lazy
 from core.filters import filter_set_factory
 from core.forms.button import Button
 from django.contrib import messages
-from .base import BaseView
+from .base import BaseViewMixin
 import logging
 
 logger = logging.getLogger(__name__)
 
-class List(BaseView):
+class List(BaseViewMixin):
     action = ["view"]
     template_name = "list.html"
 
@@ -20,7 +20,7 @@ class List(BaseView):
         Middleware-style permission check before processing the request.
         If the user lacks view permission, they are redirected to the home page with a warning.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         view_perm = f"{model_class._meta.app_label}.view_{model_class._meta.model_name}"
 
         if not request.user.has_perm(view_perm):
@@ -63,11 +63,11 @@ class List(BaseView):
 
     def get_list_filter(self):
         """Retrieve filtering fields from the model."""
-        return getattr(self.get_model(), 'list_filter', [])
+        return getattr(self.model_class(), 'list_filter', [])
 
     def get_list_display(self):
         """Retrieve and order display fields defined in the model."""
-        model_class = self.get_model()
+        model_class = self.model_class()
         list_display = getattr(model_class, 'list_display', [])
         order_map = {name: i for i, name in enumerate(list_display)}
 
@@ -78,7 +78,7 @@ class List(BaseView):
 
     def widgets(self):
         """Retrieve related widgets if the user has view permissions."""
-        model_class = self.get_model()
+        model_class = self.model_class()
         app_label, model_name = model_class._meta.app_label.lower(), model_class._meta.model_name.lower()
         required_permission = f"{app_label}.view_{model_name}"
 

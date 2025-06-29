@@ -29,9 +29,10 @@ class Preview(Change):
     """
     template_name = "payroll/preview.html"
     PAYROLL_STATUSES = ("IN_PROGRESS", "COMPLETED", "ERROR", "APPROVED", "REJECTED")
-
-    def get_model(self):
-        """Returns the Payroll model."""
+    
+    @property
+    def model_class(self):
+        """Return the model class from URL kwargs."""
         return apps.get_model("payroll", model_name="payroll")
 
     def get_action_buttons(self):
@@ -54,8 +55,8 @@ class Preview(Change):
             attrs={
                 "type": "submit",
                 "form": f"form-{kwargs['model']}",
-                "name": "status",
                 "value": "IN_PROGRESS",
+                "name": "status"
             },
         )
         buttons.append(start_button)
@@ -95,7 +96,7 @@ class Preview(Change):
 
         try:
             self.kwargs.update({"app": "payroll", "model": "payroll"})
-            model_class = self.get_model()
+            model_class = self.model_class
             payroll_obj = get_object_or_404(model_class, pk=pk)
 
             paid_employee_model = apps.get_model("payroll", "paidemployee")
@@ -126,7 +127,7 @@ class Preview(Change):
 
         try:
             self.kwargs.update({"app": "payroll", "model": "payroll"})
-            model_class = self.get_model()
+            model_class = self.model_class
             payroll_obj = get_object_or_404(model_class, pk=pk)
 
             data = request.POST.dict()

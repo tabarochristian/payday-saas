@@ -1,13 +1,11 @@
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
-from django.http import Http404
 from django.contrib import messages
-from django.urls import reverse_lazy
+
 from core.forms import modelform_factory
 from core.forms.button import Button
-from core.models import Preference
-from .change import Change
-from .base import BaseView
+from django.urls import reverse_lazy
+from .change import Change, BaseViewMixin
 
 class Read(Change):
     """
@@ -21,14 +19,14 @@ class Read(Change):
         Check if the user has permission to view the model instance.
         If not, redirect to the home page with a warning message.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         _perm = f"{model_class._meta.app_label}.view_{model_class._meta.model_name}"
 
         if not request.user.has_perm(_perm):
             messages.warning(request, _("Vous n'avez pas la permission de modifier cet objet."))
             return redirect(reverse_lazy("core:home"))
 
-        return BaseView.dispatch(self, request, *args, **kwargs)
+        return BaseViewMixin.dispatch(self, request, *args, **kwargs)
 
     
     def get_action_buttons(self, obj=None):
@@ -71,7 +69,7 @@ class Read(Change):
         Returns:
             HttpResponse: Rendered read-only template.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         obj = self._get_object()
 
         if not obj:

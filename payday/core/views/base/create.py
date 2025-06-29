@@ -6,32 +6,32 @@ from django.db import transaction
 from django.contrib.admin.models import ADDITION
 from core.forms import modelform_factory, InlineFormSetHelper
 from core.forms.button import Button
-from .base import BaseView
+from .base import BaseViewMixin
 import logging
 import uuid
 
 logger = logging.getLogger(__name__)
 
-class Create(BaseView):
+class Create(BaseViewMixin):
     """
     Enhanced view for creating model instances with improved form handling and validation.
     """
-    template_name = "create.html"
     inline_formset_helper = InlineFormSetHelper()
+    template_name = "create.html"
     action = ["add"]
 
     def dispatch(self, request, *args, **kwargs):
         """
         Validates user permissions before processing the request.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         add_perm = f"{model_class._meta.app_label}.add_{model_class._meta.model_name}"
 
         if not request.user.has_perm(add_perm):
             messages.warning(request, _("Vous n'avez pas la permission de créer cet objet."))
             return redirect(reverse_lazy("core:home"))
         
-        self.next = request.GET.get('next')
+        self.next = request.GET.dict().get('next', None)
         return super().dispatch(request, *args, **kwargs)
 
     def get_action_buttons(self, obj=None):
@@ -67,7 +67,7 @@ class Create(BaseView):
         ]
 
         # Handle model-specific extra buttons
-        model = self.get_model()
+        model = self.model_class
         get_action_buttons = getattr(obj, 'get_action_buttons', [])
         extra_buttons = [Button(**button) for button in get_action_buttons]
 
@@ -75,15 +75,28 @@ class Create(BaseView):
 
     def get_initial_data(self, request):
         """
-        Generates initial data for the form.
-        
+        Efficiently generates initial form data by combining safe user context,
+        GET parameters, and suborganization configuration.
+
+        Args:
+            request (HttpRequest): Incoming HTTP request
+
         Returns:
-            Dict containing initial form data.
+            dict: Prepopulated form data for the form.
         """
-        return {
-            'employee': getattr(request.user, 'employee', None),
-            **request.GET.dict()
-        }
+        initial = request.GET.dict()
+
+        # Include employee if attached to the user
+        if hasattr(request.user, 'employee'):
+            initial['employee'] = request.user.employee
+
+        # Attach sub_organization if applicable and defined
+        suborg = getattr(self.request, 'suborganization', None)
+        suborgs_enabled = getattr(self.request, 'suborganizations', None)
+        if suborgs_enabled and suborg:
+            initial['sub_organization'] = suborg.name
+        return initial
+
 
     def validate_form(self, form, formsets):
         """
@@ -98,9 +111,13 @@ class Create(BaseView):
         """
         Handles GET requests with optimized form initialization.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
-        form = self.filter_form(FormClass(initial=self.get_initial_data(request)))
+
+        form = self.filter_form(
+            FormClass(initial=self.get_initial_data(request))
+        )
+
         formsets = [formset() for formset in self.formsets()]
         action_buttons = self.get_action_buttons()
         
@@ -111,14 +128,16 @@ class Create(BaseView):
         """
         Processes POST requests with atomic transactions and comprehensive error handling.
         """
-        model_class = self.get_model()
         action_buttons = self.get_action_buttons()
+        model_class = self.model_class
+        
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
-        form = self.filter_form(FormClass(
-            request.POST,
-            request.FILES,
-            initial=self.get_initial_data(request)
-        ))
+        form = self.filter_form(
+            FormClass(
+                request.POST, request.FILES,
+                initial=self.get_initial_data(request)
+            )
+        )
         formsets = [formset(request.POST, request.FILES) for formset in self.formsets()]
 
         # Validate forms and formsets

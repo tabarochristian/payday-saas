@@ -65,9 +65,9 @@
             <div class="page-break">
                 <div class="row">
                     <div class="col-6">
-                        {% if obj.employee.organization.logo %}
-                            <img src="{{ obj.employee.organization.logo.url }}"
-                                 alt="{{ obj.employee.organization.name }}"
+                        {% if obj.employee.sub_organization %}
+                            <img src="{{ obj.employee.sub_organization_obj.logo.url }}"
+                                 alt="{{ obj.employee.sub_organization|default:"Payday" }}"
                                  class="organization-logo img-fluid mb-3"
                                  loading="lazy">
                         {% endif %}
@@ -144,8 +144,8 @@
                                             <tr>
                                                 <td>{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
-                                                <td>{{ item.rate }}</td>
-                                                <td>{{ item.time }}</td>
+                                                <td>{{ item.rate|floatformat:0 }}</td>
+                                                <td>{{ item.time|floatformat:0 }}</td>
                                                 <td>{{ item.amount_qp_employee|floatformat:"0"|intcomma }}</td>
                                             </tr>
                                         {% endif %}

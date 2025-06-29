@@ -67,7 +67,7 @@ class SubOrganizationMiddleware(MiddlewareMixin):
         Dynamically retrieves the SubOrganization model.
         """
         try:
-            return apps.get_model("core", "SubOrganization")
+            return apps.get_model("core", "suborganization")
         except LookupError as e:
             logger.error(f"SubOrganization model not found: {e}")
             return None

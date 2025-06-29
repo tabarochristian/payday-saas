@@ -2,14 +2,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import gettext as _
 from django.http import HttpResponse
+from core.views import BaseViewMixin
 from django.contrib import messages
-from core.views import BaseView
 
-import xlsxwriter
 from io import BytesIO
+import xlsxwriter
 
-
-class Canvas(BaseView):
+class Canvas(BaseViewMixin):
     """
     A view responsible for generating an Excel file (canvas) based on a given model's layout.
     
@@ -35,9 +34,9 @@ class Canvas(BaseView):
         '_metadata',
         
         # Employee excluded fields
-        'photo',
-        'devices',
         'create_user_on_save'
+        'devices',
+        'photo',
     ]
     EXCLUDED_FIELD_TYPES = [
         'AutoField', 

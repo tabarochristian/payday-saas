@@ -14,6 +14,7 @@ class PaidEmployee(Employee):
         default=None, 
         on_delete=models.CASCADE
     )
+    
     employee = fields.ModelSelectField(
         'employee.employee', 
         verbose_name=_('employé'), 

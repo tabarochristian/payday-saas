@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.apps import apps
 import pandas as pd
-from core.views import BaseView
+from core.views import BaseViewMixin
 from django.db.models import F
 import logging
 
@@ -32,7 +32,7 @@ def intcomma(value):
         return str(value)
 
 
-class Listing(BaseView):
+class Listing(BaseViewMixin):
     """
     A performance-optimized view for generating a payroll listing as an HTML table.
 

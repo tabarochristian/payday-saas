@@ -9,7 +9,7 @@ from django.apps import apps
 
 from core.filters import filter_set_factory
 from core.models import Base
-from .base.base import BaseView
+from .base.base import BaseViewMixin
 
 
 # Helper functions
@@ -28,7 +28,7 @@ def remove_special_chars(value):
     return value
 
 
-class Exporter(BaseView):
+class Exporter(BaseViewMixin):
     """
     A view that exports data from a given model to an Excel file.
     
@@ -51,7 +51,7 @@ class Exporter(BaseView):
         Returns:
             list: A list of field objects that are editable and not excluded.
         """
-        model_class = self.get_model()
+        model_class = self.model_class()
         excluded_fields = [field.name for field in Base._meta.fields]
         return [
             field for field in model_class._meta.fields 

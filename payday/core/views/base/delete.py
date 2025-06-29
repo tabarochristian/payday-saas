@@ -1,19 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import Http404
+
 from django.contrib.admin.models import LogEntry, DELETION
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
-from django.db import transaction
 from core.forms.button import Button
 from django.db import connection
-from .base import BaseView
+from .base import BaseViewMixin
 import logging
 
 logger = logging.getLogger(__name__)
 
-class Delete(BaseView):
+class Delete(BaseViewMixin):
     """
     View for handling deletion of model objects based on GET query parameters.
 
@@ -42,7 +42,7 @@ class Delete(BaseView):
         Returns:
             HttpResponse: Redirects to home if permission is lacking, else proceeds.
         """
-        model_class = self.get_model()
+        model_class = self.model_class
         delete_perm = f"{model_class._meta.app_label}.delete_{model_class._meta.model_name}"
 
         if not request.user.has_perm(delete_perm):
@@ -87,7 +87,7 @@ class Delete(BaseView):
 
         # Handle model-specific extra buttons
         extra_buttons = []
-        model = self.get_model()
+        model = self.model_class
         return [btn for btn in buttons + extra_buttons]
 
     def _build_query_params(self, request):
@@ -112,7 +112,7 @@ class Delete(BaseView):
         query = request.GET.dict()
         query.pop('next', None)
 
-        model_fields += list({field.name for field in self.get_model()._meta.fields})
+        model_fields += list({field.name for field in self.model_class._meta.fields})
 
         for key, value in query.items():
             field_name = key.split('__')[0]
@@ -140,7 +140,7 @@ class Delete(BaseView):
             Http404: If no query parameters are provided.
         """
         try:
-            model_class = self.get_model()
+            model_class = self.model_class
             query_params = self._build_query_params(request)
 
             if not query_params:
@@ -210,7 +210,7 @@ class Delete(BaseView):
             Http404: If no query parameters are provided.
         """
         try:
-            model_class = self.get_model()
+            model_class = self.model_class
             query_params = self._build_query_params(request)
 
             if not query_params:

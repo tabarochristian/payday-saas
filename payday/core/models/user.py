@@ -11,15 +11,11 @@ from core.models import fields
 # 🔧 Utility function for dynamic select choices
 def get_category_choices():
     try:
-        Category = apps.get_model('core', 'suborganization')
-        return list(
-            Category.objects.order_by('name')
-            .values_list('pk', 'name')
-            .distinct()
-        )
+        SubOrganization = apps.get_model('core', 'suborganization')
+        qs = set(SubOrganization.objects.values_list('name', flat=True))
+        return [(c, c) for c in qs]
     except Exception as ex:
         return []
-
 
 # 👤 Custom User model
 class User(AbstractUser):

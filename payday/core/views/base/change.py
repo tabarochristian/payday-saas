@@ -8,13 +8,13 @@ from django.db import transaction
 from django.http import Http404
 
 from core.forms.button import Button
-from .base import BaseView
+from .base import BaseViewMixin
 from copy import deepcopy
 import logging
 
 logger = logging.getLogger(__name__)
 
-class Change(BaseView):
+class Change(BaseViewMixin):
     """
     Enhanced view for updating model instances with improved permission handling,
     error management, and form processing.
@@ -28,7 +28,7 @@ class Change(BaseView):
         Validates user permissions before processing the request.
         Redirects to read view if permission is lacking.
         """
-        model_class = self.get_model()
+        model_class = self.model_class()
         change_perm = f"{model_class._meta.app_label}.change_{model_class._meta.model_name}"
 
         if not request.user.has_perm(change_perm):
@@ -44,7 +44,7 @@ class Change(BaseView):
         Raises:
             Http404: If instance not found or no PK provided.
         """
-        model_class = self.get_model()
+        model_class = self.model_class()
         pk = self.kwargs.get('pk')
         
         if not pk:
@@ -107,12 +107,37 @@ class Change(BaseView):
             bool: True if validation passes, False otherwise.
         """
         return True
+    
+    def get_initial_data(self, request):
+        """
+        Efficiently generates initial form data by combining safe user context,
+        GET parameters, and suborganization configuration.
+
+        Args:
+            request (HttpRequest): Incoming HTTP request
+
+        Returns:
+            dict: Prepopulated form data for the form.
+        """
+        initial = request.GET.dict()
+
+        # Include employee if attached to the user
+        if hasattr(request.user, 'employee'):
+            initial['employee'] = request.user.employee
+
+        # Attach sub_organization if applicable and defined
+        suborg = getattr(self.request, 'suborganization', None)
+        suborgs_enabled = getattr(self.request, 'suborganizations', None)
+        if suborgs_enabled and suborg:
+            initial['sub_organization'] = suborg.pk
+
+        return initial
 
     def get(self, request, app, model, pk):
         """
         Handles GET requests with optimized form and formset initialization.
         """
-        model_class = self.get_model()
+        model_class = self.model_class()
         obj = self._get_object()
 
         # Handle notification-specific behavior
@@ -121,7 +146,11 @@ class Change(BaseView):
             return redirect(obj.target.get_absolute_url() if obj.target else reverse_lazy('core:notifications'))
 
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
-        form = self.filter_form(FormClass(instance=obj))
+        form = self.filter_form(
+            FormClass(
+                instance=obj
+            )
+        )
 
         formsets = [formset(instance=obj) for formset in self.formsets()]
         action_buttons = self.get_action_buttons(obj)
@@ -133,13 +162,19 @@ class Change(BaseView):
         """
         Processes POST requests with atomic transactions and comprehensive error handling.
         """
-        model_class = self.get_model()
+        model_class = self.model_class()
         obj = self._get_object()
         _obj = deepcopy(obj)
         
         action_buttons = self.get_action_buttons(obj)
         FormClass = modelform_factory(model_class, fields=self.get_form_fields())
-        form = self.filter_form(FormClass(request.POST, request.FILES, instance=obj))
+        form = self.filter_form(
+            FormClass(
+                request.POST, 
+                request.FILES, 
+                instance=obj
+            )
+        )
         formsets = [formset(request.POST, request.FILES, instance=obj) for formset in self.formsets()]
 
         # Validate forms and formsets

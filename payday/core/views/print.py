@@ -6,11 +6,10 @@ from django.template import Context, Template
 from django.contrib import messages
 from django.apps import apps
 
+from core.views import BaseViewMixin
 from core import models
-from core.views import BaseView
 
-
-class Print(BaseView):
+class Print(BaseViewMixin):
     """
     A view that generates and returns a printed/exported version of model objects
     based on the selected query parameters and a document template.

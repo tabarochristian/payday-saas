@@ -205,7 +205,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 TIME_ZONE = os.getenv("TIME_ZONE", "Africa/Kinshasa")
-LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "fr-cd")
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "fr")
 
 USE_I18N = True
 USE_TZ = True

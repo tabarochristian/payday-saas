@@ -1,12 +1,9 @@
 from employee.models.managers import AttendanceManager
 from django.utils.translation import gettext as _
-from django.contrib.auth import get_user_model
 from crispy_forms.layout import Layout
 from core.models import fields, Base
 from django.urls import reverse_lazy
 from django.db import models
-
-from django.contrib.contenttypes.fields import GenericForeignKey
 
 class Attendance(Base):
     device = fields.ModelSelectField('device.Device', verbose_name=_('dispositif'), blank=True, null=True, on_delete=models.DO_NOTHING)

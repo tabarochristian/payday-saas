@@ -13,7 +13,8 @@ class ActivityLog(List):
     rendering.
     """
 
-    def get_model(self):
+    @property
+    def model_class(self):
         return LogEntry
 
     def get_list_display(self, model):

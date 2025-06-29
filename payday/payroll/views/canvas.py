@@ -2,7 +2,7 @@
 
 from employee.models import Employee
 from django.http import HttpResponse
-from core.views import BaseView
+from core.views import BaseViewMixin
 import pandas as pd
 
 from django.db.models import F, Value as V, CharField
@@ -19,7 +19,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Canvas(BaseView):
+class Canvas(BaseViewMixin):
     """
     A high-performance view for generating Excel exports of employee data.
 

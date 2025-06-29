@@ -1,14 +1,16 @@
 from django.utils.translation import gettext as _
 from core.models import ImporterStatus, Importer
-from django.urls import reverse_lazy
 from django.template import loader
 from notifications import signals
+from core.utils import set_schema
 from celery import shared_task
 import pandas as pd
 import numpy as np
 
 @shared_task(name='importer')
-def importer(pk):
+def importer(pk, schema=None):
+    if schema:
+        set_schema(schema)
     obj = Importer.objects.get(pk=pk)
 
     if not user_has_permission(obj):
@@ -71,6 +73,7 @@ def process_excel_file(obj, fields):
     # Add constant values to all rows
     df['created_by_id'] = obj.created_by.id
     df['updated_by_id'] = obj.created_by.id
+    
 
     # Convert related fields to foreign key ids using mapping
     pks = {field.name: field.remote_field.model._meta.pk.name

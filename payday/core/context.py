@@ -62,6 +62,7 @@ def base(request):
         'description': _('Les notifications qui vous sont destinées.')
     }))
     
+    is_staff = request.user.is_superuser or request.user.is_staff
     menu.insert(len(menu), dict({
         'class': 'active',
         'title': _('Paramètres'),
@@ -69,12 +70,6 @@ def base(request):
         'icon': 'bi-gear-fill',
         'description': _('Paramètres de votre organisation.'),
         'children': [item for item in [
-        #{
-        #    'title': _('Menus'),
-        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'menu'}),
-        #    'permission': 'core.view_menu',
-        #    'description': _('Faite la disposition de vos menus.')
-        #}, 
         {
             'title': _('Sous-organisation'),
             'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'suborganization'}),
@@ -120,12 +115,6 @@ def base(request):
             'description': _('Gérez vos terminaux de presence'),
             'permission': 'device.view_device',
         }, 
-        #{
-        #    'title': _('Job'),
-        #    'href': reverse_lazy('core:list', kwargs={'app': 'core', 'model': 'job'}),
-        #    'permission': 'core.view_job',
-        #    'description': _('Mettez en place des tâches automatisées.')
-        #}, 
         {
             'title': _('Flux d’approbation'),
             'permission': 'core.view_workflow',
@@ -143,7 +132,7 @@ def base(request):
             'href': reverse_lazy('core:activity-log'),
             'permission': 'admin.view_logentry',
             'description': _('Consultez l\'historique des activités.')
-        }] if request.user.is_superuser or request.user.is_staff] # if request.user.has_perm(item.get('permission'))]
+        }] if is_staff and request.user.has_perm(item.get('permission'))]
     }))
     
     menu.append(dict({

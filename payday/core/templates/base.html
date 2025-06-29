@@ -108,6 +108,13 @@
                                     </a>
 
                                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                                        <li
+                                            class="dropdown-item sub-organization-item" 
+                                            data-value="None" 
+                                            data-url="{% url 'api:set-session' %}"
+                                            data-key="sub_organization">
+                                            {% trans "Sous-organisation" %}
+                                        </li>
                                        {% for suborganization in request.suborganizations %}
                                              <li
                                                 class="dropdown-item sub-organization-item" 

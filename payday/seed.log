@@ -638,3 +638,25 @@
 2025-06-02 13:14:47,913 - INFO - core.management.commands.seed - Created 5 new payslip elements
 2025-06-02 13:14:47,914 - INFO - core.management.commands.seed - Processed 5 payslip elements
 2025-06-02 13:14:47,914 - INFO - core.management.commands.seed - Data seeding completed successfully
+2025-06-29 07:34:56,269 - INFO - core.management.commands.seed - Starting data seeding process
+2025-06-29 07:34:56,271 - INFO - core.management.commands.seed - Created 4 new grades
+2025-06-29 07:34:56,271 - INFO - core.management.commands.seed - Processed 4 grades
+2025-06-29 07:34:56,272 - INFO - core.management.commands.seed - Created 5 new statuses
+2025-06-29 07:34:56,273 - INFO - core.management.commands.seed - Processed 5 statuses
+2025-06-29 07:34:56,274 - INFO - core.management.commands.seed - Created 5 new branches
+2025-06-29 07:34:56,274 - INFO - core.management.commands.seed - Processed 5 branches
+2025-06-29 07:34:56,275 - INFO - core.management.commands.seed - Created 5 new agreements
+2025-06-29 07:34:56,275 - INFO - core.management.commands.seed - Processed 5 agreements
+2025-06-29 07:34:56,277 - INFO - core.management.commands.seed - Created 5 new directions
+2025-06-29 07:34:56,277 - INFO - core.management.commands.seed - Processed 5 directions
+2025-06-29 07:34:56,279 - INFO - core.management.commands.seed - Created 5 new designations
+2025-06-29 07:34:56,279 - INFO - core.management.commands.seed - Processed 5 designations
+2025-06-29 07:34:56,310 - INFO - core.management.commands.seed - Created 50 new employees
+2025-06-29 07:34:56,312 - INFO - core.management.commands.seed - Processed 50 employees
+2025-06-29 07:34:56,313 - INFO - core.management.commands.seed - Created 6 new leave types
+2025-06-29 07:34:56,313 - INFO - core.management.commands.seed - Processed 6 leave types
+2025-06-29 07:34:56,314 - INFO - core.management.commands.seed - Created 4 new legal payslip elements
+2025-06-29 07:34:56,315 - INFO - core.management.commands.seed - Processed 4 legal payslip elements
+2025-06-29 07:34:56,316 - INFO - core.management.commands.seed - Created 5 new payslip elements
+2025-06-29 07:34:56,316 - INFO - core.management.commands.seed - Processed 5 payslip elements
+2025-06-29 07:34:56,316 - INFO - core.management.commands.seed - Data seeding completed successfully

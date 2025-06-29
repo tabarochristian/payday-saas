@@ -35,7 +35,7 @@ class PayrollProcessor:
         logger.info(f"Starting payroll processing for payroll ID {self.payroll.id}")
         start_time = time.time()
         try:
-            self.statuses = ["en service"] #self.payroll.employee_status.all().values_list('name', flat=True).distinct()
+            self.statuses = self.payroll.employee_status.all().values_list('name', flat=True).distinct()
             logger.debug(f"Retrieved {len(self.statuses)} employee statuses")
             df = self._get_employee_data()
             df = self._merge_with_native_attendance(df)
@@ -62,7 +62,7 @@ class PayrollProcessor:
         ]
 
     def _get_employee_queryset(self):
-        fields = [f.name for f in EmployeeModel._meta.fields if f.name not in self.exclude_fields]
+        fields = ["pk"] + [f.name for f in EmployeeModel._meta.fields if f.name not in self.exclude_fields]
         
         annotate_fields = {
             "working_days_per_month": models.functions.Coalesce(
@@ -72,8 +72,11 @@ class PayrollProcessor:
         }
     
         logger.debug(f"Building employee queryset with fields: {fields}")
+        qs = EmployeeModel.objects.all()
+        if self.statuses:
+            qs = qs.filter(status__name__in=self.statuses)
         return (
-            EmployeeModel.objects.filter(status__name__in=self.statuses)
+            qs.filter(sub_organization=self.payroll.sub_organization)
             .annotate(**annotate_fields)
             .values(*fields, *annotate_fields.keys())
         )
@@ -97,8 +100,12 @@ class PayrollProcessor:
 
             # Rename columns
             df.columns = [self._get_field_name(col) for col in df.columns]
-            df["employee_id"] = df["registration_number"]
+            df["sub_organization"] = self.payroll.sub_organization
             df["payroll_id"] = self.payroll.id
+            df["employee_id"] = df["pk"]
+
+            # delete the column pk
+            del df["pk"]
 
             logger.debug("Employee data formatted successfully")
             return df
@@ -118,7 +125,7 @@ class PayrollProcessor:
                 Attendance.objects.filter(
                     checked_at__date__range=(self.payroll.start_dt, self.payroll.end_dt),
                     count__gte=2
-                )
+                ).filter(sub_organization=self.payroll.sub_organization)
                 .values("employee__registration_number")
                 .annotate(attendance=models.Count("employee__registration_number"))
             )

@@ -1,8 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.layout import Layout, Column, Row
-from core.models import Base, fields
 from django.core.exceptions import ValidationError
-
+from core.models import Base, fields
 
 class TypeOfLeave(Base):
     name = fields.CharField(
@@ -32,6 +31,7 @@ class TypeOfLeave(Base):
 
     list_display = ('id', 'name', 'min_duration', 'max_duration', 'eligibility_after_days', 'updated_at')
     layout = Layout(
+        # 'sub_organization',
         'name',
         'description',
         Row(

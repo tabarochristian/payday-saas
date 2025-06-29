@@ -1,16 +1,14 @@
-import logging, re
-from django.db import models
-from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.layout import Layout, Column, Row
-from core.models.managers import PaydayManager
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
+from core.models import fields, Base
 from django.urls import reverse_lazy
-from django.db import transaction
 from core.models import fields
-from django.apps import apps
+from django.db import models
+import logging, re
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +49,7 @@ class ApprovalManager(models.Manager):
     def get_queryset(self):
         return ApprovalQuerySet(self.model, using=self._db)
 
-class Approval(models.Model):
+class Approval(Base):
     workflow = fields.ModelSelectField(
         "core.workflow",
         on_delete=models.SET_NULL,

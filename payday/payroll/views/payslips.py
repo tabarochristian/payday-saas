@@ -1,26 +1,27 @@
-from django.shortcuts import render, redirect
-from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Count, Sum
+from django.utils.translation import gettext_lazy as _
+from django.shortcuts import render, redirect
+from payroll.filters import PayslipFilter
 from django.urls import reverse_lazy
+from core.forms.button import Button
 from django.contrib import messages
 from django.apps import apps
-from payroll.filters import PayslipFilter
-from core.forms.button import Button
-from core.views import Change
+from core.views import Read
 import logging
 
 logger = logging.getLogger(__name__)
 
-class Payslips(Change):
+class Payslips(Read):
     """
     Handles bulk payslip operations with filtering, pagination, and custom actions.
     """
     template_name = "payroll/payslips.html"
     PAGINATION_COUNT = 1000
-
-    def get_model(self):
-        return apps.get_model("payroll", "Payroll")
+    
+    @property
+    def model_class(self):
+        """Return the model class from URL kwargs."""
+        return apps.get_model("payroll", model_name="payroll")
 
     def dispatch(self, request, *args, **kwargs):
         self.next = request.GET.get("next")
@@ -29,30 +30,8 @@ class Payslips(Change):
     def get_action_buttons(self, obj=None):
         obj = obj or self._get_object()
         app, model = "payroll", "payslip"
-        
-        # Aggregate payment data
-        payment = obj.paidemployee_set.aggregate(
-            count=Count("payment_method"),
-            amount=Sum("net")
-        ) or {"count": 0, "amount": 0}
 
         buttons = [
-            Button(
-                tag="button",
-                text=_("Envoyer à la banque 🚀"),
-                classes="btn btn-success dropdown-toggle",
-                permission=f"{app}.view_{model}",
-                dropdown=[
-                    Button(
-                        tag="a",
-                        text=_("EasyPay"),
-                        url=reverse_lazy("core:create", kwargs={"app": "easypay", "model": "mobile"})
-                            + f"?payroll={obj.pk}&amount_total={payment['amount']}&count={payment['count']}",
-                        classes="dropdown-item",
-                        permission=f"{app}.view_{model}"
-                    ),
-                ]
-            ),
             Button(
                 tag="button",
                 text=_("Synthèse"),
@@ -89,6 +68,16 @@ class Payslips(Change):
                     "onclick": f"window.location.href = '{reverse_lazy('payroll:slips')}?pk__in=' + getSelectedRows('table').join(',');",
                     "title": _("Sélectionnez des lignes à imprimer")
                 }
+            ),
+            Button(
+                tag='a',
+                text=_('Supprimer'),
+                classes='btn btn-light-danger',
+                permission=f"{app}.view_{model}",
+                url=reverse_lazy('core:delete', kwargs={
+                    'model': self.kwargs['model'],
+                    'app': self.kwargs['app'],
+                }) + f'?pk__in={self.kwargs['pk']}'
             )
         ]
 
@@ -144,21 +133,24 @@ class Payslips(Change):
             # Update kwargs for parent class
             app, model = "payroll", "payroll"
             self.kwargs.update({"app": app, "model": model})
-            model_class = self.get_model()
+            model_class = self.model_class
             
             # Get payroll object
             obj = self._get_object()
             
-            # Filter and paginate
-            qs = obj.paidemployee_set.all().select_related("payroll").prefetch_related("employee")
+            # Filter and paginate (Change the model to paidemployee to fetch the queryset)
+            qs = self.get_queryset(
+                model_class=apps.get_model(app, model_name="paidemployee")
+            ).select_related("payroll").prefetch_related("employee")
+
             filter_set = PayslipFilter(request.GET, queryset=qs)
             self.count = qs.count()
             
             try:
                 paginator = Paginator(filter_set.qs, self.PAGINATION_COUNT)
-                qs = paginator.page(request.GET.get("page", 1))
+                page_obj = paginator.page(request.GET.get("page", 1))
             except (EmptyPage, PageNotAnInteger):
-                qs = paginator.page(1)
+                page_obj = paginator.page(1)
 
             # Call parent get method
             action_buttons = self.get_action_buttons(obj)

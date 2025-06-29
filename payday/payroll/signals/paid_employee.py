@@ -5,6 +5,7 @@ from django.dispatch import receiver
 @receiver(post_delete, sender=PaidEmployee)
 def item_paid_deleted(sender, instance, **kwargs):
     try:
+        instance.update()
         instance.payroll.update()
     except Exception as ex:
         print(ex)

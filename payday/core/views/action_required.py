@@ -18,7 +18,8 @@ class ActionRequired(List):
     """
     action = ['view']
 
-    def get_model(self):
+    @property
+    def model_class(self):
         return apps.get_model('core', model_name='actionrequired')
 
     def get_action_buttons(self):

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.apps import apps
 from django.db.models import Model
 import pandas as pd
-from core.views import BaseView
+from core.views import BaseViewMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 import logging
@@ -29,7 +29,7 @@ def get_name_of_fields(field_list):
     return [field.name for field in field_list]
 
 
-class Synthesis(BaseView):
+class Synthesis(BaseViewMixin):
     """
     A class-based view that generates synthesis reports using pivot tables.
 

@@ -4,14 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render
 from django.http import Http404
 from django.apps import apps
-from django.db.models import Model
-from core.views import BaseView
+from core.views import Read
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class Slips(BaseView):
+class Slips(Read):
     """
     A view that displays payslip information for paid employees.
 
@@ -23,6 +22,11 @@ class Slips(BaseView):
     """
     template_name = "payroll/slip.html"
 
+    @property
+    def model_class(self):
+        """Return the model class from URL kwargs."""
+        return apps.get_model("payroll", model_name="paidemployee")
+
     def get(self, request):
         """
         Handle GET requests to display payslips.
@@ -30,13 +34,11 @@ class Slips(BaseView):
         logger.info("User %s requested payslip(s)", request.user)
 
         # Set app/model context
-        app = "payroll"
-        model_name = "paidemployee"
-        self.kwargs.update({"app": app, "model": model_name})
+        self.kwargs.update({"app": "payroll", "model": "paidemployee"})
 
         try:
             # Load model dynamically
-            model_class = apps.get_model(app, model_name)
+            model_class = self.model_class
             logger.debug(f"Loaded model: {model_class.__name__}")
 
             # Extract and sanitize query parameters
