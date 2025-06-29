@@ -40,6 +40,7 @@ certificatesResolvers:
     acme:
       email: "christian@tabaro.me"
       storage: "/letsencrypt/acme.json"
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"  # Staging environment
       dnsChallenge:
         provider: digitalocean
         delayBeforeCheck: "0s"
@@ -48,7 +49,7 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    network: payday-saas_traefik-net
+    network: payday-saas_payday-saas_traefik-net
     constraints: "Label(`traefik.enable`, `true`)"
 
 log:
