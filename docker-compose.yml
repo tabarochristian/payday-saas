@@ -158,11 +158,11 @@ services:
       - "traefik.http.routers.saas-http.service=saas"
       - "traefik.http.routers.saas-http.entrypoints=web"
       - "traefik.http.routers.saas-http.priority=1"
-      - "traefik.http.routers.saas-http.rule=Host(`kazi.payday.cd`) || HostRegexp(`{subdomain:[a-z]+}.payday.cd`)"
+      - 'traefik.http.routers.saas-http.rule=Host(`kazi.payday.cd`) || HostRegexp(`{subdomain:[a-z0-9\\-]+}.payday.cd`)'
       - "traefik.http.routers.saas-https.service=saas"
       - "traefik.http.routers.saas-https.entrypoints=websecure"
       - "traefik.http.routers.saas-https.priority=1"
-      - "traefik.http.routers.saas-https.rule=Host(`kazi.payday.cd`) || HostRegexp(`{subdomain:[a-z]+}.payday.cd`)"
+      - 'traefik.http.routers.saas-https.rule=Host(`kazi.payday.cd`) || HostRegexp(`{subdomain:[a-z0-9\\-]+}.payday.cd`)'
       - "traefik.http.routers.saas-https.tls=true"
       - "traefik.http.routers.saas-https.tls.certresolver=letsencrypt"
       - "traefik.http.routers.saas-https.tls.domains[0].main=*.payday.cd"
