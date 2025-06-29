@@ -1,9 +1,8 @@
-import logging
-
-from django.apps import apps
 from django.utils.deprecation import MiddlewareMixin
 from django.core.cache import cache
 from django.conf import settings
+from django.apps import apps
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +29,9 @@ class SubOrganizationMiddleware(MiddlewareMixin):
         request.suborganizations = suborgs
 
         # Get selected suborg ID from session
-        selected = request.session.get(
-            "sub_organization",
-            getattr(request.user, "sub_organization", None)
-        )
+        user_org = getattr(request.user, "sub_organization", None)
+        selected = request.session.get("sub_organization", None)
+        selected = selected or user_org
 
         selected = (
             next((s for s in suborgs if str(s.id) == str(selected) or s.name == selected), None)

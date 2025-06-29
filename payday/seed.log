@@ -660,3 +660,227 @@
 2025-06-29 07:34:56,316 - INFO - core.management.commands.seed - Created 5 new payslip elements
 2025-06-29 07:34:56,316 - INFO - core.management.commands.seed - Processed 5 payslip elements
 2025-06-29 07:34:56,316 - INFO - core.management.commands.seed - Data seeding completed successfully
+2025-06-29 11:03:33,060 - INFO - core.management.commands.seed - Starting data seeding process
+2025-06-29 11:03:33,061 - INFO - core.management.commands.seed - Returning existing grades
+2025-06-29 11:03:33,062 - INFO - core.management.commands.seed - Processed 4 grades
+2025-06-29 11:03:33,062 - INFO - core.management.commands.seed - Returning existing statuses
+2025-06-29 11:03:33,062 - INFO - core.management.commands.seed - Processed 5 statuses
+2025-06-29 11:03:33,063 - INFO - core.management.commands.seed - Returning existing branches
+2025-06-29 11:03:33,063 - INFO - core.management.commands.seed - Processed 5 branches
+2025-06-29 11:03:33,063 - INFO - core.management.commands.seed - Returning existing agreements
+2025-06-29 11:03:33,063 - INFO - core.management.commands.seed - Processed 5 agreements
+2025-06-29 11:03:33,063 - INFO - core.management.commands.seed - Returning existing directions
+2025-06-29 11:03:33,064 - INFO - core.management.commands.seed - Processed 5 directions
+2025-06-29 11:03:33,064 - INFO - core.management.commands.seed - Returning existing designations
+2025-06-29 11:03:33,064 - INFO - core.management.commands.seed - Processed 5 designations
+2025-06-29 11:03:33,064 - INFO - core.management.commands.seed - Returning existing employees
+2025-06-29 11:03:33,069 - INFO - core.management.commands.seed - Processed 50 employees
+2025-06-29 11:03:33,069 - INFO - core.management.commands.seed - Returning existing leave types
+2025-06-29 11:03:33,070 - INFO - core.management.commands.seed - Processed 8 leave types
+2025-06-29 11:03:33,070 - INFO - core.management.commands.seed - Returning existing legal payslip elements
+2025-06-29 11:03:33,070 - INFO - core.management.commands.seed - Processed 4 legal payslip elements
+2025-06-29 11:03:33,070 - INFO - core.management.commands.seed - Returning existing payslip elements
+2025-06-29 11:03:33,070 - INFO - core.management.commands.seed - Processed 5 payslip elements
+2025-06-29 11:03:33,070 - INFO - core.management.commands.seed - Data seeding completed successfully
+2025-06-29 11:07:06,130 - INFO - seeder - Starting data seeding
+2025-06-29 11:07:06,130 - INFO - seeder - Returning existing grades
+2025-06-29 11:07:06,131 - INFO - seeder - Returning existing statuses
+2025-06-29 11:07:06,131 - INFO - seeder - Returning existing branches
+2025-06-29 11:07:06,131 - INFO - seeder - Returning existing agreements
+2025-06-29 11:07:06,132 - INFO - seeder - Returning existing directions
+2025-06-29 11:07:06,132 - INFO - seeder - Returning existing designations
+2025-06-29 11:07:06,144 - INFO - seeder - Returning existing employees
+2025-06-29 11:07:06,145 - INFO - seeder - Returning existing leave types
+2025-06-29 11:07:06,145 - INFO - seeder - Returning existing legal items
+2025-06-29 11:07:06,145 - INFO - seeder - Returning existing payslip elements
+2025-06-29 11:07:06,146 - INFO - seeder - Seeding completed
+2025-06-29 11:08:37,012 - INFO - seeder - Starting data seeding
+2025-06-29 11:08:37,013 - ERROR - seeder - Failed to create grades: UNIQUE constraint failed: employee_grade.name
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: employee_grade.name
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/management/commands/seed.py", line 95, in get_or_create_objects
+    model.objects.bulk_create(instances, batch_size=CONFIG.BATCH_SIZE)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1836, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: employee_grade.name
+2025-06-29 11:08:37,017 - ERROR - seeder - Seeding failed: UNIQUE constraint failed: employee_grade.name
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: employee_grade.name
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/management/commands/seed.py", line 65, in handle
+    grades = self.get_or_create_fake_grade()
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/management/commands/seed.py", line 134, in get_or_create_fake_grade
+    return self.get_or_create_objects('employee', 'Grade', instances, 'grades')
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/management/commands/seed.py", line 95, in get_or_create_objects
+    model.objects.bulk_create(instances, batch_size=CONFIG.BATCH_SIZE)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 835, in bulk_create
+    returned_columns = self._batched_insert(
+        objs_without_pk,
+    ...<4 lines>...
+        unique_fields=unique_fields,
+    )
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1875, in _batched_insert
+    self._insert(
+    ~~~~~~~~~~~~^
+        item,
+        ^^^^^
+    ...<5 lines>...
+        returning_fields=self.model._meta.db_returning_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1836, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: employee_grade.name
+2025-06-29 11:08:54,232 - INFO - seeder - Starting data seeding
+2025-06-29 11:08:54,233 - INFO - seeder - Returning existing grades
+2025-06-29 11:08:54,233 - INFO - seeder - Returning existing statuses
+2025-06-29 11:08:54,233 - INFO - seeder - Returning existing branches
+2025-06-29 11:08:54,233 - INFO - seeder - Returning existing agreements
+2025-06-29 11:08:54,233 - INFO - seeder - Returning existing directions
+2025-06-29 11:08:54,233 - INFO - seeder - Returning existing designations
+2025-06-29 11:08:54,234 - ERROR - seeder - Seeding failed: object of type 'bool' has no len()
+Traceback (most recent call last):
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/management/commands/seed.py", line 71, in handle
+    employees = self.get_or_create_employee(grades, statuses, branches, agreements, directions, designations)
+  File "/Users/tabaro/Documents/GitHub/payday-saas/payday/core/management/commands/seed.py", line 231, in get_or_create_employee
+    grade=random.choice(grades),
+          ~~~~~~~~~~~~~^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.4/Frameworks/Python.framework/Versions/3.13/lib/python3.13/random.py", line 350, in choice
+    if not len(seq):
+           ~~~^^^^^
+TypeError: object of type 'bool' has no len()
+2025-06-29 11:09:00,853 - INFO - seeder - Starting data seeding
+2025-06-29 11:09:00,854 - INFO - seeder - Created 4 grades
+2025-06-29 11:09:00,857 - INFO - seeder - Created 5 statuses
+2025-06-29 11:09:00,858 - INFO - seeder - Created 5 branches
+2025-06-29 11:09:00,859 - INFO - seeder - Created 5 agreements
+2025-06-29 11:09:00,860 - INFO - seeder - Created 5 directions
+2025-06-29 11:09:00,861 - INFO - seeder - Created 5 designations
+2025-06-29 11:09:00,880 - INFO - seeder - Created 50 employees
+2025-06-29 11:09:00,885 - INFO - seeder - Created 3 leave types
+2025-06-29 11:09:00,886 - INFO - seeder - Created 2 legal items
+2025-06-29 11:09:00,887 - INFO - seeder - Created 5 payslip elements
+2025-06-29 11:09:00,887 - INFO - seeder - Seeding completed
+2025-06-29 11:10:01,861 - INFO - seeder - Starting data seeding
+2025-06-29 11:10:01,862 - INFO - seeder - Returning existing grades
+2025-06-29 11:10:01,862 - INFO - seeder - Returning existing statuses
+2025-06-29 11:10:01,863 - INFO - seeder - Returning existing branches
+2025-06-29 11:10:01,863 - INFO - seeder - Returning existing agreements
+2025-06-29 11:10:01,863 - INFO - seeder - Returning existing directions
+2025-06-29 11:10:01,863 - INFO - seeder - Returning existing designations
+2025-06-29 11:10:01,874 - INFO - seeder - Returning existing employees
+2025-06-29 11:10:01,874 - INFO - seeder - Returning existing leave types
+2025-06-29 11:10:01,874 - INFO - seeder - Returning existing legal items
+2025-06-29 11:10:01,875 - INFO - seeder - Returning existing payslip elements
+2025-06-29 11:10:01,875 - INFO - seeder - Seeding completed
+2025-06-29 11:10:54,394 - INFO - seeder - Starting data seeding
+2025-06-29 11:10:54,396 - INFO - seeder - Created 4 grades
+2025-06-29 11:10:54,398 - INFO - seeder - Created 5 statuses
+2025-06-29 11:10:54,399 - INFO - seeder - Created 5 branches
+2025-06-29 11:10:54,400 - INFO - seeder - Created 5 agreements
+2025-06-29 11:10:54,402 - INFO - seeder - Created 5 directions
+2025-06-29 11:10:54,404 - INFO - seeder - Created 5 designations
+2025-06-29 11:10:54,426 - INFO - seeder - Created 50 employees
+2025-06-29 11:10:54,429 - INFO - seeder - Created 3 leave types
+2025-06-29 11:10:54,430 - INFO - seeder - Created 2 legal items
+2025-06-29 11:10:54,431 - INFO - seeder - Created 5 payslip elements
+2025-06-29 11:10:54,431 - INFO - seeder - Seeding completed

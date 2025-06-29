@@ -54,7 +54,11 @@ class Listing(BaseViewMixin):
             ItemPaid = apps.get_model("payroll", "ItemPaid")
 
             # Retrieve the payroll object or raise 404
-            payroll_obj = get_object_or_404(Payroll, id=pk)
+            suborganization = getattr(request.suborganization, "name", None)
+            payroll_obj = Payroll.objects.filter(
+                sub_organization=suborganization,
+                pk=pk
+            ).first()
             logger.debug(f"Found Payroll: {payroll_obj}")
 
             # Get 'code' from query parameters
@@ -66,7 +70,13 @@ class Listing(BaseViewMixin):
 
             # Try to find matching item
             from payroll.models import Item, LegalItem
-            item = Item.objects.filter(code=code).first() or LegalItem.objects.filter(code=code).first()
+            item = Item.objects.filter(
+                sub_organization=suborganization,
+                code=code
+            ).first() or LegalItem.objects.filter(
+                sub_organization=suborganization,
+                code=code
+            ).first()
 
             if not item:
                 logger.warning(f"No item found with code={code}")
@@ -77,8 +87,9 @@ class Listing(BaseViewMixin):
 
             # Fetch related ItemPaid records
             itempaid_qs = ItemPaid.objects.filter(
-                code=code,
-                employee__payroll=payroll_obj
+                sub_organization=suborganization,
+                employee__payroll=payroll_obj,
+                code=code
             ).annotate(
                 registration_number=F('employee__registration_number'),
                 last_name=F('employee__last_name'),

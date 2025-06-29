@@ -1,13 +1,13 @@
 # payroll/views/synthesis.py
-
-from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.translation import gettext_lazy as _
+from django.http import Http404
 from django.apps import apps
-from django.db.models import Model
 import pandas as pd
+
+from django.urls import reverse_lazy
 from core.views import BaseViewMixin
 from django.contrib import messages
-from django.urls import reverse_lazy
 import logging
 
 logger = logging.getLogger(__name__)
@@ -85,8 +85,8 @@ class Synthesis(BaseViewMixin):
         try:
             self.kwargs.update({"app": "payroll", "model": "paidemployee"})
             model_class = apps.get_model("payroll", "paidemployee")
-            payroll_obj = get_object_or_404(model_class.payroll.field.remote_field.model, id=pk)
 
+            payroll_obj = get_object_or_404(model_class.payroll.field.remote_field.model, id=pk)
             return render(request, self.template_name_field_selector, {
                 "pk": pk,
                 "func": func,
@@ -113,17 +113,24 @@ class Synthesis(BaseViewMixin):
             paidemployee_model = apps.get_model("payroll", "paidemployee")
 
             # Get payroll object
-            payroll_obj = get_object_or_404(payroll_model, id=pk)
+            # payroll_obj = get_object_or_404(payroll_model, id=pk)
+            suborganization = getattr(request.suborganization, "name", None)
+            payroll_obj = payroll_model.objects.filter(
+                sub_organization=suborganization,
+                pk=pk
+            ).first()
 
             # Query related paid employees
-            qs = paidemployee_model.objects.filter(payroll=payroll_obj)
+            qs = paidemployee_model.objects.filter(
+                sub_organization=suborganization,
+                payroll=payroll_obj
+            )
             if not qs.exists():
                 messages.warning(request, _("Aucune donnée trouvée pour ce rapport"))
                 return redirect(request.META.get("HTTP_REFERER", reverse_lazy("core:home")))
 
             # Process selected fields
-            post_dict = request.POST.dict()
-            selected_fields = [v for k, v in post_dict.items() if k != "csrfmiddlewaretoken"]
+            selected_fields = [v for k, v in request.POST.dict().items() if k != "csrfmiddlewaretoken"]
 
             if not selected_fields:
                 messages.warning(request, _("Veuillez sélectionner au moins un champ."))

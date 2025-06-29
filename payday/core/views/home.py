@@ -29,14 +29,17 @@ class Home(LoginRequiredMixin, View):
     def get_statistics(self):
         """Get employee count by status."""
         model = apps.get_model('employee', 'Employee')
+        suborganization = getattr(self.request.suborganization, "name", None)
         return model.objects.for_user(user=self.request.user)\
+            .filter(sub_organization=suborganization)\
             .values('status__name').annotate(count=Count('status__name'))
 
     def get_leaves(self):
         """Get all pending leave requests."""
         model = apps.get_model('leave', 'Leave')
+        suborganization = getattr(self.request.suborganization, "name", None)
         return model.objects.for_user(user=self.request.user).\
-            filter(status='pending')
+            filter(status='pending', sub_organization=suborganization)
 
     def get_remaining_leave_days(self):
         """Stub: Replace with real logic."""
@@ -45,8 +48,10 @@ class Home(LoginRequiredMixin, View):
     def get_payslips(self):
         """Get current year payslips for logged-in user."""
         model = apps.get_model('payroll', 'PaidEmployee')
+        suborganization = getattr(self.request.suborganization, "name", None)
         return model.objects.for_user(user=self.request.user).filter(
-            payroll__end_dt__year=timezone.now().date().year
+            payroll__end_dt__year=timezone.now().date().year,
+            sub_organization=suborganization
         )
 
     def get_payroll_data(self):

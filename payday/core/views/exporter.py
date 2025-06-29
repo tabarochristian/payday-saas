@@ -146,8 +146,7 @@ class Exporter(BaseViewMixin):
         list_filter = getattr(model_class, 'list_filter', [])
 
         # Prepare the base queryset with related objects.
-        qs = model_class.objects.select_related().prefetch_related()
-        qs = qs._all(user=request.user, subdomain=request.subdomain) if hasattr(qs, '_all') else qs.all()
+        qs = self.get_queryset()
 
         # Retrieve groupBy parameter if present.
         group_by = request.POST.get('groupBy', None)

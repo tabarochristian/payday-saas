@@ -74,7 +74,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     inlines = ('core.columnlevelsecurity', 'core.rowlevelsecurity')
-    list_display = ('id', 'email', 'is_active')
+    list_display = ('id', 'sub_organization', 'email', 'is_active')
     list_filter = ('is_active',)
     search_fields = ('id', 'email',)
 
