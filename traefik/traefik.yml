@@ -33,7 +33,7 @@ entryPoints:
 
 api:
   dashboard: true
-  insecure: false  # Ensure a secure endpoint, consider using a middleware/auth
+  insecure: false
 
 certificatesResolvers:
   letsencrypt:
@@ -41,18 +41,18 @@ certificatesResolvers:
       email: "christian@tabaro.me"
       storage: "/letsencrypt/acme.json"
       dnsChallenge:
-        provider: cloudflare
+        provider: digitalocean
         delayBeforeCheck: "0s"
 
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    network: "traefik-net"
+    network: payday-saas_traefik-net
     constraints: "Label(`traefik.enable`, `true`)"
 
 log:
-  level: INFO  # DEBUG in dev, INFO in production
+  level: INFO
 
 accessLog:
   filePath: "/var/log/traefik/access.log"
