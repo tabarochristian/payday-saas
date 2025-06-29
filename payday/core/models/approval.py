@@ -176,6 +176,6 @@ class Approval(Base):
             logger.error("Can't update the status: %s", e)
 
     class Meta:
-        verbose_name = _("approval")
-        verbose_name_plural = _("approvals")
+        verbose_name = _("approbation")
+        verbose_name_plural = _("approbations")
         unique_together = ('user', 'status', 'content_type', 'object_id')
