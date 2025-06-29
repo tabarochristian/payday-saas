@@ -26,8 +26,6 @@ entryPoints:
     http:
       tls:
         certResolver: letsencrypt
-        domains:
-          - main: "*.payday.cd"
 
 api:
   dashboard: true
