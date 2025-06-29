@@ -85,10 +85,16 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress.rule=Host(`payday.cd`)"
-      - "traefik.http.routers.wordpress.entrypoints=web"
-      - "traefik.http.routers.wordpress.service=wordpress"
-      - "traefik.http.routers.wordpress.priority=1000"
+      - "traefik.http.routers.wordpress-http.rule=Host(`payday.cd`)"
+      - "traefik.http.routers.wordpress-http.entrypoints=web"
+      - "traefik.http.routers.wordpress-http.service=wordpress"
+      - "traefik.http.routers.wordpress-http.priority=1000"
+      - "traefik.http.routers.wordpress-https.rule=Host(`payday.cd`)"
+      - "traefik.http.routers.wordpress-https.entrypoints=websecure"
+      - "traefik.http.routers.wordpress-https.service=wordpress"
+      - "traefik.http.routers.wordpress-https.priority=1000"
+      - "traefik.http.routers.wordpress-https.tls=true"
+      - "traefik.http.routers.wordpress-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.wordpress.loadbalancer.server.port=80"
     networks:
       - traefik-net
@@ -109,18 +115,31 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.minio-console.rule=Host(`minio.payday.cd`)"
-      - "traefik.http.routers.minio-console.entrypoints=web"
-      - "traefik.http.routers.minio-console.service=minio-console"
-      - "traefik.http.routers.minio-console.priority=1000"
+      - "traefik.http.routers.minio-console-http.rule=Host(`minio.payday.cd`)"
+      - "traefik.http.routers.minio-console-http.entrypoints=web"
+      - "traefik.http.routers.minio-console-http.service=minio-console"
+      - "traefik.http.routers.minio-console-http.priority=1000"
+      - "traefik.http.routers.minio-console-https.rule=Host(`minio.payday.cd`)"
+      - "traefik.http.routers.minio-console-https.entrypoints=websecure"
+      - "traefik.http.routers.minio-console-https.service=minio-console"
+      - "traefik.http.routers.minio-console-https.priority=1000"
+      - "traefik.http.routers.minio-console-https.tls=true"
+      - "traefik.http.routers.minio-console-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
-      - "traefik.http.routers.minio-console.middlewares=minio-redirect"
-      - "traefik.http.middlewares.minio-redirect.redirectregex.regex=^http://minio.payday.cd$$"
-      - "traefik.http.middlewares.minio-redirect.redirectregex.replacement=http://minio.payday.cd/login"
-      - "traefik.http.routers.minio-bucket.rule=Host(`cdn.payday.cd`)"
-      - "traefik.http.routers.minio-bucket.entrypoints=web"
-      - "traefik.http.routers.minio-bucket.service=minio-bucket"
-      - "traefik.http.routers.minio-bucket.priority=1000"
+      - "traefik.http.routers.minio-console-http.middlewares=minio-redirect"
+      - "traefik.http.routers.minio-console-https.middlewares=minio-redirect"
+      - "traefik.http.middlewares.minio-redirect.redirectregex.regex=^http(s)?://minio.payday.cd$$"
+      - "traefik.http.middlewares.minio-redirect.redirectregex.replacement=http$${1}://minio.payday.cd/login"
+      - "traefik.http.routers.minio-bucket-http.rule=Host(`cdn.payday.cd`)"
+      - "traefik.http.routers.minio-bucket-http.entrypoints=web"
+      - "traefik.http.routers.minio-bucket-http.service=minio-bucket"
+      - "traefik.http.routers.minio-bucket-http.priority=1000"
+      - "traefik.http.routers.minio-bucket-https.rule=Host(`cdn.payday.cd`)"
+      - "traefik.http.routers.minio-bucket-https.entrypoints=websecure"
+      - "traefik.http.routers.minio-bucket-https.service=minio-bucket"
+      - "traefik.http.routers.minio-bucket-https.priority=1000"
+      - "traefik.http.routers.minio-bucket-https.tls=true"
+      - "traefik.http.routers.minio-bucket-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.minio-bucket.loadbalancer.server.port=9000"
     networks:
       - traefik-net
@@ -148,11 +167,17 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.saas.service=saas"
-      - "traefik.http.routers.saas.entrypoints=web"
-      - "traefik.http.routers.saas.priority=1"
+      - "traefik.http.routers.saas-http.service=saas"
+      - "traefik.http.routers.saas-http.entrypoints=web"
+      - "traefik.http.routers.saas-http.priority=1"
+      - "traefik.http.routers.saas-http.rule=HostRegexp(`{subdomain:[a-z]+}.payday.cd`)"
+      - "traefik.http.routers.saas-https.service=saas"
+      - "traefik.http.routers.saas-https.entrypoints=websecure"
+      - "traefik.http.routers.saas-https.priority=1"
+      - "traefik.http.routers.saas-https.rule=HostRegexp(`{subdomain:[a-z]+}.payday.cd`)"
+      - "traefik.http.routers.saas-https.tls=true"
+      - "traefik.http.routers.saas-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.saas.loadbalancer.server.port=8000"
-      - "traefik.http.routers.saas.rule=HostRegexp(`[a-z]+\\.payday\\.cd`)"
     networks:
       - traefik-net
 
@@ -193,10 +218,16 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flower.rule=Host(`flower.payday.cd`)"
-      - "traefik.http.routers.flower.entrypoints=web"
-      - "traefik.http.routers.flower.service=flower"
-      - "traefik.http.routers.flower.priority=1000"
+      - "traefik.http.routers.flower-http.rule=Host(`flower.payday.cd`)"
+      - "traefik.http.routers.flower-http.entrypoints=web"
+      - "traefik.http.routers.flower-http.service=flower"
+      - "traefik.http.routers.flower-http.priority=1000"
+      - "traefik.http.routers.flower-https.rule=Host(`flower.payday.cd`)"
+      - "traefik.http.routers.flower-https.entrypoints=websecure"
+      - "traefik.http.routers.flower-https.service=flower"
+      - "traefik.http.routers.flower-https.priority=1000"
+      - "traefik.http.routers.flower-https.tls=true"
+      - "traefik.http.routers.flower-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.flower.loadbalancer.server.port=5555"
     networks:
       - traefik-net
@@ -217,18 +248,31 @@ services:
       retries: 10
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lago-ui.rule=Host(`lago.payday.cd`)"
-      - "traefik.http.routers.lago-ui.entrypoints=web"
-      - "traefik.http.routers.lago-ui.service=lago-ui"
-      - "traefik.http.routers.lago-ui.priority=1000"
+      - "traefik.http.routers.lago-ui-http.rule=Host(`lago.payday.cd`)"
+      - "traefik.http.routers.lago-ui-http.entrypoints=web"
+      - "traefik.http.routers.lago-ui-http.service=lago-ui"
+      - "traefik.http.routers.lago-ui-http.priority=1000"
+      - "traefik.http.routers.lago-ui-https.rule=Host(`lago.payday.cd`)"
+      - "traefik.http.routers.lago-ui-https.entrypoints=websecure"
+      - "traefik.http.routers.lago-ui-https.service=lago-ui"
+      - "traefik.http.routers.lago-ui-https.priority=1000"
+      - "traefik.http.routers.lago-ui-https.tls=true"
+      - "traefik.http.routers.lago-ui-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.lago-ui.loadbalancer.server.port=80"
-      - "traefik.http.routers.lago-api.rule=Host(`api.lago.payday.cd`)"
-      - "traefik.http.routers.lago-api.entrypoints=web"
-      - "traefik.http.routers.lago-api.service=lago-api"
-      - "traefik.http.routers.lago-api.priority=1000"
-      - "traefik.http.routers.lago-api.middlewares=lago-cors"
+      - "traefik.http.routers.lago-api-http.rule=Host(`api.lago.payday.cd`)"
+      - "traefik.http.routers.lago-api-http.entrypoints=web"
+      - "traefik.http.routers.lago-api-http.service=lago-api"
+      - "traefik.http.routers.lago-api-http.priority=1000"
+      - "traefik.http.routers.lago-api-http.middlewares=lago-cors"
+      - "traefik.http.routers.lago-api-https.rule=Host(`api.lago.payday.cd`)"
+      - "traefik.http.routers.lago-api-https.entrypoints=websecure"
+      - "traefik.http.routers.lago-api-https.service=lago-api"
+      - "traefik.http.routers.lago-api-https.priority=1000"
+      - "traefik.http.routers.lago-api-https.tls=true"
+      - "traefik.http.routers.lago-api-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.lago-api-https.middlewares=lago-cors"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowOriginList=http://lago.payday.cd,http://api.lago.payday.cd"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowOriginList=http://lago.payday.cd,https://lago.payday.cd,http://api.lago.payday.cd,https://api.lago.payday.cd"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowHeaders=Content-Type,Authorization,X-Requested-With,apollographql-client-version,apollographql-client-name,x-lago-organization"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowMethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowCredentials=true"
@@ -255,10 +299,16 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`n8n.payday.cd`)"
-      - "traefik.http.routers.n8n.entrypoints=web"
-      - "traefik.http.routers.n8n.service=n8n"
-      - "traefik.http.routers.n8n.priority=1000"
+      - "traefik.http.routers.n8n-http.rule=Host(`n8n.payday.cd`)"
+      - "traefik.http.routers.n8n-http.entrypoints=web"
+      - "traefik.http.routers.n8n-http.service=n8n"
+      - "traefik.http.routers.n8n-http.priority=1000"
+      - "traefik.http.routers.n8n-https.rule=Host(`n8n.payday.cd`)"
+      - "traefik.http.routers.n8n-https.entrypoints=websecure"
+      - "traefik.http.routers.n8n-https.service=n8n"
+      - "traefik.http.routers.n8n-https.priority=1000"
+      - "traefik.http.routers.n8n-https.tls=true"
+      - "traefik.http.routers.n8n-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
     networks:
       - traefik-net
@@ -284,10 +334,16 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.uptime.rule=Host(`uptime.payday.cd`)"
-      - "traefik.http.routers.uptime.entrypoints=web"
-      - "traefik.http.routers.uptime.service=uptime"
-      - "traefik.http.routers.uptime.priority=1000"
+      - "traefik.http.routers.uptime-http.rule=Host(`uptime.payday.cd`)"
+      - "traefik.http.routers.uptime-http.entrypoints=web"
+      - "traefik.http.routers.uptime-http.service=uptime"
+      - "traefik.http.routers.uptime-http.priority=1000"
+      - "traefik.http.routers.uptime-https.rule=Host(`uptime.payday.cd`)"
+      - "traefik.http.routers.uptime-https.entrypoints=websecure"
+      - "traefik.http.routers.uptime-https.service=uptime"
+      - "traefik.http.routers.uptime-https.priority=1000"
+      - "traefik.http.routers.uptime-https.tls=true"
+      - "traefik.http.routers.uptime-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.uptime.loadbalancer.server.port=3001"
     networks:
       - traefik-net
@@ -310,11 +366,17 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.uptime.rule=Host(`thumbor.payday.cd`)"
-      - "traefik.http.services.uptime.loadbalancer.server.port=8888"
-      - "traefik.http.routers.uptime.entrypoints=web"
-      - "traefik.http.routers.uptime.service=thumbor"
-      - "traefik.http.routers.uptime.priority=1000"
+      - "traefik.http.routers.thumbor-http.rule=Host(`thumbor.payday.cd`)"
+      - "traefik.http.routers.thumbor-http.entrypoints=web"
+      - "traefik.http.routers.thumbor-http.service=thumbor"
+      - "traefik.http.routers.thumbor-http.priority=1000"
+      - "traefik.http.routers.thumbor-https.rule=Host(`thumbor.payday.cd`)"
+      - "traefik.http.routers.thumbor-https.entrypoints=websecure"
+      - "traefik.http.routers.thumbor-https.service=thumbor"
+      - "traefik.http.routers.thumbor-https.priority=1000"
+      - "traefik.http.routers.thumbor-https.tls=true"
+      - "traefik.http.routers.thumbor-https.tls.certresolver=letsencrypt"
+      - "traefik.http.services.thumbor.loadbalancer.server.port=8888"
     networks:
       - traefik-net
     volumes:
@@ -326,9 +388,11 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-certs:/letsencrypt
     depends_on:
       - wordpress
       - minio
@@ -345,10 +409,16 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.payday.cd`)"
-      - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.priority=1000"
+      - "traefik.http.routers.traefik-http.rule=Host(`traefik.payday.cd`)"
+      - "traefik.http.routers.traefik-http.entrypoints=web"
+      - "traefik.http.routers.traefik-http.service=api@internal"
+      - "traefik.http.routers.traefik-http.priority=1000"
+      - "traefik.http.routers.traefik-https.rule=Host(`traefik.payday.cd`)"
+      - "traefik.http.routers.traefik-https.entrypoints=websecure"
+      - "traefik.http.routers.traefik-https.service=api@internal"
+      - "traefik.http.routers.traefik-https.priority=1000"
+      - "traefik.http.routers.traefik-https.tls=true"
+      - "traefik.http.routers.traefik-https.tls.certresolver=letsencrypt"
     networks:
       - traefik-net
 
@@ -359,6 +429,7 @@ volumes:
   mariadb_data:
   minio_data:
   n8n_data:
+  traefik-certs:
 
 networks:
   traefik-net:

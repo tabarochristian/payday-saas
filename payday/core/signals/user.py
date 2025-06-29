@@ -33,6 +33,7 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
         logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'. Full group list: [{group_names}]")
 
     try:
+        if not schema: return
         EmailService().send_welcome_email(
             password='payday-pwd',
             tenant_name=schema,

@@ -54,7 +54,6 @@ class SchemaManager:
         from core.utils import set_schema
         set_schema(schema)
         
-        username = email.split('@')[0]
         user = User.objects.create_superuser(
             is_active=True,
             is_staff=True,
