@@ -10,16 +10,35 @@ entryPoints:
         readTimeout: 0
         writeTimeout: 0
         idleTimeout: 0
+  websecure:
+    address: ":443"
+    transport:
+      respondingTimeouts:
+        readTimeout: 0
+        writeTimeout: 0
+        idleTimeout: 0
 
 api:
   dashboard: true
-  insecure: true
+  insecure: false  # Secure dashboard access via HTTPS
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: "christian@tabaro.me"  # Replace with your email
+      storage: "/letsencrypt/acme.json"
+      httpChallenge:
+        entryPoint: web
 
 providers:
   docker:
     exposedByDefault: false
-    network: payday-saas_traefik-net
+    network: traefik-net  # Match Docker Compose network
     constraints: "!Label(`traefik.enable`, `false`)"
 
 log:
-  level: DEBUG
+  level: DEBUG  # Keep for troubleshooting; consider INFO for production
+
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  bufferingSize: 100
