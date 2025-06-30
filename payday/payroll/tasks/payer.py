@@ -17,6 +17,7 @@ from multiprocessing import Pool, cpu_count
 from django.core.exceptions import ValidationError
 from functools import lru_cache
 from functools import partial
+from payday.celery import app
 from celery import Task
 
 logger = getLogger(__name__)
@@ -501,3 +502,5 @@ def sum_of_items_fields(df: pd.DataFrame, fields: str | List[str],
     result = float(filtered_df.sum().sum())
     logger.debug(f"Sum of fields {valid_fields}: {result}")
     return result
+
+app.register_task(Payer())
