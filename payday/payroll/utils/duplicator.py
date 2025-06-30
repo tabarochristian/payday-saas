@@ -12,6 +12,7 @@ from django.db import models
 
 from employee.models import Employee as EmployeeModel, Attendance
 from payroll.models import PaidEmployee
+from core.utils import set_schema
 
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -22,6 +23,7 @@ class PayrollProcessor:
     """
 
     def __init__(self, payroll, schema='public'):
+        self.schema = schema
         self.payroll = payroll
         self.employee_fields = []
         self.exclude_fields = {
@@ -35,6 +37,8 @@ class PayrollProcessor:
         logger.info(f"Starting payroll processing for payroll ID {self.payroll.id}")
         start_time = time.time()
         try:
+            if self.schema != "public":
+                set_schema(self.schema)
             self.statuses = self.payroll.employee_status.all().values_list('name', flat=True).distinct()
             logger.debug(f"Retrieved {len(self.statuses)} employee statuses")
             df = self._get_employee_data()

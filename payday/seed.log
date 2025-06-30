@@ -884,3 +884,15 @@ TypeError: object of type 'bool' has no len()
 2025-06-29 11:10:54,430 - INFO - seeder - Created 2 legal items
 2025-06-29 11:10:54,431 - INFO - seeder - Created 5 payslip elements
 2025-06-29 11:10:54,431 - INFO - seeder - Seeding completed
+2025-06-30 12:11:41,952 - INFO - seeder - Starting data seeding
+2025-06-30 12:11:41,953 - INFO - seeder - Returning existing grades
+2025-06-30 12:11:41,953 - INFO - seeder - Returning existing statuses
+2025-06-30 12:11:41,953 - INFO - seeder - Returning existing branches
+2025-06-30 12:11:41,954 - INFO - seeder - Returning existing agreements
+2025-06-30 12:11:41,954 - INFO - seeder - Returning existing directions
+2025-06-30 12:11:41,954 - INFO - seeder - Returning existing designations
+2025-06-30 12:11:41,966 - INFO - seeder - Returning existing employees
+2025-06-30 12:11:41,966 - INFO - seeder - Returning existing leave types
+2025-06-30 12:11:41,967 - INFO - seeder - Returning existing legal items
+2025-06-30 12:11:41,967 - INFO - seeder - Returning existing payslip elements
+2025-06-30 12:11:41,967 - INFO - seeder - Seeding completed

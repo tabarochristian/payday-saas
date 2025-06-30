@@ -422,19 +422,20 @@ LAGO_API_URL = os.getenv("LAGO_API_URL", LAGO_API_URL)
 
 ONAFRIQ_TOKEN=os.getenv('ONAFRIQ_TOKEN', '9f3855d9d3386d8bbdf9a5fc5aa08bf63f274167')
 
-# SSL and Security Headers for production
-SECURE_SSL_REDIRECT = bool(int(os.getenv("SECURE_SSL_REDIRECT", "1")))
-SESSION_COOKIE_SECURE = bool(int(os.getenv("SESSION_COOKIE_SECURE", "1")))
-CSRF_COOKIE_SECURE = bool(int(os.getenv("CSRF_COOKIE_SECURE", "1")))
+if not DEBUG:
+    # SSL and Security Headers for production
+    SECURE_SSL_REDIRECT = bool(int(os.getenv("SECURE_SSL_REDIRECT", "1")))
+    SESSION_COOKIE_SECURE = bool(int(os.getenv("SESSION_COOKIE_SECURE", "1")))
+    CSRF_COOKIE_SECURE = bool(int(os.getenv("CSRF_COOKIE_SECURE", "1")))
 
-SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = bool(int(os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "1")))
-SECURE_HSTS_PRELOAD = bool(int(os.getenv("SECURE_HSTS_PRELOAD", "1")))
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = bool(int(os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "1")))
+    SECURE_HSTS_PRELOAD = bool(int(os.getenv("SECURE_HSTS_PRELOAD", "1")))
 
-SECURE_REFERRER_POLICY = os.getenv("SECURE_REFERRER_POLICY", "same-origin")
-SECURE_BROWSER_XSS_FILTER = bool(int(os.getenv("SECURE_BROWSER_XSS_FILTER", "1")))
-SECURE_CONTENT_TYPE_NOSNIFF = bool(int(os.getenv("SECURE_CONTENT_TYPE_NOSNIFF", "1")))
+    SECURE_REFERRER_POLICY = os.getenv("SECURE_REFERRER_POLICY", "same-origin")
+    SECURE_BROWSER_XSS_FILTER = bool(int(os.getenv("SECURE_BROWSER_XSS_FILTER", "1")))
+    SECURE_CONTENT_TYPE_NOSNIFF = bool(int(os.getenv("SECURE_CONTENT_TYPE_NOSNIFF", "1")))
 
-X_FRAME_OPTIONS = os.getenv("X_FRAME_OPTIONS", "DENY")
-USE_X_FORWARDED_HOST = bool(int(os.getenv("USE_X_FORWARDED_HOST", "1")))
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    X_FRAME_OPTIONS = os.getenv("X_FRAME_OPTIONS", "DENY")
+    USE_X_FORWARDED_HOST = bool(int(os.getenv("USE_X_FORWARDED_HOST", "1")))
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
