@@ -89,6 +89,7 @@ class Payer(Task):
             worker_args = [(employee, self.special_items.get(employee["registration_number"], []))
                          for employee in employee_values]
 
+            # Review the multiprocessing in celery as it's generate error find another way or thread
             use_multiprocessing = False #not getattr(settings, 'DEBUG', False)
             results = self._process_employees(worker_args, use_multiprocessing)
 
@@ -136,9 +137,9 @@ class Payer(Task):
         shared_data = self._get_shared_data()
         pool_size = getattr(settings, "PAYROLL_WORKERS", min(cpu_count(), 4))
 
-        if use_multiprocessing:
-            with Pool(pool_size, initializer=self._init_worker, initargs=(shared_data,)) as pool:
-                return pool.map(process_employee_worker, worker_args)
+        #if use_multiprocessing:
+        #    with Pool(pool_size, initializer=self._init_worker, initargs=(shared_data,)) as pool:
+        #        return pool.map(process_employee_worker, worker_args)
         return [process_employee_worker(args) for args in worker_args]
 
     def _init_worker(self, shared_data: Dict):
