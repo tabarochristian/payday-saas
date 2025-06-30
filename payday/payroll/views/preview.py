@@ -140,16 +140,15 @@ class Preview(Change):
 
             # Trigger async payroll processing
             from payroll.tasks import Payer
-            host = request.get_host().split(".")[0]
-            logger.info(f"Triggering async payroll processor for schema: {host}, payroll_id={pk}")
+            schema = request.get_host().split(".")[0]
+            logger.info(f"Triggering async payroll processor for schema: {schema}, payroll_id={pk}")
             payer = Payer()
 
             # Fetch the debug setting with a default of False for better safety
             debug_mode = getattr(settings, "DEBUG", False)
 
             # Use a ternary operator for cleaner execution logic
-            schema = host
-            action = payer.run #if debug_mode else payer.delay
+            action = payer.run if debug_mode else payer.delay
             action(schema, pk)
 
             return redirect("payroll:payslips", pk=pk)

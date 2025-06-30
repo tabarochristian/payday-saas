@@ -17,6 +17,7 @@ from multiprocessing import Pool, cpu_count
 from django.core.exceptions import ValidationError
 from functools import lru_cache
 from functools import partial
+from celery import Task
 
 logger = getLogger(__name__)
 
@@ -47,7 +48,7 @@ class DictToObject:
     def __getattr__(self, key):
         return self._data[key]
 
-class Payer:
+class Payer(Task):
     def __init__(self):
         self.errors = []
         self.now = datetime.now()
@@ -438,7 +439,6 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
     employee["taxable_gross"] = df_items["taxable_amount"].sum().round(2)
     employee["net"] = employee["gross"]
 
-    excludable_fields = {"id", "_metadata", "updated_at", "created_at"}
     df_items["created_by"] = employee.get("created_by", None)
     df_items["updated_by"] = employee.get("updated_by", None)
     df_items["employee_id"] = employee.get("id", None)
