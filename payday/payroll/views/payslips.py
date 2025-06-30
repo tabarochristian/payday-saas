@@ -141,6 +141,8 @@ class Payslips(Read):
             # Filter and paginate (Change the model to paidemployee to fetch the queryset)
             qs = self.get_queryset(
                 model_class=apps.get_model(app, model_name="paidemployee")
+            ).filter(
+                payroll=obj
             ).select_related("payroll").prefetch_related("employee")
 
             filter_set = PayslipFilter(request.GET, queryset=qs)
