@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Model
 from django.conf import settings
+from payday.celery import app
 from django.apps import apps
 
 
@@ -148,9 +149,9 @@ class Preview(Change):
             debug_mode = getattr(settings, "DEBUG", False)
 
             # Use a ternary operator for cleaner execution logic
-            action = payer.run if debug_mode else payer.delay
+            action = payer.run if debug_mode else app.tasks['payer'].delay
             action(schema, pk)
-
+            
             return redirect("payroll:payslips", pk=pk)
 
         except Exception as e:

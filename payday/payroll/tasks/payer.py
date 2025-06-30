@@ -50,6 +50,7 @@ class DictToObject:
         return self._data[key]
 
 class Payer(Task):
+    name = 'payer'
     def __init__(self):
         self.errors = []
         self.now = datetime.now()
