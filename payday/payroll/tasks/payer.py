@@ -1,13 +1,16 @@
 import pandas as pd
 import numpy as np
 import re
+
 from django.conf import settings
 from django.db.models import F, Sum
+from core.models import fields
 from django.db import models as django_model_fields
 from django.apps import apps
 from django.db import transaction
 from datetime import datetime
 from typing import Any, Dict, List, Tuple, Optional, Callable
+from core.utils import DictToObject, set_schema
 from logging import getLogger
 from collections import defaultdict
 from multiprocessing import Pool, cpu_count
@@ -59,8 +62,8 @@ class Payer:
             try:
                 self._model_cache[key] = apps.get_model(app_label, model_name)
             except LookupError as e:
-                self.logger.error(f"Failed to load model {key}: {str(e)}",
-                                 extra={'app_label': app_label, 'model_name': model_name})
+                self.logger.error(f"Failed to load model {key}: {str(e)}", 
+                                extra={'app_label': app_label, 'model_name': model_name})
                 raise
         return self._model_cache[key]
 
@@ -69,9 +72,8 @@ class Payer:
         """Process payroll for given schema and payroll ID."""
         try:
             self._validate_inputs(schema, int(pk))
-
+            
             if not getattr(settings, 'DEBUG', True):
-                from core.utils import set_schema
                 set_schema(schema)
 
             self._load_payroll(pk)
@@ -81,7 +83,7 @@ class Payer:
             self._load_data()
             employee_values = self._prepare_employees_for_processing()
             worker_args = [(employee, self.special_items.get(employee["registration_number"], []))
-                          for employee in employee_values]
+                         for employee in employee_values]
 
             use_multiprocessing = not getattr(settings, 'DEBUG', False)
             results = self._process_employees(worker_args, use_multiprocessing)
@@ -102,9 +104,9 @@ class Payer:
             self.payroll.overall_net = total_net
             self.payroll.save(update_fields=["overall_net", "status"])
 
-            self.logger.info(f"Payroll {pk} processed successfully",
-                            extra={'schema': schema, 'employee_count': len(processed_employees),
-                                   'item_count': len(processed_items)})
+            self.logger.info(f"Payroll {pk} processed successfully", 
+                           extra={'schema': schema, 'employee_count': len(processed_employees), 
+                                  'item_count': len(processed_items)})
             return {
                 "result": "success",
                 "employees": len(processed_employees),
@@ -112,9 +114,9 @@ class Payer:
             }
 
         except Exception as e:
-            self.logger.error(f"Error in Payer.run({schema}, {pk}): {str(e)}",
-                             extra={'schema': schema, 'payroll_id': pk},
-                             exc_info=True)
+            self.logger.error(f"Error in Payer.run({schema}, {pk}): {str(e)}", 
+                            extra={'schema': schema, 'payroll_id': pk}, 
+                            exc_info=True)
             self._mark_payroll_error(pk, str(e))
             raise
 
@@ -131,9 +133,14 @@ class Payer:
         pool_size = getattr(settings, "PAYROLL_WORKERS", min(cpu_count(), 4))
 
         if use_multiprocessing:
-            with Pool(processes=pool_size) as pool:
+            with Pool(pool_size, initializer=self._init_worker, initargs=(shared_data,)) as pool:
                 return pool.map(process_employee_worker, worker_args)
         return [process_employee_worker(args) for args in worker_args]
+
+    def _init_worker(self, shared_data: Dict):
+        """Initialize worker process with shared data."""
+        global _SHARED_DATA
+        _SHARED_DATA = shared_data
 
     def _get_shared_data(self) -> Dict[str, Any]:
         """Returns data needed by worker functions."""
@@ -166,7 +173,7 @@ class Payer:
 
     def clean_metadata_keys(self, metadata: Dict) -> Dict:
         """Sanitize metadata keys."""
-        return {re.sub(r'[^a-zA-Z0-9_]', '_', key.lower()): value
+        return {re.sub(r'[^a-zA-Z0-9_]', '_', key.lower()): value 
                 for key, value in metadata.items()}
 
     def _load_data(self):
@@ -179,12 +186,13 @@ class Payer:
         self.items = list(Item.objects.filter(is_actif=True).values())
         self.legal_items = list(LegalItem.objects.filter(is_actif=True).values())
 
+        # Validate data types for items and legal_items
         for item in self.items + self.legal_items:
             for field in ["formula_qp_employee", "formula_qp_employer", "condition"]:
                 if not isinstance(item.get(field, ""), str):
                     self.logger.warning(f"Invalid {field} type for item {item.get('code', 'unknown')}: "
-                                       f"expected string, got {type(item.get(field))}",
-                                       extra={'item_code': item.get('code', 'unknown')})
+                                      f"expected string, got {type(item.get(field))}",
+                                      extra={'item_code': item.get('code', 'unknown')})
                     item[field] = "0" if "formula" in field else "True"
             if not isinstance(item.get("is_bonus", False), bool):
                 item["is_bonus"] = item.get("is_bonus", 0) == 1
@@ -208,14 +216,14 @@ class Payer:
             for field in ["formula_qp_employee", "formula_qp_employer"]:
                 if not isinstance(item.get(field, ""), str):
                     self.logger.warning(f"Invalid {field} type for special item {item.get('code', 'unknown')}: "
-                                       f"expected string, got {type(item.get(field))}",
-                                       extra={'item_code': item.get('code', 'unknown'), 'employee': item['employee']})
+                                      f"expected string, got {type(item.get(field))}",
+                                      extra={'item_code': item.get('code', 'unknown'), 'employee': item['employee']})
                     item[field] = "0"
             self.special_items[item["employee"]].append(item)
         self.logger.debug(f"Loaded special items for {len(self.special_items)} employees")
 
-        for model_name in ["grade", "status", "branch", "agreement", "direction",
-                          "subdirection", "service", "designation"]:
+        for model_name in ["grade", "status", "branch", "agreement", "direction", 
+                         "subdirection", "service", "designation"]:
             model = self._get_model("employee", model_name)
             data = {
                 str(g["id"]): self.clean_metadata_keys({**g["_metadata"], **dict(g)})
@@ -255,15 +263,15 @@ class Payer:
             return
         ItemPaid = self._get_model("payroll", "ItemPaid")
         fields = {field.name for field in ItemPaid._meta.fields} - \
-                 {'id', '_metadata', 'updated_at', 'created_at'} | {'employee_id'}
-
+                {'id', '_metadata', 'updated_at', 'created_at'} | {'employee_id'}
+        
         filtered_items = [
-            {key: item[key] for key in item.keys() & fields}
+            {key: item[key] for key in item.keys() & fields} 
             for item in items
         ]
         ItemPaid.objects.bulk_create(
-            [ItemPaid(**item) for item in filtered_items],
-            batch_size=1000,
+            [ItemPaid(**item) for item in filtered_items], 
+            batch_size=1000, 
             ignore_conflicts=True
         )
         self.logger.debug(f"Saved {len(filtered_items)} processed items")
@@ -300,8 +308,8 @@ class Payer:
                 payroll.save(update_fields=["status", "metadata"])
                 self.logger.debug(f"Marked payroll {pk} as ERROR", extra={'payroll_id': pk})
         except Exception as e:
-            self.logger.error(f"Failed to mark payroll {pk} as ERROR: {str(e)}",
-                             extra={'payroll_id': pk})
+            self.logger.error(f"Failed to mark payroll {pk} as ERROR: {str(e)}", 
+                            extra={'payroll_id': pk})
 
 def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
     """Process a single employee's payroll data."""
@@ -309,7 +317,6 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
     registration_number = employee["registration_number"]
     logger.debug(f"Processing employee {registration_number}")
 
-    # Access shared data from global context (set by Pool initializer or main process)
     global _SHARED_DATA
     shared_data = _SHARED_DATA
 
@@ -326,8 +333,8 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
 
     employee["advance_salary"] = advancesalary.get(registration_number, 0)
 
-    for attr in ["grade", "status", "branch", "agreement", "direction",
-                 "subdirection", "service", "designation"]:
+    for attr in ["grade", "status", "branch", "agreement", "direction", 
+                "subdirection", "service", "designation"]:
         employee[attr] = shared_data.get(attr, {}).get(employee[attr], {})
 
     items_list = []
@@ -339,7 +346,7 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
 
     all_items = shared_data["items"] + special_items + shared_data["legal_items"]
     df_items = pd.DataFrame(all_items)
-
+    
     if df_items.empty:
         logger.debug(f"No items for employee {registration_number}")
         return employee, []
@@ -350,8 +357,8 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
             expr = row.get("condition", "True")
             if not isinstance(expr, str):
                 logger.warning(f"Invalid condition type for employee {registration_number}, "
-                              f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
-                              extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
+                             f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
+                             extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
                 return False
             return eval(expr, {"__builtins__": None}, context)
         except Exception as e:
@@ -366,16 +373,13 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
         try:
             if not isinstance(expr, str):
                 logger.warning(f"Invalid formula type for employee {registration_number}, "
-                              f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
-                              extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
+                             f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
+                             extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
                 return 0.0
-            
-            context.update(row.to_dict())
             context["df_items"] = df_items
             context["ipr_iere"] = _ipr_iere_fast
             context["item"] = DictToObject(row.to_dict())
             context["sum_of_items_fields"] = sum_of_items_fields
-            
             result = eval(expr, {"__builtins__": None}, context)
             return float(result) if isinstance(result, (int, float)) else 0.0
         except Exception as e:
@@ -395,20 +399,22 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
     df_items["amount_qp_employee"] *= df_items["type_of_item"]
     df_items["time"] = df_items.apply(
         lambda row: safe_eval(row["time"] if isinstance(row["time"], str) else "0", row), axis=1)
-    df_items["rate"] = np.where(df_items["time"] > 0,
-                               df_items["amount_qp_employee"] / df_items["time"], 0)
+    df_items["rate"] = np.where(df_items["time"] > 0, 
+                              df_items["amount_qp_employee"] / df_items["time"], 0)
 
     df_items["is_social_security"] = df_items["is_social_security"].fillna(False)
     df_items["is_taxable"] = df_items["is_taxable"].fillna(False).astype(bool)
     df_items["is_payable"] = df_items["is_payable"].fillna(True).astype(bool)
     df_items["is_bonus"] = df_items["is_bonus"].fillna(False).astype(bool)
 
+    # Initialize social_security_amount and taxable_amount
     df_items["social_security_amount"] = np.where(
         df_items["is_social_security"], df_items["amount_qp_employee"], 0)
     df_items["taxable_amount"] = np.where(
         df_items["is_taxable"], df_items["amount_qp_employee"], 0)
     df_items = df_items.replace([np.inf, -np.inf], 0).fillna(0)
 
+    # Process legal items after initializing amounts
     for legal in shared_data["legal_items"]:
         code = legal["code"]
         filtered_df = df_items[df_items["code"] == code].copy()
@@ -432,14 +438,9 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
     df_items["employee_id"] = employee.get("id", None)
     items_list = df_items.to_dict(orient="records")
 
-    logger.debug(f"Completed processing for employee {registration_number}",
+    logger.debug(f"Completed processing for employee {registration_number}", 
                 extra={'employee_id': employee['id']})
     return employee, items_list
-
-def _init_worker(shared_data: Dict):
-    """Initialize worker process with shared data."""
-    global _SHARED_DATA
-    _SHARED_DATA = shared_data
 
 def _ipr_iere_fast(df_items: pd.DataFrame, employee: dict) -> float:
     """Calculate tax efficiently."""
@@ -460,18 +461,28 @@ def _ipr_iere_fast(df_items: pd.DataFrame, employee: dict) -> float:
     bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
     tax += bonus_tax
 
-    dependant_count = getattr(DictToObject(employee), "children", 0) + (
-        1 if getattr(DictToObject(employee), "marital_status", 0) == "MARRIED" else 0
+    dependant_count = getattr(employee, "children", 0) + (
+        1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
     )
     tax -= tax * (0.02 * dependant_count)
     return round(max(tax, 0), 2)
 
-def sum_of_items_fields(df: pd.DataFrame, fields: str | List[str],
+def sum_of_items_fields(df: pd.DataFrame, fields: str | List[str], 
                        condition: Optional[pd.Series] = None) -> float:
-    """Sums specified fields in a DataFrame with an optional filtering condition."""
+    """
+    Sums specified fields in a DataFrame with an optional filtering condition.
+    
+    Parameters:
+    - df (pd.DataFrame): The DataFrame to process
+    - fields (str | list): A single column or list of columns to sum
+    - condition (pd.Series | None): A filtering condition (e.g., df["is_payable"] == True)
+    
+    Returns:
+    - float | int: The sum of selected fields, always returning a numeric value
+    """
     if isinstance(fields, str):
         fields = [fields]
-
+    
     valid_fields = [field for field in fields if field in df.columns]
     if not valid_fields:
         logger.debug(f"No valid fields found for summation: {fields}")
@@ -480,7 +491,7 @@ def sum_of_items_fields(df: pd.DataFrame, fields: str | List[str],
     filtered_df = df[valid_fields]
     if condition is not None:
         filtered_df = df.loc[condition, valid_fields]
-
+    
     result = float(filtered_df.sum().sum())
     logger.debug(f"Sum of fields {valid_fields}: {result}")
     return result
