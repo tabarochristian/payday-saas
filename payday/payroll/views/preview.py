@@ -148,8 +148,9 @@ class Preview(Change):
             debug_mode = getattr(settings, "DEBUG", False)
 
             # Use a ternary operator for cleaner execution logic
-            action = payer.run if debug_mode else payer.delay
-            action(host, pk)
+            schema = host
+            action = payer.run #if debug_mode else payer.delay
+            action(schema, pk)
 
             return redirect("payroll:payslips", pk=pk)
 
