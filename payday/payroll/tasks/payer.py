@@ -89,7 +89,7 @@ class Payer(Task):
             worker_args = [(employee, self.special_items.get(employee["registration_number"], []))
                          for employee in employee_values]
 
-            use_multiprocessing = not getattr(settings, 'DEBUG', False)
+            use_multiprocessing = False #not getattr(settings, 'DEBUG', False)
             results = self._process_employees(worker_args, use_multiprocessing)
 
             processed_employees, processed_items = [], []
