@@ -79,7 +79,7 @@ class Base(models.Model):
     def sub_organization_obj(self):
         if not self.sub_organization:
             return None
-        model = apps.get_model('core', model_name='organization')
+        model = apps.get_model('core', model_name='suborganization')
         return model.objects.filter(name=self.sub_organization).first()
 
     @staticmethod
