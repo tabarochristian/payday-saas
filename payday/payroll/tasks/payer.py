@@ -382,11 +382,8 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
             context["item"] = DictToObject(row.to_dict())
             context["sum_of_items_fields"] = sum_of_items_fields
 
-            context["social_security_threshold"] = df_items["taxable_amount"].sum()
-            context["taxable_gross"] = df_items["social_security_amount"].sum()
-
-            print(context)
-            logger.warning(str(context))
+            #context["social_security_threshold"] = df_items["taxable_amount"].sum()
+            #context["taxable_gross"] = df_items["social_security_amount"].sum()
             
             result = eval(expr, {"__builtins__": None}, context)
             return float(result) if isinstance(result, (int, float)) else 0.0
