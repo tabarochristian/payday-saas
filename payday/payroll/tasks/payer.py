@@ -376,6 +376,7 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
                              f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
                              extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
                 return 0.0
+            context.update(row.to_dict())
             context["df_items"] = df_items
             context["ipr_iere"] = _ipr_iere_fast
             context["item"] = DictToObject(row.to_dict())
