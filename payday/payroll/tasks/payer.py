@@ -381,8 +381,13 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
             context["ipr_iere"] = _ipr_iere_fast
             context["item"] = DictToObject(row.to_dict())
             context["sum_of_items_fields"] = sum_of_items_fields
+
             context["social_security_threshold"] = df_items["taxable_amount"].sum()
             context["taxable_gross"] = df_items["social_security_amount"].sum()
+
+            print(context)
+            logger.warning(str(context))
+            
             result = eval(expr, {"__builtins__": None}, context)
             return float(result) if isinstance(result, (int, float)) else 0.0
         except Exception as e:
