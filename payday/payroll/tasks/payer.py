@@ -386,7 +386,8 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
                 context["ipr_iere"] = _ipr_iere_fast(df_items, context["employee"])
 
             result = eval(expr, {"__builtins__": None}, context)
-            return float(result) if isinstance(result, (int, float)) else 0.0
+            result = float(result) if isinstance(result, (int, float)) else 0.0
+            return result * int(row.get("type_of_item", 1))
         except Exception as e:
             logger.warning(f"Formula evaluation failed for employee {registration_number}, "
                           f"item {row.get('code', 'unknown')}, formula '{expr}': {str(e)}",
