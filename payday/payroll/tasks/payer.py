@@ -137,15 +137,10 @@ class Payer(Task):
         shared_data = self._get_shared_data()
         pool_size = getattr(settings, "PAYROLL_WORKERS", min(cpu_count(), 4))
 
-        #if use_multiprocessing:
-        #    with Pool(pool_size, initializer=self._init_worker, initargs=(shared_data,)) as pool:
-        #        return pool.map(process_employee_worker, worker_args)
-        return [process_employee_worker(args) for args in worker_args]
-
-    def _init_worker(self, shared_data: Dict):
-        """Initialize worker process with shared data."""
-        global _SHARED_DATA
-        _SHARED_DATA = shared_data
+        if use_multiprocessing:
+            with Pool(pool_size) as pool:
+                return pool.map(partial(process_employee_worker, shared_data=shared_data), worker_args)
+        return [process_employee_worker(args, shared_data=shared_data) for args in worker_args]
 
     def _get_shared_data(self) -> Dict[str, Any]:
         """Returns data needed by worker functions."""
@@ -307,23 +302,23 @@ class Payer(Task):
             with transaction.atomic():
                 payroll = Payroll.objects.get(pk=pk)
                 payroll.status = "ERROR"
-                errors = payroll.metadata.get("errors", [])
+                # Ensure metadata is a dictionary
+                metadata = payroll.metadata if isinstance(payroll.metadata, dict) else {}
+                errors = metadata.get("errors", [])
                 errors.append({"message": message, "timestamp": self.now.isoformat()})
-                payroll.metadata["errors"] = errors
+                metadata["errors"] = errors
+                payroll.metadata = metadata
                 payroll.save(update_fields=["status", "metadata"])
                 self.logger.debug(f"Marked payroll {pk} as ERROR", extra={'payroll_id': pk})
         except Exception as e:
             self.logger.error(f"Failed to mark payroll {pk} as ERROR: {str(e)}", 
                             extra={'payroll_id': pk})
 
-def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
+def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple[Dict, List]:
     """Process a single employee's payroll data."""
     employee, special_items = args
     registration_number = employee["registration_number"]
     logger.debug(f"Processing employee {registration_number}")
-
-    global _SHARED_DATA
-    shared_data = _SHARED_DATA
 
     advancesalary = shared_data["advancesalary"]
     grade = shared_data["grade"]
