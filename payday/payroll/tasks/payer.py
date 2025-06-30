@@ -2,20 +2,21 @@ import pandas as pd
 import numpy as np
 import re
 
-from django.conf import settings
-from django.db.models import F, Sum
-from core.models import fields
 from django.db import models as django_model_fields
+from django.db.models import F, Sum
+from django.conf import settings
+
 from django.apps import apps
 from django.db import transaction
 from datetime import datetime
-from typing import Any, Dict, List, Tuple, Optional, Callable
+from typing import Any, Dict, List, Tuple, Optional
 from core.utils import DictToObject, set_schema
 from logging import getLogger
 from collections import defaultdict
 from multiprocessing import Pool, cpu_count
 from django.core.exceptions import ValidationError
 from functools import lru_cache
+from functools import partial
 
 logger = getLogger(__name__)
 
@@ -378,13 +379,12 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
                 return 0.0
             context.update(extra)
             context["df_items"] = df_items
-            context["ipr_iere"] = _ipr_iere_fast
             context["item"] = DictToObject(row.to_dict())
-            context["sum_of_items_fields"] = sum_of_items_fields
+            context["sum_of"] = partial(sum_of_items_fields, df_items)
 
-            #context["social_security_threshold"] = df_items["taxable_amount"].sum()
-            #context["taxable_gross"] = df_items["social_security_amount"].sum()
-            
+            if expr == "ipr_iere":
+                context["ipr_iere"] = _ipr_iere_fast(df_items, context["employee"])
+
             result = eval(expr, {"__builtins__": None}, context)
             return float(result) if isinstance(result, (int, float)) else 0.0
         except Exception as e:
