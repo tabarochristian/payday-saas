@@ -433,10 +433,10 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
             lambda row: safe_eval(row["formula_qp_employer"], row), axis=1)
         df_items.update(filtered_df)
 
-    employee["gross"] = df_items[df_items["is_payable"]]["amount_qp_employee"].sum()
-    employee["social_security_threshold"] = df_items["social_security_amount"].sum()
-    employee["taxable_gross"] = df_items["taxable_amount"].sum()
-    employee["net"] = round(employee["gross"] - _ipr_iere_fast(df_items, employee), 2)
+    employee["gross"] = df_items[df_items["is_payable"]]["amount_qp_employee"].sum().round(2)
+    employee["social_security_threshold"] = df_items["social_security_amount"].sum().round(2)
+    employee["taxable_gross"] = df_items["taxable_amount"].sum().round(2)
+    employee["net"] = employee["gross"]
 
     excludable_fields = {"id", "_metadata", "updated_at", "created_at"}
     df_items["created_by"] = employee.get("created_by", None)
