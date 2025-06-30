@@ -114,9 +114,9 @@ class Payer:
         worker_func = _make_process_employee_worker(shared_data)
         pool_size = getattr(settings, "PAYROLL_WORKERS", min(cpu_count(), 4))
 
-        if use_multiprocessing:
-            with Pool(pool_size, initializer=self._init_worker, initargs=(shared_data,)) as pool:
-                return pool.map(worker_func, worker_args)
+        #if use_multiprocessing:
+        #    with Pool(pool_size, initializer=self._init_worker, initargs=(shared_data,)) as pool:
+        #        return pool.map(worker_func, worker_args)
         return [worker_func(args) for args in worker_args]
 
     def _init_worker(self, shared_data: Dict):
