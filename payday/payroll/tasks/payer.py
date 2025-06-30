@@ -369,19 +369,20 @@ def process_employee_worker(args: Tuple[Dict, List]) -> Tuple[Dict, List]:
 
     df_items = df_items[df_items.apply(_eval, axis=1)]
 
-    def safe_eval(expr, row):
+    def safe_eval(expr, row, extra={}):
         try:
             if not isinstance(expr, str):
                 logger.warning(f"Invalid formula type for employee {registration_number}, "
                              f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
                              extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
                 return 0.0
-            context.update(row.to_dict())
+            context.update(extra)
             context["df_items"] = df_items
             context["ipr_iere"] = _ipr_iere_fast
             context["item"] = DictToObject(row.to_dict())
             context["sum_of_items_fields"] = sum_of_items_fields
-            logger.warning(str(context))
+            context["social_security_threshold"] = df_items["taxable_amount"].sum()
+            context["taxable_gross"] = df_items["social_security_amount"].sum()
             result = eval(expr, {"__builtins__": None}, context)
             return float(result) if isinstance(result, (int, float)) else 0.0
         except Exception as e:
