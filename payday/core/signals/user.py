@@ -9,7 +9,7 @@ from core.middleware import TenantMiddleware
 
 logger = logging.getLogger(__name__)
 
-@receiver(pre_save, sender=User)
+# @receiver(pre_save, sender=User)
 def set_default_user_password(sender, instance, **kwargs):
     if instance.password and instance.has_usable_password():
         return
