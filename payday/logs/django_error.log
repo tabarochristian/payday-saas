@@ -1,4 +1,5 @@
 ERROR 2025-06-28 13:45:21,406 log Internal Server Error: /change/core/suborganization/1
+
 Traceback (most recent call last):
   File "/Users/tabaro/Documents/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 510, in parse
     compile_func = self.tags[command]
