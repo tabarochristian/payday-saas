@@ -32,6 +32,10 @@ class Change(BaseViewMixin):
         change_perm = f"{model_class._meta.app_label}.change_{model_class._meta.model_name}"
 
         if not request.user.has_perm(change_perm):
+            kwargs.update({
+                'app': model_class._meta.app_label,
+                'model': model_class._meta.model_name
+            })
             messages.warning(request, _("Vous n'avez pas la permission de modifier cet objet."))
             return redirect(reverse_lazy('core:read', kwargs=kwargs))
         
