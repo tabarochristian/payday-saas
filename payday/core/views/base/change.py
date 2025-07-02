@@ -36,6 +36,7 @@ class Change(BaseViewMixin):
                 'app': model_class._meta.app_label,
                 'model': model_class._meta.model_name
             })
+            
             messages.warning(request, _("Vous n'avez pas la permission de modifier cet objet."))
             return redirect(reverse_lazy('core:read', kwargs=kwargs))
         
