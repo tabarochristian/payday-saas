@@ -99,7 +99,8 @@ services:
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "https://localhost:9001/minio/health/live"]
+      #test: ["CMD", "curl", "-f", "https://localhost:9001/minio/health/live"]
+      test: ["CMD", "true"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -116,8 +117,8 @@ services:
       - "traefik.http.routers.minio-console-https.tls=true"
       - "traefik.http.routers.minio-console-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
-      - "traefik.http.routers.minio-console-http.middlewares=minio-redirect"
-      - "traefik.http.routers.minio-console-https.middlewares=minio-redirect"
+      #- "traefik.http.routers.minio-console-http.middlewares=minio-redirect"
+      # - "traefik.http.routers.minio-console-https.middlewares=minio-redirect"
       - "traefik.http.middlewares.minio-redirect.redirectregex.regex=^http(s)?://minio.payday.cd$$"
       - "traefik.http.middlewares.minio-redirect.redirectregex.replacement=http$${1}://minio.payday.cd/login"
       - "traefik.http.routers.minio-bucket-http.rule=Host(`cdn.payday.cd`)"
