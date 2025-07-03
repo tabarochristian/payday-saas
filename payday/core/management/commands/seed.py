@@ -270,8 +270,10 @@ class Command(BaseCommand):
     def get_or_create_legal_payslip_element(self):
         model = self._get_model('payroll', 'LegalItem')
         items = [
-            ("IPR", -1, "Impôt sur revenu", "0", "ipr_iere(df_items, employee)", "condition"),
-            ("CNSS", -1, "Sécurité Sociale", "0.13", "0.05", "condition"),
+            ("INPP", -1, "Inpp", "0", "0", "1"),
+            ("IPR", -1, "Impôt sur revenu", "0", "ipr_iere", "1"),
+            ("ONEM", -1, "Onem", "sum_of('taxable_amount') * 0.02", "0", "1"),
+            ("CNSS", -1, "Sécurité Sociale", "sum_of('social_security_amount') * 0.13", "sum_of('social_security_amount') * 0.05", "1"),
         ]
         instances = [
             model(
