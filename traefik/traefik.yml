@@ -1,5 +1,3 @@
-# traefik/traefik.yml
-
 global:
   checkNewVersion: true
   sendAnonymousUsage: false
@@ -29,9 +27,9 @@ entryPoints:
       tls:
         certResolver: letsencrypt
         domains:
-          - main: "payday.cd"
+          - main: "*.payday.cd"
             sans:
-              - "*.payday.cd"
+              - "payday.cd"
 
 api:
   dashboard: true
@@ -42,10 +40,10 @@ certificatesResolvers:
     acme:
       email: "christian@tabaro.me"
       storage: "/letsencrypt/acme.json"
-      caServer: "https://acme-v02.api.letsencrypt.org/directory "
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: digitalocean
-        delayBeforeCheck: 30s
+        delayBeforeCheck: "30s"
         resolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
@@ -79,41 +77,3 @@ tls:
         - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
         - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
       sniStrict: true
-http:
-  routers:
-    saas-catchall-http:
-      entryPoints:
-        - web
-      rule: HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`)
-      priority: 1
-      service: saas
-      middlewares:
-        - passhostheader
-
-    saas-catchall-https:
-      entryPoints:
-        - websecure
-      rule: HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`)
-      priority: 1
-      service: saas
-      middlewares:
-        - passhostheader
-      tls:
-        certResolver: letsencrypt
-        domains:
-          - main: payday.cd
-            sans:
-              - "*.payday.cd"
-
-  services:
-    saas:
-      loadBalancer:
-        servers:
-          - url: http://payday-saas:8000
-        passHostHeader: true
-
-  middlewares:
-    passhostheader:
-      headers:
-        customRequestHeaders:
-          Host: "{subdomain}.payday.cd"

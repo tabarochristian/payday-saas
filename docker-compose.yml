@@ -71,7 +71,7 @@ services:
     depends_on:
       - mariadb
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD", "curl", "-f", "https://localhost:80"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -99,7 +99,7 @@ services:
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9001/minio/health/live"]
+      test: ["CMD", "curl", "-f", "https://localhost:9001/minio/health/live"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -153,6 +153,20 @@ services:
       interval: 15s
       timeout: 10s
       retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.saas-http.service=saas"
+      - "traefik.http.routers.saas-http.entrypoints=web"
+      - "traefik.http.routers.saas-http.priority=1"
+      - 'traefik.http.routers.saas-http.rule=Host(`kazi.payday.cd`) || Host(`woubou.payday.cd`) || HostRegexp(`{subdomain:[a-z0-9\\-]+}.payday.cd`)'
+      - "traefik.http.routers.saas-https.service=saas"
+      - "traefik.http.routers.saas-https.entrypoints=websecure"
+      - "traefik.http.routers.saas-https.priority=1"
+      - 'traefik.http.routers.saas-https.rule=Host(`kazi.payday.cd`) || Host(`woubou.payday.cd`) || HostRegexp(`{subdomain:[a-z0-9\\-]+}.payday.cd`)'
+      - "traefik.http.routers.saas-https.tls=true"
+      - "traefik.http.routers.saas-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.saas-https.tls.domains[0].main=*.payday.cd"
+      - "traefik.http.services.saas.loadbalancer.server.port=8000"
 
   celery:
     container_name: payday-celery
