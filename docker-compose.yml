@@ -192,7 +192,8 @@ services:
     container_name: payday-flower
     image: mher/flower:latest
     restart: unless-stopped
-    command: ["celery", "flower", "--broker=redis://redis:6379/0", "--port=5555"]
+    command:
+      ["celery", "flower", "--broker=redis://redis:6379/0", "--port=5555"]
     depends_on:
       - redis
       - celery
@@ -254,7 +255,7 @@ services:
       - "traefik.http.routers.lago-api-https.tls=true"
       - "traefik.http.routers.lago-api-https.tls.certresolver=letsencrypt"
       - "traefik.http.services.lago-api.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowOriginList=http://lago.payday.cd,https://lago.payday.cd,http://apilago.payday.cd,https://apilago.payday.cd"
+      - "traefik.http.middlewares.lago-cors.headers.accessControlAllowOriginList=https://lago.payday.cd,https://lago.payday.cd,https://apilago.payday.cd,https://apilago.payday.cd"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowHeaders=Content-Type,Authorization,X-Requested-With,apollographql-client-version,apollographql-client-name,x-lago-organization"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowMethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
       - "traefik.http.middlewares.lago-cors.headers.accessControlAllowCredentials=true"
