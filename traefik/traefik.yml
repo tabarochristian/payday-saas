@@ -79,7 +79,6 @@ tls:
         - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
         - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
       sniStrict: true
-
 http:
   routers:
     saas-catchall-http:
@@ -88,7 +87,8 @@ http:
       rule: HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`)
       priority: 1
       service: saas
-      middlewares: passhostheader
+      middlewares:
+        - passhostheader
 
     saas-catchall-https:
       entryPoints:
@@ -96,7 +96,8 @@ http:
       rule: HostRegexp(`{subdomain:[a-z0-9-]+}.payday.cd`)
       priority: 1
       service: saas
-      middlewares: passhostheader
+      middlewares:
+        - passhostheader
       tls:
         certResolver: letsencrypt
         domains:
