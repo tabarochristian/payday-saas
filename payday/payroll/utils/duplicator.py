@@ -130,6 +130,7 @@ class PayrollProcessor:
                     checked_at__date__range=(self.payroll.start_dt, self.payroll.end_dt),
                     count__gte=2
                 ).filter(sub_organization=self.payroll.sub_organization)
+                .attended()
                 .values("employee__registration_number")
                 .annotate(attendance=models.Count("employee__registration_number"))
             )

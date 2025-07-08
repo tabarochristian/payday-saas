@@ -176,4 +176,7 @@ class Create(BaseViewMixin):
         except Exception as e:
             logger.error(f"Error creating {model_class._meta.model_name}: {str(e)}")
             messages.error(request, _("Une erreur est survenue lors de la création."))
-            return render(request, self.get_template_name(), locals())
+            return redirect(self.next or reverse_lazy('core:list', kwargs={
+                'app': app,
+                'model': model_class._meta.model_name
+            }))

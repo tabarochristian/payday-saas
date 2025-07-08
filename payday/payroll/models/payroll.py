@@ -44,7 +44,7 @@ class Payroll(Base):
     approvers = ModelSelect2Multiple('core.user', verbose_name=_('approbateurs'))
     approved = models.BooleanField(verbose_name=_('approuvé'), default=False)
     
-    list_display = ('id', 'name', 'start_dt', 'end_dt', 'overall_net', 'status', 'approved')
+    list_display = ('id', 'name', 'start_dt', 'end_dt', 'overall_net', 'status')
     list_filter = ('start_dt', 'end_dt')
 
     layout = Layout(
