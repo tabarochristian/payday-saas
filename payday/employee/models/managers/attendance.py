@@ -28,8 +28,8 @@ class AttendanceQuerySet(PaydayQuerySet):
         check_in_range = self.check_in_range_time()
 
         return self.filter(
-            Q(checked_in_at__time__range=check_in_range) &
-            Q(checked_out_at__time__range=check_out_range)
+            Q(first_checked_at__time__range=check_in_range) &
+            Q(last_checked_at__time__range=check_out_range)
         )
 
 class AttendanceManager(PaydayManager):

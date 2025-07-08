@@ -82,6 +82,18 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    "first_checked_at",
+                    core.models.fields.datetimefield.DateTimeField(
+                        verbose_name="check-in à"
+                    ),
+                ),
+                (
+                    "last_checked_at",
+                    core.models.fields.datetimefield.DateTimeField(
+                        verbose_name="check-out à"
+                    ),
+                ),
+                (
                     "count",
                     core.models.fields.integerfield.IntegerField(
                         verbose_name="presence"
