@@ -5,6 +5,20 @@ from functools import reduce
 from django import forms
 import django_filters
 
+class DateTimeRangeWidget(forms.MultiWidget):
+    def __init__(self, attrs=None):
+        widgets = [
+            forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        ]
+        super().__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            return [value.start, value.stop]
+        return [None, None]
+
+
 class AdvanceFilterSet(django_filters.FilterSet):
     q = django_filters.CharFilter(
         label=str, 
@@ -47,22 +61,31 @@ class AdvanceFilterSet(django_filters.FilterSet):
 
 def filter_set_factory(_model, fields):
     """
-    Factory function to create a FilterSet class for the given model and fields.
+    Factory function to dynamically create a Django FilterSet class for a given model and filter fields.
+    Supports DateField and DateTimeField with proper range widgets.
     """
     attrs = {}
     _fields = fields
-    
-    # Create the Meta class for the FilterSet
+
     class Meta:
         model = _model
         fields = _fields
 
-    for field in _fields:
-        field = _model._meta.get_field(field.split('__')[0])
-        if field.get_internal_type() in ['DateTimeField', 'DateField']:
-            attrs[field.name] = django_filters.DateFromToRangeFilter(**{
-                'widget': DateRangeWidget()
-            })
+    for field_name in fields:
+        # Split '__' if filter lookup is used (e.g. 'created__gte')
+        field_base_name = field_name.split('__')[0]
+
+        try:
+            model_field = _model._meta.get_field(field_base_name)
+        except Exception:
+            continue  # Skip if field is not found in model
+
+        internal_type = model_field.get_internal_type()
+
+        if internal_type == 'DateField':
+            attrs[field_name] = django_filters.DateFromToRangeFilter(widget=DateRangeWidget())
+        elif internal_type == 'DateTimeField':
+            attrs[field_name] = django_filters.DateTimeFromToRangeFilter(widget=DateTimeRangeWidget())
 
     attrs['Meta'] = Meta
     return type(f"{_model._meta.object_name}FilterSet", (AdvanceFilterSet,), attrs)
