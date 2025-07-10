@@ -1,54 +1,58 @@
-{% extends 'change.html' %}
-
-{% load core %}
-{% load i18n %}
-{% load static %}
-{% load humanize %}
-{% load mathfilters %}
-{% load crispy_forms_filters %}
-
-{% block header %}
+{% extends 'change.html' %} {% load core %} {% load i18n %} {% load static %} {%
+load humanize %} {% load mathfilters %} {% load crispy_forms_filters %} {% block
+header %}
 <!-- Attendance -->
 <div class="col-12 col-xs-12">
-     <div class="card">
-        <script src="{% static 'assets/extensions/apexcharts/apexcharts.min.js' %}"></script>
-        <div class="card-body p-0 p-4 pb-3">
-            <div class="col">
-                <div id="attendances-chart"></div>
-                {{ self.attendances|json_script:'attendances' }}
-                <script>
-                    const getMonthName = monthNumber => new Date(0, monthNumber).toLocaleString('{{ LANGUAGE_CODE }}', { month: 'long' });
-                    const attendances = JSON.parse(document.getElementById('attendances').textContent).map((e) => ({
-                        date: new Date(e.checked_at),
-                        count: e.count,
-                    }));
-    
-                    new ApexCharts(document.querySelector('#attendances-chart'), {
-                        series: Array.from({ length: 12 }, (value, index) => index).map(function (month) {
-                            return {
-                                name: getMonthName(month),
-                                data: Array.from({ length: 31 }, (value, index) => index+1).map(function(day) {
-                                    let y = attendances.find((item) => item.date.getMonth() === month && item.date.getDate() === day)
-                                    return {x: String(day), y: y?y.count:0}
-                                })
-                            }
-                        }),
-                        chart: {
-                            height: 250,
-                            type: 'heatmap'
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        colors: ['#008FFB'],
-                        title: {
-                            text: '{% trans 'Presence' %} {% now 'Y' %}',
-                            align: 'center'
-                        },
-                    }).render();
-                </script>
-            </div>
-        </div>
+  <div class="card">
+    <script src="{% static 'assets/extensions/apexcharts/apexcharts.min.js' %}"></script>
+    <div class="card-body p-0 p-4 pb-3">
+      <div class="col">
+        <div id="attendances-chart"></div>
+        {{ self.attendances|json_script:'attendances' }}
+        <script>
+          const getMonthName = monthNumber => new Date(0, monthNumber).toLocaleString('{{ LANGUAGE_CODE }}', { month: 'long' });
+          const attendances = JSON.parse(document.getElementById('attendances').textContent).map((e) => ({
+              date: new Date(e.checked_at),
+              count: e.count,
+          }));
+
+          new ApexCharts(document.querySelector('#attendances-chart'), {
+              series: Array.from({ length: 12 }, (value, index) => index).map(function (month) {
+                  return {
+                      name: getMonthName(month),
+                      data: Array.from({ length: 31 }, (value, index) => index+1).map(function(day) {
+                          let y = attendances.find((item) => item.date.getMonth() === month && item.date.getDate() === day)
+                          return {x: String(day), y: y?y.count:0}
+                      })
+                  }
+              }),
+              chart: {
+                  height: 250,
+                  type: 'heatmap'
+              },
+              dataLabels: {
+                  enabled: false
+              },
+              colors: ['#008FFB'],
+              title: {
+                  text: '{% trans 'Presence' %} {% now 'Y' %}',
+                  align: 'center'
+              },
+          }).render();
+        </script>
+      </div>
     </div>
+  </div>
 </div>
+<script>
+  $(document).ready(function () {
+    const $input = $("#id_registration_number");
+    $input.prop("readonly", true); // Make input read-only
+    $input.addClass("bg-dark"); // Update background class
+    $input.css({
+      "pointer-events": "none", // Disable all mouse interaction
+      cursor: "not-allowed", // Show “not allowed” cursor
+    });
+  });
+</script>
 {% endblock header %}
