@@ -90,8 +90,6 @@ class Payer(Task):
             employee_values = self._prepare_employees_for_processing()
             worker_args = [(employee, self.special_items.get(employee["employee_id"], []))
                          for employee in employee_values]
-            
-            print(worker_args)
 
             # Review the multiprocessing in celery as it's generate error find another way or thread
             use_multiprocessing = False #not getattr(settings, 'DEBUG', False)
