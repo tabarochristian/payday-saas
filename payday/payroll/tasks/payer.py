@@ -347,8 +347,11 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
         "itemspaid": pd.DataFrame(items_list) if items_list else pd.DataFrame()
     }
 
+    print(special_items)
     all_items = shared_data["items"] + special_items + shared_data["legal_items"]
     df_items = pd.DataFrame(all_items)
+    print("\n\n")
+    print(all_items)
     
     if df_items.empty:
         logger.debug(f"No items for employee {registration_number}")
