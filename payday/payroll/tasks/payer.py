@@ -303,11 +303,11 @@ class Payer(Task):
                 payroll = Payroll.objects.get(pk=pk)
                 payroll.status = "ERROR"
                 # Ensure metadata is a dictionary
-                metadata = payroll.metadata if isinstance(payroll.metadata, dict) else {}
+                metadata = payroll._metadata if isinstance(payroll._metadata, dict) else {}
                 errors = metadata.get("errors", [])
                 errors.append({"message": message, "timestamp": self.now.isoformat()})
                 metadata["errors"] = errors
-                payroll.metadata = metadata
+                payroll._metadata = metadata
                 payroll.save(update_fields=["status", "metadata"])
                 self.logger.debug(f"Marked payroll {pk} as ERROR", extra={'payroll_id': pk})
         except Exception as e:
