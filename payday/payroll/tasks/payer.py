@@ -88,6 +88,7 @@ class Payer(Task):
 
             self._load_data()
             employee_values = self._prepare_employees_for_processing()
+            print(employee_values)
             worker_args = [(employee, self.special_items.get(employee["employee_id"], []))
                          for employee in employee_values]
 
@@ -244,6 +245,7 @@ class Payer(Task):
             for field in ["formula_qp_employee", "formula_qp_employer"]:
                 item[field] = str(item.get(field, "0"))
             self.special_items[item["employee"]].append(item)
+        print(self.special_items)
         self.logger.debug(f"Loaded special items for {len(self.special_items)} employees")
 
         for model_name in ["grade", "status", "branch", "agreement", "direction", 
