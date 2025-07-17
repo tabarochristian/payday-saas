@@ -88,8 +88,7 @@ class Payer(Task):
 
             self._load_data()
             employee_values = self._prepare_employees_for_processing()
-            print(employee_values[0])
-            worker_args = [(employee, self.special_items.get(employee["employee"], []))
+            worker_args = [(employee, self.special_items.get(employee["employee_id"], []))
                          for employee in employee_values]
 
             # Review the multiprocessing in celery as it's generate error find another way or thread
