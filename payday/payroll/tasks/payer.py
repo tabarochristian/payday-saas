@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 from django.db import models as django_model_fields
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Q, Value
 from django.conf import settings
 
 from django.apps import apps
@@ -200,15 +200,19 @@ class Payer(Task):
         self.logger.debug(f"Loaded {len(self.items)} items and {len(self.legal_items)} legal items")
 
         special_items_qs = (
-            SpecialEmployeeItem.objects.filter(end_date__gte=self.today)
+            SpecialEmployeeItem.objects.filter(
+                Q(end_date__gte=self.payroll.end_dt) |
+                Q(end_date__isnull=True)
+            )
             .select_related('item')
             .annotate(
                 code=F("item__code"),
                 name=F("item__name"),
                 formula_qp_employee=F("amount_qp_employee"),
                 formula_qp_employer=F("amount_qp_employer"),
+                condition=Value("1")
             )
-            .values("code", "name", "formula_qp_employee", "formula_qp_employer", "employee")
+            .values("code", "name", "formula_qp_employee", "formula_qp_employer", "employee", "condition")
         )
 
         self.special_items = defaultdict(list)
