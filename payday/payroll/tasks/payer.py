@@ -88,7 +88,7 @@ class Payer(Task):
 
             self._load_data()
             employee_values = self._prepare_employees_for_processing()
-            worker_args = [(employee, self.special_items.get(employee["registration_number"], []))
+            worker_args = [(employee, self.special_items.get(employee["employee_id"], []))
                          for employee in employee_values]
 
             # Review the multiprocessing in celery as it's generate error find another way or thread
@@ -227,7 +227,6 @@ class Payer(Task):
                                       extra={'item_code': item.get('code', 'unknown'), 'employee': item['employee']})
                     item[field] = value
             self.special_items[item["employee"]].append(item)
-            print(item)
         self.logger.debug(f"Loaded special items for {len(self.special_items)} employees")
 
         for model_name in ["grade", "status", "branch", "agreement", "direction", 
@@ -351,7 +350,6 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
         "itemspaid": pd.DataFrame(items_list) if items_list else pd.DataFrame()
     }
 
-    print(special_items)
     all_items = shared_data["items"] + special_items + shared_data["legal_items"]
     df_items = pd.DataFrame(all_items)
     print("\n\n")
