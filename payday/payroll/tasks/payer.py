@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import re
 
-from django.db.models import F, Sum, Q, Value, CharField, BooleanField
+from django.db.models import F, Sum, Q, Value, CharField, BooleanField, IntegerField
 from django.db.models.functions import Coalesce
 
 
@@ -217,6 +217,7 @@ class Payer(Task):
                 condition=Value("1"),
                 time=Value("0"),
                 
+                type_of_item=Coalesce(F("item__type_of_item"), Value(1), output_field=IntegerField()),
                 is_social_security=Coalesce(F("item__is_social_security"), Value("0"), output_field=BooleanField()),
                 
                 is_taxable=Coalesce(F("item__is_taxable"), Value(True), output_field=BooleanField()),
@@ -232,6 +233,7 @@ class Payer(Task):
                 "formula_qp_employer", 
                 "employee", 
                 "condition",
+                "type_of_item",
                 "time",
                 "is_social_security",
                 "is_taxable",
@@ -402,9 +404,6 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
     df_items = df_items[df_items.apply(_eval, axis=1)]
 
     def safe_eval(expr, row, extra={}):
-        print(row)
-        print("\n")
-        print(expr)
         try:
             if not isinstance(expr, str):
                 logger.warning(f"Invalid formula type for employee {registration_number}, "
