@@ -402,6 +402,9 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
     df_items = df_items[df_items.apply(_eval, axis=1)]
 
     def safe_eval(expr, row, extra={}):
+        print(row)
+        print("\n")
+        print(expr)
         try:
             if not isinstance(expr, str):
                 logger.warning(f"Invalid formula type for employee {registration_number}, "
