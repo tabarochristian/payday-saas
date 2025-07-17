@@ -215,13 +215,13 @@ class Payer(Task):
                 condition=Value("1"),
                 time=Value("0"),
                 
-                is_social_security=Coalesce(F("item.is_social_security"), Value("0"), output_field=BooleanField()),
+                is_social_security=Coalesce(F("item__is_social_security"), Value("0"), output_field=BooleanField()),
                 
-                is_taxable=Coalesce(F("item.is_taxable"), Value(True), output_field=BooleanField()),
-                is_bonus=Coalesce(F("item.is_bonus"), Value(True), output_field=BooleanField()),
+                is_taxable=Coalesce(F("item__is_taxable"), Value(True), output_field=BooleanField()),
+                is_bonus=Coalesce(F("item__is_bonus"), Value(True), output_field=BooleanField()),
 
-                is_payable=Coalesce(F("item.is_payable"), Value(True), output_field=BooleanField()),
-                is_actif=Coalesce(F("item.is_actif"), Value(True), output_field=BooleanField()),
+                is_payable=Coalesce(F("item__is_payable"), Value(True), output_field=BooleanField()),
+                is_actif=Coalesce(F("item__is_actif"), Value(True), output_field=BooleanField()),
             )
             .values(
                 "code", 
