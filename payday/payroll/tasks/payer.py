@@ -359,7 +359,8 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                              f"item {row.get('code', 'unknown')}: expected string, got {type(expr)}",
                              extra={'employee_id': employee['id'], 'item_code': row.get('code', 'unknown')})
                 return False
-            return eval(expr, {"__builtins__": None}, context)
+            result = eval(expr, {"__builtins__": None}, context)
+            return bool(result)
         except Exception as e:
             logger.warning(f"Condition evaluation failed for employee {registration_number}, "
                           f"item {row.get('code', 'unknown')}: {str(e)}",
