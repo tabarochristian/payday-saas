@@ -240,6 +240,7 @@ class Payer(Task):
             )
         )
 
+        print(special_items_qs)
         self.special_items = defaultdict(list)
         for item in special_items_qs:
             for field in ["formula_qp_employee", "formula_qp_employer"]:
