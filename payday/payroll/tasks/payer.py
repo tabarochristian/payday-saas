@@ -242,12 +242,7 @@ class Payer(Task):
         self.special_items = defaultdict(list)
         for item in special_items_qs:
             for field in ["formula_qp_employee", "formula_qp_employer"]:
-                value = item.get(field, "0")
-                if not isinstance(value, (str, float, int)):
-                    self.logger.warning(f"Invalid {field} type for special item {item.get('code', 'unknown')}: "
-                                      f"expected string,float,int, got {type(item.get(field))}",
-                                      extra={'item_code': item.get('code', 'unknown'), 'employee': item['employee']})
-                    item[field] = value
+                item[field] = str(item.get(field, "0"))
             self.special_items[item["employee"]].append(item)
         self.logger.debug(f"Loaded special items for {len(self.special_items)} employees")
 
