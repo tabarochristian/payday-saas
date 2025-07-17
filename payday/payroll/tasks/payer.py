@@ -88,6 +88,7 @@ class Payer(Task):
 
             self._load_data()
             employee_values = self._prepare_employees_for_processing()
+            print(employee_values[0])
             worker_args = [(employee, self.special_items.get(employee["employee"], []))
                          for employee in employee_values]
 
@@ -352,8 +353,6 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
 
     all_items = shared_data["items"] + special_items + shared_data["legal_items"]
     df_items = pd.DataFrame(all_items)
-    print("\n\n")
-    print(all_items)
     
     if df_items.empty:
         logger.debug(f"No items for employee {registration_number}")
