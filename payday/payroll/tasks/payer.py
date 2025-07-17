@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import re
 
-from django.db.models import F, Sum, Q, Value, CharField
+from django.db.models import F, Sum, Q, Value, CharField, BooleanField
 from django.db.models.functions import Coalesce
 
 
@@ -212,9 +212,31 @@ class Payer(Task):
                 name=F("item__name"),
                 formula_qp_employee=Coalesce(F("amount_qp_employee"), Value("0"), output_field=CharField(max_length=200)),
                 formula_qp_employer=Coalesce(F("amount_qp_employer"), Value("0"), output_field=CharField(max_length=200)),
-                condition=Value("1")
+                condition=Value("1"),
+                time=Value("0"),
+                
+                is_social_security=Coalesce(F("item.is_social_security"), Value("0"), output_field=BooleanField()),
+                
+                is_taxable=Coalesce(F("item.is_taxable"), Value(True), output_field=BooleanField()),
+                is_bonus=Coalesce(F("item.is_bonus"), Value(True), output_field=BooleanField()),
+
+                is_payable=Coalesce(F("item.is_payable"), Value(True), output_field=BooleanField()),
+                is_actif=Coalesce(F("item.is_actif"), Value(True), output_field=BooleanField()),
             )
-            .values("code", "name", "formula_qp_employee", "formula_qp_employer", "employee", "condition")
+            .values(
+                "code", 
+                "name", 
+                "formula_qp_employee", 
+                "formula_qp_employer", 
+                "employee", 
+                "condition",
+                "time",
+                "is_social_security",
+                "is_taxable",
+                "is_bonus",
+                "is_payable",
+                "is_actif"
+            )
         )
 
         self.special_items = defaultdict(list)
@@ -350,9 +372,12 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
         "itemspaid": pd.DataFrame(items_list) if items_list else pd.DataFrame()
     }
 
-    print(special_items)
-    print(shared_data["items"])
-
+    try:
+        for emp in special_items:
+            emp.pop('employee')
+    except Exception as ex:
+        print("can't pop employee from special_items")
+    
     all_items = shared_data["items"] + special_items + shared_data["legal_items"]
     df_items = pd.DataFrame(all_items)
     
