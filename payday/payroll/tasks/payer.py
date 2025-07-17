@@ -302,13 +302,12 @@ class Payer(Task):
             with transaction.atomic():
                 payroll = Payroll.objects.get(pk=pk)
                 payroll.status = "ERROR"
-                # Ensure metadata is a dictionary
                 metadata = payroll._metadata if isinstance(payroll._metadata, dict) else {}
                 errors = metadata.get("errors", [])
                 errors.append({"message": message, "timestamp": self.now.isoformat()})
                 metadata["errors"] = errors
-                payroll._metadata = metadata
-                payroll.save(update_fields=["status", "metadata"])
+                payroll._metadata = metadata  # Update the underlying field
+                payroll.save(update_fields=["status", "_metadata"])
                 self.logger.debug(f"Marked payroll {pk} as ERROR", extra={'payroll_id': pk})
         except Exception as e:
             self.logger.error(f"Failed to mark payroll {pk} as ERROR: {str(e)}", 
