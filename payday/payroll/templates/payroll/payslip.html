@@ -76,11 +76,11 @@
                                                 <td>{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
 
-                                                <td>{{ item.amount_qp_employee|intcomma }}</td>
-                                                <td>{{ item.amount_qp_employer|intcomma }}</td>
+                                                <td>{{ item.amount_qp_employee|floatformat:2 }}</td>
+                                                <td>{{ item.amount_qp_employer|floatformat:2 }}</td>
 
-                                                <td>{{ item.taxable_amount|intcomma }}</td>
-                                                <td>{{ item.social_security_amount|intcomma }}</td>
+                                                <td>{{ item.taxable_amount|floatformat:2 }}</td>
+                                                <td>{{ item.social_security_amount|floatformat:2 }}</td>
 
                                                 <td>
                                                     {% if employee_obj.payroll.status != "APPROVED" %}
@@ -125,10 +125,10 @@
                                         <!-- Totals row -->
                                         <tr class="table-info fw-bold">
                                             <td colspan="3" class="text-uppercase">{% trans "Totals" %}</td>
-                                            <td class="text-end">{{ employee_obj.gross|floatformat:"0"|intcomma }}</td>
-                                            <td class="text-end">{{ employee_obj.net|floatformat:"0"|intcomma }}</td>
-                                            <td class="text-end">{{ employee_obj.taxable_gross|floatformat:"0"|intcomma }}</td>
-                                            <td class="text-end">{{ employee_obj.social_security_threshold|floatformat:"0"|intcomma }}</td>
+                                            <td class="text-end">{{ employee_obj.gross|floatformat:2 }}</td>
+                                            <td class="text-end">{{ employee_obj.net|floatformat:2 }}</td>
+                                            <td class="text-end">{{ employee_obj.taxable_gross|floatformat:2 }}</td>
+                                            <td class="text-end">{{ employee_obj.social_security_threshold|floatformat:2 }}</td>
                                             <td></td>
                                         </tr>
                                     </tbody>
