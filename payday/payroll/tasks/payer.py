@@ -412,9 +412,13 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
             context["df_items"] = df_items
             context["item"] = DictToObject(row.to_dict())
             context["sum_of"] = partial(sum_of_items_fields, df_items)
+            
 
-            if expr == "ipr_iere":
-                context["ipr_iere"] = _ipr_iere_fast(df_items, context["employee"])
+            if expr == "ipr_iere_cdf":
+                context["ipr_iere"] = _ipr_iere_fast_cdf(df_items, context["employee"])
+
+            if expr == "ipr_iere_usd":
+                context["ipr_iere"] = _ipr_iere_fast_usd(df_items, context["employee"], payroll.metadata.get("rate", 1))
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
@@ -478,7 +482,11 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                 extra={'employee_id': employee['id']})
     return employee, items_list
 
-def _ipr_iere_fast(df_items: pd.DataFrame, employee: dict) -> float:
+def _cdf_to_usd(amount: float, rate: 1) -> float:
+    """Convert CDF to USD."""
+    return round(amount/rate, 2) 
+
+def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: 1) -> float:
     """Calculate tax efficiently."""
     df_items["is_bonus"] = df_items["is_bonus"].astype(bool)
     non_bonus_mask = ~df_items["is_bonus"]
@@ -486,11 +494,41 @@ def _ipr_iere_fast(df_items: pd.DataFrame, employee: dict) -> float:
     taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
 
     tax = 0
+    base_tax = _cdf_to_usd(4860, rate)
+
+    for rule in TRANCHE_RULES:
+        lower, upper = rule["range"]
+        lower = _cdf_to_usd(lower, rate)
+        upper = _cdf_to_usd(upper, rate)
+
+        if lower <= taxable_gross <= upper:
+            over_base = max(taxable_gross - lower, 0)
+            tax = (over_base * rule["rate"]) + base_tax
+            break
+
+    bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
+    tax += bonus_tax
+
+    dependant_count = getattr(employee, "children", 0) + (
+        1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
+    )
+    tax -= tax * (0.02 * dependant_count)
+    return round(max(tax, 0), 2)
+
+def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
+    """Calculate tax efficiently."""
+    df_items["is_bonus"] = df_items["is_bonus"].astype(bool)
+    non_bonus_mask = ~df_items["is_bonus"]
+    social_sec_threshold = df_items.loc[non_bonus_mask, "social_security_amount"].sum() * 0.05
+    taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
+
+    tax = 0
+    base_tax = _cdf_to_usd(4860, 1)
+
     for rule in TRANCHE_RULES:
         lower, upper = rule["range"]
         if lower <= taxable_gross <= upper:
             over_base = max(taxable_gross - lower, 0)
-            base_tax = 4860
             tax = (over_base * rule["rate"]) + base_tax
             break
 

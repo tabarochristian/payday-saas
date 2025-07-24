@@ -22,8 +22,8 @@ class Employee(Base):
     date_of_join = fields.DateField(_('date d\'engagement'), help_text='YYYY-MM-DD', null=True, default=None)
     date_of_end = fields.DateField(_('date de fin'), help_text='YYYY-MM-DD', blank=True, null=True, default=None)
 
-    designation = fields.ModelSelectField('employee.designation', verbose_name=_('fonction'), blank=True, null=True, on_delete=models.SET_NULL)
-    grade = fields.ModelSelectField('employee.grade', verbose_name=_('grade'), blank=True, null=True, on_delete=models.SET_NULL)
+    designation = fields.ModelSelectField('employee.designation', verbose_name=_('fonction'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    grade = fields.ModelSelectField('employee.grade', verbose_name=_('grade'), blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     # linked field
     subdirection = fields.ModelSelectField('employee.subdirection', verbose_name=_('sous-direction'), blank=True, null=True, on_delete=models.SET_NULL, default=None)
@@ -35,20 +35,21 @@ class Employee(Base):
     last_name = fields.CharField(_('nom'), max_length=100, blank=True, null=True, default=None)
 
     date_of_birth = fields.DateField(_('date de naissance'), help_text='YYYY-MM-DD', null=True, default=None)
-    gender = fields.CharField(_('genre'), max_length=10, choices=GENDERS)
+    gender = fields.CharField(_('genre'), max_length=10, choices=GENDERS, blank=True, null=True, default=None)
 
     spouse_date_of_birth = fields.DateField(_('date de naissance du conjoint'), help_text='YYYY-MM-DD', blank=True, null=True, default=None)
+    marital_status = fields.CharField(_('état civil'), max_length=12, choices=MARITAl_STATUS, blank=True, null=True, default=None)
     spouse = fields.CharField(_('conjoint'), max_length=100, blank=True, null=True, default=None)
-    marital_status = fields.CharField(_('état civil'), max_length=12, choices=MARITAl_STATUS)
+   
 
     mobile_number = PhoneNumberField(_('numéro de téléphone mobile'), help_text=_("+243 XXX XXX XXX"), null=True, default=None)
     physical_address = fields.TextField(_('adresse physique'), blank=True, null=True, default=None)
     emergency_information = fields.TextField(_('informations d\'urgence'), null=True, default=None)
 
-    branch = fields.ModelSelectField('employee.Branch', verbose_name=_('site'),  null=True, on_delete=models.SET_NULL)
+    branch = fields.ModelSelectField('employee.Branch', verbose_name=_('site'),  null=True, on_delete=models.SET_NULL, default=None)
 
+    payment_method = fields.CharField(_('mode de paiement'), max_length=20, choices=PAYMENT_METHODS, blank=True, null=True, default=None)
     payment_account = fields.CharField(_('numéro de compte/paiement'), max_length=50, blank=True, null=True, default=None)
-    payment_method = fields.CharField(_('mode de paiement'), max_length=20, choices=PAYMENT_METHODS)
     payer_name = fields.CharField(_('nom du payeur'), max_length=50, null=True, default=None)
 
     comment = fields.TextField(_('commentaire'), blank=True, null=True, default=None)
