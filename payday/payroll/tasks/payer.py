@@ -459,7 +459,11 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
     df_items = df_items.replace([np.inf, -np.inf], 0).fillna(0)
 
     # Process legal items after initializing amounts
-    for legal in shared_data["legal_items"]:
+    # Sort by 'code' key in ascending order
+    sorted_legal_items = sorted(shared_data["legal_items"], key=lambda x: x["code"])
+
+    # Loop through the sorted list
+    for legal in sorted_legal_items:
         code = legal["code"]
         filtered_df = df_items[df_items["code"] == code].copy()
         if filtered_df.empty:
