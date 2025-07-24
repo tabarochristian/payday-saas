@@ -28,7 +28,7 @@ logger = getLogger(__name__)
 TRANCHE_RULES = [
     {"rate": 0.03, "range": (0, 162_000)},
     {"rate": 0.15, "range": (162_001, 1_800_000)},
-    {"rate": 0.30, "range": (3_600_001, float("inf"))}
+    {"rate": 0.30, "range": (1_800_001, float("inf"))}
 
     #{"rate": 0.30, "range": (1_800_001, 3_600_000)},
     #{"rate": 0.40, "range": (3_600_001, float("inf"))}
