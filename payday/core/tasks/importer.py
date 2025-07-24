@@ -62,42 +62,76 @@ def get_model_fields(model):
     return {field.verbose_name.lower(): field for field in model._meta.fields}
 
 def process_excel_file(obj, fields):
+    # Read Excel and normalize missing values
     df = pd.read_excel(obj.document, sheet_name=0, dtype=str)
-    df = df.replace({np.nan: None, '': None})
+    df.replace({np.nan: None, '': None}, inplace=True)
     df = df.where(pd.notnull(df), None)
 
-    df.columns = [fields[col.lower()].name for col in df.columns]
-    related_fields = {field.name: field.related_model.objects.values('id', 'name') 
-        for field in fields.values() if field.is_relation and field.name in df.columns}
+    # Normalize column names based on field mappings
+    df.columns = [
+        fields[col.lower()].name if col.lower() in fields else col
+        for col in df.columns
+    ]
 
-    # Add constant values to all rows
+    # Identify related fields and fetch their ID mappings
+    related_fields = {
+        field.name: field.related_model.objects.values('id', 'name') 
+        for field in fields.values()
+        if field.is_relation and field.name in df.columns
+    }
+
+    pks = {
+        field.name: field.remote_field.model._meta.pk.name
+        for field in fields.values()
+        if field.is_relation and field.name in df.columns
+    }
+
+    # Add system fields
     df['created_by_id'] = obj.created_by.id
     df['updated_by_id'] = obj.created_by.id
-    
 
-    # Convert related fields to foreign key ids using mapping
-    pks = {field.name: field.remote_field.model._meta.pk.name
-        for field in fields.values() if field.is_relation and field.name in df.columns}
+    # Convert related fields to foreign key IDs
+    rename_map = {}
+    for field_name, choices in related_fields.items():
+        pk_field = pks[field_name]
+        mapping = {choice['name']: choice['id'] for choice in choices}
+        df[field_name] = df[field_name].map(mapping).replace({np.nan: None})
+        rename_map[field_name] = f"{field_name}_{pk_field}"
 
-    columns = {}
-    for field, choices in related_fields.items():
-        pk_field = pks[field]
-        choices_dict = {choice['name']: choice['id'] for choice in choices}
-        df[field] = df[field].map(choices_dict)
-        df[field] = df[field].replace({np.nan: None})
-        columns[field] = f'{field}_{pk_field}'
-    
-    for name, field in fields.items():
-        if 'date' not in field.get_internal_type().lower() or field.name not in df.columns:
-            continue
-        df[field.name] = df[field.name].where(df[field.name].isnull(), pd.to_datetime(df[field.name], errors='coerce'))
+    df.rename(columns=rename_map, inplace=True)
 
-    # rename field
-    df.rename(columns=columns, inplace=True)
+    # Parse date fields
+    for field in fields.values():
+        if (
+            'date' in field.get_internal_type().lower()
+            and field.name in df.columns
+        ):
+            df[field.name] = pd.to_datetime(df[field.name], errors='coerce').where(
+                df[field.name].notnull(), None
+            )
 
-    # replace all nan by None
+    # Metadata extraction
+    metadata_cols = [
+        col for col in df.columns
+        if col.lower().startswith("metadata.")
+    ]
+
+    if metadata_cols:
+        def extract_metadata(row):
+            return {
+                col.split('.', 1)[1]: row[col]
+                for col in metadata_cols
+                if row.get(col) is not None and '.' in col
+            }
+
+        df["_metadata"] = df[metadata_cols].apply(extract_metadata, axis=1)
+        df.drop(columns=metadata_cols, inplace=True)
+
+    # Final cleanup
     df = df.where(pd.notnull(df), None)
+
     return df.to_dict(orient='records')
+
 
 def bulk_create_records(model, data):
     records = [model(**row) for row in data]

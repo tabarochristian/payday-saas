@@ -491,7 +491,7 @@ def _ipr_iere_fast(df_items: pd.DataFrame, employee: dict) -> float:
         if lower <= taxable_gross <= upper:
             over_base = max(taxable_gross - lower, 0)
             base_tax = 4860
-            tax = over_base * rule["rate"] + base_tax
+            tax = (over_base * rule["rate"]) + base_tax
             break
 
     bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
