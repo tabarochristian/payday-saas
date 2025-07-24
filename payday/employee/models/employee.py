@@ -130,7 +130,8 @@ class Employee(BaseEmployee):
             'devices',
             'create_user_on_save',
             css_class='bg-dark p-4 rounded'
-        )
+        ),
+        '_metadata'
     )
 
     def payslips(self):

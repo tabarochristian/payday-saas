@@ -28,6 +28,8 @@ logger = getLogger(__name__)
 TRANCHE_RULES = [
     {"rate": 0.03, "range": (0, 162_000)},
     {"rate": 0.15, "range": (162_001, 1_800_000)},
+    #{"rate": 0.30, "range": (3_600_001, float("inf"))}
+
     {"rate": 0.30, "range": (1_800_001, 3_600_000)},
     {"rate": 0.40, "range": (3_600_001, float("inf"))}
 ]
@@ -108,7 +110,7 @@ class Payer(Task):
                 Sum('net'))['net__sum'] or 0
 
             self.payroll.status = "COMPLETED"
-            self.payroll.overall_net = total_net
+            self.payroll.overall_net = round(total_net, 2)
             self.payroll.save(update_fields=["overall_net", "status"])
 
             self.logger.info(f"Payroll {pk} processed successfully", 
@@ -418,8 +420,8 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                 context["ipr_iere_cdf"] = _ipr_iere_fast_cdf(df_items, context["employee"])
 
             if expr == "ipr_iere_usd":
-                #rate = context["payroll"].metadata["rate"] or context["payroll"].metadata["taux"] or 1
-                context["ipr_iere_usd"] = _ipr_iere_fast_usd(df_items, context["employee"], 2800)
+                rate = context["payroll"].metadata["rate"] or context["payroll"].metadata["taux"] or 1
+                context["ipr_iere_usd"] = _ipr_iere_fast_usd(df_items, context["employee"], rate)
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
@@ -504,7 +506,8 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: 1) -> float
 
         if lower <= taxable_gross <= upper:
             over_base = max(taxable_gross - lower, 0)
-            tax = (over_base * rule["rate"]) + base_tax
+            tax = over_base * rule["rate"]
+            tax += base_tax
             break
 
     bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
