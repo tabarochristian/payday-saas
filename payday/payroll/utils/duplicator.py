@@ -70,7 +70,7 @@ class PayrollProcessor:
         
         annotate_fields = {
             "working_days_per_month": models.functions.Coalesce(
-                models.F("designation__working_days_per_month"), models.Value(23)
+                models.F("designation__working_days_per_month"), models.Value(22)
             ),
             "children": models.functions.Coalesce(models.Count("child"), models.Value(0)),
         }

@@ -1,21 +1,18 @@
-from employee.models import *
-from core.tasks import *
+import pandas as pd
 
-class CreatedBy:
-    def __init__(self):
-        self.id = 12
+# Load the Excel file (adjust the filename as needed)
+file_path = '/Users/tabaro/Downloads/grades (1).xlsx'
+df = pd.read_excel(file_path)
 
-created_by = CreatedBy()
+# Strip whitespace and convert column names to lowercase
+df.columns = [col.strip().lower() for col in df.columns]
 
-class MetaCol:
-    def __init__(self):
-        self.document = "/Users/tabaro/Desktop/grades.xlsx"
-        self.created_by = created_by
+# Concatenate 'nom' with 'metadata.salaire de base' into a new column
+df["nom"] = df["nom"].str.strip().str.lower()
+df["nom"] = df["nom"] + "-" + df["metadata.salaire de base"].astype(str)
 
-meta_col = MetaCol()
+# Display the result
+print(df)
 
-model = Grade
-fields = get_model_fields(model)
-value = process_excel_file(meta_col, fields)
-
-print(value)
+# Optional: save to a new Excel file
+df.to_excel("processed_output.xlsx", index=False)
