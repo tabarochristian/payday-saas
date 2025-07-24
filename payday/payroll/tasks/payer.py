@@ -418,7 +418,8 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                 context["ipr_iere"] = _ipr_iere_fast_cdf(df_items, context["employee"])
 
             if expr == "ipr_iere_usd":
-                context["ipr_iere"] = _ipr_iere_fast_usd(df_items, context["employee"], payroll.metadata.get("rate", 1))
+                rate = context["payroll"].metadata["rate"] or context["payroll"].metadata["taux"] or 1
+                context["ipr_iere"] = _ipr_iere_fast_usd(df_items, context["employee"], rate)
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
