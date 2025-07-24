@@ -501,18 +501,29 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: 1) -> float
     taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
 
     tax = 0
-    base_tax = _cdf_to_usd(4860, rate)
+    base_tax = 0 #_cdf_to_usd(4860, rate)
 
-    for rule in TRANCHE_RULES:
+    for i, rule in enumerate(TRANCHE_RULES):
         lower, upper = rule["range"]
         lower = _cdf_to_usd(lower, rate)
         upper = _cdf_to_usd(upper, rate)
+
+        # Default previous values
+        if i > 0:
+            previous_range_start = _cdf_to_usd(TRANCHE_RULES[i - 1]["range"][0], rate)
+            previous_rate = TRANCHE_RULES[i - 1]["rate"]
+        else:
+            previous_range_start = 0
+            previous_rate = 0
+
+        base_tax = (lower - previous_range_start) * previous_rate
 
         if lower <= taxable_gross <= upper:
             over_base = max(taxable_gross - lower, 0)
             tax = over_base * rule["rate"]
             tax += base_tax
             break
+
 
     bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
     tax += bonus_tax
@@ -533,11 +544,25 @@ def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
     tax = 0
     base_tax = _cdf_to_usd(4860, 1)
 
-    for rule in TRANCHE_RULES:
+    for i, rule in enumerate(TRANCHE_RULES):
         lower, upper = rule["range"]
+        lower = _cdf_to_usd(lower, 1)
+        upper = _cdf_to_usd(upper, 1)
+
+        # Default previous values
+        if i > 0:
+            previous_range_start = _cdf_to_usd(TRANCHE_RULES[i - 1]["range"][0], 1)
+            previous_rate = TRANCHE_RULES[i - 1]["rate"]
+        else:
+            previous_range_start = 0
+            previous_rate = 0
+
+        base_tax = (lower - previous_range_start) * previous_rate
+
         if lower <= taxable_gross <= upper:
             over_base = max(taxable_gross - lower, 0)
-            tax = (over_base * rule["rate"]) + base_tax
+            tax = over_base * rule["rate"]
+            tax += base_tax
             break
 
     bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03

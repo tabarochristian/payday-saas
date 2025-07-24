@@ -179,7 +179,7 @@ set_schema("kazi")
 Employee.objects.all().delete()
 data = [Employee(**row) for row in final_df.to_dict(orient="records")]
 Employee.objects.bulk_create(data)
-"""
+
 
 
 
@@ -191,10 +191,16 @@ import pandas as pd
 set_schema("kazi")
 
 # Step 1: Load Excel file
-df = pd.read_excel("/Users/tabaro/Desktop/kazi/salaire.xlsx")
+df = pd.read_excel("/Users/tabaro/Desktop/kazi/hs.xlsx")
 df.columns = [col.strip().lower() for col in df.columns]
 print(df.columns)
 df["nom_complets"] = df["nom complets"].astype(str).str.strip().str.lower()
+
+# Replace empty strings with NaN first
+df.replace("", pd.NA, inplace=True)
+
+# Fill all NaN (including those introduced by empty strings) with 0
+df = df.fillna(0)
 
 # Step 2: Preprocess full name into tokens
 def tokenize(name):
@@ -228,10 +234,23 @@ for _, row in df.iterrows():
 
     # Step 5: Assign net if a match is found
     if best_match:
-        metadata = {"net": row["net"]}
-        best_match._metadata = metadata
+        metadata = {"hs": row.get("hs", 0)}
+        best_match._metadata.update(metadata)
         best_match.save()
-        print(f"Matched: {row['nom_complets']} → {best_match.first_name} {best_match.last_name} | Net: {row['net']}")
+        print(f"Matched: {row['nom_complets']} → {best_match.first_name} {best_match.last_name} | HS: {row['hs']}")
     else:
         print(f"No match for: {row['nom_complets']}")
 
+"""
+
+from employee.models import *
+from core.utils import set_schema
+
+set_schema("kazi")
+
+for emp in Employee.objects.all():
+    _metadata = emp._metadata
+    _metadata["target_net"] = _metadata.get("net", 0)
+    emp._metadata.update(_metadata)
+    emp.save()
+    print(emp.first_name, emp.last_name)
