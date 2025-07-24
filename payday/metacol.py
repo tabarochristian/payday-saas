@@ -1,3 +1,4 @@
+"""
 import pandas as pd
 
 # Load the Excel file (adjust the filename as needed)
@@ -178,4 +179,59 @@ set_schema("kazi")
 Employee.objects.all().delete()
 data = [Employee(**row) for row in final_df.to_dict(orient="records")]
 Employee.objects.bulk_create(data)
+"""
+
+
+
+from difflib import SequenceMatcher
+from core.utils import set_schema
+from employee.models import *
+import pandas as pd
+
+set_schema("kazi")
+
+# Step 1: Load Excel file
+df = pd.read_excel("/Users/tabaro/Desktop/kazi/salaire.xlsx")
+df.columns = [col.strip().lower() for col in df.columns]
+print(df.columns)
+df["nom_complets"] = df["nom complets"].astype(str).str.strip().str.lower()
+
+# Step 2: Preprocess full name into tokens
+def tokenize(name):
+    return set(name.split())
+
+df["name_tokens"] = df["nom_complets"].apply(tokenize)
+
+# Step 3: Build lookup of Django employees with token sets
+employee_cache = []
+for emp in Employee.objects.all():
+    parts = [emp.first_name, emp.middle_name, emp.last_name]
+    tokens = set(filter(None, [p.strip().lower() for p in parts if p]))
+    employee_cache.append({
+        "instance": emp,
+        "tokens": tokens
+    })
+
+# Step 4: Match and assign
+for _, row in df.iterrows():
+    excel_tokens = row["name_tokens"]
+    best_match = None
+    highest_score = 0
+
+    for entry in employee_cache:
+        overlap = excel_tokens & entry["tokens"]
+        score = len(overlap)
+
+        if score > highest_score:
+            highest_score = score
+            best_match = entry["instance"]
+
+    # Step 5: Assign net if a match is found
+    if best_match:
+        metadata = {"net": row["net"]}
+        best_match._metadata = metadata
+        best_match.save()
+        print(f"Matched: {row['nom_complets']} → {best_match.first_name} {best_match.last_name} | Net: {row['net']}")
+    else:
+        print(f"No match for: {row['nom_complets']}")
 
