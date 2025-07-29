@@ -23,6 +23,9 @@ class Change(BaseViewMixin):
     template_name = "change.html"
     action = ["change"]
 
+    def sub_organization(self):
+        return None
+
     def dispatch(self, request, *args, **kwargs):
         """
         Validates user permissions before processing the request.

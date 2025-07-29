@@ -21,7 +21,7 @@ class SubOrganization(Base):
     )
 
     list_display = ('id', 'name')
-    layout = Layout('logo', 'name')
+    layout = Layout('logo', 'name', '_metadata')
 
     class Meta:
         verbose_name = _('sous-organisation')

@@ -7,12 +7,24 @@ from core.forms.button import Button
 from django.urls import reverse_lazy
 from .change import Change, BaseViewMixin
 
+from core.models import SubOrganization
+
 class Read(Change):
     """
     A read-only view for viewing model instances, inheriting from Change.
     Overrides relevant methods to ensure the form is non-editable.
     """
     action = ["view"]
+
+    def sub_organization(self):
+        obj = self._get_object()
+        sub_organization = obj.sub_organization
+        if not sub_organization:
+            return None
+        obj = SubOrganization.objects.filter(
+            name__iexact=sub_organization.lower()
+        )
+        return obj
 
     def dispatch(self, request, *args, **kwargs):
         """

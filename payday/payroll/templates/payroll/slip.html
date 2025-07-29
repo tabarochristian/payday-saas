@@ -65,9 +65,9 @@
             <div class="page-break">
                 <div class="row">
                     <div class="col-6">
-                        {% if obj.employee.sub_organization %}
-                            <img src="#"
-                                 alt="{{ obj.employee.sub_organization }}"
+                        {% if self.sub_organization %}
+                            <img src="{{ self.sub_organization.logo.url }}"
+                                 alt="{{ self.sub_organization.name }}"
                                  class="organization-logo img-fluid mb-3"
                                  loading="lazy">
                         {% endif %}
@@ -90,10 +90,10 @@
                             <dd class="col-8 mb-0">: {{ obj.employee.registration_number }}</dd>
 
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.full_name }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.full_name|title }}</dd>
 
                             <dt class="col-4">{% trans "Numéro de sécurité sociale CNSS" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.social_security_number }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:'-' }}</dd>
 
                             <dt class="col-4">{% trans "Fonction" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.designation.name|default:"-" }}</dd>
@@ -105,7 +105,7 @@
                             <dd class="col-8 mb-0">: {{ obj.employee.agreement.name|default:"-" }}</dd>
 
                             <dt class="col-4">{% trans "Nombre des jours" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.designation.working_days_per_month }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.designation.working_days_per_month|default:'-' }}</dd>
                         </dl>
                     </div>
 
