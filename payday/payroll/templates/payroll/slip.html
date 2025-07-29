@@ -67,7 +67,7 @@
                     <div class="col-6">
                         {% if obj.employee.sub_organization %}
                             <img src="#"
-                                 alt="{{ obj.employee.sub_organization|default:"Payday" }}"
+                                 alt="{{ obj.employee.sub_organization }}"
                                  class="organization-logo img-fluid mb-3"
                                  loading="lazy">
                         {% endif %}
@@ -76,7 +76,13 @@
                         <small>{% trans "Généré le" %}: {% now "d/m/Y" %}</small>
                     </div>
                 </div>
-
+                {% comment %}
+                 <div class="row col-12 text-start ps-3">
+                    <div style="width: 80px; height: 80px; border: 2px solid #000; display: flex; align-items: center; justify-content: center;">
+                        <!-- Logo ici -->
+                    </div>
+                </div>
+                {% endcomment %}
                 <div class="row mb-3">
                     <div class="col-6">
                         <dl class="row">
@@ -86,17 +92,23 @@
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.full_name }}</dd>
 
+                            <dt class="col-4">{% trans "Numéro de sécurité sociale CNSS" %}</dt>
+                            <dd class="col-8 mb-0">: {{ obj.employee.social_security_number }}</dd>
+
                             <dt class="col-4">{% trans "Fonction" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.position.name|default:"-" }}</dd>
 
-                            <dt class="col-4">{% trans "Catégorie" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.grade.category|default:"-" }}</dd>
+                            <dt class="col-4">{% trans "Grade" %}</dt>
+                            <dd class="col-8 mb-0">: {{ obj.employee.grade.name|default:"-" }}</dd>
 
-                            <dt class="col-4">{% trans "Sit. Fam." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.marital_status }} {% trans "avec" %} {{ obj.employee.children_set.count }}</dd>
+                            <dt class="col-4">{% trans "Contrat" %}</dt>
+                            <dd class="col-8 mb-0">: {{ obj.employee.agreement.name|default:"-" }}</dd>
 
-                            <dt class="col-4">{% trans "N. Sec. Social" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:"-" }}</dd>
+                            <dt class="col-4">{% trans "Nombre des jours" %}</dt>
+                            <dd class="col-8 mb-0">: 0</dd>
+
+                            <dt class="col-4">{% trans "Pecule de conge" %}</dt>
+                            <dd class="col-8 mb-0">: 0</dd>
                         </dl>
                     </div>
 
@@ -119,6 +131,9 @@
 
                             <dt class="col-4">{% trans "Centre" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.branch.name|default:"-" }}</dd>
+
+                             <dt class="col-4">{% trans "Indeminite des conges" %}</dt>
+                            <dd class="col-8 mb-0">: 0</dd>
                         </dl>
                     </div>
                 </div>
@@ -165,11 +180,11 @@
                                 </thead>
                                 <tbody>
                                     {% for item in items %}
-                                        {% if item.type_of_item == -1 and item.amount_qp_employee != 0 %}
+                                        {% if item.type_of_item == -1 %}
                                             <tr>
                                                 <td>{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
-                                                <td>{{ item.amount_qp_employee|abs|floatformat:2 }}</td>
+                                                <td>{{ item.amount_qp_employee|default:item.amount_qp_employer|abs|floatformat:2 }}</td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
