@@ -65,9 +65,9 @@
             <div class="page-break">
                 <div class="row">
                     <div class="col-6">
-                        {% if self.sub_organization %}
-                            <img src="{{ self.sub_organization.logo.url }}"
-                                 alt="{{ self.sub_organization.name }}"
+                        {% if sub_organization %}
+                            <img src="{{ sub_organization.logo.url }}"
+                                 alt="{{ sub_organization.name }}"
                                  class="organization-logo img-fluid mb-3"
                                  loading="lazy">
                         {% endif %}

@@ -1,10 +1,12 @@
 # payroll/views/slips.py
 
 from django.utils.translation import gettext_lazy as _
+from core.models import SubOrganization
 from django.shortcuts import render
 from django.http import Http404
 from django.apps import apps
 from core.views import Read
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,6 +23,17 @@ class Slips(Read):
       - Uses locals() only where safe (template rendering)
     """
     template_name = "payroll/slip.html"
+
+    def sub_organization(self):
+        
+        obj = self._get_object()
+        sub_organization = obj.sub_organization
+        if not sub_organization:
+            return None
+        obj = SubOrganization.objects.filter(
+            name__iexact=sub_organization.lower()
+        )
+        return obj
 
     @property
     def model_class(self):
@@ -48,9 +61,12 @@ class Slips(Read):
             }
 
             logger.debug("Applying query filters: %s", query_params)
+            qs = self.get_queryset().filter(**query_params)
 
-            # Apply filters
-            qs = model_class.objects.filter(**query_params)
+            sub_organization = getattr(qs.first(), "sub_organization", None)
+            sub_organization = SubOrganization.objects.filter(
+                name__iexact=sub_organization
+            ).first()
 
             if not qs.exists():
                 logger.warning("No payslips matched the filters")
