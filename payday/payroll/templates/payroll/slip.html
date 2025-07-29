@@ -204,11 +204,11 @@
                     <div class="col-6 text-end">
                         <h3 class="mb-0 fs-5">
                             {% trans "NET A PAYER" %}: 
-                            <span class="text-decoration-underline">
+                            <span class="text-decoration-none">
                                 {{ obj.net|floatformat:2 }}
                             </span>
                         </h3>
-                        <small>({{ obj.currency }})</small>
+                        <small>(USD)</small>
                     </div>
                 </div>
 
@@ -217,8 +217,8 @@
                 <div class="row mb-2">
                     <div class="col">
                         <dl class="row">
-                            <dt class="col-3">{% trans "Grade" %}</dt>
-                            <dd class="col-9 mb-0">: {{ obj.employee.grade.name }}</dd>
+                            <dt class="col-3">{% trans "Grade/Categorie" %}</dt>
+                            <dd class="col-9 mb-0">: {{ obj.employee.designation.group }}</dd>
 
                             <dt class="col-3">{% trans "Période" %}</dt>
                             <dd class="col-9 mb-0">
