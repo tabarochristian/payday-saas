@@ -105,10 +105,7 @@
                             <dd class="col-8 mb-0">: {{ obj.employee.agreement.name|default:"-" }}</dd>
 
                             <dt class="col-4">{% trans "Nombre des jours" %}</dt>
-                            <dd class="col-8 mb-0">: 0</dd>
-
-                            <dt class="col-4">{% trans "Pecule de conge" %}</dt>
-                            <dd class="col-8 mb-0">: 0</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.designation.working_days }}</dd>
                         </dl>
                     </div>
 
@@ -132,7 +129,7 @@
                             <dt class="col-4">{% trans "Centre" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.branch.name|default:"-" }}</dd>
 
-                             <dt class="col-4">{% trans "Indeminite des conges" %}</dt>
+                            <dt class="col-4">{% trans "Nbre. Conge" %}</dt>
                             <dd class="col-8 mb-0">: 0</dd>
                         </dl>
                     </div>
