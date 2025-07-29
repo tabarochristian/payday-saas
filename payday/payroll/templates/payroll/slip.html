@@ -96,16 +96,16 @@
                             <dd class="col-8 mb-0">: {{ obj.employee.social_security_number }}</dd>
 
                             <dt class="col-4">{% trans "Fonction" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.position.name|default:"-" }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.designation.name|default:"-" }}</dd>
 
-                            <dt class="col-4">{% trans "Grade" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.grade.name|default:"-" }}</dd>
+                            <dt class="col-4">{% trans "Grade/Categorie" %}</dt>
+                            <dd class="col-8 mb-0">: {{ obj.employee.designation.group|default:"-" }}</dd>
 
                             <dt class="col-4">{% trans "Contrat" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.agreement.name|default:"-" }}</dd>
 
                             <dt class="col-4">{% trans "Nombre des jours" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.designation.working_days }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.employee.designation.working_days_per_month }}</dd>
                         </dl>
                     </div>
 
