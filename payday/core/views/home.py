@@ -80,7 +80,8 @@ class Home(LoginRequiredMixin, View):
                     'payroll_data': context['payroll_data']
                 }, request=request),
                 "permission": "payroll.view_paidemployee",
-                "column": "col-12"
+                "column": "col-12",
+                "admin": True
             },
             {
                 "title": _("Employee Status Cards"),
@@ -88,7 +89,8 @@ class Home(LoginRequiredMixin, View):
                     'statistics': context['statistics']
                 }, request=request),
                 "permission": "employee.view_employee",
-                "column": "col-12 col-md-6 col-lg-3"
+                "column": "col-12 col-md-6 col-lg-3",
+                "admin": True
             },
             {
                 "title": _("Leave Request Form"),
@@ -96,7 +98,8 @@ class Home(LoginRequiredMixin, View):
                     'remaining_leave_days': context['remaining_leave_days'],
                 }, request=request),
                 "permission": "leave.add_leave",
-                "column": "col-12 col-md-6 col-lg-3"
+                "column": "col-12 col-md-6 col-lg-3",
+                "admin": False
             },
             {
                 "title": _("Pending Leaves List"),
@@ -104,7 +107,8 @@ class Home(LoginRequiredMixin, View):
                     'leaves': context['leaves']
                 }, request=request),
                 "permission": "leave.view_leave",
-                "column": "col-12 col-md-6 col-lg-3"
+                "column": "col-12 col-md-6 col-lg-3",
+                "admin": False
             },
             {
                 "title": _("Current Year Payslips"),
@@ -112,7 +116,8 @@ class Home(LoginRequiredMixin, View):
                     'payslips': context['payslips']
                 }, request=request),
                 "permission": "payroll.view_paidemployee",
-                "column": "col-12 col-md-6 col-lg-6"
+                "column": "col-12 col-md-6 col-lg-6",
+                "admin": False
             }
         ]
 
@@ -120,8 +125,17 @@ class Home(LoginRequiredMixin, View):
             "title": widget["title"],
             "column": widget["column"],
             "content": mark_safe(widget["content"]),
-        } for widget in widgets if request.user.has_perm(widget["permission"])]
+        } for widget in widgets if request.user.has_perm(widget["permission"]) and _is_admin(widget["admin"], request.user)]
 
+    def _is_admin(act, user):
+        if act == False:
+            return True
+        if act and (user.is_superuser or user.is_staff):
+            return True
+        else:
+            return False
+        return False
+    
     def get(self, request):
         """
         Handle GET requests for the homepage.
