@@ -125,9 +125,10 @@ class Home(LoginRequiredMixin, View):
             "title": widget["title"],
             "column": widget["column"],
             "content": mark_safe(widget["content"]),
-        } for widget in widgets if request.user.has_perm(widget["permission"]) and _is_admin(widget["admin"], request.user)]
+        } for widget in widgets if request.user.has_perm(widget["permission"]) and self._is_admin(widget["admin"])]
 
-    def _is_admin(act, user):
+    def _is_admin(self, act):
+        user = self.request.user
         if act == False:
             return True
         if act and (user.is_superuser or user.is_staff):
