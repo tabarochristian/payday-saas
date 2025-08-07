@@ -108,7 +108,7 @@ class Payer(Task):
                 Sum('net'))['net__sum'] or 0
 
             self.payroll.status = "COMPLETED"
-            self.payroll.overall_net = round(total_net, 2)
+            self.payroll.overall_net = round(total_net)
             self.payroll.save(update_fields=["overall_net", "status"])
 
             self.logger.info(f"Payroll {pk} processed successfully", 
@@ -427,7 +427,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
             result = result * int(row.get("type_of_item", 1))
             print("IPR FOR", context["employee"]["registration_number"], result)
-            return round(result, 2)
+            return round(result)
         except Exception as e:
             logger.warning(f"Formula evaluation failed for employee {registration_number}, "
                           f"item {row.get('code', 'unknown')}, formula '{expr}': {str(e)}",
@@ -496,56 +496,96 @@ def _cdf_to_usd(amount: float, rate: 1) -> float:
     return round(amount/rate, 2) 
 
 def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int) -> float:
-    """Calculate tax efficiently."""
+    """
+    Efficiently calculate income tax in USD based on payroll items and employee profile.
+
+    Args:
+        df_items (pd.DataFrame): Payroll items with 'is_bonus', 'social_security_amount', and 'taxable_amount'.
+        employee (dict): Employee data with optional 'children' and 'marital_status'.
+        rate (int): Exchange rate or scaling factor.
+
+    Returns:
+        float: Final tax amount in USD.
+    """
     df_items["is_bonus"] = df_items["is_bonus"].astype(bool)
     non_bonus_mask = ~df_items["is_bonus"]
 
-    social_sec_threshold = df_items.loc[non_bonus_mask, "social_security_amount"].sum() * 0.05
-    taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
-    taxable_gross = taxable_gross * rate
+    # Compute adjusted taxable gross
+    social_security_total = df_items.loc[non_bonus_mask, "social_security_amount"].sum() or 0
+    social_security_deduction = social_security_total * 0.05
 
-    plafond, tax = 0, 0
+    taxable_gross_local = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_security_deduction
+    taxable_gross_cdf = taxable_gross_local * rate
+
+    # Apply progressive tax rules
+    max_tax, capped_tax = 0, 0
     for rule in TRANCHE_RULES:
-        rate = rule["rate"]
+        tranche_rate = rule["rate"]
         lower, upper = rule["range"]
-        upper = taxable_gross if upper == float("inf") else upper
-        tax = round(tax + ((upper - lower) * rate))
-        if lower <= taxable_gross <= upper:
-            plafond = taxable_gross * rate
-            break
-    tax = plafond if tax > plafond else tax
+        upper = taxable_gross_cdf if upper == float("inf") else upper
 
-    dependant_count = getattr(employee, "children", 0) + (
-        1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
-    )
-    tax -= (tax * (0.02 * dependant_count))
-    return round(tax / rate, 2)
+        max_tax += (upper - lower) * tranche_rate
+        if lower <= taxable_gross_cdf <= upper:
+            capped_tax = taxable_gross_cdf * tranche_rate
+            break
+
+    tax_cdf = capped_tax if max_tax > capped_tax else max_tax
+
+    # Apply dependent deductions
+    children = employee.get("children", 0)
+    is_married = employee.get("marital_status", "") == "MARRIED"
+    dependents = children + int(is_married)
+
+    deduction_factor = 0.02 * dependents
+    tax_cdf *= (1 - deduction_factor)
+
+    # Avoid division by zero
+    return round(tax_cdf / rate) if rate else 0
+
 
 def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
-    """Calculate tax efficiently."""
+    """
+    Efficiently calculate income tax in CDF based on payroll items and employee profile.
+
+    Args:
+        df_items (pd.DataFrame): Payroll items with 'is_bonus', 'social_security_amount', and 'taxable_amount'.
+        employee (dict): Employee data with optional 'children' and 'marital_status'.
+
+    Returns:
+        float: Final tax amount in CDF.
+    """
     df_items["is_bonus"] = df_items["is_bonus"].astype(bool)
     non_bonus_mask = ~df_items["is_bonus"]
-    social_sec_threshold = df_items.loc[non_bonus_mask, "social_security_amount"].sum() * 0.05
-    taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
-    taxable_gross = taxable_gross * 1
 
-    tax = 0
-    plafond = 0
+    # Compute adjusted taxable gross
+    social_security_total = df_items.loc[non_bonus_mask, "social_security_amount"].sum() or 0
+    social_security_deduction = social_security_total * 0.05
+    taxable_gross_cdf = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_security_deduction
+
+    # Apply progressive tax rules
+    max_tax, capped_tax = 0, 0
     for rule in TRANCHE_RULES:
-        rate = rule["rate"]
+        tranche_rate = rule["rate"]
         lower, upper = rule["range"]
-        upper = taxable_gross if upper == float("inf") else upper
-        tax = round(tax + ((upper - lower) * rate))
-        if lower <= taxable_gross <= upper:
-            plafond = taxable_gross * rate
+        upper = taxable_gross_cdf if upper == float("inf") else upper
+
+        max_tax += (upper - lower) * tranche_rate
+        if lower <= taxable_gross_cdf <= upper:
+            capped_tax = taxable_gross_cdf * tranche_rate
             break
-    tax = plafond if tax > plafond else tax
-    
-    dependant_count = getattr(employee, "children", 0) + (
-        1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
-    )
-    tax -= (tax * (0.02 * dependant_count))
-    return round(tax, 2)
+
+    tax_cdf = capped_tax if max_tax > capped_tax else max_tax
+
+    # Apply dependent deductions
+    children = employee.get("children", 0)
+    is_married = employee.get("marital_status", "") == "MARRIED"
+    dependents = children + int(is_married)
+
+    deduction_factor = 0.02 * dependents
+    tax_cdf *= (1 - deduction_factor)
+
+    return round(tax_cdf)
+
 
 def sum_of_items_fields(df: pd.DataFrame, fields: str | List[str], 
                        condition: Optional[pd.Series] = None) -> float:
