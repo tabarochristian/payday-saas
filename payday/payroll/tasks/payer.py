@@ -415,13 +415,13 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
             
 
             if expr == "ipr_iere_cdf":
-                context["ipr_iere_cdf"] = _ipr_iere_fast_cdf(df_items, context["employee"])
+                context["ipr_iere_cdf"] = _ipr_iere_fast_cdf(df_items, context["employee"], context)
 
             if expr == "ipr_iere_usd":
                 rate = context["payroll"]._metadata.get("rate") \
                     or context["payroll"]._metadata.get("taux") \
                     or 1
-                context["ipr_iere_usd"] = _ipr_iere_fast_usd(df_items, context["employee"], rate)
+                context["ipr_iere_usd"] = _ipr_iere_fast_usd(df_items, context["employee"], rate, context)
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
@@ -495,7 +495,7 @@ def _cdf_to_usd(amount: float, rate: 1) -> float:
     """Convert CDF to USD."""
     return round(amount/rate, 2) 
 
-def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int) -> float:
+def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int, context) -> float:
     """
     Efficiently calculate income tax in USD based on payroll items and employee profile.
 
@@ -511,7 +511,8 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int) -> flo
     non_bonus_mask = ~df_items["is_bonus"]
 
     # Compute adjusted taxable gross
-    social_security_total = df_items.loc[non_bonus_mask, "social_security_amount"].sum() or 0
+    sum_of = context["sum_of"]
+    social_security_total = sum_of("social_security_amount") #df_items.loc[non_bonus_mask, "social_security_amount"].sum() or 0
     social_security_deduction = social_security_total * 0.05
 
     taxable_gross_local = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_security_deduction
@@ -543,7 +544,7 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int) -> flo
     return round(tax_cdf / rate) if rate else 0
 
 
-def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
+def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict, context) -> float:
     """
     Efficiently calculate income tax in CDF based on payroll items and employee profile.
 

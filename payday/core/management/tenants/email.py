@@ -23,7 +23,7 @@ class EmailService:
     def send_welcome_email(
         self,
         schema: str,
-        user: 'User',
+        user,
         password: str,
         tenant_name: Optional[str],
         plan: str

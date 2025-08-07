@@ -35,7 +35,7 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
     try:
         if not schema: return
         EmailService().send_welcome_email(
-            password='payday-pwd',
+            password='kazi-pwd',
             tenant_name=schema,
             user=instance,
             schema=schema,
