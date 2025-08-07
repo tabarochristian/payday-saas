@@ -29,7 +29,7 @@ TRANCHE_RULES = [
     {"rate": 0.03, "range": (0, 162_000)},
     {"rate": 0.15, "range": (162_001, 1_800_000)},
     {"rate": 0.30, "range": (1_800_001, 3600000)},
-    {"rate": 0.40, "range": (3_600_000, float("inf"))}
+    {"rate": 0.40, "range": (3_600_001, float("inf"))}
 ]
 
 class DictToObject:
@@ -525,9 +525,10 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int, contex
         lower, upper = rule["range"]
         upper = taxable_gross_cdf if upper == float("inf") else upper
 
-        max_tax += (upper - lower) * tranche_rate
+        max_tax += ((upper - lower) * tranche_rate)
         if lower <= taxable_gross_cdf <= upper:
-            capped_tax = taxable_gross_cdf * tranche_rate
+            _tranche_rate = (0.3 if tranche_rate == 0.4 else rate)
+            capped_tax = taxable_gross_cdf * _tranche_rate
             break
 
     tax_cdf = capped_tax if max_tax > capped_tax else max_tax
