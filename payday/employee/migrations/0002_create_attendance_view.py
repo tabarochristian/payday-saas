@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 SELECT
                     r.id,
                     d.id AS device_id,
-                    r.enroll_id AS employee_id,
+                    e.id AS employee_id,
                     e.sub_organization,
                     DATE(r.timestamp) AS checked_at,
                     COUNT(r.enroll_id) AS count,
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 SELECT
                     ROW_NUMBER() OVER (ORDER BY l.timestamp) AS id,
                     d.id AS device_id,
-                    l.enroll_id AS employee_id,
+                    e.id AS employee_id,
                     e.sub_organization,
                     DATE(l.timestamp) AS checked_at,
                     COUNT(l.enroll_id) AS count,
