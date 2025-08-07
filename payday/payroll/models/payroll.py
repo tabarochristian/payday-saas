@@ -43,6 +43,10 @@ class Payroll(Base):
     
     approvers = ModelSelect2Multiple('core.user', verbose_name=_('approbateurs'))
     approved = models.BooleanField(verbose_name=_('approuvé'), default=False)
+
+    _metadata = fields.JSONField(_("metadata"), default={
+        "taux": 2800
+    }, blank=True)
     
     list_display = ('id', 'name', 'start_dt', 'end_dt', 'overall_net', 'status')
     list_filter = ('start_dt', 'end_dt')

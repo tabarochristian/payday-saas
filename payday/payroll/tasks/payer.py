@@ -28,10 +28,8 @@ logger = getLogger(__name__)
 TRANCHE_RULES = [
     {"rate": 0.03, "range": (0, 162_000)},
     {"rate": 0.15, "range": (162_001, 1_800_000)},
-    {"rate": 0.30, "range": (1_800_001, float("inf"))}
-
-    #{"rate": 0.30, "range": (1_800_001, 3_600_000)},
-    #{"rate": 0.40, "range": (3_600_001, float("inf"))}
+    {"rate": 0.30, "range": (1_800_001, 3600000)},
+    {"rate": 0.40, "range": (3_600_000, float("inf"))}
 ]
 
 class DictToObject:
@@ -499,40 +497,25 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: 1) -> float
     non_bonus_mask = ~df_items["is_bonus"]
     social_sec_threshold = df_items.loc[non_bonus_mask, "social_security_amount"].sum() * 0.05
     taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
+    taxable_gross = taxable_gross * rate
 
     tax = 0
-    base_tax = 0 #_cdf_to_usd(4860, rate)
-
-    for i, rule in enumerate(TRANCHE_RULES):
+    plafond = 0
+    for rule in TRANCHE_RULES:
+        rate = rule["rate"]
         lower, upper = rule["range"]
-        lower = _cdf_to_usd(lower, rate)
-        upper = _cdf_to_usd(upper, rate)
-
-        # Default previous values
-        if i > 0:
-            previous_range_start = _cdf_to_usd(TRANCHE_RULES[i - 1]["range"][0], rate)
-            previous_rate = TRANCHE_RULES[i - 1]["rate"]
-        else:
-            previous_range_start = 0
-            previous_rate = 0
-
-        base_tax = (lower - previous_range_start) * previous_rate
-
+        upper = taxable_gross if upper == float("inf") else upper
+        tax = round(tax + ((upper - lower) * rate))
         if lower <= taxable_gross <= upper:
-            over_base = max(taxable_gross - lower, 0)
-            tax = over_base * rule["rate"]
-            tax += base_tax
+            plafond = taxable_gross * rate
             break
-
-
-    bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
-    tax += bonus_tax
+    tax = plafond if tax > plafond else tax
 
     dependant_count = getattr(employee, "children", 0) + (
         1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
     )
     tax -= tax * (0.02 * dependant_count)
-    return round(max(tax, 0), 2)
+    return round(max(tax / rate, 0), 2)
 
 def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
     """Calculate tax efficiently."""
@@ -540,34 +523,20 @@ def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
     non_bonus_mask = ~df_items["is_bonus"]
     social_sec_threshold = df_items.loc[non_bonus_mask, "social_security_amount"].sum() * 0.05
     taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
+    taxable_gross = taxable_gross * 1
 
     tax = 0
-    base_tax = _cdf_to_usd(4860, 1)
-
-    for i, rule in enumerate(TRANCHE_RULES):
+    plafond = 0
+    for rule in TRANCHE_RULES:
+        rate = rule["rate"]
         lower, upper = rule["range"]
-        lower = _cdf_to_usd(lower, 1)
-        upper = _cdf_to_usd(upper, 1)
-
-        # Default previous values
-        if i > 0:
-            previous_range_start = _cdf_to_usd(TRANCHE_RULES[i - 1]["range"][0], 1)
-            previous_rate = TRANCHE_RULES[i - 1]["rate"]
-        else:
-            previous_range_start = 0
-            previous_rate = 0
-
-        base_tax = (lower - previous_range_start) * previous_rate
-
+        upper = taxable_gross if upper == float("inf") else upper
+        tax = round(tax + ((upper - lower) * rate))
         if lower <= taxable_gross <= upper:
-            over_base = max(taxable_gross - lower, 0)
-            tax = over_base * rule["rate"]
-            tax += base_tax
+            plafond = taxable_gross * rate
             break
-
-    bonus_tax = df_items.loc[df_items["is_bonus"], "taxable_amount"].sum() * 0.03
-    tax += bonus_tax
-
+    tax = plafond if tax > plafond else tax
+    
     dependant_count = getattr(employee, "children", 0) + (
         1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
     )
