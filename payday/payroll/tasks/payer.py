@@ -418,7 +418,9 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                 context["ipr_iere_cdf"] = _ipr_iere_fast_cdf(df_items, context["employee"])
 
             if expr == "ipr_iere_usd":
-                rate = context["payroll"]._metadata["rate"] or context["payroll"]._metadata["taux"] or 1
+                rate = context["payroll"]._metadata.get("rate") \
+                    or context["payroll"]._metadata.get("taux") \
+                    or 1
                 context["ipr_iere_usd"] = _ipr_iere_fast_usd(df_items, context["employee"], rate)
 
             result = eval(expr, {"__builtins__": None}, context)
@@ -495,12 +497,12 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: 1) -> float
     """Calculate tax efficiently."""
     df_items["is_bonus"] = df_items["is_bonus"].astype(bool)
     non_bonus_mask = ~df_items["is_bonus"]
+
     social_sec_threshold = df_items.loc[non_bonus_mask, "social_security_amount"].sum() * 0.05
     taxable_gross = df_items.loc[non_bonus_mask, "taxable_amount"].sum() - social_sec_threshold
     taxable_gross = taxable_gross * rate
 
-    tax = 0
-    plafond = 0
+    plafond, tax = 0, 0
     for rule in TRANCHE_RULES:
         rate = rule["rate"]
         lower, upper = rule["range"]
