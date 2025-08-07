@@ -517,8 +517,7 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int) -> flo
         1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
     )
     tax -= (tax * (0.02 * dependant_count))
-    print("Print IPR FOR", employee["registration_number"], tax)
-    return round(max(tax / rate, 0), 2)
+    return round(tax / rate, 2)
 
 def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
     """Calculate tax efficiently."""
