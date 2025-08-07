@@ -542,8 +542,8 @@ def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict) -> float:
     dependant_count = getattr(employee, "children", 0) + (
         1 if getattr(employee, "marital_status", 0) == "MARRIED" else 0
     )
-    tax -= tax * (0.02 * dependant_count)
-    return round(max(tax, 0), 2)
+    tax -= (tax * (0.02 * dependant_count))
+    return round(tax, 2)
 
 def sum_of_items_fields(df: pd.DataFrame, fields: str | List[str], 
                        condition: Optional[pd.Series] = None) -> float:
