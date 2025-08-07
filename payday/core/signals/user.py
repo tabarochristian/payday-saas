@@ -30,7 +30,7 @@ def assign_group_and_send_email(sender, instance, created, **kwargs):
         instance.groups.set(groups)
         group = groups.values_list('name', flat=True)
         group_names = ', '.join(instance.groups.all().values_list('name', flat=True))
-        logger.info(f"User '{instance.email}' assigned to group '{group.name}' in schema '{schema}'. Full group list: [{group_names}]")
+        logger.info(f"User '{instance.email}' assigned in schema '{schema}'. Full group list: [{group_names}]")
 
     try:
         if not schema: return
