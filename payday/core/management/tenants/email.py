@@ -14,12 +14,12 @@ class EmailService:
     Handles sending welcome and password reset emails for tenants.
     """
 
-    @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_none(),
-        retry=retry_if_exception_type((SMTPException, ConnectionError)),
-        before_sleep=before_sleep_log(logger, logging.WARNING)
-    )
+    #@retry(
+    #    stop=stop_after_attempt(3),
+    #    wait=wait_none(),
+    #    retry=retry_if_exception_type((SMTPException, ConnectionError)),
+    #    before_sleep=before_sleep_log(logger, logging.WARNING)
+    #)
     def send_welcome_email(
         self,
         schema: str,
@@ -31,28 +31,32 @@ class EmailService:
         """
         Send a welcome email to the user with their temporary password.
         """
-        subject = f"Bienvenue sur Payday !"
-        context = {
-            'user': user,
-            'schema': schema,
-            'password': password,
-            'tenant_name': tenant_name or schema,
-            'plan': plan,
-            'protocol': 'http',
-            'domain': getattr(settings, 'DEFAULT_TENANT_REDIRECT_URL', 'http://payday.cd').replace('http://', ''),
-            'support_email': getattr(settings, 'DEFAULT_FROM_EMAIL', 'support@localhost')
-        }
-        html_message = render_to_string('email/welcome_email.html', context)
-        plain_message = render_to_string('email/welcome_email.txt', context)
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=plain_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email]
-        )
-        email.attach_alternative(html_message, 'text/html')
-        email.send()
-        logger.info(f'Sent welcome email to {user.email}')
+        try:
+            subject = f"Bienvenue sur Payday !"
+            context = {
+                'user': user,
+                'schema': schema,
+                'password': password,
+                'tenant_name': tenant_name or schema,
+                'plan': plan,
+                'protocol': 'http',
+                'domain': getattr(settings, 'DEFAULT_TENANT_REDIRECT_URL', 'http://payday.cd').replace('http://', ''),
+                'support_email': getattr(settings, 'DEFAULT_FROM_EMAIL', 'support@localhost')
+            }
+            html_message = render_to_string('email/welcome_email.html', context)
+            plain_message = render_to_string('email/welcome_email.txt', context)
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email.strip()]
+            )
+            email.attach_alternative(html_message, 'text/html')
+            email.send()
+            logger.info(f'Sent welcome email to {user.email}')
+            print("Ok", user.email)
+        except Exception as ex:
+            print("Not Ok", user.email, str(ex))
 
     @retry(
         stop=stop_after_attempt(3),
