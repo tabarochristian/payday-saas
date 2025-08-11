@@ -297,7 +297,7 @@ class Payer(Task):
         ]
         ItemPaid.objects.bulk_create(
             [ItemPaid(**item) for item in filtered_items], 
-            batch_size=1000, 
+            # batch_size=1000, 
             ignore_conflicts=True
         )
         self.logger.debug(f"Saved {len(filtered_items)} processed items")
