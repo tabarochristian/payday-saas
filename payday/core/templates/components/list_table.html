@@ -2,68 +2,131 @@
 {% load i18n %}
 {% load humanize %}
 
-<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
 
-<div class="card">
+<div class="card shadow-sm">
     {% if model_class.can_search %}
-    <div class="card-header">
-        <form method="get" class="input-group mb-0">
-            <span class="input-group-text" id="search-button">
-                <i class="bi bi-search" aria-hidden="true"></i>
-            </span>
-            <input type="text" name="q" class="form-control" placeholder="{% trans 'Search' %}"
-                   aria-label="{% trans 'Search' %}" aria-describedby="search-button"
-                   value="{{ request.GET.q }}">
-        </form>
-    </div>
+        <div class="card-header bg-white">
+            <form method="get" class="input-group">
+                <span class="input-group-text" id="search-addon">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                </span>
+                <input
+                    type="text"
+                    name="q"
+                    class="form-control"
+                    placeholder="{% trans 'Search' %}"
+                    aria-label="{% trans 'Search' %}"
+                    aria-describedby="search-addon"
+                    value="{{ request.GET.q|default:'' }}"
+                />
+                {% for key, value in request.GET.items %}
+                    {% if key != 'q' and key != 'page' %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}" />
+                    {% endif %}
+                {% endfor %}
+            </form>
+        </div>
     {% endif %}
-    
-    <div class="card-body">
+
+    <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-striped table-hover align-middle mb-0" id="data-table">
+                <thead class="table-light">
                     <tr class="text-uppercase">
-                        <th><input type="checkbox" class="form-check-input" id="select-all-checkbox" aria-label="{% trans 'Select All' %}"/></th>
+                        <th class="text-center" style="width: 50px;">
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                id="select-all-checkbox"
+                                aria-label="{% trans 'Select All' %}"
+                            />
+                        </th>
                         {% for field in self.get_list_display %}
-                            <th>{{ field.verbose_name }}</th>
+                            <th>{{ field.verbose_name|default:field.name|capfirst }}</th>
                         {% empty %}
                             <th>{% trans 'PK' %}</th>
                             <th>{% trans 'Name' %}</th>
                         {% endfor %}
-                        <th>{% trans 'Action' %}</th>
+                        <th class="text-center" style="width: 120px;">{% trans 'Action' %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for obj in page_obj %}
-                    <tr data-row-id="{{ obj.pk }}">
-                        <td><input type="checkbox" class="form-check-input row-checkbox" data-value="{{ obj.pk }}" /></td>
-                        {% for field in self.get_list_display %}
-                            <td>
-                                {% if field.get_internal_type == 'FloatField' %}
-                                    {{ obj|getattr:field.name|intcomma|default:'-' }}
-                                {% elif field.get_internal_type == 'BooleanField' %}
-                                    <i class="bi {% if obj|getattr:field.name %}bi-check-circle-fill text-success{% else %}bi-slash-circle-fill text-danger{% endif %}"></i>
-                                {% else %}
-                                    {{ obj|getattr:field.name|default:'-' }}
-                                {% endif %}
+                        <tr data-row-id="{{ obj.pk }}">
+                            <td class="text-center">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input row-checkbox"
+                                    data-value="{{ obj.pk }}"
+                                />
                             </td>
-                        {% empty %}
-                            <td>{{ obj.pk }}</td>
-                            <td>{{ obj }}</td>
-                        {% endfor %}
-                        
-                        <td>
-                            {% url "core:change" app model_class|getattr:'_meta'|getattr:'model_name' obj.pk as url %}
-                            <a class="text-decoration-none" href="{{ obj.get_absolute_url|default:url }}">{% trans 'View' %}</a>
-                        </td>
-                    </tr>
+                            {% for field in self.get_list_display %}
+                                <td>
+                                    {% if field.name == 'status' %}
+                                        <!-- Custom Status Badges -->
+                                        {% if obj|getattr:field.name == 'PENDING' %}
+                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                                <i class="bi bi-clock-history me-1"></i>
+                                                {% trans 'EN ATTENTE' %}
+                                            </span>
+                                        {% elif obj|getattr:field.name == 'APPROVED' %}
+                                            <span class="badge bg-success rounded-pill px-3 py-2">
+                                                <i class="bi bi-check-circle me-1"></i>
+                                                {% trans 'APPROUVÉ' %}
+                                            </span>
+                                        {% elif obj|getattr:field.name == 'REJECTED' %}
+                                            <span class="badge bg-danger rounded-pill px-3 py-2">
+                                                <i class="bi bi-x-circle me-1"></i>
+                                                {% trans 'REJETÉ' %}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                                {{ obj|getattr:field.name|default:'-' }}
+                                            </span>
+                                        {% endif %}
+                                    {% elif field.get_internal_type == 'BooleanField' %}
+                                        <i class="bi 
+                                            {% if obj|getattr:field.name %}
+                                                bi-check-circle-fill text-success
+                                            {% else %}
+                                                bi-slash-circle-fill text-danger
+                                            {% endif %}
+                                            fs-5"
+                                            aria-label="{% if obj|getattr:field.name %}True{% else %}False{% endif %}">
+                                        </i>
+                                    {% elif field.get_internal_type == 'FloatField' %}
+                                        {{ obj|getattr:field.name|floatformat:2|intcomma|default:'-' }}
+                                    {% else %}
+                                        {{ obj|getattr:field.name|default:'-' }}
+                                    {% endif %}
+                                </td>
+                            {% empty %}
+                                <td>{{ obj.pk }}</td>
+                                <td>{{ obj }}</td>
+                            {% endfor %}
+                            <td class="text-center">
+                                {% url "core:change" app model_class|getattr:'_meta'|getattr:'model_name' obj.pk as url %}
+                                <a
+                                    href="{{ obj.get_absolute_url|default:url }}"
+                                    aria-label="{% trans 'View details' %}"
+                                >
+                                    {% trans 'Afficher' %}
+                                </a>
+                            </td>
+                        </tr>
                     {% empty %}
-                    <tr>
-                        <td colspan="{{ self.get_list_display|length|add:4 }}" class="text-center">
-                            {% trans 'Oups... Nous n avons rien trouvé.' %}
-                        </td>
-                    </tr>
+                        <tr>
+                            <td
+                                colspan="{{ self.get_list_display|length|add:2 }}"
+                                class="text-center text-muted py-4"
+                            >
+                                <i class="bi bi-inbox text-secondary" style="font-size: 2rem;"></i><br>
+                                {% trans "Oups... Nous n'avons rien trouvé." %}
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -71,65 +134,117 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-body text-center" id="pagination-card">
-        <nav aria-label="{% trans 'Page navigation' %}">
-            <ul class="pagination justify-content-center mb-0">
-                {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}">{% trans 'Prev' %}</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link">{% trans 'Prev' %}</a></li>
-                {% endif %}
+<!-- Pagination -->
+<div class="card mt-3">
+    <div class="card-body">
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="{% trans 'Page navigation' %}">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}">
+                                &laquo; {% trans 'Prev' %}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">&laquo; {% trans 'Prev' %}</span>
+                        </li>
+                    {% endif %}
 
-                {% for i in page_obj.paginator.page_range|slice:"10" %}
-                    <li class="page-item {% if page_obj.number == i %}active{% endif %}">
-                        <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ i }}">{{ i }}</a>
-                    </li>
-                {% endfor %}
+                    {% for i in page_obj.paginator.page_range|slice:":10" %}
+                        <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
 
-                {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">{% trans 'Next' %}</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link">{% trans 'Next' %}</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">
+                                {% trans 'Next' %} &raquo;
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">{% trans 'Next' %} &raquo;</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
     </div>
 </div>
 
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.min.js"></script>
+
 <script>
-    $(document).ready(function() {
-        // Suppress DataTable errors
+    $(document).ready(function () {
+        // Prevent DataTable errors from breaking the page
         $.fn.dataTable.ext.errMode = 'none';
 
-        // Initialize DataTable with improved settings
-        const table = new DataTable('table', {
+        // Initialize DataTable
+        const table = new DataTable('#data-table', {
             responsive: true,
             paging: false,
             searching: false,
+            ordering: false,
             columnDefs: [
-                { orderable: false, targets: [0, -1] }
+                { orderable: false, targets: [0, -1] },
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
             ],
-            dom: '<"top"f>rt<"bottom"lp><"clear">'
+            language: {
+                emptyTable: "{% trans 'Aucune donnée disponible' %}",
+                info: "_START_ à _END_ sur _TOTAL_",
+                infoEmpty: "0 à 0 sur 0",
+                lengthMenu: "Afficher _MENU_ éléments",
+                search: "Rechercher:"
+            }
         });
 
-        // "Select All" Checkbox logic
-        $('#select-all-checkbox').on('change', function() {
-            $('.row-checkbox').prop('checked', this.checked);
+        // "Select All" Checkbox Logic
+        $('#select-all-checkbox').on('change', function () {
+            const isChecked = this.checked;
+            $('.row-checkbox').prop('checked', isChecked);
+
+            // Update indeterminate state
+            $(this).prop('indeterminate', false);
         });
 
-        // Update "Select All" checkbox state dynamically
-        $('table').on('change', '.row-checkbox', function() {
-            const allRows = $('.row-checkbox').length;
-            const checkedRows = $('.row-checkbox:checked').length;
+        // Update "Select All" state on individual checkbox changes
+        $('.row-checkbox').on('change', function () {
+            const all = $('.row-checkbox');
+            const checked = $('.row-checkbox:checked');
 
-            $('#select-all-checkbox')
-                .prop('indeterminate', checkedRows > 0 && checkedRows < allRows)
-                .prop('checked', checkedRows === allRows);
+            const selectAll = $('#select-all-checkbox');
+            if (checked.length === 0) {
+                selectAll.prop('indeterminate', false).prop('checked', false);
+            } else if (checked.length === all.length) {
+                selectAll.prop('indeterminate', false).prop('checked', true);
+            } else {
+                selectAll.prop('indeterminate', true).prop('checked', false);
+            }
+        });
+
+        // Re-apply "Select All" indeterminate state after DataTable redraw
+        table.on('draw', function () {
+            const all = $('.row-checkbox');
+            const checked = $('.row-checkbox:checked');
+            const selectAll = $('#select-all-checkbox');
+
+            if (checked.length > 0 && checked.length < all.length) {
+                selectAll.prop('indeterminate', true);
+            } else {
+                selectAll.prop('indeterminate', false);
+            }
         });
     });
 
-    // Function to retrieve selected row IDs
-    const getSelectedRows = () => $('input.row-checkbox:checked').map((_, el) => $(el).closest('tr').data('row-id')).get();
+    // Utility: Get selected row IDs
+    const getSelectedRows = () => {
+        return $('.row-checkbox:checked').map((_, el) => $(el).closest('tr').data('row-id')).get();
+    };
 </script>

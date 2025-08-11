@@ -49,7 +49,6 @@ class Payroll(Base):
     approved = models.BooleanField(verbose_name=_('approuvé'), default=False)
 
     _metadata = fields.JSONField(_("metadata"), default=_default_exchange_rate_usd_cdf, blank=True)
-    status = None
     
     list_display = ('id', 'name', 'start_dt', 'end_dt', 'overall_net', 'status')
     list_filter = ('start_dt', 'end_dt')
