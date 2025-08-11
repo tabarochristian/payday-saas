@@ -65,8 +65,11 @@
                                     <th>{% trans 'Nom complet' %}</th>
                                     <th>{% trans 'Site' %}</th>
                                     <th>{% trans 'Grade' %}</th>
-                                    <th>{% trans 'Enfant(ren)' %}</th>
+                                    <th>{% trans 'Designation' %}</th>
+                                    <th>{% trans 'Dependant' %}</th>
                                     <th>{% trans 'Jours travaillés' %}</th>
+                                    <th>{% trans 'Congé sans solde' %}</th>
+                                    <th>{% trans 'Congé payé' %}</th>
                                     <th>{% trans 'Présence' %}</th>
                                 </tr>
                             </thead>
@@ -77,15 +80,43 @@
                                         <td>{{ obj.full_name }}</td>
                                         <td>{{ obj.employee.branch.name|default:obj.branch|default:'-'|title }}</td>
                                         <td>{{ obj.employee.grade.name|default:obj.grade|default:'-'|title }}</td>
-                                        <td>{{ obj.children }}</td>
+                                        <td>{{ obj.employee.designation.name|default:obj.designation|default:'-'|title }}</td>
+                                        <td>{{ obj.dependent }}</td>
                                         <td>{{ obj.working_days_per_month|default:23 }}</td>
+
+                                        <td>
+                                            <input type="number"
+                                                   name="unpaid_leave"
+                                                   data-app="payroll"
+                                                   data-model="paidemployee"
+                                                   data-id="{{ obj.id }}"
+                                                   class="form-control input-field-updater"
+                                                   min="0"
+                                                   step="1"
+                                                   max="22"
+                                                   value="0" />
+                                        </td>
+
+                                        <td>
+                                            <input type="number"
+                                                   name="paid_leave"
+                                                   data-app="payroll"
+                                                   data-model="paidemployee"
+                                                   data-id="{{ obj.id }}"
+                                                   class="form-control input-field-updater"
+                                                   min="0"
+                                                   step="1"
+                                                   max="22"
+                                                   value="0" />
+                                        </td>
+                                        
                                         <td>
                                             <input type="number"
                                                    name="attendance"
                                                    data-app="payroll"
                                                    data-model="paidemployee"
                                                    data-id="{{ obj.id }}"
-                                                   class="form-control attendance-input-field"
+                                                   class="form-control input-field-updater"
                                                    min="0"
                                                    step="1"
                                                    max="{{ obj.working_days_per_month|default:23 }}"
@@ -123,21 +154,23 @@
                 }]
             });
 
-            $('.attendance-input-field').on('change', function () {
+            $('.input-field-updater').on('change', function () {
                 var $this = $(this);
-                var id = $this.data("id");
                 var value = $this.val();
+                var id = $this.data("id");
+                var fieldName = $this.attr('name');
                 var url = "{% url 'api:detail' app='payroll' model='paidemployee' pk='xyz' %}".replace("xyz", id);
 
                 if (!id || isNaN(value)) {
                     toastr.error("{% trans 'Veuillez entrer un nombre valide' %}");
                     return;
                 }
-
+                
+                console.log({ [fieldName]: value });
                 $.ajax({
                     url: url,
                     method: "PATCH",
-                    data: { attendance: value },
+                    data: { [fieldName]: value },
                     headers: {
                         "X-CSRFToken": "{{ csrf_token }}"
                     },

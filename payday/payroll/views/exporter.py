@@ -285,7 +285,7 @@ class PayrollExporter(Exporter):  # Add mixins for security
                 if col not in total_dict:
                     total_dict[col] = ''
             df_pivot = pd.concat([df_pivot, pd.DataFrame([total_dict])], ignore_index=True)
-
+            df_pivot[df_pivot.select_dtypes(include='number').columns] = df_pivot.select_dtypes(include='number').abs()
             return df_pivot.fillna('')
         except ValueError as e:
             logger.warning(f"Report generation warning: {e}")
@@ -313,26 +313,6 @@ class PayrollExporter(Exporter):  # Add mixins for security
             messages.error(request, f"Invalid fields selected: {', '.join(invalid_fields)}")
             return redirect(reverse_lazy('payroll:exporter', kwargs={'pk': pk}))
 
-        df = self.report(fields=fields)
-        obj = self._get_object()
-
-        # Create Excel file in memory
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-            df.to_excel(writer, index=False, sheet_name='Report')
-            # Optional: Add formatting, e.g., writer.sheets['Report'].set_column(0, 0, 20)
-
-        output.seek(0)
-
-        messages.success(request, "Exportation réussie.")
-
-        response = HttpResponse(
-            output.read(),
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
-        response['Content-Disposition'] = f'attachment; filename="payroll_{obj.name.lower()}.xlsx"'
-        return response
-
         try:
             df = self.report(fields=fields)
             obj = self._get_object()
@@ -341,7 +321,27 @@ class PayrollExporter(Exporter):  # Add mixins for security
             output = BytesIO()
             with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
                 df.to_excel(writer, index=False, sheet_name='Report')
-                # Optional: Add formatting, e.g., writer.sheets['Report'].set_column(0, 0, 20)
+
+                workbook = writer.book
+                worksheet = writer.sheets['Report']
+
+                # Define format for last row: bold + dark orange fill
+                last_row_format = workbook.add_format({
+                    'bold': True,
+                    'bg_color': '#FF8C00',  # Dark orange
+                    'font_color': 'white'   # Optional: white text for contrast
+                })
+
+                # Get last row index (0-based, plus header row)
+                last_row_idx = len(df)
+
+                # Get last row index and number of columns
+                last_row_idx = len(df)
+                num_cols = len(df.columns)
+
+                # Apply format cell-by-cell across actual columns
+                for col_idx in range(num_cols):
+                    worksheet.write(last_row_idx, col_idx, df.iloc[-1, col_idx], last_row_format)
 
             output.seek(0)
 
@@ -353,6 +353,7 @@ class PayrollExporter(Exporter):  # Add mixins for security
             )
             response['Content-Disposition'] = f'attachment; filename="payroll_{obj.name.lower()}.xlsx"'
             return response
+
         except Exception as e:
             messages.error(request, f"Export failed: {str(e)}")
             return redirect(reverse_lazy('payroll:exporter', kwargs={'pk': pk}))

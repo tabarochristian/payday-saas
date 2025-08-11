@@ -53,7 +53,11 @@ class PaidEmployee(Employee):
     @property
     def name(self):
         return self.short_name
-    
+
+    @property
+    def dependent(self):
+        return (1 if self.marital_status == 'MARRIED' else 0) + self.children
+
     def get_absolute_url(self):
         return reverse_lazy("payroll:payslip", kwargs={"pk": self.id})
 
