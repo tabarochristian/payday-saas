@@ -127,12 +127,14 @@
                 <!-- Header -->
                 <header class="row mb-3">
                     <div class="col-6">
-                        {% if sub_organization and sub_organization.logo %}
-                            <img src="{{ sub_organization.logo.url }}"
-                                 alt="{% blocktrans with name=sub_organization.name %}Logo de {{ name }}{% endblocktrans %}"
-                                 class="organization-logo img-fluid mb-2"
-                                 loading="lazy">
-                        {% endif %}
+                        {% with obj.sub_organization_obj as sub_organization %}
+                            {% if sub_organization and sub_organization.logo %}
+                                <img src="{{ sub_organization.logo.url }}"
+                                    alt="{% blocktrans with name=sub_organization.name %}Logo de {{ name }}{% endblocktrans %}"
+                                    class="organization-logo img-fluid mb-2"
+                                    loading="lazy">
+                            {% endif %}
+                        {% endwith %}
                         <h5 class="mb-0">{% trans "Fiche de paie" %}</h5>
                     </div>
                     <div class="col-6 text-end no-print">

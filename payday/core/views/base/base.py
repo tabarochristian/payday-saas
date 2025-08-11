@@ -133,7 +133,7 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
         SubOrganization = apps.get_model('core', 'suborganization')
         sub_organization = self.get_subdomain()
         return SubOrganization.objects.filter(
-            name__iexact=sub_organization
+            name__iexact=sub_organization.lower()
         ).first()
 
     def logs(self):
