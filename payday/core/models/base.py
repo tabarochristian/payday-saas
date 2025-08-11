@@ -7,12 +7,17 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
 from django_currentuser.db.models import CurrentUserField
 from crispy_forms.layout import Layout
+from django.core.cache import cache
+import pandas as pd
+import logging
 
 from api.serializers import model_serializer_factory
 from core.models.managers import PaydayManager
 from core.utils import DictToObject
 from core.models import fields
-from django.core.cache import cache
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_sub_organization_choices():
@@ -21,16 +26,18 @@ def get_sub_organization_choices():
     """
     cache_key = "suborganization_choices"
     choices = cache.get(cache_key)
-    if choices is not None:
+    if choices:
         return choices
 
     try:
-        SubOrg = apps.get_model('core', 'SubOrganization')
-        names = SubOrg.objects.order_by().values_list('name', flat=True).distinct()
+        SubOrg = apps.get_model("core", "SubOrganization")
+        # Using distinct('name') might be DB-specific; fallback with values_list + distinct.
+        names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()
         choices = [(name, name) for name in names]
-        cache.set(cache_key, choices, 60 * 60)  # cache for 1 hour
+        cache.set(cache_key, choices, 3600)  # Cache for 1 hour
         return choices
     except LookupError:
+        logger.warning("SubOrganization model not found")
         return []
 
 
@@ -84,11 +91,9 @@ class Base(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self) -> str:
+    def __str__(self):
         name = getattr(self, "name", None)
-        if name:
-            return str(name)
-        return f"{self.__class__.__name__} (id={self.pk})"
+        return str(name) if name else f"{self.__class__.__name__} (id={self.pk})"
 
     @property
     def metadata(self) -> DictToObject:
@@ -125,14 +130,51 @@ class Base(models.Model):
         )
 
     def save(self, *args, **kwargs):
+        # Track whether the instance is new before saving
         is_new = self._state.adding
         super().save(*args, **kwargs)
+        if is_new:
+            self._initialize_workflow_approvals()
 
-        if not is_new:
-            return
+    def approvals(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        Approval = apps.get_model("core", "Approval")
+        return Approval.objects.filter(content_type=content_type, object_id=self.pk)
 
-        # Extract workflow logic to a helper method or service for testability
-        self._initialize_workflow_approvals()
+    def approvers(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        Workflow = apps.get_model("core", "Workflow")
+        return Workflow.objects.filter(content_type=content_type).prefetch_related("users")
+
+    def approvals_table(self):
+        data = self.approvals().values(
+            "status",
+            "user__email",
+            "created_at",
+            "updated_at",
+            "comment",
+        )
+        df = pd.DataFrame.from_records(data)
+
+        if df.empty:
+            return ""
+
+        # Format datetime columns only if they exist to avoid KeyErrors
+        for col in ("created_at", "updated_at"):
+            df[col] = pd.to_datetime(df[col]).dt.strftime("%Y-%m-%d %H:%M")
+
+        df.sort_values(by=["updated_at", "status", "user__email"], ascending=[False, True, True], inplace=True)
+        df.rename(
+            columns={
+                "status": "Status",
+                "user__email": "Acteur",
+                "created_at": "Cree le/a",
+                "updated_at": "Modifie le/a",
+                "comment": "Commentaire",
+            },
+            inplace=True,
+        )
+        return df.to_html(classes="table table-bordered table-striped", index=False, escape=False)
 
     def _initialize_workflow_approvals(self):
         Workflow = apps.get_model("core", "Workflow")
@@ -147,7 +189,9 @@ class Base(models.Model):
 
         local_ctx = {"obj": self, "model": self._meta.model_name}
         valid_workflows = [
-            wf for wf in workflows if not wf.condition or self._evaluate_condition(wf.condition, local_ctx)
+            wf
+            for wf in workflows
+            if not wf.condition or self._evaluate_condition(wf.condition, local_ctx)
         ]
 
         pending = Approval.objects.filter(
@@ -155,29 +199,32 @@ class Base(models.Model):
         ).values_list("user_id", "workflow_id")
         existing_keys = set(pending)
 
-        approvals = [
-            Approval(
-                content_type=content_type,
-                object_id=self.pk,
-                status=Status.PENDING,
-                workflow=wf,
-                user=user,
-            )
-            for wf in valid_workflows
-            for user in wf.users.all()
-            if (user.pk, wf.pk) not in existing_keys
-        ]
-        if approvals:
-            Approval.objects.bulk_create(approvals)
+        new_approvals = []
+        for wf in valid_workflows:
+            for user in wf.users.all():
+                key = (user.pk, wf.pk)
+                if key not in existing_keys:
+                    new_approvals.append(
+                        Approval(
+                            content_type=content_type,
+                            object_id=self.pk,
+                            status=Status.PENDING,
+                            workflow=wf,
+                            user=user,
+                        )
+                    )
+
+        if new_approvals:
+            Approval.objects.bulk_create(new_approvals)
 
     def _evaluate_condition(self, condition: str, context: dict) -> bool:
         """
         Evaluate workflow condition safely.
 
-        Warning: Ideally replace with safer parser or avoid eval.
+        WARNING: Using eval can be dangerous. Consider safer alternatives or restricted parsing.
         """
         try:
             return bool(eval(condition, {}, context))
-        except Exception:
-            # Log warning here if logger available
+        except Exception as e:
+            logger.warning(f"Failed to evaluate condition '{condition}': {e}")
             return False
