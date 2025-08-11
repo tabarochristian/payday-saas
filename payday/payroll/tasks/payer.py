@@ -73,7 +73,7 @@ class Payer(Task):
                 raise
         return self._model_cache[key]
 
-    @transaction.atomic
+    # @transaction.atomic
     def run(self, schema: str, pk: int, *args, **kwargs) -> Dict[str, Any]:
         """Process payroll for given schema and payroll ID."""
         try:
