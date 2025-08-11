@@ -13,6 +13,7 @@ PREFERENCES = [
 ]
 
 class Preference(Base):
+    status = None
     key = fields.CharField(
         verbose_name=_('clé'),
         max_length=100,

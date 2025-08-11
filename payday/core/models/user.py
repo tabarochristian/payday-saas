@@ -9,12 +9,12 @@ from core.models.managers import UserManager
 from core.models import fields
 
 # 🔧 Utility function for dynamic select choices
-def get_category_choices():
+def get_sub_organization_choices():
     try:
-        SubOrganization = apps.get_model('core', 'suborganization')
-        qs = set(SubOrganization.objects.values_list('name', flat=True))
-        return [(c, c) for c in qs]
-    except Exception as ex:
+        SubOrg = apps.get_model('core', 'suborganization')
+        names = SubOrg.objects.order_by().values_list('name', flat=True).distinct()
+        return [(name, name) for name in names]
+    except Exception:
         return []
 
 # 👤 Custom User model
@@ -47,7 +47,7 @@ class User(AbstractUser):
 
     sub_organization = fields.ChoiceField(
         verbose_name=_('sous-organization'),
-        choices=get_category_choices,
+        choices=get_sub_organization_choices,
         max_length=100,
         default=None,
         blank=True,

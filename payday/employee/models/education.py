@@ -14,6 +14,7 @@ class Education(Base):
 
     start_date = fields.DateField(_('date de début'), null=True, blank=True, inline=True)
     end_date = fields.DateField(_('date de fin'), null=True, blank=True, inline=True)
+    status = None
 
     list_display = ('id', 'employee', 'institution', 'degree', 'start_date', 'end_date')
     layout = Layout(

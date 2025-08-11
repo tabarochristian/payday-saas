@@ -8,6 +8,7 @@ from core.models import Base
 class Status(Base):
     group = fields.CharField(verbose_name=_('groupe'), max_length=100, blank=True, null=True, default=None)
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    status = None
 
     list_display = ('id', 'group', 'name')
     layout = Layout('group', 'name')

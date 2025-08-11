@@ -6,6 +6,7 @@ from core.models import Base
 from django.db import models
 
 class SpecialEmployeeItem(Base):
+    status = None
     employee = fields.ModelSelectField('employee.Employee', verbose_name=_('employee'), null = True, on_delete = models.SET_NULL)
     item = fields.ModelSelectField('payroll.Item', verbose_name=_('element de paie'), null = True, on_delete = models.SET_NULL, inline=True)
     amount_qp_employee = fields.FloatField(_('montant qp employé'), help_text=_('laisser vide pour utiliser la formule de l\'element'), default=None, null=True, blank=True, inline=True)

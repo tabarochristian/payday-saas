@@ -24,6 +24,7 @@ class Item(Base):
     is_bonus = models.BooleanField(_('est une prime'), help_text=_('Cet élément est un bonus'), default=False)
     is_payable = models.BooleanField(_('est payable'), help_text=_('Cet élément est payable'), default=True)
     is_actif = models.BooleanField(_('est actif'), help_text=_('Cet élément est actif'), default=True)
+    status = None
 
     list_display = ('code', 'name', 'is_taxable', 'is_social_security')
     list_filter = ('type_of_item', 'is_taxable', 'is_social_security')

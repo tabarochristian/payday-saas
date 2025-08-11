@@ -10,6 +10,7 @@ class Document(Base):
     employee = fields.ModelSelectField(Employee, verbose_name=_('employé'), null=True, on_delete=models.SET_NULL)
     document = fields.FileField(verbose_name=_('nom du document'), upload_to=upload_directory_file, inline=True)
     name = fields.CharField(verbose_name=_('nom du document'), max_length=100, inline=True)
+    status = None
 
     list_display = ('id', 'employee', 'name', 'document')
     layout = Layout(

@@ -19,6 +19,7 @@ class BootstrapColumn(models.TextChoices):
     COL_12 = 'col-md-12 col-xs-12', _('12/12')
 
 class Widget(Base):
+    status = None
     content_type = fields.ModelSelectField(
         'contenttypes.contenttype',
         verbose_name=_('type de contenu')

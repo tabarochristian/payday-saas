@@ -7,6 +7,7 @@ from django.db import models
 from .base import Base
 
 class Template(Base):
+    status = None
     content_type = fields.ModelSelectField(
         ContentType, 
         verbose_name=_('type de contenu'), 

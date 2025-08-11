@@ -13,7 +13,7 @@ from core.utils import DictToObject
 from core.models import fields
 
 
-def get_category_choices():
+def get_sub_organization_choices():
     try:
         SubOrg = apps.get_model('core', 'suborganization')
         names = SubOrg.objects.order_by().values_list('name', flat=True).distinct()
@@ -21,16 +21,28 @@ def get_category_choices():
     except Exception:
         return []
 
+class Status(models.TextChoices):
+    PENDING = "PENDING", _("EN ATTENTE")
+    APPROVED = "APPROVED", _("APPROUVÉ")
+    REJECTED = "REJECTED", _("REJETÉ")
 
 class Base(models.Model):
     _metadata = fields.JSONField(_("metadata"), default=dict, blank=True)
 
     sub_organization = fields.ChoiceField(
         _("sous-organization"),
-        choices=get_category_choices,
+        choices=get_sub_organization_choices,
         max_length=100,
         blank=True,
         null=True
+    )
+
+    status = fields.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PENDING,
+        verbose_name=_("statut"),
+        editable=False
     )
 
     updated_by = CurrentUserField(
@@ -108,6 +120,11 @@ class Base(models.Model):
         content_type = ContentType.objects.get_for_model(self.__class__)
         workflows = Workflow.objects.filter(content_type=content_type).prefetch_related("users")
 
+        if not workflows.exists() and hasattr(self, 'status'):
+            self.status = Status.APPROVED
+            super().save()
+            return
+
         local_ctx = {"obj": self, "model": self._meta.model_name}
         valid_workflows = [
             wf for wf in workflows
@@ -137,5 +154,4 @@ class Base(models.Model):
             return
 
         created = Approval.objects.bulk_create(approvals)
-        for instance in created:
-            post_save.send(sender=Approval, instance=instance, created=True)
+        [post_save.send(sender=Approval, instance=instance, created=True) for instance in created]

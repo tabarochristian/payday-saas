@@ -9,7 +9,7 @@ class RowLevelSecurity(Base):
     """
     Model to handle row-level security for users and groups.
     """
-    updated_by, created_by = None, None
+    updated_by, created_by, status = None, None, None
 
     user = fields.ModelSelectField(
         get_user_model(),

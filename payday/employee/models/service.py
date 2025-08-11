@@ -10,6 +10,7 @@ from core.models import Base
 class Service(Base):
     subdirection = fields.ModelSelectField(SubDirection, verbose_name=_('sous-direction'), on_delete=models.CASCADE)
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    status = None
 
     search_fields = ('subdirection', 'name')
     list_display = ('id', 'subdirection', 'name')

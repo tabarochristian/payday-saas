@@ -4,6 +4,7 @@ from core.models import Base, fields
 
 class Direction(Base):
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    status = None
 
     list_display = ('id', 'name')
     layout = Layout('name',)

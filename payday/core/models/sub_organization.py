@@ -5,7 +5,7 @@ from core.models import Base, fields
 
 
 class SubOrganization(Base):
-    sub_organization = None
+    sub_organization, status = None, None
     logo = fields.ImageField(
         verbose_name=_('logo'),
         help_text=_('Logo de la sous-organisation - Dimension 64x64'),

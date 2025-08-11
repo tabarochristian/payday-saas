@@ -9,7 +9,7 @@ class Menu(Base):
         ((icon.split('/')[-1]).split('.')[0], ' '.join(((icon.split('/')[-1]).split('.')[0]).split('-')).title()) 
         for icon in glob.glob("ICONS/*.svg")
     ]
-
+    status = None
     icon = fields.ChoiceField(
         verbose_name=_('icon'), 
         choices=ICONS, 

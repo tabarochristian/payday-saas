@@ -5,11 +5,6 @@ from django.core.exceptions import ValidationError
 from crispy_forms.layout import Layout, Column, Row
 from django.utils.translation import gettext_lazy as _
 
-class Status(models.TextChoices):
-    PENDING = "PENDING", _("EN ATTENTE")
-    APPROVED = "APPROVED", _("APPROUVÉ")
-    REJECTED = "REJECTED", _("REJETÉ")
-
 class EarlyLeave(Base):
     employee = fields.ModelSelectField(
         "employee.employee",
@@ -26,14 +21,6 @@ class EarlyLeave(Base):
     end_time = fields.TimeField(verbose_name=_("heure de fin"))
 
     reason = fields.TextField(blank=True, verbose_name=_("motif"))
-
-    status = fields.CharField(
-        max_length=10,
-        choices=Status.choices,
-        default=Status.PENDING,
-        verbose_name=_("statut"),
-        editable=False
-    )
 
     list_display = ('id', 'employee', 'date', 'start_time', 'end_time', 'status')
     layout = Layout(

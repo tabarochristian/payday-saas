@@ -28,6 +28,7 @@ class TypeOfLeave(Base):
         default=30,  
         verbose_name=_("délai avant d'être éligible (jours)")
     )
+    status = None
 
     list_display = ('id', 'name', 'min_duration', 'max_duration', 'eligibility_after_days', 'updated_at')
     layout = Layout(

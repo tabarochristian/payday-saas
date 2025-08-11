@@ -11,6 +11,7 @@ class Log(Base):
     sn = models.CharField(_("Serial Number"), max_length=255, db_index=True)
     timestamp = models.DateTimeField(_("Timestamp"))
     enroll_id = models.IntegerField(_("Enroll ID"))  # User ID
+    status = None
     
     mode = models.IntegerField(_("Verification Mode"), choices=[
         (0, _("Fingerprint")),

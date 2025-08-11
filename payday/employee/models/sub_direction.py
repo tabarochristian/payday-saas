@@ -8,6 +8,7 @@ from .direction import Direction
 class SubDirection(Base):
     direction = fields.ModelSelectField(Direction, verbose_name=_('direction'), on_delete=models.CASCADE)
     name = models.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    status = None
 
     search_fields = ('direction__name', 'name')
     list_display = ('id', 'direction', 'name')

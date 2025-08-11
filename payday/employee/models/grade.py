@@ -5,6 +5,7 @@ from core.models import Base, fields
 class Grade(Base):
     group = fields.CharField(verbose_name=_('groupe'), max_length=100, blank=True, null=True, default=None)
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    status = None
 
     layout = Layout('group', 'name', '_metadata')
     list_display = ('id', 'group', 'name')

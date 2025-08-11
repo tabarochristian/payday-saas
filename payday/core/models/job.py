@@ -12,6 +12,7 @@ class JobFrequencyChoice(models.TextChoices):
     YEARLY = "YEARLY", _("annuel")
 
 class Job(Base):
+    status = None
     frequency = fields.CharField(
         max_length=10, 
         choices=JobFrequencyChoice.choices, 

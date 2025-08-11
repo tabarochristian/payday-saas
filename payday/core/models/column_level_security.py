@@ -8,7 +8,7 @@ class ColumnLevelSecurity(Base):
     """
     Model to handle field permissions for users and groups.
     """
-    created_by, updated_by = None, None
+    created_by, updated_by, status = None, None, None
 
     user = fields.ModelSelectField(
         get_user_model(),

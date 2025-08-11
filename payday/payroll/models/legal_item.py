@@ -10,6 +10,7 @@ class TypeOfItems(models.IntegerChoices):
     Deductible = (-1, _('Deductible'))
 
 class LegalItem(Base):
+    status = None
     code = models.CharField(_('code'), max_length=100, unique=True)
     type_of_item = models.IntegerField(_('type d\'element'), choices=TypeOfItems, default=TypeOfItems.Deductible)
 

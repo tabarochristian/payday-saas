@@ -6,6 +6,7 @@ from core.models import fields, Base
 from django.db import models
 
 class Workflow(Base):
+    status = None
     name = fields.CharField(_('nom'), max_length=100)
     content_type = fields.ModelSelectField(
         "contenttypes.contenttype",

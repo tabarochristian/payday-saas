@@ -6,6 +6,7 @@ class Designation(Base):
     group = fields.CharField(verbose_name=_('groupe'), max_length=100, blank=True, null=True, default=None)
     working_days_per_month = fields.IntegerField(verbose_name=_('jours ouvrables par mois'), default=22)
     name = fields.CharField(verbose_name=_('nom'), max_length=100, unique=True)
+    status = None
 
     layout = Layout('group', 'name', 'working_days_per_month', '_metadata')
     list_display = ('id', 'group', 'name', 'working_days_per_month')

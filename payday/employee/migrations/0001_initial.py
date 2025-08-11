@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -129,7 +129,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -213,7 +213,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -297,7 +297,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -387,7 +387,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -461,7 +461,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -800,7 +800,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -902,7 +902,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -993,7 +993,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -1083,7 +1083,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -1179,7 +1179,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -1265,7 +1265,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",
@@ -1360,7 +1360,7 @@ class Migration(migrations.Migration):
                     "sub_organization",
                     core.models.fields.choice_field.ChoiceField(
                         blank=True,
-                        choices=core.models.base.get_category_choices,
+                        choices=core.models.base.get_sub_organization_choices,
                         max_length=100,
                         null=True,
                         verbose_name="sous-organization",

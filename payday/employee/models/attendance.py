@@ -14,6 +14,7 @@ class Attendance(Base):
     checked_at = fields.DateTimeField(verbose_name=_('vérifié à'))
 
     count = fields.IntegerField(verbose_name=_("presence"))
+    status = None
 
     search_fields = ('employee__first_name', 'employee__last_name', 'employee__register_number')
     list_display = ('device', 'employee', 'first_checked_at', 'last_checked_at', 'count')
