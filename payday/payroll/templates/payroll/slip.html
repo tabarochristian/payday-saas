@@ -48,6 +48,7 @@
 
         .payslip-table th {
             font-weight: 600;
+            background-color: #f8f9fa;
         }
 
         dl.row dt {
@@ -145,49 +146,83 @@
                 <div class="row mb-3">
                     <div class="col-6">
                         <dl class="row mb-0">
+                            <!-- Matricule -->
                             <dt class="col-4">{% trans "Matricule" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.registration_number|default:"-" }}</dd>
 
+                            <!-- Full Name -->
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.full_name|title|default:"-" }}</dd>
 
+                            <!-- CNSS -->
                             <dt class="col-4">{% trans "CNSS" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:"-" }}</dd>
 
-                            <dt class="col-4">{% trans "Fonction" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.designation.name|default:"-"|title }}</dd>
+                            <!-- Fonction -->
+                            {% with designation=obj.employee.designation %}
+                                <dt class="col-4">{% trans "Fonction" %}</dt>
+                                <dd class="col-8 mb-0">:
+                                    {% if designation %}{{ designation.name|title }}{% else %}-{% endif %}
+                                </dd>
+                            {% endwith %}
 
-                            <dt class="col-4">{% trans "Grade/Catégorie" %}</dt>
-                            <dd class="col-8 mb-0">:
-                                {{ obj.employee.designation.group|default:obj.employee.grade.name|default:"-"|title }}
-                            </dd>
+                            <!-- Grade/Catégorie -->
+                            {% with grade=obj.employee.grade|default:None %}
+                                {% with group=obj.employee.designation.group|default:None %}
+                                    <dt class="col-4">{% trans "Grade/Catégorie" %}</dt>
+                                    <dd class="col-8 mb-0">:
+                                        {% if group %}{{ group|title }}{% elif grade %}{{ grade.name|title }}{% else %}-{% endif %}
+                                    </dd>
+                                {% endwith %}
+                            {% endwith %}
 
-                            <dt class="col-4">{% trans "Contrat" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.agreement.name|default:"-"|title }}</dd>
+                            <!-- Contrat -->
+                            {% with agreement=obj.employee.agreement %}
+                                <dt class="col-4">{% trans "Contrat" %}</dt>
+                                <dd class="col-8 mb-0">:
+                                    {% if agreement %}{{ agreement.name|title }}{% else %}-{% endif %}
+                                </dd>
+                            {% endwith %}
                         </dl>
                     </div>
 
                     <div class="col-6">
                         <dl class="row mb-0">
+                            <!-- Banque -->
                             <dt class="col-4">{% trans "Banque" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payer_name|default:"-" }}</dd>
 
+                            <!-- Compte -->
                             <dt class="col-4">{% trans "Compte" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payment_account|default:"-" }}</dd>
 
-                            <dt class="col-4">{% trans "Salaire bar." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.grade.category|default:"-" }}</dd>
+                            <!-- Salaire bar. -->
+                            {% with grade=obj.employee.grade %}
+                                <dt class="col-4">{% trans "Salaire bar." %}</dt>
+                                <dd class="col-8 mb-0">:
+                                    {% if grade %}{{ grade.category }}{% else %}-{% endif %}
+                                </dd>
+                            {% endwith %}
 
+                            <!-- Taux appl. -->
                             <dt class="col-4">{% trans "Taux appl." %}</dt>
                             <dd class="col-8 mb-0">:
                                 {{ obj.payroll.metadata.taux|default:_("non applicable") }}
                             </dd>
 
+                            <!-- Date engag. -->
                             <dt class="col-4">{% trans "Date engag." %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.date_of_join|date:"d/m/Y"|default:"-" }}</dd>
+                            <dd class="col-8 mb-0">:
+                                {{ obj.employee.date_of_join|date:"d/m/Y"|default:"-" }}
+                            </dd>
 
-                            <dt class="col-4">{% trans "Centre" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.branch.name|default:"-" }}</dd>
+                            <!-- Centre -->
+                            {% with branch=obj.employee.branch %}
+                                <dt class="col-4">{% trans "Centre" %}</dt>
+                                <dd class="col-8 mb-0">:
+                                    {% if branch %}{{ branch.name }}{% else %}-{% endif %}
+                                </dd>
+                            {% endwith %}
                         </dl>
                     </div>
                 </div>
@@ -195,23 +230,23 @@
                 <hr class="my-2">
 
                 <!-- Earnings & Deductions -->
-                <div class="row">
-                    {% with items=obj.itempaid_set.all earnings=items|dictsort:"code" deductions=items|dictsort:"code" %}
+                {% with items=obj.itempaid_set.all %}
+                    <div class="row">
                         <!-- Earnings -->
                         <div class="col-6">
                             <h6 class="mb-small">{% trans "Rémunérations" %}</h6>
                             <table class="table table-bordered table-sm payslip-table">
-                                <thead class="table-light">
+                                <thead>
                                     <tr>
-                                        <th scope="col">{% trans "Code" %}</th>
-                                        <th scope="col">{% trans "Libellé" %}</th>
-                                        <th scope="col">{% trans "Taux" %}</th>
-                                        <th scope="col">{% trans "Temps" %}</th>
-                                        <th scope="col">{% trans "Montant" %}</th>
+                                        <th>{% trans "Code" %}</th>
+                                        <th>{% trans "Libellé" %}</th>
+                                        <th class="text-end">{% trans "Taux" %}</th>
+                                        <th class="text-end">{% trans "Temps" %}</th>
+                                        <th class="text-end">{% trans "Montant" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for item in earnings %}
+                                    {% for item in items %}
                                         {% if item.type_of_item >= 0 %}
                                             <tr>
                                                 <td>{{ item.code }}</td>
@@ -230,15 +265,15 @@
                         <div class="col-6">
                             <h6 class="mb-small">{% trans "Retenues" %}</h6>
                             <table class="table table-bordered table-sm payslip-table">
-                                <thead class="table-light">
+                                <thead>
                                     <tr>
-                                        <th scope="col">{% trans "Code" %}</th>
-                                        <th scope="col">{% trans "Libellé" %}</th>
-                                        <th scope="col">{% trans "Montant" %}</th>
+                                        <th>{% trans "Code" %}</th>
+                                        <th>{% trans "Libellé" %}</th>
+                                        <th class="text-end">{% trans "Montant" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for item in deductions %}
+                                    {% for item in items %}
                                         {% if item.type_of_item == -1 %}
                                             <tr>
                                                 <td>{{ item.code }}</td>
@@ -252,8 +287,8 @@
                                 </tbody>
                             </table>
                         </div>
-                    {% endwith %}
-                </div>
+                    </div>
+                {% endwith %}
 
                 <!-- Totals -->
                 <div class="row mt-2">
@@ -277,15 +312,21 @@
 
                 <hr class="my-3">
 
-                <!-- Period & Footer -->
+                <!-- Footer Info -->
                 <div class="row mb-2">
                     <div class="col">
                         <dl class="row mb-0">
-                            <dt class="col-3">{% trans "Grade/Catégorie" %}</dt>
-                            <dd class="col-9 mb-0">:
-                                {{ obj.employee.designation.group|default:obj.employee.grade.name|title }}
-                            </dd>
+                            <!-- Grade/Catégorie (again) -->
+                            {% with grade=obj.employee.grade|default:None %}
+                                {% with group=obj.employee.designation.group|default:None %}
+                                    <dt class="col-3">{% trans "Grade/Catégorie" %}</dt>
+                                    <dd class="col-9 mb-0">:
+                                        {% if group %}{{ group|title }}{% elif grade %}{{ grade.name|title }}{% else %}-{% endif %}
+                                    </dd>
+                                {% endwith %}
+                            {% endwith %}
 
+                            <!-- Period -->
                             <dt class="col-3">{% trans "Période" %}</dt>
                             <dd class="col-9 mb-0">
                                 : {{ obj.payroll.start_dt|date:"d/m/Y" }} – {{ obj.payroll.end_dt|date:"d/m/Y" }}
@@ -310,9 +351,15 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{ obj.employee.registration_number }}</td>
-                                    <td>{{ obj.employee.last_name }} {{ obj.employee.middle_name|default:"" }} {{ obj.employee.first_name }}</td>
-                                    <td>{{ obj.employee.branch.name|default:"-" }}</td>
+                                    <td>{{ obj.employee.registration_number|default:"-" }}</td>
+                                    <td>
+                                        {{ obj.employee.last_name|default:"" }}
+                                        {{ obj.employee.middle_name|default:"" }}
+                                        {{ obj.employee.first_name|default:"" }}
+                                    </td>
+                                    {% with branch=obj.employee.branch %}
+                                        <td>{{ branch.name|default:"-" }}</td>
+                                    {% endwith %}
                                     <td class="text-end">{{ obj.net|default:0|floatformat:2|intcomma }}</td>
                                     <td>&nbsp;</td>
                                 </tr>
@@ -327,8 +374,7 @@
         {% endfor %}
     {% endblock %}
 
-    <!-- Bootstrap JS (optional for print) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-..." crossorigin="anonymous"></script>
+    <!-- Optional Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
