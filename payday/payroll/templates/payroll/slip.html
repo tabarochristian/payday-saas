@@ -143,9 +143,9 @@
                                             <tr>
                                                 <td>{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
-                                                <td>{{ item.rate|floatformat:2|intcomma }}</td>
-                                                <td>{{ item.time|floatformat:0 }}</td>
-                                                <td>{{ item.amount_qp_employee|floatformat:2|intcomma }}</td>
+                                                <td>{{ item.rate|default:0|floatformat:2|intcomma }}</td>
+                                                <td>{{ item.time|default:0|floatformat:0 }}</td>
+                                                <td>{{ item.amount_qp_employee|default:0|floatformat:2|intcomma }}</td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -168,7 +168,7 @@
                                             <tr>
                                                 <td>{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
-                                                <td>{{ item.amount_qp_employee|default:item.amount_qp_employer|abs|floatformat:2|intcomma }}</td>
+                                                <td>{{ item.amount_qp_employee|default:item.amount_qp_employer|default:0|abs|floatformat:2|intcomma }}</td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -182,17 +182,17 @@
                     <div class="col-6">
                         <dl class="row">
                             <dt class="col-4">{% trans "Plafond CNSS" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.social_security_threshold|floatformat:2|intcomma }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.social_security_threshold|default:0|floatformat:2|intcomma }}</dd>
 
                             <dt class="col-4">{% trans "Brut imposable" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.taxable_gross|floatformat:2|intcomma }}</dd>
+                            <dd class="col-8 mb-0">: {{ obj.taxable_gross|default:0|floatformat:2|intcomma }}</dd>
                         </dl>
                     </div>
                     <div class="col-6 text-end">
                         <h3 class="mb-0 fs-5">
                             {% trans "NET A PAYER" %}: 
                             <span class="text-decoration-none">
-                                {{ obj.net|floatformat:2|intcomma }}
+                                {{ obj.net|default:0|floatformat:2|intcomma }}
                             </span>
                         </h3>
                         <small>({{ obj.payroll.metadata.currency|default:'CDF' }})</small>
@@ -232,7 +232,7 @@
                                     <td>{{ obj.employee.registration_number }}</td>
                                     <td>{{ obj.employee.last_name }} {{ obj.employee.middle_name }}</td>
                                     <td>{{ obj.employee.branch.name }}</td>
-                                    <td>{{ obj.net|floatformat:2|intcomma }}</td>
+                                    <td>{{ obj.net|default:0|floatformat:2|intcomma }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
