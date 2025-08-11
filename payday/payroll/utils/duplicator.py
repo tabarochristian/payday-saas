@@ -39,7 +39,7 @@ class PayrollProcessor:
         try:
             if self.schema != "public":
                 set_schema(self.schema)
-            self.statuses = self.payroll.employee_status.all().values_list('name', flat=True).distinct()
+            self.statuses = self.payroll.employee_status.all().values_list('name', flat=True)
             logger.debug(f"Retrieved {len(self.statuses)} employee statuses")
             df = self._get_employee_data()
             df = self._merge_with_native_attendance(df)
@@ -77,8 +77,7 @@ class PayrollProcessor:
     
         logger.debug(f"Building employee queryset with fields: {fields}")
         qs = EmployeeModel.objects.all()
-        if self.statuses:
-            qs = qs.filter(status__name__in=self.statuses)
+        qs = qs.filter(status__name__in=self.statuses)
         return (
             qs.filter(sub_organization=self.payroll.sub_organization)
             .annotate(**annotate_fields)

@@ -344,7 +344,6 @@ class PayrollExporter(Exporter):  # Add mixins for security
                     worksheet.write(last_row_idx, col_idx, df.iloc[-1, col_idx], last_row_format)
 
             output.seek(0)
-
             messages.success(request, "Exportation réussie.")
 
             response = HttpResponse(
