@@ -55,7 +55,7 @@ class Payslips(Read):
             Button(
                 tag="a",
                 text=_("Exportateur"),
-                url=reverse_lazy("core:exporter", kwargs={"app": app, "model": "paidemployee"}) + f"?payroll_id={obj.pk}",
+                url=reverse_lazy("payroll:exporter", kwargs={"pk": obj.pk}),
                 classes="btn btn-light-success",
                 permission=f"{app}.view_{model}"
             ),

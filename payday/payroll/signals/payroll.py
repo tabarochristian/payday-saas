@@ -1,13 +1,11 @@
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 
+from core.middleware import TenantMiddleware
 from payroll.utils import PayrollProcessor
 from payroll.models import Payroll
 from django.apps import apps
 import threading
-
-from core.middleware import TenantMiddleware
-
 
 @receiver(pre_save, sender=Payroll)
 def payroll_create(sender, instance, **kwargs):

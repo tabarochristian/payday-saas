@@ -12,7 +12,11 @@ from core.models import Base
 
 intcomma = lambda value: "{:,}".format(round(abs(value), 2))
 leave_empty_for_all = _('laisser vide pour tous')
-    
+
+def _default_exchange_rate_usd_cdf():
+    _default = {"currency": "CDF"}
+    _default.update({key: 2800 for key in ["rate", "taux"]})
+    return _default
 
 class PayrollStatus(models.TextChoices):    
     CREATED = ('CREATED', _('créé'))
@@ -44,9 +48,7 @@ class Payroll(Base):
     approvers = ModelSelect2Multiple('core.user', verbose_name=_('approbateurs'))
     approved = models.BooleanField(verbose_name=_('approuvé'), default=False)
 
-    _metadata = fields.JSONField(_("metadata"), default={
-        "taux": 2800
-    }, blank=True)
+    _metadata = fields.JSONField(_("metadata"), default=_default_exchange_rate_usd_cdf, blank=True)
     
     list_display = ('id', 'name', 'start_dt', 'end_dt', 'overall_net', 'status')
     list_filter = ('start_dt', 'end_dt')

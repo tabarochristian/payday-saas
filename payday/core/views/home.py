@@ -3,77 +3,99 @@ from django.utils.safestring import mark_safe
 from django.shortcuts import render
 from django.views import View
 from django.utils.translation import gettext as _
-from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
-from core.forms import modelform_factory
 from django.utils import timezone
-import json
+
 
 class Home(LoginRequiredMixin, View):
     """
-    Optimized Home view that renders dashboard widgets conditionally based on permissions.
+    Dashboard view that dynamically renders widgets based on user permissions and role.
     """
     template_name = "home.html"
 
-    def get_context_data(self, request):
+    def get(self, request):
+        """
+        Handle GET request and render dashboard with authorized widgets.
+        """
+        widgets = self._get_authorized_widgets(request)
+        return render(request, self.template_name, {'widgets': widgets})
+
+    def _get_authorized_widgets(self, request):
+        """
+        Render widgets based on user permissions and admin status.
+        """
+        context = self._build_context(request)
+        widget_definitions = self._widget_definitions(context, request)
+
+        return [
+            {
+                "title": widget["title"],
+                "column": widget["column"],
+                "content": mark_safe(widget["content"]),
+            }
+            for widget in widget_definitions
+            if request.user.has_perm(widget["permission"]) and widget.get("visible", False)
+        ]
+
+    def _build_context(self, request):
+        """
+        Aggregate all data needed for widget rendering.
+        """
         return {
-            'remaining_leave_days': self.get_remaining_leave_days(),
-            'statistics': self.get_statistics(),
-            'leaves': self.get_leaves(),
-            'payslips': self.get_payslips(),
-            'payroll_data': self.get_payroll_data(),
+            'remaining_leave_days': self._get_remaining_leave_days(request),
+            'statistics': self._get_employee_statistics(request),
+            'leaves': self._get_pending_leaves(request),
+            'payslips': self._get_current_year_payslips(request),
+            'payroll_data': self._get_payroll_chart_data(),
         }
 
-    def get_statistics(self):
-        """Get employee count by status."""
-        model = apps.get_model('employee', 'Employee')
-        suborganization = getattr(self.request.suborganization, "name", None)
-        return model.objects.for_user(user=self.request.user)\
-            .filter(sub_organization=suborganization)\
-            .values('status__name').annotate(count=Count('status__name'))
+    def _get_employee_statistics(self, request):
+        Employee = apps.get_model('employee', 'Employee')
+        suborg = getattr(request.suborganization, "name", None)
+        return Employee.objects.for_user(user=request.user)\
+            .filter(sub_organization=suborg)\
+            .values('status__name')\
+            .annotate(count=Count('status__name'))
 
-    def get_leaves(self):
-        """Get all pending leave requests."""
-        model = apps.get_model('leave', 'Leave')
-        suborganization = getattr(self.request.suborganization, "name", None)
-        return model.objects.for_user(user=self.request.user).\
-            filter(status='pending', sub_organization=suborganization)
+    def _get_pending_leaves(self, request):
+        Leave = apps.get_model('leave', 'Leave')
+        suborg = getattr(request.suborganization, "name", None)
+        return Leave.objects.for_user(user=request.user)\
+            .filter(status='pending', sub_organization=suborg)
 
-    def get_remaining_leave_days(self):
-        """Stub: Replace with real logic."""
+    def _get_remaining_leave_days(self, request):
+        # TODO: Replace with actual leave balance logic
         return 0
 
-    def get_payslips(self):
-        """Get current year payslips for logged-in user."""
-        model = apps.get_model('payroll', 'PaidEmployee')
-        suborganization = getattr(self.request.suborganization, "name", None)
-        return model.objects.for_user(user=self.request.user).filter(
-            payroll__end_dt__year=timezone.now().date().year,
-            sub_organization=suborganization
-        )
+    def _get_current_year_payslips(self, request):
+        sub_organization = getattr(request.suborganization, "name", None)
+        PaidEmployee = apps.get_model('payroll', 'PaidEmployee')
+        
+        current_year = timezone.now().year
+        return PaidEmployee.objects.for_user(user=request.user)\
+            .filter(
+                payroll__end_dt__year=current_year, 
+                sub_organization=sub_organization
+            )[:36]
 
-    def get_payroll_data(self):
-        """Get monthly salary data for chart."""
-        model = apps.get_model('payroll', 'Payroll')
-        qs = model.objects.values('name') \
-            .annotate(amounts=Sum('overall_net')) \
+    def _get_payroll_chart_data(self):
+        Payroll = apps.get_model('payroll', 'Payroll')
+        qs = Payroll.objects.values('name')\
+            .annotate(total=Sum('overall_net'))\
             .order_by('-created_at')
 
-        names = [data['name'] for data in qs]
-        amounts = [float(data['amounts']) for data in qs]
-
         return {
-            'names': names,
-            'amounts': amounts
+            'names': [entry['name'] for entry in qs],
+            'amounts': [float(entry['total']) for entry in qs],
         }
 
-    def get_widgets(self, request):
-        """Generate list of widgets filtered by user permissions."""
-        context = self.get_context_data(request)
-
-        widgets = [
+    def _widget_definitions(self, context, request):
+        """
+        Define all widgets with metadata and rendered content.
+        """
+        return [
             {
                 "title": _("Salary Statistics"),
                 "content": render_to_string('widgets/home/salary_statistics_chart.html', {
@@ -81,7 +103,19 @@ class Home(LoginRequiredMixin, View):
                 }, request=request),
                 "permission": "payroll.view_paidemployee",
                 "column": "col-12",
-                "admin": True
+                "visible": any([
+                    self.request.user.is_staff,
+                    self.request.user.is_superuser
+                ])
+            },
+            {
+                "title": _("Current Year Payslips"),
+                "content": render_to_string('widgets/home/current_year_payslips.html', {
+                    'payslips': context['payslips']
+                }, request=request),
+                "permission": "payroll.view_paidemployee",
+                "column": "col-12",
+                "visible": True
             },
             {
                 "title": _("Employee Status Cards"),
@@ -90,16 +124,19 @@ class Home(LoginRequiredMixin, View):
                 }, request=request),
                 "permission": "employee.view_employee",
                 "column": "col-12 col-md-6 col-lg-3",
-                "admin": True
+                "visible": any([
+                    self.request.user.is_staff,
+                    self.request.user.is_superuser
+                ])
             },
             {
                 "title": _("Leave Request Form"),
                 "content": render_to_string('widgets/home/leave_request_form.html', {
-                    'remaining_leave_days': context['remaining_leave_days'],
+                    'remaining_leave_days': context['remaining_leave_days']
                 }, request=request),
                 "permission": "leave.add_leave",
                 "column": "col-12 col-md-6 col-lg-3",
-                "admin": False
+                "visible": True
             },
             {
                 "title": _("Pending Leaves List"),
@@ -108,56 +145,9 @@ class Home(LoginRequiredMixin, View):
                 }, request=request),
                 "permission": "leave.view_leave",
                 "column": "col-12 col-md-6 col-lg-3",
-                "admin": False
-            },
-            {
-                "title": _("Current Year Payslips"),
-                "content": render_to_string('widgets/home/current_year_payslips.html', {
-                    'payslips': context['payslips']
-                }, request=request),
-                "permission": "payroll.view_paidemployee",
-                "column": "col-12 col-md-6 col-lg-6",
-                "admin": False
+                "visible": any([
+                    self.request.user.is_staff,
+                    self.request.user.is_superuser
+                ])
             }
         ]
-
-        return [{
-            "title": widget["title"],
-            "column": widget["column"],
-            "content": mark_safe(widget["content"]),
-        } for widget in widgets if request.user.has_perm(widget["permission"]) and self._is_admin(widget["admin"])]
-
-    def _is_admin(self, act):
-        user = self.request.user
-        if act == False:
-            return True
-        if act and (user.is_superuser or user.is_staff):
-            return True
-        else:
-            return False
-        return False
-    
-    def get(self, request):
-        """
-        Handle GET requests for the homepage.
-
-        Retrieves all Widget objects and prepares a list where each widget is represented
-        as a dictionary containing its title, rendered content, and assigned column.
-        The resulting context is then rendered with the specified template.
-
-        Args:
-            request (HttpRequest): The HTTP request object.
-
-        Returns:
-            HttpResponse: The rendered template response with the widget information.
-        """
-        # Retrieve all widgets and build a list of dictionaries for each one.
-        widgets = [widget for widget in self.get_widgets(request) if widget['content']]
-
-        Widget = apps.get_model('core', model_name='widget')
-        widgets += [{
-            'title': widget.name,
-            'content': widget.render(request),
-            'column': widget.column,
-        } for widget in Widget.objects.all()]
-        return render(request, self.template_name, locals())

@@ -2,7 +2,6 @@ from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.db import transaction
 from django.contrib.admin.models import ADDITION
 from core.forms import modelform_factory, InlineFormSetHelper
 from core.forms.button import Button

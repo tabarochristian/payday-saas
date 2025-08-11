@@ -30,7 +30,7 @@ class ItemPaid(Base):
     list_filter = ('payslip__employee__registration_number', 'is_bonus', 'is_payable', 'type_of_item')
 
     def __str__(self):
-        return f"Element payé {self.name} de la fiche de paie du {self.payslip.payroll.name}"
+        return f"Element payé {self.name} de la fiche de paie du {self.employee.payroll.name}"
     
     list_filter = (
         "is_bonus",

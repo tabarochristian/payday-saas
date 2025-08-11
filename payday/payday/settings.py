@@ -294,7 +294,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     ),
 }
 
@@ -311,10 +311,10 @@ DEFAULT_CURRENCY = os.getenv('DEFAULT_CURRENCY', 'USD')
 CURRENCY_CHOICES = [(currency, currency) for currency in ('USD', 'CDF')]
 
 # Django Ace settings
+ACE_DEFAULT_HEIGHT = '300px'
 ACE_DEFAULT_THEME = 'chrome'
 ACE_DEFAULT_MODE = 'python'
 ACE_DEFAULT_WIDTH = '100%'
-ACE_DEFAULT_HEIGHT = '300px'
 
 # Django Phonenumber Field settings
 PHONENUMBER_DB_FORMAT = 'E164'

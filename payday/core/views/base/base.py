@@ -119,6 +119,23 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
     # Logging Utilities
     # ========================
 
+    def get_subdomain(self):
+        host = self.request.get_host().split(':')[0]  # Remove port if present
+        domain_parts = host.split('.')
+
+        # Example: sub.example.com → ['sub', 'example', 'com']
+        if len(domain_parts) >= 3:
+            return domain_parts[0]  # Assumes subdomain is the first part
+        return None  # No subdomain present
+
+
+    def sub_organization(self):
+        SubOrganization = apps.get_model('core', 'sub_organization')
+        sub_organization = self.get_subdomain()
+        return SubOrganization.objects.filter(
+            name = sub_organization
+        ).first()
+
     def logs(self):
         """Return audit logs for current object."""
         return LogEntry.objects.filter(

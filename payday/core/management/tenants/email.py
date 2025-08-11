@@ -1,11 +1,10 @@
+from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.contrib.auth.forms import PasswordResetForm
+
 from django.conf import settings
-from smtplib import SMTPException
-from tenacity import retry, stop_after_attempt, wait_none, retry_if_exception_type, before_sleep_log
-import logging
 from typing import Optional
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -14,12 +13,6 @@ class EmailService:
     Handles sending welcome and password reset emails for tenants.
     """
 
-    #@retry(
-    #    stop=stop_after_attempt(3),
-    #    wait=wait_none(),
-    #    retry=retry_if_exception_type((SMTPException, ConnectionError)),
-    #    before_sleep=before_sleep_log(logger, logging.WARNING)
-    #)
     def send_welcome_email(
         self,
         schema: str,
@@ -58,12 +51,6 @@ class EmailService:
         except Exception as ex:
             print("Not Ok", user.email, str(ex))
 
-    @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_none(),  # No waiting between retries
-        retry=retry_if_exception_type((Exception,)),
-        before_sleep=before_sleep_log(logger, logging.WARNING)
-    )
     def send_password_reset_email(self, schema: str, user: 'User') -> None:
         """
         Send a password reset email to the user.

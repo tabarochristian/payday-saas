@@ -4,8 +4,9 @@ from payroll.views import *
 app_name = 'payroll'
 
 urlpatterns = [
+    path('exporter/<str:pk>', PayrollExporter.as_view(), name='exporter'),
     path('synthesis/<str:func>/<int:pk>', Synthesis.as_view(), name='synthesis'),
-
+    
     path('listing/<int:pk>', Listing.as_view(), name='listing'),
     path('canvas/<str:actor>', Canvas.as_view(), name='canvas'),
 

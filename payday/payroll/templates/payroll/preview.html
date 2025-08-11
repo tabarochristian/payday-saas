@@ -75,8 +75,8 @@
                                     <tr data-id="{{ obj.id }}">
                                         <td>{{ obj.registration_number }}</td>
                                         <td>{{ obj.full_name }}</td>
-                                        <td>{{ obj.branch.name|default:obj.branch|default:'-' }}</td>
-                                        <td>{{ obj.grade.name|default:obj.grade|default:'-' }}</td>
+                                        <td>{{ obj.employee.branch.name|default:obj.branch|default:'-'|title }}</td>
+                                        <td>{{ obj.employee.grade.name|default:obj.grade|default:'-'|title }}</td>
                                         <td>{{ obj.children }}</td>
                                         <td>{{ obj.working_days_per_month|default:23 }}</td>
                                         <td>

@@ -234,6 +234,12 @@ class Command(BaseCommand):
                 agreement=random.choice(agreements),
                 direction=random.choice(directions),
                 designation=random.choice(designations),
+                marital_status=random.choice([
+                    'MARRIED',
+                    'SINGLE',
+                    'WIDOWER',
+                    'DIVORCED'
+                ]),
                 date_of_join=fake.date_between(start_date="-5y", end_date="today"),
                 date_of_birth=fake.date_of_birth(minimum_age=18, maximum_age=65),
                 sub_organization=self.suborganization,
@@ -271,7 +277,7 @@ class Command(BaseCommand):
         model = self._get_model('payroll', 'LegalItem')
         items = [
             ("INPP", -1, "Inpp", "0", "0", "1"),
-            ("IPR", -1, "Impôt sur revenu", "0", "ipr_iere", "1"),
+            ("IPR", -1, "Impôt sur revenu", "0", "0", "1"),
             ("ONEM", -1, "Onem", "sum_of('taxable_amount') * 0.02", "0", "1"),
             ("CNSS", -1, "Sécurité Sociale", "sum_of('social_security_amount') * 0.13", "sum_of('social_security_amount') * 0.05", "1"),
         ]

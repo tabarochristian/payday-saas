@@ -1,12 +1,5 @@
-{# templates/payroll/payslip_form_table.html #}
-
 {% extends "change.html" %}
-{% load i18n %}
-{% load core %}
-{% load humanize %}
-{% load mathfilters %}
-{% load crispy_forms_tags %}
-{% load crispy_forms_filters %}
+{% load i18n core humanize mathfilters crispy_forms_tags crispy_forms_filters %}
 
 {% block title %}
     {% blocktrans %}Gestion des éléments de paie - {{ employee_obj.full_name }}{% endblocktrans %}
@@ -18,9 +11,7 @@
     {% if messages %}
         <div class="messages">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
         </div>
     {% endif %}
@@ -31,7 +22,7 @@
                 <div class="card shadow-sm">
                     <div class="card-header text-bg-primary">
                         <h5 class="text-light fw-bold mb-0">
-                            {{ employee_obj.last_name }} {{ employee_obj.middle_name }}
+                            {{ employee_obj.employee.full_name }}
                         </h5>
                         <small class="text-white-50">{% trans "Fiche de paie" %}</small>
 
@@ -41,9 +32,7 @@
                                     <div class="col-sm-6">
                                         <dl class="row m-0">
                                             <dt class="col-sm-4 text-capitalize">{{ field.verbose_name|title }}</dt>
-                                            <dd class="col-sm-8 mb-1">
-                                                {{ employee_obj|getattr:field.name }}
-                                            </dd>
+                                            <dd class="col-sm-8 mb-1">{{ employee_obj.employee|getattr:field.name }}</dd>
                                         </dl>
                                     </div>
                                 {% endif %}
@@ -69,25 +58,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Display existing items -->
                                         {% for item in items %}
                                             <tr class="text-start">
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
 
-                                                <td>{{ item.amount_qp_employee|floatformat:2 }}</td>
-                                                <td>{{ item.amount_qp_employer|floatformat:2 }}</td>
-
-                                                <td>{{ item.taxable_amount|floatformat:2 }}</td>
-                                                <td>{{ item.social_security_amount|floatformat:2 }}</td>
+                                                <td class="{% if item.amount_qp_employee < 0 %}text-warning{% endif %}">
+                                                    {{ item.amount_qp_employee|floatformat:2 }}
+                                                </td>
+                                                <td class="{% if item.amount_qp_employer < 0 %}text-warning{% endif %}">
+                                                    {{ item.amount_qp_employer|floatformat:2 }}
+                                                </td>
+                                                <td class="{% if item.taxable_amount < 0 %}text-warning{% endif %}">
+                                                    {{ item.taxable_amount|floatformat:2 }}
+                                                </td>
+                                                <td class="{% if item.social_security_amount < 0 %}text-warning{% endif %}">
+                                                    {{ item.social_security_amount|floatformat:2 }}
+                                                </td>
 
                                                 <td>
-                                                    {% if employee_obj.payroll.status != "APPROVED" %}
+                                                    {% if self.can_change_paid_employee %}
                                                         <a href="{% url 'core:delete' 'payroll' 'itempaid' %}?pk={{ item.pk }}&next={{ request.get_full_path }}"
-                                                        class="btn btn-sm btn-danger"
-                                                        aria-label="{% trans 'Supprimer cet élément' %}"
-                                                        title="{% trans 'Supprimer' %}">
+                                                           class="btn btn-sm btn-danger"
+                                                           aria-label="{% trans 'Supprimer cet élément' %}"
+                                                           title="{% trans 'Supprimer' %}">
                                                             {% trans "Supprimer" %}
                                                         </a>
                                                     {% endif %}
@@ -101,34 +96,37 @@
                                             </tr>
                                         {% endfor %}
 
-                                        {% if employee_obj.payroll.status != "APPROVED" %}
-                                        <!-- Inline form for adding new item -->
-                                        <tr class="bg-light">
-                                            <td>{{ form.type_of_item|as_crispy_field }}</td>
-                                            <td>{{ form.code|as_crispy_field }}</td>
-                                            <td>{{ form.name|as_crispy_field }}</td>
-
-                                            <td>{{ form.amount_qp_employee|as_crispy_field }}</td>
-                                            <td>{{ form.amount_qp_employer|as_crispy_field }}</td>
-
-                                            <td>{{ form.taxable_amount|as_crispy_field }}</td>
-                                            <td>{{ form.social_security_amount|as_crispy_field }}</td>
-
-                                            <td>
-                                                <button type="submit" class="btn btn-primary w-100">
-                                                    {% trans "Sauvegarder" %}
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        {% if self.can_change_paid_employee %}
+                                            <tr class="bg-light">
+                                                <td>{{ form.type_of_item|as_crispy_field }}</td>
+                                                <td>{{ form.code|as_crispy_field }}</td>
+                                                <td>{{ form.name|as_crispy_field }}</td>
+                                                <td>{{ form.amount_qp_employee|as_crispy_field }}</td>
+                                                <td>{{ form.amount_qp_employer|as_crispy_field }}</td>
+                                                <td>{{ form.taxable_amount|as_crispy_field }}</td>
+                                                <td>{{ form.social_security_amount|as_crispy_field }}</td>
+                                                <td>
+                                                    <button type="submit" class="btn btn-primary w-100">
+                                                        {% trans "Sauvegarder" %}
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         {% endif %}
 
-                                        <!-- Totals row -->
                                         <tr class="table-info fw-bold">
                                             <td colspan="3" class="text-uppercase">{% trans "Totals" %}</td>
-                                            <td class="text-end">{{ employee_obj.gross|floatformat:2 }}</td>
-                                            <td class="text-end">{{ employee_obj.net|floatformat:2 }}</td>
-                                            <td class="text-end">{{ employee_obj.taxable_gross|floatformat:2 }}</td>
-                                            <td class="text-end">{{ employee_obj.social_security_threshold|floatformat:2 }}</td>
+                                            <td class="{% if employee_obj.gross < 0 %}text-warning{% endif %} text-end">
+                                                {{ employee_obj.gross|floatformat:2 }}
+                                            </td>
+                                            <td class="{% if employee_obj.net < 0 %}text-warning{% endif %} text-end">
+                                                {{ employee_obj.net|floatformat:2 }}
+                                            </td>
+                                            <td class="{% if employee_obj.taxable_gross < 0 %}text-warning{% endif %} text-end">
+                                                {{ employee_obj.taxable_gross|floatformat:2 }}
+                                            </td>
+                                            <td class="{% if employee_obj.social_security_threshold < 0 %}text-warning{% endif %} text-end">
+                                                {{ employee_obj.social_security_threshold|floatformat:2 }}
+                                            </td>
                                             <td></td>
                                         </tr>
                                     </tbody>
@@ -137,6 +135,24 @@
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h4>{% trans 'Activities' %}</h4>
+                </div>
+    
+                <ul>
+                    {% for log in self.logs %}
+                        <li>{{ log.action_time }}: {{ log.change_message }}</li>
+                    {% empty %}
+                        <li>No logs available.</li>
+                    {% endfor %}
+                </ul>                      
             </div>
         </div>
     </div>

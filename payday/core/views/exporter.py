@@ -1,9 +1,8 @@
 import re
 import pandas as pd
-from io import BytesIO
 
 from django.utils.translation import gettext as _
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse
 from django.utils.text import slugify
 from django.apps import apps
 

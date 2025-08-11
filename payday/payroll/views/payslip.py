@@ -2,11 +2,14 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext as _
+from django.contrib.admin.models import ADDITION
 from django.urls import reverse_lazy
 from django.db import transaction
 from django.forms import CheckboxInput
 from django.contrib import messages
+from types import SimpleNamespace
 from django.apps import apps
+
 import logging
 
 from core.forms import modelform_factory
@@ -39,35 +42,16 @@ class Payslip(Change):
 
     def get_action_buttons(self, obj=None):
         obj = obj or self._get_object()
-        parent_buttons = [
-            btn for btn in super().get_action_buttons(obj)
-            if not any(label in btn.text for label in [_("Sauvegarder"), _("Supprimer")])
-        ]
-
-        print_button = Button(
+        return [Button(
             tag='a',
             text=_("Bulletin de paie"),
             url=reverse_lazy("payroll:slips") + f"?pk={obj.pk}",
             classes="btn btn-light-primary",
             permission="payroll.view_paidemployee",
-        )
-
-        extra_buttons = []
-        get_extra_buttons = getattr(obj, "get_action_buttons", None)
-
-        try:
-            if callable(get_extra_buttons):
-                result = get_extra_buttons()
-                extra_buttons = [Button(**b) for b in (result if isinstance(result, (list, tuple)) else [result])]
-            elif isinstance(get_extra_buttons, (list, tuple)):
-                extra_buttons = [Button(**b) for b in get_extra_buttons]
-            elif isinstance(get_extra_buttons, dict):
-                extra_buttons = [Button(**get_extra_buttons)]
-        except Exception as e:
-            logger.warning(f"Failed to load extra buttons: {e}", exc_info=True)
-
-        all_buttons = extra_buttons + parent_buttons + [print_button]
-        return [btn for btn in all_buttons if not btn.permission or self.request.user.has_perm(btn.permission)]
+            attrs={
+                "target": "_blank"
+            }
+        )]
 
     def get_display_fields(self):
         try:
@@ -85,6 +69,18 @@ class Payslip(Change):
                 form.fields[field].widget = CheckboxInput()
                 form.fields[field].required = False
         return form
+
+    def can_change_paid_employee(self):
+        return any([
+            self.request.user.is_superuser,
+            any([
+                self.request.user.is_staff,
+                all([
+                    self.request.user.has_perm('payroll.change_payroll'),
+                    self.request.user.has_perm('payroll.add_itemPaid')
+                ])
+            ])
+        ])
 
     def get(self, request, pk):
         self.kwargs.update({
@@ -153,6 +149,15 @@ class Payslip(Change):
             # Update parent records
             employee_obj.update()
             employee_obj.payroll.update()
+
+            # Log addition
+            message = _('Ajout du/de {model} #{pk}').format(
+                model=model_class._meta.model_name, pk=employee_obj.pk)
+            message = f"#Obj ItemPaid: {instance.name} added"
+            
+            self.log(model_class, SimpleNamespace(**{
+                'instance': employee_obj
+            }), action=ADDITION, change_message=message)
 
             messages.success(request, _("L'élément a été ajouté avec succès."))
             return redirect(request.META.get("HTTP_REFERER", self.next or reverse_lazy("core:list", kwargs={

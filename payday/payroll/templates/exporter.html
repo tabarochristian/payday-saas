@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+{% load i18n static crispy_forms_filters mathfilters core %}
+
+{% block title %}
+    {% trans "Exporteur" %}
+{% endblock %}
+
+{% block content %}
+<style>
+/* Apple/Tailwind inspired clean UI with production optimizations */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    background: linear-gradient(to bottom right, #ffffff, #f9fafb);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease; /* Subtle hover effect for engagement */
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.list-header {
+    background-color: rgba(255,255,255,0.8);
+    backdrop-filter: blur(6px);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.list-body {
+    overflow-y: auto;
+    flex: 1;
+    max-height: 50vh; /* Limit height to prevent excessive scrolling on large lists */
+}
+
+.search-box {
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    width: 100%; /* Full width for better mobile UX */
+}
+
+.search-box:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+}
+
+.list-group-item.draggable {
+    cursor: grab;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+    user-select: none; /* Prevent text selection during drag */
+}
+
+.list-group-item.draggable:hover {
+    background-color: #f9fafb;
+    transform: translateY(-1px);
+}
+
+.list-group-item.draggable:active {
+    cursor: grabbing;
+}
+
+.list-group-item.placeholder {
+    border: 2px dashed #94a3b8;
+    background: #f8fafc;
+    height: 2.5rem;
+}
+
+.placeholder-text {
+    font-style: italic;
+    color: #9ca3af;
+    text-align: center;
+    padding: 0.75rem;
+    display: block; /* Default to visible */
+}
+
+.btn-close {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+mark {
+    background-color: #fde68a;
+    color: inherit;
+    padding: 0;
+    border-radius: 0.15rem;
+    transition: background-color 0.3s ease;
+}
+
+/* Smooth scroll and touch support */
+.list-body {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Accessibility: Focus styles for keyboard navigation */
+.draggable:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: -2px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .row.g-4 {
+        flex-direction: column;
+    }
+    .list-body {
+        max-height: 40vh;
+    }
+}
+</style>
+
+<!-- Page Heading -->
+<div class="page-heading mb-4">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-sm-12 text-start">
+                <h3 class="mb-0 fw-semibold text-gray-800">
+                    {% trans 'Exporter' %} {{ model_class|model_attr:'verbose_name'|title }}
+                </h3>
+                {% include 'components/breadcrumb.html' %}
+            </div>
+            <div class="col-md-6 col-sm-12 text-end">
+                <a href="{% url 'core:list' app model_class|model_attr:'model_name' %}" class="btn btn-outline-gray me-2">
+                    {% trans "Annuler" %}
+                </a>
+                <button type="submit" form="form-{{ model_class|model_attr:'model_name' }}" class="btn btn-primary shadow-sm">
+                    {% trans "Exporter" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Options Form -->
+<form method="post" id="form-{{ model_class|model_attr:'model_name' }}" novalidate class="container-fluid page-content pb-5">
+    {% csrf_token %}
+    <input type="hidden" name="selected_items_order" id="selected-items-order">
+    <div class="row g-4 min-vh-50">
+
+        <!-- Available Items -->
+        <div class="col-lg-6 col-md-12 h-100 d-flex">
+            <div class="card shadow-sm flex-fill d-flex flex-column" role="region" aria-label="{% trans 'Éléments de paie disponibles' %}">
+                <div class="list-header">
+                    <h5 class="mb-1">{% trans "Éléments de paie disponibles" %}</h5>
+                    <input type="text" id="search-available" class="form-control form-control-sm search-box"
+                           placeholder="{% trans 'Rechercher...' %}" aria-label="{% trans 'Rechercher éléments disponibles' %}">
+                </div>
+                <div class="list-body">
+                    <ul id="item-list" class="list-group list-group-flush" role="listbox" aria-multiselectable="true">
+                        {% for verbose, name in list_of_items.items %}
+                        <li class="list-group-item draggable d-flex justify-content-between align-items-center"
+                            data-id="{{ name }}" role="option" tabindex="0">
+                            <span class="item-label flex-grow-1">{{ verbose|upper }}</span>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item text-muted" role="alert">{% trans "Aucun élément disponible." %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selected Items -->
+        <div class="col-lg-6 col-md-12 h-100 d-flex">
+            <div class="card shadow-sm flex-fill d-flex flex-column" role="region" aria-label="{% trans 'Éléments sélectionnés' %}">
+                <div class="list-header">
+                    <h5 class="mb-1">{% trans "Éléments sélectionnés" %}</h5>
+                    <input type="text" id="search-selected" class="form-control form-control-sm search-box"
+                           placeholder="{% trans 'Rechercher...' %}" aria-label="{% trans 'Rechercher éléments sélectionnés' %}">
+                    <p class="text-muted small mb-0">
+                        {% trans "Glissez les éléments ici pour les inclure dans le rapport." %}
+                    </p>
+                </div>
+                <div class="list-body">
+                    <ul id="drop-zone" class="list-group list-group-flush" role="listbox" aria-multiselectable="true">
+                        <li class="list-group-item placeholder-text" role="alert">{% trans "Déposez les éléments ici." %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<!-- Drag & Drop + Search Script -->
+<script>
+// Modularized and optimized JS for production: Error handling, accessibility, touch support, performance
+document.addEventListener('DOMContentLoaded', () => {
+    const itemList = document.getElementById('item-list');
+    const dropZone = document.getElementById('drop-zone');
+    const selectedInput = document.getElementById('selected-items-order');
+    const placeholderText = dropZone.querySelector('.placeholder-text');
+    let draggedItem = null;
+
+    const placeholder = document.createElement('li');
+    placeholder.className = 'list-group-item placeholder';
+    placeholder.setAttribute('aria-hidden', 'true');
+
+    // Utility: Sort list alphabetically (only for available items)
+    function sortList(list) {
+        const items = Array.from(list.querySelectorAll('.draggable'));
+        items.sort((a, b) => a.textContent.trim().localeCompare(b.textContent.trim()));
+        items.forEach(item => list.appendChild(item));
+    }
+
+    // Utility: Update remove button and ARIA
+    function updateRemoveButton(item) {
+        const isInDropZone = item.parentElement.id === 'drop-zone';
+        let btn = item.querySelector('.remove-btn');
+        if (isInDropZone) {
+            if (!btn) {
+                btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn-close remove-btn ms-2';
+                btn.setAttribute('aria-label', '{% trans "Supprimer" %}');
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    itemList.appendChild(item);
+                    updateRemoveButton(item);
+                    sortList(itemList);
+                    togglePlaceholder();
+                    updateHiddenInput();
+                    item.focus(); // Accessibility: Focus back
+                });
+                item.appendChild(btn);
+            }
+            item.setAttribute('aria-selected', 'true');
+        } else {
+            if (btn) btn.remove();
+            item.setAttribute('aria-selected', 'false');
+        }
+    }
+
+    // Utility: Make item draggable and add keyboard support
+    function makeDraggable(item) {
+        item.draggable = true;
+        item.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { // Simulate drag with keyboard
+                e.preventDefault();
+                const targetList = item.parentElement.id === 'item-list' ? dropZone : itemList;
+                handleDrop(targetList, null); // Null y for keyboard
+            }
+        });
+        updateRemoveButton(item);
+    }
+
+    // Handle drop logic
+    function handleDrop(targetList, clientY) {
+        if (!draggedItem) return;
+        draggedItem.classList.remove('opacity-50');
+        if (placeholder.parentNode) placeholder.remove();
+
+        try {
+            if (targetList === dropZone) {
+                const afterElement = clientY ? getDragAfterElement(dropZone, clientY) : null;
+                if (afterElement == null) {
+                    dropZone.appendChild(draggedItem);
+                } else {
+                    dropZone.insertBefore(draggedItem, afterElement);
+                }
+            } else {
+                targetList.appendChild(draggedItem);
+                sortList(itemList);
+            }
+
+            updateRemoveButton(draggedItem);
+            draggedItem = null;
+            togglePlaceholder();
+            updateHiddenInput();
+        } catch (error) {
+            console.warn('Drag-drop error:', error); // Production logging
+            if (draggedItem) draggedItem.classList.remove('opacity-50');
+        }
+    }
+
+    // Toggle placeholder visibility
+    function togglePlaceholder() {
+        const hasItems = dropZone.querySelectorAll('.draggable').length > 0;
+        placeholderText.style.display = hasItems ? 'none' : 'block';
+        placeholderText.setAttribute('aria-hidden', hasItems ? 'true' : 'false');
+    }
+
+    // Update hidden input with selected order
+    function updateHiddenInput() {
+        const selectedIds = Array.from(dropZone.querySelectorAll('.draggable'))
+            .map(item => item.dataset.id);
+        selectedInput.value = selectedIds.join(',');
+    }
+
+    // Highlight search matches
+    function highlightMatch(text, query) {
+        if (!query) return text;
+        const regex = new RegExp(`(${query.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi'); // Escape special chars
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+
+    // Filter list with search
+    function filterList(inputEl, listEl) {
+        const query = inputEl.value.trim().toLowerCase();
+        listEl.querySelectorAll('.draggable').forEach(item => {
+            const labelEl = item.querySelector('.item-label');
+            const text = labelEl.textContent.toLowerCase();
+            if (text.includes(query)) {
+                item.style.display = '';
+                labelEl.innerHTML = highlightMatch(labelEl.textContent, query); // Use original textContent
+            } else {
+                item.style.display = 'none';
+                labelEl.innerHTML = labelEl.textContent; // Reset
+            }
+        });
+    }
+
+    // Debounce utility
+    const debounce = (fn, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn(...args), delay);
+        };
+    };
+
+    // Get element after drag position
+    function getDragAfterElement(container, y) {
+        const draggableElements = Array.from(container.querySelectorAll('.draggable:not(.opacity-50)'));
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            }
+            return closest;
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Setup drag events (with touch support via polyfill if needed, but basic here)
+    [itemList, dropZone].forEach(zone => {
+        zone.addEventListener('dragstart', e => {
+            if (!e.target.classList.contains('draggable')) return;
+            draggedItem = e.target;
+            e.dataTransfer.effectAllowed = 'move';
+            setTimeout(() => draggedItem.classList.add('opacity-50'), 0);
+        });
+
+        zone.addEventListener('dragover', e => {
+            e.preventDefault();
+            if (!draggedItem) return;
+
+            if (zone === dropZone) {
+                const afterElement = getDragAfterElement(dropZone, e.clientY);
+                if (afterElement == null) {
+                    dropZone.appendChild(placeholder);
+                } else {
+                    dropZone.insertBefore(placeholder, afterElement);
+                }
+            } else {
+                if (!placeholder.parentNode) zone.appendChild(placeholder);
+            }
+        });
+
+        zone.addEventListener('dragleave', e => {
+            if (e.relatedTarget && zone.contains(e.relatedTarget)) return;
+            if (placeholder.parentNode) placeholder.remove();
+        });
+
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            handleDrop(zone, e.clientY);
+        });
+
+        // Basic touch support (for mobile drag simulation)
+        zone.addEventListener('touchstart', e => {
+            if (!e.target.classList.contains('draggable')) return;
+            draggedItem = e.target;
+            setTimeout(() => draggedItem.classList.add('opacity-50'), 0);
+        });
+
+        zone.addEventListener('touchmove', e => {
+            e.preventDefault(); // Prevent scrolling
+        });
+
+        zone.addEventListener('touchend', e => {
+            if (!draggedItem) return;
+            const target = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            const targetZone = target ? target.closest('#item-list, #drop-zone') : null;
+            if (targetZone) {
+                handleDrop(targetZone, e.changedTouches[0].clientY);
+            } else {
+                draggedItem.classList.remove('opacity-50');
+                draggedItem = null;
+            }
+        });
+    });
+
+    // Initialization
+    document.querySelectorAll('#item-list .draggable').forEach(makeDraggable);
+    sortList(itemList);
+    togglePlaceholder();
+    updateHiddenInput();
+
+    // Search inputs with debounce
+    document.getElementById('search-available').addEventListener('input', debounce(e => filterList(e.target, itemList), 150));
+    document.getElementById('search-selected').addEventListener('input', debounce(e => filterList(e.target, dropZone), 150));
+});
+</script>
+    
+{% endblock %}

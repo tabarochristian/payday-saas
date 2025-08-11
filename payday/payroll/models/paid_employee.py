@@ -25,7 +25,7 @@ class PaidEmployee(Employee):
     )
 
     attendance = fields.IntegerField(
-        verbose_name=_('présence'), 
+        verbose_name=_('prestation'), 
         default=0
     )
 
@@ -42,13 +42,13 @@ class PaidEmployee(Employee):
     service = fields.CharField(verbose_name=_('service'), blank=True, null=True, default=None, max_length=255)
 
     working_days_per_month = fields.IntegerField(verbose_name=_('jours ouvrables par mois'), default=23)
-    children = fields.IntegerField(verbose_name=_('children'), default=0)
+    children = fields.IntegerField(verbose_name=_('enfant(s)'), default=0)
 
-    social_security_threshold = fields.FloatField(_('plafond cnss/cnsap'), default=0)
-    taxable_gross = fields.FloatField(_('brut imposable'), default=0)
+    social_security_threshold = fields.FloatField(_('plafond CNSS/CNSAP'), default=0)
+    taxable_gross = fields.FloatField(_('brut/base imposable'), default=0)
     
-    gross = fields.FloatField(_('brut'), default=0)
-    net = fields.FloatField(_('net'), default=0)
+    gross = fields.FloatField(_('brut global'), default=0)
+    net = fields.FloatField(_('net à payer'), default=0)
 
     @property
     def name(self):
