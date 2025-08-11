@@ -121,7 +121,7 @@ class Payslips(Read):
     def get_list_display(self):
         try:
             model_class = apps.get_model("payroll", "PaidEmployee")
-            list_display = ["registration_number", "last_name", "net", "payment_method"]
+            list_display = ["registration_number", "last_name", "middle_name", "first_name", "net"]
             return [field for field in model_class._meta.fields if field.name in list_display]
         except Exception as e:
             logger.error(f"Error retrieving list display fields: {str(e)}")
