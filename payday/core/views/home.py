@@ -74,11 +74,17 @@ class Home(LoginRequiredMixin, View):
         PaidEmployee = apps.get_model('payroll', 'PaidEmployee')
         
         current_year = timezone.now().year
-        return PaidEmployee.objects.for_user(user=request.user)\
-            .filter(
-                payroll__end_dt__year=current_year, 
-                sub_organization=sub_organization
-            )[:36]
+        qs = PaidEmployee.objects.for_user(user=request.user).filter(
+            payroll__end_dt__year=current_year, 
+            sub_organization=sub_organization
+        )
+
+        if any([
+            request.user.is_superuser,
+            request.user.is_staff
+        ]):
+            return qs[:36]
+        return qs.filter(employee__user=request.user)[:36]
 
     def _get_payroll_chart_data(self):
         Payroll = apps.get_model('payroll', 'Payroll')
