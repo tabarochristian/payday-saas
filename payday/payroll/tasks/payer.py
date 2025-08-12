@@ -527,8 +527,7 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int, contex
 
         max_tax += ((upper - lower) * tranche_rate)
         if lower <= taxable_gross_cdf <= upper:
-            _tranche_rate = (0.3 if tranche_rate == 0.4 else rate)
-            capped_tax = taxable_gross_cdf * _tranche_rate
+            capped_tax = taxable_gross_cdf * tranche_rate
             break
 
     tax_cdf = capped_tax if max_tax > capped_tax else max_tax
