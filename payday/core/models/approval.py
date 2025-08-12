@@ -154,11 +154,9 @@ class Approval(Base):
 
         try:
             # If all are approved, update the related object's status
-            status = "APPROVED"
             obj = self.content_object
-            print(obj, status)
             if hasattr(obj, "status"):
-                obj.status = status
+                obj.status = "APPROVED"
                 obj.save(update_fields=["status"])
         except Exception as e:
             logger.error("Can't update the status: %s", e)

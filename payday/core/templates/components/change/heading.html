@@ -93,9 +93,11 @@
 
                             <!-- Hidden Fields -->
                             <input type="hidden" name="content_type" value="{{ self.approval.content_type.pk }}">
+                            <input type="hidden" name="sub_organization" value="{{ obj.sub_organization }}">
                             <input type="hidden" name="id_workflow" value="{{ self.approval.workflow.pk }}">
                             <input type="hidden" name="user" value="{{ request.user.pk }}">
                             <input type="hidden" name="object_id" value="{{ obj.pk }}">
+                            
 
                             <div class="d-flex gap-2">
                                 <button type="submit" name="status" form="approval-form" value="APPROVED" class="btn btn-light-success">
