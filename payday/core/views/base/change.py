@@ -79,7 +79,10 @@ class Change(BaseViewMixin):
             (self.request.user.is_staff or self.request.user.is_superuser)
             and (
                 self.approvals().filter(user=self.request.user).exists()
-                or getattr(obj, "status", "PENDING") != "APPROVED"
+                or all([
+                    hasattr(obj, "status"),
+                    obj.status in ["APPROVED", "REJECTED"]
+                ])
             )
         )
 
