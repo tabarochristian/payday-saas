@@ -201,7 +201,7 @@ class Base(models.Model):
             if (user.pk, wf.pk) not in existing_keys
         ]
 
-        Approval.objects.bulk_create(new_approvals, return_defaults=True)
+        Approval.objects.bulk_create(new_approvals)
         for instance in new_approvals:
             post_save.send(sender=Approval, instance=instance, created=True)
 
