@@ -72,7 +72,7 @@ class Change(BaseViewMixin):
                 self.request.user.is_staff,
                 self.request.user.is_superuser
             ]),
-            getattr(self.request, "user", None) == getattr(obj, "created_by", None)
+            self.request.user != obj.created_by
         ]):
             return True
         return False
