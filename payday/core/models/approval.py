@@ -26,8 +26,9 @@ class Approval(Base):
 
     user = fields.ModelSelectField(
         get_user_model(),
-        on_delete=models.PROTECT,
-        verbose_name=_("approver")
+        on_delete=models.SET_NULL,
+        verbose_name=_("approver"),
+        null=True
     )
 
     content_type = fields.ModelSelectField(
@@ -109,7 +110,7 @@ class Approval(Base):
                     output_field=models.TextField()
                 ),
             )
-            .values("app", "model", "title", "description", "pk")
+            .values("app", "model", "title", "description", "pk", "created_at", "updated_at")
             .distinct()
         )
 

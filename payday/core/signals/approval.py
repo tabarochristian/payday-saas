@@ -19,12 +19,14 @@ def handle_approval(sender, instance, created, **kwargs):
         return
 
     subject = _("Demande d'approbation en attente")
-
     schema = TenantMiddleware.get_schema()
+
     url = f"http://{schema}.payday.cd" if schema else "http://payday.cd"
-    approval_url = url + reverse('approval:detail', args=[instance.pk])
+    approval_url = url + reverse('approval:detail', kwargs={
+        'pk': instance.pk
+    })
     message = _(
-        "Bonjour {name},\n\n"
+        "{name},\n\n"
         "Une nouvelle demande nécessite votre approbation.\n"
         "Veuillez vous connecter à la plateforme pour approuver ou rejeter cette demande :\n\n"
         "{url}\n\n"
