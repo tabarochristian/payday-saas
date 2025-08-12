@@ -105,7 +105,7 @@ class Approval(Base):
     
     @staticmethod
     def get_action_required(user=None):
-        qs = Approval.objects.filter(status=Status.PENDING)
+        qs = Approval.objects.filter(status="PENDING")
 
         # Safely apply custom user filter if available
         if user and callable(getattr(qs, "for_user", None)):
