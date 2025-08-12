@@ -84,29 +84,38 @@
 {% if not self.can_change %}
 <script>
 $(function() {
-    const $form = $("form"); // Replace with your actual form ID
+    const $form = $("#your-form-id"); // Replace with your actual form ID
 
-    $form.find("input, select, textarea, button").each(function() {
+    $form.find("input, select, textarea, button").not(".no-readonly").each(function() {
         const $field = $(this);
 
         if ($field.is(":hidden")) return;
 
-        // Apply read-only or disabled
-        if ($field.is("input[type='text'], input[type='number'], textarea")) {
+        const tag = this.tagName.toLowerCase();
+        const type = $field.attr("type");
+
+        // Apply read-only or disabled based on type
+        const tags = ["text", "number", "email", "date", "time", "url", "search", "tel"];
+        if (tag === "textarea" || (tag === "input" && tags.includes(type))) {
             $field.prop("readonly", true);
         } else {
             $field.prop("disabled", true);
         }
 
-        // Add Bootstrap visual cues
+        // Apply Bootstrap styling
         $field.addClass("bg-light text-muted border-secondary");
-        $field.css("cursor", "not-allowed");
+
+        // Only apply cursor style if not already styled
+        if (!$field.hasClass("form-control-plaintext")) {
+            $field.css("cursor", "not-allowed");
+        }
     });
 
     // Optional: dim the form container slightly
     $form.addClass("opacity-75");
 });
 </script>
+
 {% endif %}
 
 {% endwith %}
