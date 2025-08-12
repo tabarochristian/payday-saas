@@ -64,7 +64,7 @@
                     {% for approval in self.approvals %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ approval.user.get_full_name|default:approval.user.username }}
-                            <a href="{% url 'core:change' 'core' 'approval' approval.pk %}" class="text-decoration-none">
+                            <a href="#" class="text-decoration-none">
                                 <span class="badge p-2 ps-3 pe-3 
                                     bg-{{ approval.is_approved|yesno:'light-success,light-warning' }}">
                                     #{{ approval.pk }} – {% trans approval.get_status_display %}
