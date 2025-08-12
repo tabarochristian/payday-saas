@@ -15003,3 +15003,2592 @@ Traceback (most recent call last):
     )
 TypeError: 'Meta.fields' must not contain non-model field names: status
 ERROR 2025-08-12 15:29:46,066 runserver [35;1mHTTP GET /list/device/device 500 [0.05, 127.0.0.1:58416][0m
+ERROR 2025-08-12 15:34:21,295 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:34:21,304 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.07, 127.0.0.1:58543][0m
+ERROR 2025-08-12 15:34:26,097 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:34:26,101 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58543][0m
+ERROR 2025-08-12 15:35:25,496 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:35:25,500 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58568][0m
+ERROR 2025-08-12 15:35:26,227 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:35:26,230 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.03, 127.0.0.1:58568][0m
+ERROR 2025-08-12 15:36:54,267 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:36:54,270 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58633][0m
+ERROR 2025-08-12 15:37:48,306 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:37:48,310 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.05, 127.0.0.1:58641][0m
+ERROR 2025-08-12 15:38:57,037 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:38:57,041 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.06, 127.0.0.1:58655][0m
+ERROR 2025-08-12 15:41:18,923 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:41:18,926 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58710][0m
+ERROR 2025-08-12 15:42:05,570 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:42:05,574 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.05, 127.0.0.1:58712][0m
+ERROR 2025-08-12 15:43:10,520 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:43:10,523 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.03, 127.0.0.1:58726][0m
+ERROR 2025-08-12 15:44:18,378 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/preview.py", line 40, in get_permission_required
+    app = self.kwargs['app']
+          ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:44:18,382 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.05, 127.0.0.1:58744][0m
+ERROR 2025-08-12 15:47:36,542 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:47:36,546 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:58784][0m
+ERROR 2025-08-12 15:47:37,490 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:47:37,493 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:58786][0m
+ERROR 2025-08-12 15:48:07,932 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:48:07,935 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:58792][0m
+ERROR 2025-08-12 15:48:08,437 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:48:08,440 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:58792][0m
+ERROR 2025-08-12 15:48:21,265 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:48:21,268 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:58792][0m
+ERROR 2025-08-12 15:48:56,695 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:48:56,704 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58815][0m
+ERROR 2025-08-12 15:49:39,021 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:49:39,024 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58828][0m
+ERROR 2025-08-12 15:49:39,749 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:49:39,753 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.03, 127.0.0.1:58828][0m
+ERROR 2025-08-12 15:50:13,163 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:50:13,167 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.05, 127.0.0.1:58836][0m
+ERROR 2025-08-12 15:50:13,770 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:50:13,772 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.02, 127.0.0.1:58836][0m
+ERROR 2025-08-12 15:50:36,414 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:50:36,417 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.04, 127.0.0.1:58847][0m
+ERROR 2025-08-12 15:51:04,821 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:51:04,825 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.05, 127.0.0.1:58852][0m
+ERROR 2025-08-12 15:56:01,033 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:56:01,038 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.06, 127.0.0.1:58882][0m
+ERROR 2025-08-12 15:57:23,717 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:57:23,722 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.03, 127.0.0.1:58898][0m
+ERROR 2025-08-12 15:57:24,358 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:57:24,359 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.02, 127.0.0.1:58898][0m
+ERROR 2025-08-12 15:57:49,549 log Internal Server Error: /payroll/preview/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:57:49,552 runserver [35;1mHTTP GET /payroll/preview/4 500 [0.03, 127.0.0.1:58904][0m
+ERROR 2025-08-12 15:59:40,938 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:59:40,942 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:58947][0m
+ERROR 2025-08-12 15:59:41,725 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 15:59:41,728 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:58947][0m
+ERROR 2025-08-12 16:00:12,024 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:00:12,029 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:58956][0m
+ERROR 2025-08-12 16:00:12,627 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:00:12,629 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:58956][0m
+ERROR 2025-08-12 16:04:32,709 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:04:32,715 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.07, 127.0.0.1:59004][0m
+ERROR 2025-08-12 16:11:17,315 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:11:17,318 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59098][0m
+ERROR 2025-08-12 16:11:18,046 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:11:18,049 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:59098][0m
+ERROR 2025-08-12 16:12:37,726 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:12:37,731 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59126][0m
+ERROR 2025-08-12 16:12:38,305 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:12:38,307 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:59126][0m
+ERROR 2025-08-12 16:13:03,458 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:13:03,460 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:59136][0m
+ERROR 2025-08-12 16:13:04,093 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:13:04,096 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59136][0m
+ERROR 2025-08-12 16:13:40,890 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 36, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:13:40,894 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.06, 127.0.0.1:59153][0m
+ERROR 2025-08-12 16:13:41,642 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 36, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:13:41,644 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:59153][0m
+ERROR 2025-08-12 16:13:42,142 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 36, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:13:42,143 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.01, 127.0.0.1:59153][0m
+ERROR 2025-08-12 16:13:42,421 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 36, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:13:42,424 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:59153][0m
+ERROR 2025-08-12 16:14:24,478 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 36, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:14:24,482 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.05, 127.0.0.1:59163][0m
+ERROR 2025-08-12 16:14:24,996 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 36, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:14:24,998 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:59163][0m
+ERROR 2025-08-12 16:21:13,312 log Internal Server Error: /payroll/payslip/102
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslip.py", line 41, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 43, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:21:13,323 runserver [35;1mHTTP GET /payroll/payslip/102 500 [0.09, 127.0.0.1:59229][0m
+ERROR 2025-08-12 16:23:13,801 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:23:13,805 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59279][0m
+ERROR 2025-08-12 16:23:14,519 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:23:14,521 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:59279][0m
+ERROR 2025-08-12 16:23:19,666 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:23:19,670 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59279][0m
+ERROR 2025-08-12 16:23:26,213 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:23:26,217 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59279][0m
+ERROR 2025-08-12 16:23:50,966 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 99, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:23:50,970 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.03, 127.0.0.1:59293][0m
+ERROR 2025-08-12 16:24:05,795 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:24:05,800 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59299][0m
+ERROR 2025-08-12 16:24:15,320 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:24:15,324 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.05, 127.0.0.1:59304][0m
+ERROR 2025-08-12 16:24:34,179 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 99, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:24:34,182 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.05, 127.0.0.1:59310][0m
+ERROR 2025-08-12 16:25:22,518 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 33, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:25:22,522 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59355][0m
+ERROR 2025-08-12 16:25:22,978 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 33, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:25:22,980 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:59355][0m
+ERROR 2025-08-12 16:25:38,670 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:25:38,674 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.05, 127.0.0.1:59359][0m
+ERROR 2025-08-12 16:25:52,580 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:25:52,582 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:59365][0m
+ERROR 2025-08-12 16:25:54,548 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:25:54,553 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.05, 127.0.0.1:59367][0m
+ERROR 2025-08-12 16:26:08,194 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 107, in dispatch
+    if not self.has_permission():
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/base.py", line 98, in get_permission_required
+    app, model = self.kwargs['app'], self.kwargs['model']
+                 ~~~~~~~~~~~^^^^^^^
+KeyError: 'app'
+ERROR 2025-08-12 16:26:08,199 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.05, 127.0.0.1:59370][0m

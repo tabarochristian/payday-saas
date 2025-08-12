@@ -30,7 +30,7 @@ class Preview(Change):
     """
     template_name = "payroll/preview.html"
     PAYROLL_STATUSES = ("IN_PROGRESS", "COMPLETED", "ERROR", "APPROVED", "REJECTED")
-    
+
     @property
     def model_class(self):
         """Return the model class from URL kwargs."""
@@ -93,10 +93,10 @@ class Preview(Change):
         If the payroll has already been processed, redirects to payslips view.
         Otherwise, prepares context and renders the preview template.
         """
+        self.kwargs.update({"app": "payroll", "model": "payroll"})
         logger.info(f"User {request.user} requested payroll preview for ID={pk}")
 
         try:
-            self.kwargs.update({"app": "payroll", "model": "payroll"})
             model_class = self.model_class
             payroll_obj = get_object_or_404(model_class, pk=pk)
 
@@ -125,9 +125,9 @@ class Preview(Change):
         Changes payroll status to IN_PROGRESS and triggers async payroll generation.
         """
         logger.info(f"User {request.user} triggered payroll processing for ID={pk}")
+        self.kwargs.update({"app": "payroll", "model": "payroll"})
 
         try:
-            self.kwargs.update({"app": "payroll", "model": "payroll"})
             model_class = self.model_class
             payroll_obj = get_object_or_404(model_class, pk=pk)
 

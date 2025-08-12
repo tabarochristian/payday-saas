@@ -129,10 +129,9 @@ class Payslips(Read):
 
     def get(self, request, pk):
         logger.info(f"User {request.user} requested payslips for Payroll ID={pk}")
+        self.kwargs.update({"app": "payroll", "model": "payroll"})
         try:
-            # Update kwargs for parent class
-            app, model = "payroll", "payroll"
-            self.kwargs.update({"app": app, "model": model})
+            # Update kwargs for parent class    
             model_class = self.model_class
             
             # Get payroll object
@@ -140,7 +139,7 @@ class Payslips(Read):
             
             # Filter and paginate (Change the model to paidemployee to fetch the queryset)
             qs = self.get_queryset(
-                model_class=apps.get_model(app, model_name="paidemployee")
+                model_class=apps.get_model("payroll", model_name="paidemployee")
             ).filter(
                 payroll=obj
             ).select_related("payroll").prefetch_related("employee")

@@ -24,7 +24,7 @@ from core.models import Template, Workflow, Approval
 logger = logging.getLogger(__name__)
 
 
-class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
+class BaseViewMixin(View, LoginRequiredMixin, PermissionRequiredMixin):
     """
     Optimized base mixin with safe caching for static metadata,
     live queries for approval-related data, and reduced memory usage.
@@ -63,12 +63,14 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
             content_type=self.content_type
         )
 
-    @cached_property
     def sub_organization(self):
         """Cache DB hit for sub_organization lookup."""
         SubOrganization = apps.get_model('core', 'suborganization')
-        sub_name = self.get_subdomain()
-        return SubOrganization.objects.filter(name__iexact=sub_name.lower()).first() if sub_name else None
+        if sub_name := self.get_subdomain():
+            return SubOrganization.objects.filter(
+                name__iexact=sub_name.lower()
+            ).first()
+        return None
 
     # ========================
     # Object / Field Checks
@@ -87,7 +89,7 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
     # ========================
 
     def get_actions(self):
-        return self.actions
+        return getattr(self, 'actions', [])
 
     def get_permission_required(self):
         if any([
@@ -95,8 +97,7 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
             self.request.path == reverse_lazy('core:action-required')
         ]):
             return []
-        app = self.kwargs['app']
-        model = self.kwargs['model']
+        app, model = self.kwargs['app'], self.kwargs['model']
         return [f"{app}.{action}_{model}" for action in self.get_actions()]
 
     def handle_no_permission(self):
