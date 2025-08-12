@@ -81,7 +81,7 @@
                 {% with user_can_approve=self.user_can_approve %}
                     <!-- Approval Form or Messages -->
                     {% if user_can_approve %}
-                        <form method="post" id="approval-form" action="{% url 'core:change' 'core' 'approval' user_can_approve.pk %}?next={{ request.path }}">
+                        <form method="post" id="approval-form" action="{% url 'core:change' 'core' 'approval' 2 %}?next={{ request.path }}">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="comment-{{ obj.pk }}" class="form-label">
