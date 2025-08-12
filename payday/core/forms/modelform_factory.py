@@ -1,8 +1,8 @@
-from django import forms
 from django.core.exceptions import FieldDoesNotExist
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from collections.abc import Sequence
+from django import forms
 
 def model_has_field(model_class, field_name):
     try:

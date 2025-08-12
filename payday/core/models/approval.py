@@ -1,50 +1,21 @@
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import gettext_lazy as _
-from crispy_forms.layout import Layout, Column, Row
-from django.contrib.auth import get_user_model
-from django.db.models import QuerySet
-from core.models import fields, Base
-from django.urls import reverse_lazy
-from core.models import fields
+import logging
 from django.db import models
-import logging, re
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
+
+from django.contrib.contenttypes.fields import GenericForeignKey
+from crispy_forms.layout import Layout, Column, Row
+from core.models import fields, Base
 
 logger = logging.getLogger(__name__)
 
-class ApprovalQuerySet(QuerySet):
-    def __getattr__(self, attr):
-        pattern = (
-            r"get(?:_status_(?P<status>\w+))?"
-            r"(?:_content_type_(?P<app_label>[a-z0-9_]+)_(?P<model>[a-z0-9_]+))?$"
-        )
-        match = re.match(pattern, attr)
-        if not match:
-            raise AttributeError(f"{self.__class__.__name__} has no attribute {attr}")
-
-        app_label = match.group("app_label")
-        status = match.group("status")
-        model = match.group("model")
-
-        def dynamic_method():
-            qs = self
-            if status:
-                qs = qs.filter(status=status)
-            if app_label and model:
-                try:
-                    ct = ContentType.objects.get(app_label=app_label, model=model)
-                    qs = qs.filter(content_type=ct)
-                except ContentType.DoesNotExist:
-                    return self.none()
-            return qs
-
-        return dynamic_method
-
-class ApprovalManager(models.Manager):
-    def get_queryset(self):
-        return ApprovalQuerySet(self.model, using=self._db)
 
 class Approval(Base):
+    """
+    Generic approval model for workflow-based validation of any object.
+    """
+
     workflow = fields.ModelSelectField(
         "core.workflow",
         on_delete=models.SET_NULL,
@@ -69,45 +40,51 @@ class Approval(Base):
         verbose_name=_("object ID")
     )
 
-    content_object = GenericForeignKey(
-        "content_type", 
-        "object_id"
-    )
+    content_object = GenericForeignKey("content_type", "object_id")
 
     comment = fields.TextField(
         null=True,
         blank=True,
-        verbose_name=_("comment"),
-        default=None
+        default=None,
+        verbose_name=_("comment")
     )
 
     layout = Layout(
-        'workflow',
-        Row(Column('content_type'), Column('object_id')),
-        'user',
-        'status',
-        'comment'
+        "workflow",
+        Row(Column("content_type"), Column("object_id")),
+        "user",
+        "status",
+        "comment"
     )
 
-    list_display = ('id', 'workflow', 'content_object', 'object_id', 'status', 'updated_at')
-    objects = ApprovalManager()
+    list_display = ("id", "workflow", "content_object", "object_id", "status", "updated_at")
+
+    class Meta:
+        verbose_name = _("approbation")
+        verbose_name_plural = _("approbations")
+        unique_together = ("user", "status", "content_type", "object_id")
 
     @property
-    def is_approved(self):
-        return self.status in {"APPROVED"}
+    def is_approved(self) -> bool:
+        """Returns True if this approval is marked as approved."""
+        return self.status == "APPROVED"
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
+        """Returns the URL to edit the related object."""
         return reverse_lazy("core:change", kwargs={
             "model": self.content_type.model,
             "app": self.content_type.app_label,
             "pk": self.object_id
         })
-    
+
     @staticmethod
-    def get_action_required(user=None):
+    def get_action_required(user=None) -> list[dict]:
+        """
+        Returns a list of pending approvals, optionally filtered by user.
+        Each item includes metadata for display or routing.
+        """
         qs = Approval.objects.filter(status="PENDING")
 
-        # Safely apply custom user filter if available
         if user and callable(getattr(qs, "for_user", None)):
             qs = qs.for_user(user=user)
 
@@ -136,31 +113,25 @@ class Approval(Base):
             .distinct()
         )
 
-
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
+        """
+        Saves the approval and updates the related object's status
+        if all approvals are marked as approved.
+        """
         super().save(*args, **kwargs)
 
-        # Fetch all remaining approvals for this object that aren't "approved"
         outstanding = Approval.objects.filter(
             content_type=self.content_type,
             object_id=self.object_id
-        ).exclude(
-            status="APPROVED"
-        )
+        ).exclude(status="APPROVED")
 
         if outstanding.exists():
             return
 
         try:
-            # If all are approved, update the related object's status
             obj = self.content_object
             if hasattr(obj, "status"):
                 obj.status = "APPROVED"
                 obj.save(update_fields=["status"])
         except Exception as e:
-            logger.error("Can't update the status: %s", e)
-
-    class Meta:
-        verbose_name = _("approbation")
-        verbose_name_plural = _("approbations")
-        unique_together = ('user', 'status', 'content_type', 'object_id')
+            logger.error("Unable to update related object status: %s", e)
