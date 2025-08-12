@@ -159,6 +159,7 @@ class Change(BaseViewMixin):
             obj.mark_as_read()
             return redirect(obj.target.get_absolute_url() if obj.target else reverse_lazy('core:notifications'))
 
+        action_buttons = self.get_action_buttons(obj=obj)
         form, formsets = self._build_form_and_formsets(obj)
         return render(request, self.get_template_name(), locals())
 
