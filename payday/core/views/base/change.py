@@ -65,6 +65,18 @@ class Change(BaseViewMixin):
         
         return obj
 
+    def can_change(self):
+        obj = self._get_object()
+        if all([
+            any([
+                self.request.user.is_staff,
+                self.request.user.is_superuser
+            ]),
+            self.request.user == obj.created_by
+        ]):
+            return True
+        return False
+
     def get_action_buttons(self, obj=None):
         """
         Generates action buttons based on user permissions and model configuration.

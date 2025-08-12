@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-</{{ form.form_tag }}>
+</{{ form.form_tagg|default:'form' }}>
 
 {{ self.keywords|json_script:"keywords" }}
 
@@ -80,4 +80,33 @@
         });
     });
 </script>
+
+{% if self.can_change %}
+<script>
+$(function() {
+    const $form = $("form"); // Replace with your actual form ID
+
+    $form.find("input, select, textarea, button").each(function() {
+        const $field = $(this);
+
+        if ($field.is(":hidden")) return;
+
+        // Apply read-only or disabled
+        if ($field.is("input[type='text'], input[type='number'], textarea")) {
+            $field.prop("readonly", true);
+        } else {
+            $field.prop("disabled", true);
+        }
+
+        // Add Bootstrap visual cues
+        $field.addClass("bg-light text-muted border-secondary");
+        $field.css("cursor", "not-allowed");
+    });
+
+    // Optional: dim the form container slightly
+    $form.addClass("opacity-75");
+});
+</script>
+{% endif %}
+
 {% endwith %}
