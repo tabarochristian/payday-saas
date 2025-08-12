@@ -160,8 +160,8 @@ class Base(models.Model):
         return df.to_html(classes="table table-bordered table-striped", index=False, escape=False)
 
     def _initialize_workflow_approvals(self):
-        Workflow = apps.get_model("core", "Workflow")
-        Approval = apps.get_model("core", "Approval")
+        Workflow = apps.get_model("core", "workflow")
+        Approval = apps.get_model("core", "approval")
         content_type = ContentType.objects.get_for_model(self.__class__)
         workflows = Workflow.objects.filter(content_type=content_type).prefetch_related("users")
 
@@ -206,7 +206,7 @@ class Base(models.Model):
             if (user.pk, wf.pk) not in existing_keys
         ]
 
-        Approval.objects.bulk_create(new_approvals)
+        new_approvals = Approval.objects.bulk_create(new_approvals)
         for instance in new_approvals:
             post_save.send(sender=Approval, instance=instance, created=True)
 

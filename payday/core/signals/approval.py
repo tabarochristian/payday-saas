@@ -22,8 +22,10 @@ def handle_approval(sender, instance, created, **kwargs):
     schema = TenantMiddleware.get_schema()
 
     url = f"http://{schema}.payday.cd" if schema else "http://payday.cd"
-    approval_url = url + reverse('approval:detail', kwargs={
-        'pk': instance.pk
+    approval_url = url + reverse('core:change', kwargs={
+        'app': instance.content_type.model,
+        'model': instance.content_type.app_label,
+        'pk': instance.object_id
     })
     message = _(
         "{name},\n\n"
