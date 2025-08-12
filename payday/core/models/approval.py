@@ -22,8 +22,8 @@ class ApprovalQuerySet(QuerySet):
         if not match:
             raise AttributeError(f"{self.__class__.__name__} has no attribute {attr}")
 
-        status = match.group("status")
         app_label = match.group("app_label")
+        status = match.group("status")
         model = match.group("model")
 
         def dynamic_method():
@@ -135,7 +135,6 @@ class Approval(Base):
             .values("app", "model", "title", "description", "pk")
             .distinct()
         )
-
 
 
     def save(self, *args, **kwargs):

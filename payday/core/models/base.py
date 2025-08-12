@@ -65,7 +65,7 @@ class Base(models.Model):
         choices=Status.choices,
         default=Status.PENDING,
         verbose_name=_("statut"),
-        editable=False,
+        # editable=False,
     )
     updated_by = CurrentUserField(
         _("mis à jour par"),
