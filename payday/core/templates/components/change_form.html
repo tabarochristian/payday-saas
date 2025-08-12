@@ -81,7 +81,7 @@
     });
 </script>
 
-{% if self.can_change %}
+{% if not self.can_change %}
 <script>
 $(function() {
     const $form = $("form"); // Replace with your actual form ID
