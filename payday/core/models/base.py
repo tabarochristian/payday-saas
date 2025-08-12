@@ -182,7 +182,8 @@ class Base(models.Model):
         content_type = ContentType.objects.get_for_model(self.__class__)
         workflows = Workflow.objects.filter(content_type=content_type).prefetch_related("users")
 
-        if not workflows.exists() and hasattr(self, "status"):
+        model_name = self.__class__.__name__.lower()
+        if not workflows.exists() and hasattr(self, "status") and model_name != 'payroll':
             self.status = Status.APPROVED
             super().save(update_fields=["status"])
             return
