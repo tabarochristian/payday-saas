@@ -207,9 +207,10 @@ class Base(models.Model):
                 if key not in existing_keys:
                     new_approvals.append(
                         Approval(
+                            sub_organization=self.sub_organization,
                             content_type=content_type,
-                            object_id=self.pk,
                             status=Status.PENDING,
+                            object_id=self.pk,
                             workflow=wf,
                             user=user,
                         )

@@ -115,6 +115,12 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
             content_type__model=self.model_class._meta.model_name
         )
 
+    def is_approved(self):
+        obj = self._get_object()
+        if not hasattr(obj, 'status'):
+            return False
+        return self.status in ["APPROVED"]
+
     # ========================
     # Logging Utilities
     # ========================
