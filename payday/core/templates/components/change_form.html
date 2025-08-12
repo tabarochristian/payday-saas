@@ -84,7 +84,7 @@
 {% if not self.can_change %}
 <script>
 $(function() {
-    const $form = $("form"); // Replace with your actual form ID
+    const $form = = $("form[id^='form-']"); // Replace with your actual form ID
 
     $form.find("input, select, textarea, button").not(".no-readonly").each(function() {
         const $field = $(this);
