@@ -12,11 +12,6 @@ import logging, re
 
 logger = logging.getLogger(__name__)
 
-class Status(models.TextChoices):
-    PENDING = "PENDING", _("EN ATTENTE")
-    APPROVED = "APPROVED", _("APPROUVÉ")
-    REJECTED = "REJECTED", _("REJETÉ")
-
 class ApprovalQuerySet(QuerySet):
     def __getattr__(self, attr):
         pattern = (
@@ -79,13 +74,6 @@ class Approval(Base):
         "object_id"
     )
 
-    status = fields.CharField(
-        max_length=10,
-        choices=Status,
-        default=Status.PENDING,
-        verbose_name=_("status")
-    )
-
     comment = fields.TextField(
         null=True,
         blank=True,
@@ -106,7 +94,7 @@ class Approval(Base):
 
     @property
     def is_approved(self):
-        return self.status in {"approved"}
+        return self.status in {"APPROVED"}
 
     def get_absolute_url(self):
         return reverse_lazy("core:change", kwargs={

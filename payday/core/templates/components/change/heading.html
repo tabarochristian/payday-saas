@@ -106,14 +106,14 @@
                                 </button>
                             </div>
                         </form>
-                    {% elif request.user == obj.created_by %}
+                    {% comment %}{% elif request.user == obj.created_by %}
                         <div class="alert alert-warning mt-3">
                             ⚠ {% trans "Vous ne pouvez pas/plus approuver cette demande." %}
                         </div>
                     {% else %}
                         <div class="alert alert-info mt-3">
                             ℹ️ {% trans "Vous n’êtes pas autorisé à valider cette demande." %}
-                        </div>
+                        </div>{% endcomment %}
                     {% endif %}
                 {% endwith %}
             </div>
