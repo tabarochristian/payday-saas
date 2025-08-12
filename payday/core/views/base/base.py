@@ -178,7 +178,7 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get_form_fields(self, model=None):
         model = model or self.model_class
         layout = getattr(model, 'layout', Layout())
-        return list(layout.get_field_names())
+        return [field.name for field in layout.get_field_names()]
 
     def get_inline_form_fields(self, model=None):
         model = model or self.model_class
