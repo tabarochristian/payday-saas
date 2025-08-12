@@ -72,7 +72,10 @@ class Change(BaseViewMixin):
                 self.request.user.is_staff,
                 self.request.user.is_superuser
             ]),
-            self.request.user != obj.created_by
+            any([
+                self.approvals().filter(user=self.request.user).exists(),
+                getattr(obj, "status", "PENDING") != "APPROVED"
+            ]),
         ]):
             return True
         return False
