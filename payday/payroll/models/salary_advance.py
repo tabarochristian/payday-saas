@@ -16,7 +16,6 @@ class AdvanceSalary(Base):
     duration = models.IntegerField(_('durée'), help_text=_('nombre de mois'), default=36)
     amount = models.FloatField(_('montant'))
     date = DateField(_('date'))
-    status = None
 
     list_display = ['employee', 'amount', 'date', 'duration', 'status']
     inlines = ['payroll.advancesalarypayment']
