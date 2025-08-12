@@ -103,16 +103,13 @@ $(function() {
         }
 
         // Apply Bootstrap styling
-        $field.addClass("bg-light text-muted border-secondary");
+        $field.addClass("bg-light text-muted");
 
         // Only apply cursor style if not already styled
         if (!$field.hasClass("form-control-plaintext")) {
             $field.css("cursor", "not-allowed");
         }
     });
-
-    // Optional: dim the form container slightly
-    $form.addClass("opacity-75");
 });
 </script>
 {% endif %}

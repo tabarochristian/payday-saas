@@ -150,6 +150,7 @@ class Change(BaseViewMixin):
     # ---------------------------------
 
     def get(self, request, app, model, pk):
+        model_class = self.model_class_obj
         obj = self._get_object()
 
         # Notification special case
@@ -158,19 +159,13 @@ class Change(BaseViewMixin):
             return redirect(obj.target.get_absolute_url() if obj.target else reverse_lazy('core:notifications'))
 
         form, formsets = self._build_form_and_formsets(obj)
-        context = {
-            'form': form,
-            'formsets': formsets,
-            'action_buttons': self.get_action_buttons(obj),
-            'object': obj
-        }
-        return render(request, self.get_template_name(), context)
+        return render(request, self.get_template_name(), locals())
 
     @transaction.atomic
     def post(self, request, app, model, pk):
         obj = self._get_object()
         _obj_copy = deepcopy(obj)
-
+        model_class = self.model_class_obj
         form, formsets = self._build_form_and_formsets(obj, data=request.POST, files=request.FILES)
 
         if not (form.is_valid() and all(fs.is_valid() for fs in formsets) and self.validate_form(form, formsets)):
