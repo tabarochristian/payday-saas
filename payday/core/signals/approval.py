@@ -23,8 +23,8 @@ def handle_approval(sender, instance, created, **kwargs):
 
     url = f"http://{schema}.payday.cd" if schema else "http://payday.cd"
     approval_url = url + reverse('core:change', kwargs={
-        'app': instance.content_type.model,
-        'model': instance.content_type.app_label,
+        'app': instance.content_type.app_label,
+        'model': instance.content_type.model,
         'pk': instance.object_id
     })
     message = _(
