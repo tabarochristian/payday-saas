@@ -119,7 +119,7 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
         obj = self._get_object()
         if not hasattr(obj, 'status'):
             return False
-        return self.status in ["APPROVED"]
+        return obj.status in ["APPROVED"]
 
     # ========================
     # Logging Utilities
