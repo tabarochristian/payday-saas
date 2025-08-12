@@ -179,6 +179,9 @@ class BaseViewMixin(View, LoginRequiredMixin, PermissionRequiredMixin):
     # Forms & Inline Support
     # ========================
 
+    def can_change(self):
+        return True
+
     def get_form_fields(self, model=None):
         model = model or self.model_class
         layout = getattr(model, 'layout', Layout())
