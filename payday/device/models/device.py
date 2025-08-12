@@ -17,7 +17,6 @@ class Device(Base):
     sn = fields.CharField(_("Serial Number"), max_length=255, unique=True, blank=False, null=False)
     status = fields.CharField(_("Status"), max_length=255, default='disconnected', editable=False)
     name = fields.CharField(_("Device Name"), max_length=255, blank=True, null=True)
-    status = None
 
     list_display = ("id", "name", "sn", "status")
     layout = Layout("sn", "name")

@@ -84,7 +84,9 @@ class Approval(Base):
         Returns a list of pending approvals, optionally filtered by user.
         Each item includes metadata for display or routing.
         """
-        qs = Approval.objects.filter(status="PENDING")
+        qs = Approval.objects.filter(
+            status="PENDING"
+        )
 
         if user and callable(getattr(qs, "for_user", None)):
             qs = qs.for_user(user=user)

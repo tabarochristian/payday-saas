@@ -1,7 +1,7 @@
-from crispy_forms.layout import Layout, Column, Row
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from core.models import fields
+from datetime import datetime, timezone
 from django.apps import apps
 from django.db import models
 from itertools import chain
@@ -35,6 +35,13 @@ class ActionRequiredList(list):
         return len(self)
 
 class ActionRequiredManager(models.Manager):
+    def sort_by_created_at_desc(self, data: list[dict]) -> list[dict]:
+        def parse_date(item):
+            dt = item.get("created_at")
+            if not isinstance(dt, datetime):
+                return datetime.min.replace(tzinfo=timezone.utc)  # fallback for missing or invalid
+            return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)  # ensure UTC-aware
+        return sorted(data, key=parse_date, reverse=True)
 
     def get_queryset(self):
         """Aggregate and wrap all action-required entries into model instances."""
@@ -47,8 +54,10 @@ class ActionRequiredManager(models.Manager):
         flattened_data = chain.from_iterable(
             (result for model in models_with_action if (result := model.get_action_required()))
         )
+        flattened_data = list(flattened_data)
 
         # Instantiate your model with each action payload
+        flattened_data = self.sort_by_created_at_desc(flattened_data)
         instances = [self.model(**entry) for entry in flattened_data]
         return ActionRequiredList(instances)
 
@@ -64,7 +73,7 @@ class ActionRequired(Base):
         return self.title
 
     objects = ActionRequiredManager()
-    list_display = ['app', 'model', 'title', 'description']
+    list_display = ['app', 'model', 'title', 'description', 'created_at']
 
 
     def get_absolute_url(self):

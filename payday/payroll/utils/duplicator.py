@@ -238,7 +238,10 @@ class PayrollProcessor:
                 logger.warning("No paid employee records to save")
                 return
 
-            paid_employees = [PaidEmployee(**record) for record in df.to_dict("records")]
+            paid_employees = [PaidEmployee(**{
+                "sub_organization": self.payroll.sub_organization,
+                **record
+            }) for record in df.to_dict("records")]
             logger.debug(f"Prepared {len(paid_employees)} paid employee records")
             PaidEmployee.objects.bulk_create(paid_employees)
             logger.info(f"Successfully saved {len(paid_employees)} paid employee records")

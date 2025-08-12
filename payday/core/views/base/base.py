@@ -90,7 +90,10 @@ class BaseViewMixin(LoginRequiredMixin, PermissionRequiredMixin, View):
         return self.actions
 
     def get_permission_required(self):
-        if not self.request.user.is_authenticated:
+        if any([
+            not self.request.user.is_authenticated,
+            self.request.path == reverse_lazy('core:action-required')
+        ]):
             return []
         app = self.kwargs['app']
         model = self.kwargs['model']
