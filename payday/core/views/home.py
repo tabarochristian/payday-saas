@@ -7,6 +7,7 @@ from django.db.models import Count, Sum, Q
 from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
+from datetime import timedelta
 from django.db.models import Sum, F, ExpressionWrapper, DurationField
 
 
@@ -71,7 +72,10 @@ class Home(LoginRequiredMixin, View):
             start_date__year=current_year,
             status='APPROVED'
         ).annotate(
-            used_days=ExpressionWrapper(F('end_date') - F('start_date') + 1, output_field=DurationField())
+            used_days = ExpressionWrapper(
+                F('end_date') - F('start_date') + timedelta(days=1),
+                output_field=DurationField()
+            )
         )
 
         # Aggregate used days per type
