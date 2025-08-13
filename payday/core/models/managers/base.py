@@ -2,11 +2,12 @@
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models import ForeignObjectRel
 from core.utils import get_rls_filters
+from collections import deque
 from functools import reduce
 from operator import or_
-from collections import deque
-from django.db.models.fields.reverse_related import ForeignObjectRel
+
 
 class PaydayQuerySet(models.QuerySet):
     def for_user(self, user=None):
@@ -48,76 +49,55 @@ class PaydayQuerySet(models.QuerySet):
         except ImportError:
             return None
 
-    """
-    Detect all paths (direct or deeply nested) that relate to the User model.
-    Applies filter to only include records related to the given user.
-    Works for any depth: level 1, 2, 3+, safely and efficiently.
-    """
-    """
     def _apply_user_relation_filter(self, user):
-        
+        """
+        Traverses model relations level by level.
+        At each level, collects all paths to User before deciding to stop.
+        """
         if not user or not user.is_authenticated:
             return self.none()
 
+        user_model = get_user_model()
         model = self.model
-        valid_paths = []
-
         visited = set()
         queue = deque()
 
-        # Start BFS from each direct relation of the current model
+        # Start with direct relations
         for field in model._meta.get_fields():
             if field.is_relation and not isinstance(field, ForeignObjectRel):
                 queue.append((field.name, field.related_model))
 
         while queue:
-            path, related_model = queue.popleft()
+            level_size = len(queue)
+            valid_paths = []
 
-            if path in visited:
-                continue
-            visited.add(path)
+            # Scan entire current level
+            for _ in range(level_size):
+                path, related_model = queue.popleft()
 
-            if related_model == get_user_model():
-                valid_paths.append(path)
-                continue
+                if path in visited:
+                    continue
+                visited.add(path)
 
-            for field in related_model._meta.get_fields():
-                if field.is_relation and not isinstance(field, ForeignObjectRel):
-                    new_path = f"{path}__{field.name}"
-                    queue.append((new_path, field.related_model))
+                if related_model == user_model:
+                    valid_paths.append(path)
+                    continue
 
-        if not valid_paths:
-            return self.none()
+                # Queue next-level relations
+                for field in related_model._meta.get_fields():
+                    if field.is_relation and not isinstance(field, ForeignObjectRel):
+                        new_path = f"{path}__{field.name}"
+                        queue.append((new_path, field.related_model))
 
-        # Build ORed Q objects: user is in any of these paths
-        filters = [models.Q(**{f"{p}": user}) for p in valid_paths]
-        combined_filter = reduce(or_, filters)
+            # If any valid paths found at this level, stop and apply filter
+            if valid_paths:
+                filters = [models.Q(**{p: user}) for p in valid_paths]
+                return self.filter(reduce(or_, filters)).distinct()
 
-        return self.filter(combined_filter).distinct()
-    """
-    def _apply_user_relation_filter(self, user):
-        """
-        Applies filter to include records directly related to the given user
-        via first-level foreign keys only.
-        """
-        if not user or not user.is_authenticated:
-            return self.none()
+        # No path to User found
+        return self.none()
 
-        model = self.model
-        valid_paths = []
 
-        for field in model._meta.get_fields():
-            if field.is_relation and not isinstance(field, ForeignObjectRel):
-                if field.related_model == get_user_model():
-                    valid_paths.append(field.name)
-
-        if not valid_paths:
-            return self.none()
-
-        filters = [models.Q(**{path: user}) for path in valid_paths]
-        combined_filter = reduce(or_, filters)
-
-        return self.filter(combined_filter).distinct()
 
 
 
