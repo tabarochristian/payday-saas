@@ -48,6 +48,7 @@ class PaydayQuerySet(models.QuerySet):
         except ImportError:
             return None
 
+    """
     def _apply_user_relation_filter(self, user):
         """
         Detect all paths (direct or deeply nested) that relate to the User model.
@@ -92,6 +93,31 @@ class PaydayQuerySet(models.QuerySet):
         combined_filter = reduce(or_, filters)
 
         return self.filter(combined_filter).distinct()
+    """
+    def _apply_user_relation_filter(self, user):
+        """
+        Applies filter to include records directly related to the given user
+        via first-level foreign keys only.
+        """
+        if not user or not user.is_authenticated:
+            return self.none()
+
+        model = self.model
+        valid_paths = []
+
+        for field in model._meta.get_fields():
+            if field.is_relation and not isinstance(field, ForeignObjectRel):
+                if field.related_model == get_user_model():
+                    valid_paths.append(field.name)
+
+        if not valid_paths:
+            return self.none()
+
+        filters = [models.Q(**{path: user}) for path in valid_paths]
+        combined_filter = reduce(or_, filters)
+
+        return self.filter(combined_filter).distinct()
+
 
 
 class PaydayManager(models.Manager):

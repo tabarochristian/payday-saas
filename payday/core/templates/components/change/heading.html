@@ -21,7 +21,7 @@
                     <div class="btn-group" role="group">
                         {# Show documents only if obj.status is approved and all approvals are approved #}
                         {% with documents=self.documents %}
-                            {% if self.is_approved and documents %}
+                            {% if self.is_approved and documents and self.kwargs.pk %}
                                 <button class="btn btn-primary dropdown-toggle"
                                         id="dropdownDocumentBtn"
                                         data-bs-toggle="dropdown"
