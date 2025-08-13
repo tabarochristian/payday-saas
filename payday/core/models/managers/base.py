@@ -52,13 +52,14 @@ class PaydayQuerySet(models.QuerySet):
     def _apply_user_relation_filter(self, user):
         """
         Traverses model relations level by level.
-        At each level, collects all paths to User before deciding to stop.
+        Stops at the first level where one or more paths to User are found,
+        and applies filter using all those paths.
         """
         if not user or not user.is_authenticated:
             return self.none()
 
-        user_model = get_user_model()
         model = self.model
+        user_model = get_user_model()
         visited = set()
         queue = deque()
 
@@ -72,6 +73,7 @@ class PaydayQuerySet(models.QuerySet):
             valid_paths = []
 
             # Scan entire current level
+            next_level = deque()
             for _ in range(level_size):
                 path, related_model = queue.popleft()
 
@@ -81,24 +83,24 @@ class PaydayQuerySet(models.QuerySet):
 
                 if related_model == user_model:
                     valid_paths.append(path)
-                    continue
+                else:
+                    # Queue next-level relations
+                    for field in related_model._meta.get_fields():
+                        if field.is_relation and not isinstance(field, ForeignObjectRel):
+                            new_path = f"{path}__{field.name}"
+                            next_level.append((new_path, field.related_model))
 
-                # Queue next-level relations
-                for field in related_model._meta.get_fields():
-                    if field.is_relation and not isinstance(field, ForeignObjectRel):
-                        new_path = f"{path}__{field.name}"
-                        queue.append((new_path, field.related_model))
-
-            # If any valid paths found at this level, stop and apply filter
             if valid_paths:
+                # Stop here and apply filter using all valid paths
                 filters = [models.Q(**{p: user}) for p in valid_paths]
-                return self.filter(reduce(or_, filters)).distinct()
+                combined_filter = reduce(or_, filters)
+                return self.filter(combined_filter).distinct()
+
+            # Move to next level
+            queue = next_level
 
         # No path to User found
         return self.none()
-
-
-
 
 
 class PaydayManager(models.Manager):
