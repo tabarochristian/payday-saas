@@ -48,7 +48,9 @@ class Change(BaseViewMixin):
     # ---------------------------------
 
     def _get_object(self):
-        self.model_class_obj = self.model_class_obj or self.model_class()
+        if getattr(self, "model_class_obj", None):
+            self.model_class_obj = self.model_class()
+
         if getattr(self, "obj_instance", None):
             return self.obj_instance
         pk = self.kwargs.get('pk')
