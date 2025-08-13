@@ -41,7 +41,10 @@ class Approval(Base):
         verbose_name=_("object ID")
     )
 
-    content_object = GenericForeignKey("content_type", "object_id")
+    content_object = GenericForeignKey(
+        "content_type", 
+        "object_id"
+    )
 
     comment = fields.TextField(
         null=True,

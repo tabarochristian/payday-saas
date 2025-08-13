@@ -65,7 +65,7 @@ class PaydayQuerySet(models.QuerySet):
 
         # Start BFS from each direct relation of the current model
         for field in model._meta.get_fields():
-            if field.is_relation: # and not isinstance(field, ForeignObjectRel):
+            if field.is_relation and not isinstance(field, ForeignObjectRel):
                 queue.append((field.name, field.related_model))
 
         while queue:
