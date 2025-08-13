@@ -1,20 +1,48 @@
-<div class="card shadow-sm border-0">
-    <div class="card-body text-start">
-        <h5 class="text-primary">Congés en attente</h5>
-        <hr>
-        {% if leaves %}
-            <ul class="list-group">
-                {% for leave in leaves %}
-                    <a href="{% url 'core:change' 'leave' 'leave' leave.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>{{ leave.employee.name }}</strong> ({{ leave.status }})
-                            <p class="text-muted mb-0">Du {{ leave.start_date }} au {{ leave.end_date }}</p>
-                        </div>
-                    </a>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-muted">Aucune demande en attente.</p>
-        {% endif %}
+<div class="card shadow-sm border-0 rounded-lg">
+    <div class="card-body">
+      <h6 class="text-primary fw-semibold mb-3">Congés restants</h6>
+      <ul class="list-group list-group-flush">
+        {% for item in remaining_leaves %}
+        <li class="list-group-item px-2 py-2">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">{{ item.type }}</span>
+            <span class="badge 
+              {% if item.remaining == 0 %}
+                bg-danger text-white
+              {% elif item.remaining <= 3 %}
+                bg-warning text-dark
+              {% else %}
+                bg-success text-white
+              {% endif %}
+            ">
+              {{ item.remaining }} / {{ item.allowed }} jours
+            </span>
+          </div>
+          <div class="text-muted small">
+            Utilisé : {{ item.used }} jours
+          </div>
+  
+          <!-- Optional progress bar -->
+          <div class="progress mt-1" style="height: 4px;">
+            <div class="progress-bar 
+              {% if item.remaining == 0 %}
+                bg-danger
+              {% elif item.remaining <= 3 %}
+                bg-warning
+              {% else %}
+                bg-success
+              {% endif %}
+            " role="progressbar"
+            style="width: {{ item.used|floatformat:0|divisibleby:item.allowed|floatformat:0 }}%;">
+            </div>
+          </div>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted text-center py-2">
+          Aucun type de congé défini.
+        </li>
+        {% endfor %}
+      </ul>
     </div>
-</div>
+  </div>
+  

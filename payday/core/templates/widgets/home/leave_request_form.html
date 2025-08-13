@@ -1,8 +1,7 @@
 <div class="card shadow-sm border-0">
     <div class="card-body text-start">
-        <h5 class="text-primary">Jours de congé restants: <strong>{{ remaining_leave_days }}</strong></h5>
+        <h5 class="text-primary">Demander un congé</strong></h5>
         <hr>
-        <h5 class="text-muted">Demander un congé</h5>
         <form method="GET" action="{% url 'core:create' 'leave' 'leave' %}">
             <input type="hidden" name="employee" value="{{ request.user.employee.pk }}" />
             <div class="mb-3">

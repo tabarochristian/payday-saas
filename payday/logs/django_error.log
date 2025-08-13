@@ -17640,3 +17640,839 @@ Traceback (most recent call last):
     raise NoReverseMatch(msg)
 django.urls.exceptions.NoReverseMatch: Reverse for 'change' with keyword arguments '{'app': 'leave', 'model': 'earlyleave'}' not found. 1 pattern(s) tried: ['change/(?P<app>[^/]+)/(?P<model>[^/]+)/(?P<pk>[^/]+)\\Z']
 ERROR 2025-08-12 18:28:46,448 runserver [35;1mHTTP GET /change/leave/earlyleave/12 500 [0.07, 127.0.0.1:62551][0m
+ERROR 2025-08-13 23:43:33,828 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 23, in get
+    widgets = self._get_authorized_widgets(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 30, in _get_authorized_widgets
+    context = self._build_context(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 51, in _build_context
+    'leaves': self._get_remaining_leaves(request),
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 89, in _get_remaining_leaves
+    remaining_days = max(leave_type.annual_days - used, 0)
+                         ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TypeOfLeave' object has no attribute 'annual_days'
+ERROR 2025-08-13 23:43:33,832 runserver [35;1mHTTP GET / 500 [0.05, 127.0.0.1:56391][0m
+ERROR 2025-08-13 23:44:18,445 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 23, in get
+    widgets = self._get_authorized_widgets(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 30, in _get_authorized_widgets
+    context = self._build_context(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 51, in _build_context
+    'leaves': self._get_remaining_leaves(request),
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 89, in _get_remaining_leaves
+    remaining_days = max(leave_type.annual_days - used, 0)
+                         ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TypeOfLeave' object has no attribute 'annual_days'
+ERROR 2025-08-13 23:44:18,448 runserver [35;1mHTTP GET / 500 [0.04, 127.0.0.1:56421][0m
+ERROR 2025-08-13 23:44:19,328 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 23, in get
+    widgets = self._get_authorized_widgets(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 30, in _get_authorized_widgets
+    context = self._build_context(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 51, in _build_context
+    'leaves': self._get_remaining_leaves(request),
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 89, in _get_remaining_leaves
+    remaining_days = max(leave_type.annual_days - used, 0)
+                         ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TypeOfLeave' object has no attribute 'annual_days'
+ERROR 2025-08-13 23:44:19,331 runserver [35;1mHTTP GET / 500 [0.04, 127.0.0.1:56421][0m
+ERROR 2025-08-13 23:44:29,421 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 23, in get
+    widgets = self._get_authorized_widgets(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 31, in _get_authorized_widgets
+    widget_definitions = self._widget_definitions(context, request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 165, in _widget_definitions
+    'remaining_leave_days': context['remaining_leave_days']
+                            ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'remaining_leave_days'
+ERROR 2025-08-13 23:44:29,426 runserver [35;1mHTTP GET / 500 [0.04, 127.0.0.1:56427][0m
+ERROR 2025-08-13 23:47:53,134 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'set'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 23, in get
+    widgets = self._get_authorized_widgets(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 31, in _get_authorized_widgets
+    widget_definitions = self._widget_definitions(context, request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/home.py", line 175, in _widget_definitions
+    "content": render_to_string('widgets/home/pending_leaves_list.html', {
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        'remaining_leaves': context['remaining_leaves']
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }, request=request),
+    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 7: 'set', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2025-08-13 23:47:53,140 runserver [35;1mHTTP GET / 500 [0.05, 127.0.0.1:56559][0m
+ERROR 2025-08-13 23:53:18,409 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 161, in get
+    raise e
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 138, in get
+    obj = self._get_object()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 51, in _get_object
+    if self.obj_instance:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'Payslips' object has no attribute 'obj_instance'
+ERROR 2025-08-13 23:53:18,412 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.02, 127.0.0.1:56838][0m
+ERROR 2025-08-13 23:54:14,870 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 161, in get
+    raise e
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 138, in get
+    obj = self._get_object()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 51, in _get_object
+    if hasattr(self, "obj_instance", False):
+       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: hasattr expected 2 arguments, got 3
+ERROR 2025-08-13 23:54:14,875 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:56874][0m
+ERROR 2025-08-13 23:54:22,427 log Internal Server Error: /payroll/payslips/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 61, in _get_object
+    **{self.model_class_obj._meta.pk.name: pk}
+       ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Payslips' object has no attribute 'model_class_obj'. Did you mean: 'model_class'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 28, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/read.py", line 29, in dispatch
+    return BaseViewMixin.dispatch(self, request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 161, in get
+    raise e
+  File "/Users/tabaro/GitHub/payday-saas/payday/payroll/views/payslips.py", line 138, in get
+    obj = self._get_object()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 63, in _get_object
+    except self.model_class_obj.DoesNotExist:
+           ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Payslips' object has no attribute 'model_class_obj'. Did you mean: 'model_class'?
+ERROR 2025-08-13 23:54:22,431 runserver [35;1mHTTP GET /payroll/payslips/4 500 [0.04, 127.0.0.1:56890][0m
+ERROR 2025-08-13 23:58:12,189 log Internal Server Error: /employee/change/48
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/employee/views/employee.py", line 58, in get
+    return super().get(request, self.kwargs['app'], self.kwargs['model'], pk)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 166, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 145, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Employee' object is not callable
+ERROR 2025-08-13 23:58:12,194 runserver [35;1mHTTP GET /employee/change/48 500 [0.05, 127.0.0.1:57030][0m
+ERROR 2025-08-13 23:58:16,185 log Internal Server Error: /employee/change/48
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/employee/views/employee.py", line 58, in get
+    return super().get(request, self.kwargs['app'], self.kwargs['model'], pk)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 166, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 145, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Employee' object is not callable
+ERROR 2025-08-13 23:58:16,188 runserver [35;1mHTTP GET /employee/change/48 500 [0.04, 127.0.0.1:57030][0m
+ERROR 2025-08-13 23:58:29,995 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 166, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 145, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-13 23:58:29,997 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.03, 127.0.0.1:57030][0m
+ERROR 2025-08-14 00:00:15,571 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 168, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 147, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-14 00:00:15,574 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.04, 127.0.0.1:57100][0m
+ERROR 2025-08-14 00:00:16,236 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 168, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 147, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-14 00:00:16,238 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.02, 127.0.0.1:57100][0m
+ERROR 2025-08-14 00:00:47,561 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 170, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 149, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-14 00:00:47,564 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.03, 127.0.0.1:57139][0m
+ERROR 2025-08-14 00:01:47,010 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 169, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 148, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-14 00:01:47,013 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.03, 127.0.0.1:57212][0m
+ERROR 2025-08-14 00:02:20,446 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 169, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 147, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-14 00:02:20,449 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.04, 127.0.0.1:57251][0m
+ERROR 2025-08-14 00:02:45,912 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 169, in get
+    form, formsets = self._build_form_and_formsets(obj)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 148, in _build_form_and_formsets
+    form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
+                                                                              ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 365, in __init__
+    self.instance = opts.model()
+                    ~~~~~~~~~~^^
+TypeError: 'Grade' object is not callable
+ERROR 2025-08-14 00:02:45,914 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.03, 127.0.0.1:57270][0m
+ERROR 2025-08-14 00:03:28,304 log Internal Server Error: /change/employee/grade/4
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 44, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 158, in get
+    obj = self._get_object()
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 52, in _get_object
+    self.obj_instance = self.obj_instance or self._get_object()
+                                             ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 52, in _get_object
+    self.obj_instance = self.obj_instance or self._get_object()
+                                             ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/change.py", line 52, in _get_object
+    self.obj_instance = self.obj_instance or self._get_object()
+                                             ~~~~~~~~~~~~~~~~^^
+  [Previous line repeated 953 more times]
+RecursionError: maximum recursion depth exceeded
+ERROR 2025-08-14 00:03:28,339 runserver [35;1mHTTP GET /change/employee/grade/4 500 [0.29, 127.0.0.1:57307][0m

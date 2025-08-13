@@ -7,6 +7,7 @@ from django.db.models import Count, Sum, Q
 from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
+from django.db.models import Sum, F, ExpressionWrapper, DurationField
 
 
 class Home(LoginRequiredMixin, View):
@@ -44,11 +45,10 @@ class Home(LoginRequiredMixin, View):
         Aggregate all data needed for widget rendering.
         """
         return {
-            'remaining_leave_days': self._get_remaining_leave_days(request),
+            'remaining_leaves': self._get_remaining_leaves(request),
             'statistics': self._get_employee_statistics(request),
-            'leaves': self._get_pending_leaves(request),
             'payslips': self._get_current_year_payslips(request),
-            'payroll_data': self._get_payroll_chart_data(),
+            'payroll_data': self._get_payroll_chart_data()
         }
 
     def _get_employee_statistics(self, request):
@@ -59,15 +59,41 @@ class Home(LoginRequiredMixin, View):
             .values('status__name')\
             .annotate(count=Count('status__name'))
 
-    def _get_pending_leaves(self, request):
+    def _get_remaining_leaves(self, request):
+        TypeOfLeave = apps.get_model('leave', 'TypeOfLeave')
         Leave = apps.get_model('leave', 'Leave')
-        suborg = getattr(request.suborganization, "name", None)
-        return Leave.objects.for_user(user=request.user)\
-            .filter(status='pending', sub_organization=suborg)
+        current_year = timezone.now().year
 
-    def _get_remaining_leave_days(self, request):
-        # TODO: Replace with actual leave balance logic
-        return 0
+        # Get all leave durations for the employee this year
+        leaves = Leave.objects.for_user(user=request.user).filter(
+            Q(employee__email=request.user.email) | Q(employee__user=request.user)
+        ).filter(
+            start_date__year=current_year,
+            status='APPROVED'
+        ).annotate(
+            used_days=ExpressionWrapper(F('end_date') - F('start_date') + 1, output_field=DurationField())
+        )
+
+        # Aggregate used days per type
+        used_by_type = leaves.values('type_of_leave__id', 'type_of_leave__name').annotate(
+            total_used=Sum('used_days')
+        )
+
+        # Convert to dict for easy lookup
+        used_map = {item['type_of_leave__id']: item['total_used'].days for item in used_by_type}
+
+        # Prepare final list
+        remaining = []
+        for leave_type in TypeOfLeave.objects.all():
+            used = used_map.get(leave_type.id, 0)
+            remaining_days = max(leave_type.max_duration - used, 0)
+            remaining.append({
+                'allowed': leave_type.max_duration,
+                'remaining': remaining_days,
+                'type': leave_type.name,
+                'used': used,
+            })
+        return remaining
 
     def _get_current_year_payslips(self, request):
         sub_organization = getattr(request.suborganization, "name", None)
@@ -76,15 +102,12 @@ class Home(LoginRequiredMixin, View):
         current_year = timezone.now().year
         qs = PaidEmployee.objects.for_user(user=request.user).filter(
             payroll__end_dt__year=current_year, 
-            sub_organization=sub_organization
+            sub_organization=sub_organization,
+        ).filter(
+            Q(employee__user=request.user) | Q(employee__email=request.user.email)
         )
 
-        if any([
-            request.user.is_superuser,
-            request.user.is_staff
-        ]):
-            return qs[:36]
-        return qs.filter(employee__user=request.user)[:36]
+        return qs[:36]
 
     def _get_payroll_chart_data(self):
         Payroll = apps.get_model('payroll', 'Payroll')
@@ -129,7 +152,7 @@ class Home(LoginRequiredMixin, View):
                     'statistics': context['statistics']
                 }, request=request),
                 "permission": "employee.view_employee",
-                "column": "col-12 col-md-6 col-lg-3",
+                "column": "col-12 col-md-6 col-lg-4",
                 "visible": any([
                     self.request.user.is_staff,
                     self.request.user.is_superuser
@@ -137,23 +160,22 @@ class Home(LoginRequiredMixin, View):
             },
             {
                 "title": _("Leave Request Form"),
-                "content": render_to_string('widgets/home/leave_request_form.html', {
-                    'remaining_leave_days': context['remaining_leave_days']
-                }, request=request),
+                "content": render_to_string(
+                    'widgets/home/leave_request_form.html', 
+                    dict(), 
+                    request=request
+                ),
                 "permission": "leave.add_leave",
-                "column": "col-12 col-md-6 col-lg-3",
+                "column": "col-12 col-md-6 col-lg-4",
                 "visible": True
             },
             {
                 "title": _("Pending Leaves List"),
                 "content": render_to_string('widgets/home/pending_leaves_list.html', {
-                    'leaves': context['leaves']
+                    'remaining_leaves': context['remaining_leaves']
                 }, request=request),
                 "permission": "leave.view_leave",
-                "column": "col-12 col-md-6 col-lg-3",
-                "visible": any([
-                    self.request.user.is_staff,
-                    self.request.user.is_superuser
-                ])
+                "column": "col-12 col-md-6 col-lg-4",
+                "visible": True
             }
         ]

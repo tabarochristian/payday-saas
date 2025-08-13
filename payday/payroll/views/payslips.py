@@ -158,6 +158,7 @@ class Payslips(Read):
             return render(request, self.get_template_name(), locals())
             
         except Exception as e:
+            raise e
             logger.error(f"GET request failed for Payroll ID={pk}: {str(e)}")
             messages.error(request, _("Une erreur est survenue lors du chargement des fiches de paie."))
             return redirect(self.next or reverse_lazy("core:home"))

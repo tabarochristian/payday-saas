@@ -48,10 +48,11 @@ class Change(BaseViewMixin):
     # ---------------------------------
 
     def _get_object(self):
-        if self.obj_instance:
+        self.model_class_obj = self.model_class_obj or self.model_class()
+        if getattr(self, "obj_instance", None):
             return self.obj_instance
-
         pk = self.kwargs.get('pk')
+        
         if not pk:
             logger.error("No primary key provided for %s", self.model_class_obj._meta.model_name)
             raise Http404(_("Aucun identifiant n'a été fourni"))
@@ -138,6 +139,8 @@ class Change(BaseViewMixin):
 
     def _build_form_and_formsets(self, obj, data=None, files=None):
         """Centralized creation of main form and inline formsets."""
+        if hasattr(self, "model_class_obj"):
+            self.model_class_obj = self.model_class()
         FormClass = modelform_factory(self.model_class_obj, fields=self.get_form_fields())
         form = self.filter_form(FormClass(data, files, instance=obj) if data else FormClass(instance=obj))
         formsets = [

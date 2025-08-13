@@ -1,10 +1,23 @@
-{% for statistic in statistics %}
-    <a href="{% url 'core:list' 'employee' 'employee' %}?status__name={{ statistic.status__name }}" class="text-decoration-none">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-start">
-                <h3 class="text-primary">{{ statistic.status__name.title }}</h3>
-                <h5 class="text-muted">Nombre d'employés: <strong>{{ statistic.count }}</strong></h5>
-            </div>
-        </div>
-    </a>
-{% endfor %}
+<div class="card shadow-sm border-0 rounded-lg">
+    <div class="card-body text-start">
+      <h5 class="text-primary fw-semibold mb-3">Statistiques des employés</h5>
+      <hr class="mb-3">
+  
+      <ul class="list-group">
+        {% for statistic in statistics %}
+        <a href="{% url 'core:list' 'employee' 'employee' %}?status__name={{ statistic.status__name }}"
+           class="list-group-item list-hover border-0 rounded px-3 py-3 mb-2 text-decoration-none d-block">
+          <div class="fw-semibold">{{ statistic.status__name.title }}</div>
+          <div class="text-muted small mt-1">
+            Nombre d'employés : <strong>{{ statistic.count }}</strong>
+          </div>
+        </a>
+        {% empty %}
+        <li class="list-group-item border-0 rounded px-3 py-3 bg-light text-muted text-center">
+          Aucune statistique disponible.
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  

@@ -177,8 +177,9 @@ class Base(models.Model):
             return
 
         local_ctx = {
+            "employee": getattr(self, "employee", None), 
             "model": self._meta.model_name,
-            "content_type": content_type, 
+            "content_type": content_type,
             "obj": self, 
         }
         valid_workflows = [
