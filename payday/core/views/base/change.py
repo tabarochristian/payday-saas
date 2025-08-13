@@ -58,7 +58,7 @@ class Change(BaseViewMixin):
             not hasattr(self, "obj_instance"),
             not getattr(self, "obj_instance", None),
         ]):
-            return self.obj_instance
+            self.obj_instance = self.obj_instance
         pk = self.kwargs.get('pk')
         
         if not pk:
