@@ -49,12 +49,13 @@ class PaydayQuerySet(models.QuerySet):
             return None
 
     """
+    Detect all paths (direct or deeply nested) that relate to the User model.
+    Applies filter to only include records related to the given user.
+    Works for any depth: level 1, 2, 3+, safely and efficiently.
+    """
+    """
     def _apply_user_relation_filter(self, user):
-        """
-        Detect all paths (direct or deeply nested) that relate to the User model.
-        Applies filter to only include records related to the given user.
-        Works for any depth: level 1, 2, 3+, safely and efficiently.
-        """
+        
         if not user or not user.is_authenticated:
             return self.none()
 
