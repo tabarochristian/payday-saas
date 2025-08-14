@@ -1,3 +1,4 @@
+{% load mathfilters %}
 <div class="card shadow-sm border-0 rounded-lg">
     <div class="card-body">
       <h6 class="text-primary fw-semibold mb-3">Congés restants</h6>
@@ -33,7 +34,7 @@
                 bg-success
               {% endif %}
             " role="progressbar"
-            style="width: {{ item.used|floatformat:0|divisibleby:item.allowed|floatformat:0 }}%;">
+            style="width: {{ item.used|div:item.allowed|mul:100|floatformat:0 }}%;">
             </div>
           </div>
         </li>
