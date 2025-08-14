@@ -78,17 +78,24 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress-http.rule=Host(`payday.cd`)"
+
+      # HTTP Router
+      - "traefik.http.routers.wordpress-http.rule=Host(`payday.cd`) || Host(`www.payday.cd`)"
       - "traefik.http.routers.wordpress-http.entrypoints=web"
       - "traefik.http.routers.wordpress-http.service=wordpress"
       - "traefik.http.routers.wordpress-http.priority=1000"
-      - "traefik.http.routers.wordpress-https.rule=Host(`payday.cd`)"
+
+      # HTTPS Router
+      - "traefik.http.routers.wordpress-https.rule=Host(`payday.cd`) || Host(`www.payday.cd`)"
       - "traefik.http.routers.wordpress-https.entrypoints=websecure"
       - "traefik.http.routers.wordpress-https.service=wordpress"
       - "traefik.http.routers.wordpress-https.priority=1000"
       - "traefik.http.routers.wordpress-https.tls=true"
       - "traefik.http.routers.wordpress-https.tls.certresolver=letsencrypt"
+
+      # Service Definition
       - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+
 
   minio:
     container_name: payday-minio
