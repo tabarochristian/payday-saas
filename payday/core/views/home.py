@@ -103,9 +103,8 @@ class Home(LoginRequiredMixin, View):
         sub_organization = getattr(request.suborganization, "name", None)
         PaidEmployee = apps.get_model('payroll', 'PaidEmployee')
         
-        current_year = timezone.now().year
-        qs = PaidEmployee.objects.for_user(user=request.user).filter(
-            payroll__end_dt__year=current_year, 
+        qs = PaidEmployee.objects.filter(
+            payroll__end_dt__year=timezone.now().year, 
             sub_organization=sub_organization,
         ).filter(
             Q(employee__user=request.user) | Q(employee__email=request.user.email)
