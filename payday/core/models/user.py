@@ -70,13 +70,13 @@ class User(AbstractUser):
     )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ()
     objects = UserManager()
+    REQUIRED_FIELDS = ()
 
     inlines = ('core.columnlevelsecurity', 'core.rowlevelsecurity')
     list_display = ('id', 'sub_organization', 'email', 'is_active')
-    list_filter = ('is_active',)
     search_fields = ('id', 'email',)
+    list_filter = ('is_active',)
 
     layout = Layout(
         Column('email'),
