@@ -302,6 +302,24 @@ services:
       - "traefik.http.services.thumbor.loadbalancer.server.port=8888"
     volumes:
       - ./thumbor/storage:/app/storage
+  
+  gotenberg:
+    image: gotenberg/gotenberg:latest
+    container_name: gotenberg
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gotenberg.rule=Host(`gotenberg.payday.cd`)"
+      - "traefik.http.services.gotenberg.loadbalancer.server.port=3000"
+      - "traefik.http.routers.gotenberg.entrypoints=websecure"
+      - "traefik.http.routers.gotenberg.tls=true"
 
   traefik:
     container_name: payday-traefik
