@@ -162,7 +162,7 @@
                 </header>
                 <!-- Employee Info -->
                 <section class="row mb-3" aria-label="{% trans 'Employee Information' %}">
-                    <div class="col-6">
+                    <div class="col">
                         <dl class="row mb-0">
                             <dt class="col-4">{% trans "Matricule" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.registration_number|default:"-" }}</dd>
@@ -192,7 +192,7 @@
                             {% endwith %}
                         </dl>
                     </div>
-                    <div class="col-6">
+                    <div class="col">
                         <dl class="row mb-0">
                             <dt class="col-4">{% trans "Banque" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payer_name|default:"-" }}</dd>
