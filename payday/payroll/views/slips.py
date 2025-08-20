@@ -60,7 +60,7 @@ class Slips(Read):
                 logger.warning("No payslips matched the filters")
                 raise Http404(_("Aucun bulletin de paie trouvé avec ces filtres"))
 
-            """# PDF export branch
+            # PDF export branch
             if doctype == "pdf":
                 gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/html"
                 html_content = render_to_string(self.template_name, locals())
@@ -83,7 +83,6 @@ class Slips(Read):
                 response = HttpResponse(resp.content, content_type="application/pdf")
                 response["Content-Disposition"] = 'inline; filename="preview.pdf"'
                 return response
-            """
             return render(request, self.template_name, locals())
 
         except LookupError as e:
