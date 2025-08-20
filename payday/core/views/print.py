@@ -1,5 +1,6 @@
 import requests
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 from django.template import Context, Template
 from django.http import HttpResponse
@@ -52,29 +53,6 @@ class Print(BaseViewMixin):
             messages.warning(request, _("Impossible de trouver le modèle d'objet"))
             return redirect(request.META.get("HTTP_REFERER", "/"))
 
-        # PDF export branch
-        if doctype == "pdf":
-            gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/url"
-            source_url = request.build_absolute_uri().replace("/pdf", "/html")
-
-            try:
-                resp = requests.post(
-                    gotenberg_url,
-                    files={"url": (None, source_url)},
-                    timeout=15,
-                )
-                resp.raise_for_status()
-            except requests.RequestException as exc:
-                messages.error(
-                    request,
-                    _("Erreur lors de la génération du PDF : %(err)s") % {"err": str(exc)},
-                )
-                return redirect(request.META.get("HTTP_REFERER", "/"))
-
-            response = HttpResponse(resp.content, content_type="application/pdf")
-            response["Content-Disposition"] = 'inline; filename="preview.pdf"'
-            return response
-
         # Resolve model
         model_class = apps.get_model(app, model_name=model)
         objects = get_list_or_404(model_class, **query_params)
@@ -96,5 +74,29 @@ class Print(BaseViewMixin):
             "objects": objects,
             "rendered_outputs": rendered_outputs,
         }
+
+        # PDF export branch
+        if doctype == "pdf":
+            gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/html"
+            html_content = render_to_string(self.template_name, context)
+
+            try:
+                resp = requests.post(
+                    gotenberg_url,
+                    files={
+                        "index.html": ("index.html", html_content, "text/html")
+                    }
+                )
+                resp.raise_for_status()
+            except requests.RequestException as exc:
+                messages.error(
+                    request,
+                    _("Erreur lors de la génération du PDF : %(err)s") % {"err": str(exc)},
+                )
+                return redirect(request.META.get("HTTP_REFERER", "/"))
+
+            response = HttpResponse(resp.content, content_type="application/pdf")
+            response["Content-Disposition"] = 'inline; filename="preview.pdf"'
+            return response
 
         return render(request, self.template_name, context)

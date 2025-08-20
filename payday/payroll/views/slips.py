@@ -1,6 +1,7 @@
 # payroll/views/slips.py
 
 from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -45,29 +46,6 @@ class Slips(Read):
             model_class = self.model_class
             logger.debug(f"Loaded model: {model_class.__name__}")
 
-            # PDF export branch
-            if doctype == "pdf":
-                gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/url"
-                source_url = request.build_absolute_uri().replace("/pdf", "/html")
-
-                try:
-                    resp = requests.post(
-                        gotenberg_url,
-                        files={"url": (None, source_url)},
-                        timeout=15,
-                    )
-                    resp.raise_for_status()
-                except requests.RequestException as exc:
-                    messages.error(
-                        request,
-                        _("Erreur lors de la génération du PDF : %(err)s") % {"err": str(exc)},
-                    )
-                    return redirect(request.META.get("HTTP_REFERER", "/"))
-
-                response = HttpResponse(resp.content, content_type="application/pdf")
-                response["Content-Disposition"] = 'inline; filename="preview.pdf"'
-                return response
-
             # Extract and sanitize query parameters
             query_params = {
                 key: value.split(',') if "__in" in key else value
@@ -81,6 +59,30 @@ class Slips(Read):
             if not qs.exists():
                 logger.warning("No payslips matched the filters")
                 raise Http404(_("Aucun bulletin de paie trouvé avec ces filtres"))
+
+            # PDF export branch
+            if doctype == "pdf":
+                gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/html"
+                html_content = render_to_string(self.template_name, locals())
+
+                try:
+                    resp = requests.post(
+                        gotenberg_url,
+                        files={
+                            "index.html": ("index.html", html_content, "text/html")
+                        }
+                    )
+                    resp.raise_for_status()
+                except requests.RequestException as exc:
+                    messages.error(
+                        request,
+                        _("Erreur lors de la génération du PDF : %(err)s") % {"err": str(exc)},
+                    )
+                    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+                response = HttpResponse(resp.content, content_type="application/pdf")
+                response["Content-Disposition"] = 'inline; filename="preview.pdf"'
+                return response
 
             return render(request, self.template_name, locals())
 
