@@ -3,136 +3,153 @@
 {% load humanize %}
 {% load mathfilters %}
 {% get_current_language as LANGUAGE_CODE %}
-
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE|slice:2 == 'ar' %}rtl{% else %}ltr{% endif %}">
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE|slice:':2' == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% trans "Fiche de paie" %}{% endblock %}</title>
-
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
-          crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-print-css/css/bootstrap-print.min.css" media="print">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 11px;
+            font-size: 11pt;
             margin: 0;
             padding: 0;
             color: #333;
+            line-height: 1.4;
         }
-
-        .page-break {
-            page-break-after: always;
-        }
-
         .payslip-container {
-            max-width: none;
+            max-width: 210mm; /* A4 width */
             margin: 0 auto;
+            padding: 10mm;
         }
-
         .organization-logo {
             max-height: 60px;
             width: auto;
         }
-
+        .payslip-table {
+            table-layout: fixed;
+            width: 100%;
+        }
         .payslip-table th,
         .payslip-table td {
             vertical-align: middle;
-            padding: 0.25rem 0.5rem;
-            font-size: 11px;
+            padding: 0.3rem 0.5rem;
+            font-size: 11pt;
+            word-wrap: break-word;
         }
-
         .payslip-table th {
             font-weight: 600;
             background-color: #f8f9fa;
         }
-
         dl.row dt {
             font-weight: 500;
+            font-size: 11pt;
         }
-
         dl.row dd {
-            margin-bottom: 0.2rem;
-            font-size: 11px;
+            margin-bottom: 0.3rem;
+            font-size: 11pt;
         }
-
         .net-pay {
-            font-size: 14px;
+            font-size: 14pt;
             font-weight: bold;
         }
-
+        .signature-table {
+            table-layout: fixed;
+            width: 100%;
+        }
         .signature-table th,
         .signature-table td {
             vertical-align: bottom;
             padding: 0.4rem;
-            font-size: 11px;
+            font-size: 11pt;
         }
-
         .signature-table td {
             height: 60px;
         }
-
         .text-muted {
             color: #6c757d !important;
         }
-
         .mb-small {
             margin-bottom: 0.5rem;
         }
-
         .text-end-sm {
             text-align: end;
         }
-
         @media print {
             body {
-                font-size: 12px;
+                font-size: 10pt;
+                margin: 0;
             }
-
+            .payslip-container {
+                padding: 10mm;
+            }
             .page-break {
                 page-break-after: always;
             }
-
             .no-print {
                 display: none !important;
             }
-
-            .container-fluid {
-                padding-left: 10mm;
-                padding-right: 10mm;
-            }
-
             @page {
-                margin: 15mm;
+                size: A4;
+                margin: 10mm;
+            }
+            .row {
+                display: flex !important;
+                flex-wrap: wrap;
+                margin-right: -10px;
+                margin-left: -10px;
+            }
+            .col {
+                flex: 1 0 0%;
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+            .payslip-table th,
+            .payslip-table td {
+                font-size: 10pt;
+                padding: 0.2rem 0.4rem;
+            }
+            .signature-table th,
+            .signature-table td {
+                font-size: 10pt;
+            }
+            dl.row dt,
+            dl.row dd {
+                font-size: 10pt;
+            }
+            .net-pay {
+                font-size: 12pt;
             }
         }
-
         @media (max-width: 768px) {
             .col-6 {
                 flex: 0 0 100%;
                 max-width: 100%;
             }
+            .text-end-sm {
+                text-align: start;
+            }
         }
     </style>
 </head>
-
 <body class="container-fluid payslip-container mt-3 mb-5">
     {% block content %}
         {% for obj in qs %}
-            <div class="page-break">
+            <div class="page-break" role="region" aria-label="{% trans 'Payslip' %}">
                 <!-- Header -->
                 <header class="row mb-3">
                     <div class="col-6">
                         {% with obj.sub_organization_obj as sub_organization %}
                             {% if sub_organization and sub_organization.logo %}
                                 <img src="{{ sub_organization.logo.url }}"
-                                    alt="{% blocktrans with name=sub_organization.name %}Logo de {{ name }}{% endblocktrans %}"
-                                    class="organization-logo img-fluid mb-2"
-                                    loading="lazy">
+                                     alt="{% blocktrans with name=sub_organization.name %}Logo de {{ name }}{% endblocktrans %}"
+                                     class="organization-logo img-fluid mb-2"
+                                     loading="lazy">
                             {% endif %}
                         {% endwith %}
                         <h5 class="mb-0">{% trans "Fiche de paie" %}</h5>
@@ -143,32 +160,22 @@
                         </small>
                     </div>
                 </header>
-
                 <!-- Employee Info -->
-                <div class="row mb-3">
+                <section class="row mb-3" aria-label="{% trans 'Employee Information' %}">
                     <div class="col-6">
                         <dl class="row mb-0">
-                            <!-- Matricule -->
                             <dt class="col-4">{% trans "Matricule" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.registration_number|default:"-" }}</dd>
-
-                            <!-- Full Name -->
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.full_name|title|default:"-" }}</dd>
-
-                            <!-- CNSS -->
                             <dt class="col-4">{% trans "CNSS" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:"-" }}</dd>
-
-                            <!-- Fonction -->
                             {% with designation=obj.employee.designation %}
                                 <dt class="col-4">{% trans "Fonction" %}</dt>
                                 <dd class="col-8 mb-0">:
                                     {% if designation %}{{ designation.name|title }}{% else %}-{% endif %}
                                 </dd>
                             {% endwith %}
-
-                            <!-- Grade/Catégorie -->
                             {% with grade=obj.employee.grade|default:None %}
                                 {% with group=obj.employee.designation.group|default:None %}
                                     <dt class="col-4">{% trans "Grade/Catégorie" %}</dt>
@@ -177,8 +184,6 @@
                                     </dd>
                                 {% endwith %}
                             {% endwith %}
-
-                            <!-- Contrat -->
                             {% with agreement=obj.employee.agreement %}
                                 <dt class="col-4">{% trans "Contrat" %}</dt>
                                 <dd class="col-8 mb-0">:
@@ -187,38 +192,26 @@
                             {% endwith %}
                         </dl>
                     </div>
-
                     <div class="col-6">
                         <dl class="row mb-0">
-                            <!-- Banque -->
                             <dt class="col-4">{% trans "Banque" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payer_name|default:"-" }}</dd>
-
-                            <!-- Compte -->
                             <dt class="col-4">{% trans "Compte" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payment_account|default:"-" }}</dd>
-
-                            <!-- Salaire bar. -->
                             {% with grade=obj.employee.grade %}
                                 <dt class="col-4">{% trans "Salaire bar." %}</dt>
                                 <dd class="col-8 mb-0">:
                                     {% if grade %}{{ grade.category }}{% else %}-{% endif %}
                                 </dd>
                             {% endwith %}
-
-                            <!-- Taux appl. -->
                             <dt class="col-4">{% trans "Taux appl." %}</dt>
                             <dd class="col-8 mb-0">:
                                 {{ obj.payroll.metadata.taux|default:_("non applicable") }}
                             </dd>
-
-                            <!-- Date engag. -->
                             <dt class="col-4">{% trans "Date engag." %}</dt>
                             <dd class="col-8 mb-0">:
                                 {{ obj.employee.date_of_join|date:"d/m/Y"|default:"-" }}
                             </dd>
-
-                            <!-- Centre -->
                             {% with branch=obj.employee.branch %}
                                 <dt class="col-4">{% trans "Centre" %}</dt>
                                 <dd class="col-8 mb-0">:
@@ -227,32 +220,30 @@
                             {% endwith %}
                         </dl>
                     </div>
-                </div>
-
+                </section>
                 <hr class="my-2">
-
                 <!-- Earnings & Deductions -->
                 {% with items=obj.itempaid_set.all %}
-                    <div class="row">
+                    <section class="row" aria-label="{% trans 'Earnings and Deductions' %}">
                         <!-- Earnings -->
-                        <div class="col-6">
+                        <div class="col">
                             <h6 class="mb-small">{% trans "Rémunérations" %}</h6>
                             <table class="table table-bordered table-sm payslip-table">
                                 <thead>
                                     <tr>
-                                        <th>{% trans "Code" %}</th>
-                                        <th>{% trans "Libellé" %}</th>
-                                        <th class="text-end">{% trans "Taux" %}</th>
-                                        <th class="text-end">{% trans "Temps" %}</th>
-                                        <th class="text-end">{% trans "Montant" %}</th>
+                                        <th scope="col">{% trans "Code" %}</th>
+                                        <th scope="col">{% trans "Libellé" %}</th>
+                                        <th scope="col" class="text-end">{% trans "Taux" %}</th>
+                                        <th scope="col" class="text-end">{% trans "Temps" %}</th>
+                                        <th scope="col" class="text-end">{% trans "Montant" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for item in items %}
                                         {% if item.type_of_item >= 0 %}
                                             <tr>
-                                                <td>{{ item.code }}</td>
-                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.code|default:"-" }}</td>
+                                                <td>{{ item.name|default:"-" }}</td>
                                                 <td class="text-end">{{ item.rate|default:0|floatformat:2|intcomma }}</td>
                                                 <td class="text-end">{{ item.time|default:0|floatformat:0 }}</td>
                                                 <td class="text-end">{{ item.amount_qp_employee|default:0|floatformat:2|intcomma }}</td>
@@ -262,24 +253,23 @@
                                 </tbody>
                             </table>
                         </div>
-
                         <!-- Deductions -->
-                        <div class="col-6">
+                        <div class="col">
                             <h6 class="mb-small">{% trans "Retenues" %}</h6>
                             <table class="table table-bordered table-sm payslip-table">
                                 <thead>
                                     <tr>
-                                        <th>{% trans "Code" %}</th>
-                                        <th>{% trans "Libellé" %}</th>
-                                        <th class="text-end">{% trans "Montant" %}</th>
+                                        <th scope="col">{% trans "Code" %}</th>
+                                        <th scope="col">{% trans "Libellé" %}</th>
+                                        <th scope="col" class="text-end">{% trans "Montant" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for item in items %}
                                         {% if item.type_of_item == -1 %}
                                             <tr>
-                                                <td>{{ item.code }}</td>
-                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.code|default:"-" }}</td>
+                                                <td>{{ item.name|default:"-" }}</td>
                                                 <td class="text-end">
                                                     {{ item.amount_qp_employee|default:item.amount_qp_employer|default:0|abs|floatformat:2|intcomma }}
                                                 </td>
@@ -289,16 +279,14 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </section>
                 {% endwith %}
-
                 <!-- Totals -->
-                <div class="row mt-2">
+                <section class="row mt-2" aria-label="{% trans 'Totals' %}">
                     <div class="col-6">
                         <dl class="row mb-0">
                             <dt class="col-4">{% trans "Plafond CNSS" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.social_security_threshold|default:0|floatformat:2|intcomma }}</dd>
-
                             <dt class="col-4">{% trans "Brut imposable" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.taxable_gross|default:0|floatformat:2|intcomma }}</dd>
                         </dl>
@@ -310,15 +298,12 @@
                         </div>
                         <small class="text-muted">({{ obj.payroll.metadata.currency|default:'CDF' }})</small>
                     </div>
-                </div>
-
+                </section>
                 <hr class="my-3">
-
                 <!-- Footer Info -->
-                <div class="row mb-2">
+                <section class="row mb-2" aria-label="{% trans 'Footer Information' %}">
                     <div class="col">
                         <dl class="row mb-0">
-                            <!-- Grade/Catégorie (again) -->
                             {% with grade=obj.employee.grade|default:None %}
                                 {% with group=obj.employee.designation.group|default:None %}
                                     <dt class="col-3">{% trans "Grade/Catégorie" %}</dt>
@@ -327,28 +312,25 @@
                                     </dd>
                                 {% endwith %}
                             {% endwith %}
-
-                            <!-- Period -->
                             <dt class="col-3">{% trans "Période" %}</dt>
                             <dd class="col-9 mb-0">
                                 : {{ obj.payroll.start_dt|date:"d/m/Y" }} – {{ obj.payroll.end_dt|date:"d/m/Y" }}
                             </dd>
                         </dl>
                     </div>
-                </div>
-
+                </section>
                 <!-- Signature Block -->
-                <div class="row mt-4">
+                <section class="row mt-4" aria-label="{% trans 'Signature Block' %}">
                     <div class="col">
                         <h6 class="mb-2">{% trans "Accusé de réception" %}</h6>
                         <table class="table table-bordered table-sm signature-table">
                             <thead class="table-secondary">
                                 <tr>
-                                    <th>{% trans "Matricule" %}</th>
-                                    <th>{% trans "Nom complet" %}</th>
-                                    <th>{% trans "Centre" %}</th>
-                                    <th>{% trans "Net à payer" %}</th>
-                                    <th>{% trans "Signature" %}</th>
+                                    <th scope="col">{% trans "Matricule" %}</th>
+                                    <th scope="col">{% trans "Nom complet" %}</th>
+                                    <th scope="col">{% trans "Centre" %}</th>
+                                    <th scope="col">{% trans "Net à payer" %}</th>
+                                    <th scope="col">{% trans "Signature" %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -371,12 +353,13 @@
                             {% trans "Veuillez vérifier et signer à réception." %}
                         </small>
                     </div>
-                </div>
+                </section>
             </div>
         {% endfor %}
     {% endblock %}
-
-    <!-- Optional Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS (optional, included for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
 </body>
 </html>
