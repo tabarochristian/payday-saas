@@ -65,7 +65,9 @@ class Payslips(Read):
                 classes="btn btn-success",
                 permission=f"{app}.view_{model}",
                 attrs={
-                    "onclick": f"window.location.href = '{reverse_lazy('payroll:slips')}?pk__in=' + getSelectedRows('table').join(',');",
+                    "onclick": f"window.location.href = '{reverse_lazy('payroll:slips', kwargs={
+                        'doctype': 'html'
+                    })}?pk__in=' + getSelectedRows('table').join(',');",
                     "title": _("Sélectionnez des lignes à imprimer")
                 }
             ),
