@@ -2,10 +2,10 @@ from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from .change import Change, BaseViewMixin
 from core.forms import modelform_factory
 from core.forms.button import Button
 from django.urls import reverse_lazy
-from .change import Change, BaseViewMixin
 
 class Read(Change):
     """

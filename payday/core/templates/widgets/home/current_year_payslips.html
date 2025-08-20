@@ -12,7 +12,7 @@
                 <ul class="list-group list-group-flush" role="list">
                     {% for payslip in payslips %}
                         <li role="listitem" class="list-group-item">
-                            <a href="{% url 'payroll:slips' %}?pk={{ payslip.pk }}"
+                            <a href="{% url 'payroll:slips' 'pdf' %}?pk={{ payslip.pk }}"
                                class="d-flex justify-content-between align-items-center text-decoration-none">
                                 <div>
                                     <strong>{{ payslip.payroll.name }}</strong><br>

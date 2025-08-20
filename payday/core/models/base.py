@@ -7,7 +7,6 @@ from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django_currentuser.db.models import CurrentUserField
 from django.db.models.signals import post_save
 from crispy_forms.layout import Layout

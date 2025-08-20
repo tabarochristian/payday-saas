@@ -29,7 +29,7 @@ urlpatterns = [
     path('modal/delete/<str:app>/<str:model>', DeleteModal.as_view(), name='delete-modal'),
     path('modal/change/<str:app>/<str:model>/<str:pk>', ChangeModal.as_view(), name='change-modal'),
     
-    path('print/<str:document>/<str:app>/<str:model>', Print.as_view(), name='print'),
+    path('print/<str:document>/<str:app>/<str:model>/<str:doctype>', Print.as_view(), name='print'),
     path('exporter/<str:app>/<str:model>', Exporter.as_view(), name='exporter'),
     path('notifications', Notifications.as_view(), name='notifications'),
     path('activity-log', ActivityLog.as_view(), name='activity-log'),

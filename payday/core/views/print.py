@@ -1,67 +1,100 @@
-import re
-import pandas as pd
+import requests
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
 from django.utils.translation import gettext as _
 from django.template import Context, Template
+from django.http import HttpResponse
 from django.contrib import messages
 from django.apps import apps
 
 from core.views import BaseViewMixin
 from core import models
 
+
 class Print(BaseViewMixin):
     """
     A view that generates and returns a printed/exported version of model objects
-    based on the selected query parameters and a document template.
+    based on query parameters and a stored document template.
 
-    The view builds a query dictionary from the GET parameters, retrieves a list of 
-    objects from the specified model, fetches a document template by its PK, and then
-    renders the template for each object with a custom context. The rendered outputs are 
-    then passed to a print template.
+    Supports two formats:
+      - HTML (default): renders objects using the template and displays them in-browser.
+      - PDF: sends the HTML through Gotenberg for conversion to PDF.
     """
+
     action = ["view"]
     template_name = "print.html"
 
-    def get(self, request, document, app, model):
+    def get(self, request, document, app, model, doctype='html'):
         """
         Handle GET requests to export data using a document template.
-        
+
         Args:
             request (HttpRequest): Incoming HTTP request.
-            document (str/int): Primary key of the document template.
-            app (str): Application label where the target model resides.
-            model (str): Name of the target model.
-        
+            document (str|int): Primary key of the document template.
+            app (str): Django app label where the target model resides.
+            model (str): Name of the target model class.
+            doctype (str): Either "html" (default) or "pdf".
+
         Returns:
-            HttpResponse: The rendered response with the printed view.
+            HttpResponse: Rendered response (HTML or PDF).
         """
-        # Build a query dictionary from GET parameters.
-        # For any parameter containing '__in', split its value by commas.
-        query_params = {
-            key: value.split(',') if '__in' in key else value
-            for key, value in request.GET.items()
-        }
+
+        # Build query parameters
+        query_params = {}
+        for key, value in request.GET.items():
+            if "__in" in key:
+                query_params[key] = [
+                    v.strip() for v in value.split(",") if v.strip()
+                ]
+            else:
+                query_params[key] = value
+
         if not query_params:
             messages.warning(request, _("Impossible de trouver le modèle d'objet"))
-            return redirect(request.META.get('HTTP_REFERER'))
+            return redirect(request.META.get("HTTP_REFERER", "/"))
 
-        # Retrieve the model class using Django's apps registry.
+        # PDF export branch
+        if doctype == "pdf":
+            gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/url"
+            source_url = request.build_absolute_uri().replace("/pdf", "/html")
+
+            try:
+                resp = requests.post(
+                    gotenberg_url,
+                    files={"url": (None, source_url)},
+                    timeout=15,
+                )
+                resp.raise_for_status()
+            except requests.RequestException as exc:
+                messages.error(
+                    request,
+                    _("Erreur lors de la génération du PDF : %(err)s") % {"err": str(exc)},
+                )
+                return redirect(request.META.get("HTTP_REFERER", "/"))
+
+            response = HttpResponse(resp.content, content_type="application/pdf")
+            response["Content-Disposition"] = 'inline; filename="preview.pdf"'
+            return response
+
+        # Resolve model
         model_class = apps.get_model(app, model_name=model)
-        # Get a list of objects matching the query; raise 404 if none found.
-        object_list = get_list_or_404(model_class, **query_params)
+        objects = get_list_or_404(model_class, **query_params)
 
-        # Retrieve the document template; get_object_or_404 will raise a 404 if not found.
+        # Get document template
         document_template = get_object_or_404(models.Template, pk=document)
 
-        # Render the template for each object.
-        # Instead of using locals(), we explicitly build the context for each rendering.
+        # Render each object individually
         rendered_outputs = []
-        for obj in object_list:
-            # Build a context that can be extended later if needed.
-            context = Context({
-                'object': obj,
-            })
-            rendered_output = Template(document_template.content).render(context)
-            rendered_outputs.append(rendered_output)
+        for obj in objects:
+            context = Context({"object": obj})
+            rendered_outputs.append(
+                Template(document_template.content).render(context)
+            )
 
-        return render(request, self.template_name, locals())
+        # Final context for the print view
+        context = {
+            "document_template": document_template,
+            "objects": objects,
+            "rendered_outputs": rendered_outputs,
+        }
+
+        return render(request, self.template_name, context)

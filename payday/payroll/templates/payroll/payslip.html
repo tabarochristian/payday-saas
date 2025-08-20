@@ -2,7 +2,7 @@
 {% load i18n core humanize mathfilters crispy_forms_tags crispy_forms_filters %}
 
 {% block title %}
-    {% blocktrans %}Gestion des éléments de paie - {{ employee_obj.full_name }}{% endblocktrans %}
+    {% blocktrans %}Gestion des éléments de paie - {{ employee_obj.employee.full_name }}{% endblocktrans %}
 {% endblock %}
 
 {% block content %}

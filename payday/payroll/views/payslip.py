@@ -45,9 +45,11 @@ class Payslip(Change):
         return [Button(
             tag='a',
             text=_("Bulletin de paie"),
-            url=reverse_lazy("payroll:slips") + f"?pk={obj.pk}",
-            classes="btn btn-light-primary",
+            url=reverse_lazy("payroll:slips", kwargs={
+                'doctype': 'pdf'
+            }) + f"?pk={obj.pk}",
             permission="payroll.view_paidemployee",
+            classes="btn btn-light-primary",
             attrs={
                 "target": "_blank"
             }

@@ -1,12 +1,14 @@
 # payroll/views/slips.py
 
 from django.utils.translation import gettext_lazy as _
-from core.models import SubOrganization
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.contrib import messages
 from django.http import Http404
 from django.apps import apps
 from core.views import Read
 
+import requests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -17,10 +19,10 @@ class Slips(Read):
     A view that displays payslip information for paid employees.
 
     Features:
-      - Dynamic model loading via apps.get_model()
-      - Safe filtering using query params
-      - Raises 404 if no records match filters
       - Uses locals() only where safe (template rendering)
+      - Dynamic model loading via apps.get_model()
+      - Raises 404 if no records match filters
+      - Safe filtering using query params
     """
     template_name = "payroll/slip.html"
 
@@ -29,7 +31,7 @@ class Slips(Read):
         """Return the model class from URL kwargs."""
         return apps.get_model("payroll", model_name="paidemployee")
 
-    def get(self, request):
+    def get(self, request, doctype='html'):
         """
         Handle GET requests to display payslips.
         """
@@ -42,6 +44,29 @@ class Slips(Read):
             # Load model dynamically
             model_class = self.model_class
             logger.debug(f"Loaded model: {model_class.__name__}")
+
+            # PDF export branch
+            if doctype == "pdf":
+                gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/url"
+                source_url = request.build_absolute_uri().replace("/pdf", "/html")
+
+                try:
+                    resp = requests.post(
+                        gotenberg_url,
+                        files={"url": (None, source_url)},
+                        timeout=15,
+                    )
+                    resp.raise_for_status()
+                except requests.RequestException as exc:
+                    messages.error(
+                        request,
+                        _("Erreur lors de la génération du PDF : %(err)s") % {"err": str(exc)},
+                    )
+                    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+                response = HttpResponse(resp.content, content_type="application/pdf")
+                response["Content-Disposition"] = 'inline; filename="preview.pdf"'
+                return response
 
             # Extract and sanitize query parameters
             query_params = {
