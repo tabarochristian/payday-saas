@@ -283,7 +283,7 @@
                 {% endwith %}
                 <!-- Totals -->
                 <section class="row mt-2" aria-label="{% trans 'Totals' %}">
-                    <div class="col-6">
+                    <div class="col">
                         <dl class="row mb-0">
                             <dt class="col-4">{% trans "Plafond CNSS" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.social_security_threshold|default:0|floatformat:2|intcomma }}</dd>
@@ -291,7 +291,7 @@
                             <dd class="col-8 mb-0">: {{ obj.taxable_gross|default:0|floatformat:2|intcomma }}</dd>
                         </dl>
                     </div>
-                    <div class="col-6 text-end-sm">
+                    <div class="col text-end-sm">
                         <div class="net-pay">
                             {% trans "NET A PAYER" %}:
                             <strong>{{ obj.net|default:0|floatformat:2|intcomma }}</strong>
