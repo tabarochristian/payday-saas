@@ -373,7 +373,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
         for emp in special_items:
             emp.pop('employee')
     except Exception as ex:
-        print("can't pop employee from special_items")
+        logger.error("can't pop employee from special_items")
     
     all_items = shared_data["items"] + special_items + shared_data["legal_items"]
     df_items = pd.DataFrame(all_items)
@@ -426,7 +426,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
             result = abs(result) * int(row.get("type_of_item", 1))
-            print("IPR FOR", context["employee"]["registration_number"], result)
+            logger.error("IPR FOR", context["employee"]["registration_number"], result)
             return round(result)
         except Exception as e:
             logger.warning(f"Formula evaluation failed for employee {registration_number}, "
