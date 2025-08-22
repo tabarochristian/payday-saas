@@ -16,7 +16,8 @@ def payroll_create(sender, instance, **kwargs):
 def payroll_created(sender, instance, created, **kwargs):
     if not created: return
     schema = TenantMiddleware.get_schema() or "public"
-    threading.Thread(target=PayrollProcessor(instance, schema).process, daemon=True).start()
+    PayrollProcessor(instance, schema).process()
+    # threading.Thread(target=, daemon=True).start()
 
 @receiver(post_delete, sender=Payroll)
 def payroll_deleted(sender, instance, **kwargs):
