@@ -141,6 +141,21 @@ class Employee(BaseEmployee):
     def attendances(self, filter = {}):
         attendance = apps.get_model('employee', 'attendance')
         return attendance.objects.filter(employee=self).filter(**filter)
+
+    def advance_salary(self, period):
+        AdvanceSalaryPayment = apps.get_model('payroll', 'AdvanceSalaryPayment')
+
+        queryset = AdvanceSalaryPayment.objects.filter(
+            advance_salary__employee=self
+        )
+
+        if period:
+            queryset = queryset.filter(
+                date__year=period.year,
+                date__month=period.month
+            )
+
+        return queryset
     
     @property
     def get_action_buttons(self):

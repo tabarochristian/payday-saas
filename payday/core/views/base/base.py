@@ -197,7 +197,9 @@ class BaseViewMixin(View, LoginRequiredMixin, PermissionRequiredMixin):
             form = form()
         model = form._meta.model
         perms = self.request.user.get_user_field_permission(app=model._meta.app_label, model=model._meta.model_name)
-        protected = {k for k, v in perms.items() if v} | {'sub_organization', 'employee'}
+        protected = {k for k, v in perms.items() if v}
+        if not self.request.user.is_superuser:
+            protected = protected | {'sub_organization', 'employee'}
         for field in protected & form.fields.keys():
             form.fields[field].widget.attrs.update({
                 'readonly': True, 'class': 'bg-dark', 'style': 'pointer-events: none'

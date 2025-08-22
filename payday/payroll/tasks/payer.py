@@ -363,6 +363,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
         employee[attr] = shared_data.get(attr, {}).get(employee[attr], {})
 
     items_list = []
+    print(employee)
     context = {
         "payroll": payroll,
         "employee": DictToObject(employee),
@@ -491,10 +492,6 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                 extra={'employee_id': employee['id']})
     return employee, items_list
 
-def _cdf_to_usd(amount: float, rate: 1) -> float:
-    """Convert CDF to USD."""
-    return round(amount/rate, 2) 
-
 def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int, context) -> float:
     """
     Efficiently calculate income tax in USD based on payroll items and employee profile.
@@ -530,7 +527,7 @@ def _ipr_iere_fast_usd(df_items: pd.DataFrame, employee: dict, rate: int, contex
             capped_tax = taxable_gross_cdf * tranche_rate
             break
 
-    tax_cdf = capped_tax if max_tax > capped_tax else max_tax
+    tax_cdf = max_tax if capped_tax > max_tax else capped_tax
 
     # Apply dependent deductions
     children = employee.get("children", 0)
@@ -575,12 +572,11 @@ def _ipr_iere_fast_cdf(df_items: pd.DataFrame, employee: dict, context) -> float
             capped_tax = taxable_gross_cdf * tranche_rate
             break
 
-    tax_cdf = capped_tax if max_tax > capped_tax else max_tax
+    tax_cdf = max_tax if capped_tax > max_tax else capped_tax
 
     # Apply dependent deductions
-    children = employee.get("children", 0)
     is_married = employee.get("marital_status", "") == "MARRIED"
-    dependents = children + int(is_married)
+    dependents = employee.get("children", 0) + int(is_married)
 
     deduction_factor = 0.02 * dependents
     tax_cdf *= (1 - deduction_factor)

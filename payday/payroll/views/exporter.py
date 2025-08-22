@@ -40,12 +40,12 @@ class PayrollExporter(Exporter):  # Add mixins for security
             - df['employee__attendance'].fillna(0)),
 
         'dependants': safe_numeric(lambda df: df['employee__employee__marital_status'].eq('MARRIED').astype(int).fillna(0)
-            + df['employee__children'].fillna(0).astype(int))
+            + df['employee__children'].fillna(0).astype(int)),
     }
 
     @property
     def model_class(self):
-        """Return the Payroll model."""
+        """surn the Payroll model."""
         return apps.get_model('payroll', 'payroll')
 
     @property
@@ -53,10 +53,10 @@ class PayrollExporter(Exporter):  # Add mixins for security
         """Cache frequently accessed models."""
         if not hasattr(self, "_models_cache"):
             self._models_cache = {
-                'Payroll': self.model_class,
                 'PaidEmployee': apps.get_model('payroll', 'paidemployee'),
                 'Employee': apps.get_model('employee', 'employee'),
-                'ItemPaid': apps.get_model('payroll', 'itempaid')
+                'ItemPaid': apps.get_model('payroll', 'itempaid'),
+                'Payroll': self.model_class
             }
         return self._models_cache
 

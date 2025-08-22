@@ -22,7 +22,7 @@
                                     </small>
                                 </div>
                                 <span class="badge bg-primary rounded-pill">
-                                    {{ payslip.net|floatformat:2 }} FC
+                                    {{ payslip.net|floatformat:2 }} {{ payslip.payroll.metadata.currency|default:'CDF' }}
                                 </span>
                             </a>
                         </li>
