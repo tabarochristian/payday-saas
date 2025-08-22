@@ -456,7 +456,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
-            result = abs(result) * int(row.get("type_of_item", 1))
+            result = abs(result) * int(row.to_dict().get("type_of_item", 1))
             return round(result)
         except Exception as e:
             logger.warning(f"Formula evaluation failed for employee {registration_number}, "

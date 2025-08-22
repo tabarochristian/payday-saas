@@ -128,7 +128,11 @@ class PayrollProcessor:
                 logger.warning("Empty employee DataFrame, skipping leave merge")
                 return df
 
-            queryset = Leave.objects.filter(status='APPROVED').annotate(
+            queryset = Leave.objects.filter(
+                start_date__lte=self.payroll.end_dt,
+                end_date__gte=self.payroll.start_dt,
+                status='APPROVED'
+            ).annotate(
                 leave_duration=models.ExpressionWrapper(
                     models.F('end_date') - models.F('start_date') + timedelta(days=1),
                     output_field=models.DurationField()
