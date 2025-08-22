@@ -439,6 +439,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                 return 0.0
             context.update(extra)
             context['sum'] = sum
+            context['float'] = float
             context["df_items"] = df_items
             context["item"] = DictToObject(row.to_dict())
             context["sum_of"] = partial(sum_of_items_fields, df_items)
