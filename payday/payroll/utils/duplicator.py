@@ -36,6 +36,7 @@ class PayrollProcessor:
         """Main entry point to start processing."""
         logger.info(f"Starting payroll processing for payroll ID {self.payroll.id}")
         start_time = time.time()
+        time.sleep(1)
         try:
             if self.schema != "public":
                 set_schema(self.schema)

@@ -4,8 +4,10 @@ from django.dispatch import receiver
 from core.middleware import TenantMiddleware
 from payroll.utils import PayrollProcessor
 from payroll.models import Payroll
+from django.conf import settings
 from django.apps import apps
 import threading
+
 
 @receiver(pre_save, sender=Payroll)
 def payroll_create(sender, instance, **kwargs):
@@ -13,11 +15,17 @@ def payroll_create(sender, instance, **kwargs):
     instance._metadata['errors'] = []
 
 @receiver(post_save, sender=Payroll)
-def payroll_created(sender, instance, created, **kwargs):
-    if not created: return
-    schema = TenantMiddleware.get_schema() or "public"
-    PayrollProcessor(instance, schema).process()
-    # threading.Thread(target=, daemon=True).start()
+def payroll_created(sender, instance, created: bool, **kwargs) -> None:
+    if not created:
+        return
+
+    schema = "public" if settings.DEBUG else TenantMiddleware.get_schema()
+
+    if not schema:
+        raise RuntimeError("Failed to determine tenant schema for payroll duplication.")
+
+    processor = PayrollProcessor(instance, schema)
+    threading.Thread(target=processor.process, daemon=True).start()
 
 @receiver(post_delete, sender=Payroll)
 def payroll_deleted(sender, instance, **kwargs):
