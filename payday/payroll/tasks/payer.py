@@ -2,11 +2,12 @@ import pandas as pd
 import numpy as np
 import re
 
-from django.db.models import F, Sum, Q, Value, CharField, BooleanField, IntegerField
+from django.db.models import F, Sum, Q, Value, CharField, BooleanField, IntegerField, ExpressionWrapper, DurationField
 from django.db.models.functions import Coalesce
-
+from collections import defaultdict
 
 from django.conf import settings
+from datetime import timedelta
 
 from django.apps import apps
 from django.db import transaction
@@ -148,6 +149,7 @@ class Payer(Task):
         """Returns data needed by worker functions."""
         return {
             "items": self.items,
+            "leaves": self.leaves,
             "legal_items": self.legal_items,
             "payroll": self.payroll,
             "advancesalary": self.advancesalary,
@@ -181,6 +183,7 @@ class Payer(Task):
     def _load_data(self):
         """Load required data for payroll processing."""
         Item = self._get_model("payroll", "Item")
+        Leave = self._get_model("leave", "leave")
         LegalItem = self._get_model("payroll", "LegalItem")
         SpecialEmployeeItem = self._get_model("payroll", "SpecialEmployeeItem")
         AdvanceSalaryPayment = self._get_model("payroll", "AdvanceSalaryPayment")
@@ -260,8 +263,9 @@ class Payer(Task):
 
         advance_qs = (
             AdvanceSalaryPayment.objects.filter(
-                date__range=[self.payroll.start_dt, self.payroll.end_dt])
-            .values("advance_salary__employee__registration_number")
+                date__range=[self.payroll.start_dt, self.payroll.end_dt],
+                advance_salary__status='APPROVED'
+            ).values("advance_salary__employee__registration_number")
             .annotate(amount=Sum("amount"))
         )
 
@@ -270,6 +274,28 @@ class Payer(Task):
             for item in advance_qs
         }
         self.logger.debug(f"Loaded advance salary for {len(self.advancesalary)} employees")
+
+        leaves = Leave.objects.filter(
+            start_date__lte=self.payroll.end_dt,
+            end_date__gte=self.payroll.start_dt,
+            status='APPROVED'
+        ).values('employee__registration_number', 'type_of_leave__name').annotate(
+            total_days=Sum(
+                ExpressionWrapper(
+                    F('end_date') - F('start_date') + timedelta(days=1),
+                    output_field=DurationField()
+                )
+            )
+        )
+
+        self.leaves = {
+            reg_num: {
+                lt: (td.days if isinstance(td := leave['total_days'], timedelta) else int(td))
+                for leave in leaves if (reg := leave['employee__registration_number']) and (lt := leave['type_of_leave__name']) and reg == reg_num
+            }
+            for reg_num in {leave['employee__registration_number'] for leave in leaves}
+        }
+        self.logger.debug(f"Loaded leaves for {len(self.leaves)} employees")
 
     def _prepare_employees_for_processing(self):
         """Prepare employee data for processing."""
@@ -355,11 +381,14 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
     service = shared_data["service"]
     payroll = shared_data["payroll"]
     designation = shared_data["designation"]
+    leaves = shared_data["leaves"]
 
     employee["advance_salary"] = advancesalary.get(registration_number, 0)
+    employee["leaves"] = leaves.get(registration_number, {})
 
-    for attr in ["grade", "status", "branch", "agreement", "direction", 
-                "subdirection", "service", "designation"]:
+    for attr in ["grade", "status", "branch", "agreement", 
+                "direction", "subdirection", "service", 
+                "designation"]:
         employee[attr] = shared_data.get(attr, {}).get(employee[attr], {})
 
     items_list = []
@@ -426,7 +455,6 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
             result = abs(result) * int(row.get("type_of_item", 1))
-            logger.error("IPR FOR", context["employee"]["registration_number"], result)
             return round(result)
         except Exception as e:
             logger.warning(f"Formula evaluation failed for employee {registration_number}, "

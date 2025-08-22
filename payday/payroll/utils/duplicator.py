@@ -156,7 +156,6 @@ class PayrollProcessor:
 
             leave_df = pd.DataFrame.from_records(queryset)
             logger.debug(f"Loaded {len(leave_df)} leave records")
-            print(leave_df)
 
             # Convert timedelta to integer days
             leave_df['paid_leave_days'] = leave_df['paid_leave_days'].apply(lambda x: x.days if pd.notnull(x) else 0)

@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.layout import Layout, Column, Row
 from core.models import Base, fields
@@ -85,7 +86,7 @@ class Leave(Base):
             taken=models.Sum(
                 ExpressionWrapper(F("end_date") - F("start_date"), output_field=DurationField())
             )
-        ).get("taken", 0) or 0
+        ).get("taken", timedelta(days=0)).days
 
         if self.type_of_leave.max_duration and (total_taken_leave + self.duration) > self.type_of_leave.max_duration:
             raise ValidationError(_("vous avez atteint la limite maximale de congé ({}) pour ce type.").format(self.type_of_leave.max_duration))

@@ -19497,3 +19497,165 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
 django.db.utils.OperationalError: no such column: leave_typeofleave.paid
 ERROR 2025-08-22 20:04:47,497 runserver [35;1mHTTP GET / 500 [0.05, 127.0.0.1:63081][0m
+ERROR 2025-08-22 21:28:50,973 log Internal Server Error: /create/leave/leave
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 34, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 143, in post
+    if not (form.is_valid() and all(fs.is_valid() for fs in formsets) and self.validate_form(form, formsets)):
+            ~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._post_clean()
+    ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1625, in full_clean
+    self.clean()
+    ~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/leave/models/leave.py", line 90, in clean
+    if self.type_of_leave.max_duration and (total_taken_leave + self.duration) > self.type_of_leave.max_duration:
+                                            ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for +: 'datetime.timedelta' and 'int'
+ERROR 2025-08-22 21:28:50,979 runserver [35;1mHTTP POST /create/leave/leave 500 [0.05, 127.0.0.1:65492][0m
+ERROR 2025-08-22 21:29:09,471 log Internal Server Error: /create/leave/leave
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 34, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 143, in post
+    if not (form.is_valid() and all(fs.is_valid() for fs in formsets) and self.validate_form(form, formsets)):
+            ~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._post_clean()
+    ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1625, in full_clean
+    self.clean()
+    ~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/leave/models/leave.py", line 90, in clean
+    if self.type_of_leave.max_duration and (total_taken_leave + self.duration) > self.type_of_leave.max_duration:
+                                            ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for +: 'datetime.timedelta' and 'int'
+ERROR 2025-08-22 21:29:09,474 runserver [35;1mHTTP POST /create/leave/leave 500 [0.05, 127.0.0.1:65492][0m
+ERROR 2025-08-22 21:30:29,248 log Internal Server Error: /create/leave/leave
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 34, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 143, in post
+    if not (form.is_valid() and all(fs.is_valid() for fs in formsets) and self.validate_form(form, formsets)):
+            ~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._post_clean()
+    ~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/forms/models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/db/models/base.py", line 1625, in full_clean
+    self.clean()
+    ~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/leave/models/leave.py", line 91, in clean
+    if self.type_of_leave.max_duration and (total_taken_leave + self.duration) > self.type_of_leave.max_duration:
+                                            ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for +: 'datetime.timedelta' and 'int'
+ERROR 2025-08-22 21:30:29,252 runserver [35;1mHTTP POST /create/leave/leave 500 [0.06, 127.0.0.1:49153][0m
