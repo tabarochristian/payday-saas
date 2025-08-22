@@ -363,7 +363,6 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
         employee[attr] = shared_data.get(attr, {}).get(employee[attr], {})
 
     items_list = []
-    print(employee)
     context = {
         "payroll": payroll,
         "employee": DictToObject(employee),
@@ -426,7 +425,7 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
-            result = result * int(row.get("type_of_item", 1))
+            result = abs(result) * int(row.get("type_of_item", 1))
             print("IPR FOR", context["employee"]["registration_number"], result)
             return round(result)
         except Exception as e:
