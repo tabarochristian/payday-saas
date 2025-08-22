@@ -29,6 +29,16 @@ class PaidEmployee(Employee):
         default=0
     )
 
+    paid_leave_days = models.IntegerField(
+        verbose_name=_("congé payé (jours)"),
+        default=0
+    )
+
+    unpaid_leave_days = models.IntegerField(
+        verbose_name=_("congé sans solde (jours)"),
+        default=0
+    )
+
     registration_number = fields.CharField(verbose_name=_('matricule'), blank=True, null=True, default=None, max_length=255)
     agreement = fields.CharField(verbose_name=_('type de contrat'), blank=True, null=True, default=None, max_length=255)
     status = fields.CharField(verbose_name=_('statut'), blank=True, null=True, default=None, max_length=255)

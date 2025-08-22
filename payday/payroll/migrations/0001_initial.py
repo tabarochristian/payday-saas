@@ -794,6 +794,18 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    "paid_leave_days",
+                    core.models.fields.integerfield.IntegerField(
+                        default=23, verbose_name="congé payé (jours)"
+                    ),
+                ),
+                (
+                    "unpaid_leave_days",
+                    core.models.fields.integerfield.IntegerField(
+                        default=23, verbose_name="congé sans solde (jours)"
+                    ),
+                ),
+                (
                     "children",
                     core.models.fields.integerfield.IntegerField(
                         default=0, verbose_name="children"

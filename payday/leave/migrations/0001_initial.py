@@ -214,6 +214,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    "paid",
+                    core.models.fields.booleanfield.BooleanField(
+                        default=30, verbose_name="congé payé"
+                    ),
+                ),
+                (
                     "created_by",
                     django_currentuser.db.models.fields.CurrentUserField(
                         default=django_currentuser.middleware.get_current_authenticated_user,

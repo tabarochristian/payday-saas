@@ -28,6 +28,12 @@ class TypeOfLeave(Base):
         default=30,  
         verbose_name=_("délai avant d'être éligible (jours)")
     )
+    
+    paid = fields.BooleanField(
+        verbose_name=_("congé payé"),
+        default=True
+    )
+
     status = None
 
     list_display = ('id', 'name', 'min_duration', 'max_duration', 'eligibility_after_days', 'updated_at')
@@ -39,7 +45,8 @@ class TypeOfLeave(Base):
             Column('min_duration'),
             Column('max_duration')
         ),
-        'eligibility_after_days'
+        'eligibility_after_days',
+        'paid'
     )
 
     class Meta:

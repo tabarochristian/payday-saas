@@ -13,6 +13,8 @@ from django.db import models
 from employee.models import Employee as EmployeeModel, Attendance
 from payroll.models import PaidEmployee
 from core.utils import set_schema
+from leave.models import Leave
+from datetime import timedelta
 
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -43,6 +45,7 @@ class PayrollProcessor:
             self.statuses = self.payroll.employee_status.all().values_list('name', flat=True)
             logger.debug(f"Retrieved {len(self.statuses)} employee statuses")
             df = self._get_employee_data()
+            df = self._merge_with_leave(df)
             df = self._merge_with_native_attendance(df)
             df = self._merge_with_canvas_attendance(df)
             self._save_paid_employees(df)
@@ -73,7 +76,7 @@ class PayrollProcessor:
             "working_days_per_month": models.functions.Coalesce(
                 models.F("designation__working_days_per_month"), models.Value(22)
             ),
-            "children": models.functions.Coalesce(models.Count("child"), models.Value(0)),
+            "children": models.functions.Coalesce(models.Count("child"), models.Value(0))
         }
     
         logger.debug(f"Building employee queryset with fields: {fields}")
@@ -117,6 +120,75 @@ class PayrollProcessor:
             logger.error(f"Failed to load employee data: {str(e)}", exc_info=True)
             raise
 
+    def _merge_with_leave(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Merge with approved leave records (paid and unpaid)."""
+        logger.info("Merging with approved leave records")
+        try:
+            if df.empty:
+                logger.warning("Empty employee DataFrame, skipping leave merge")
+                return df
+
+            queryset = Leave.objects.filter(status='APPROVED').annotate(
+                leave_duration=models.ExpressionWrapper(
+                    models.F('end_date') - models.F('start_date') + timedelta(days=1),
+                    output_field=models.DurationField()
+                )
+            ).values('employee__registration_number').annotate(
+                paid_leave_days=models.Sum(
+                    models.Case(
+                        models.When(type_of_leave__paid=True, then=models.F('leave_duration')),
+                        default=timedelta(days=0),
+                        output_field=models.DurationField()
+                    )
+                ),
+                unpaid_leave_days=models.Sum(
+                    models.Case(
+                        models.When(type_of_leave__paid=False, then=models.F('leave_duration')),
+                        default=timedelta(days=0),
+                        output_field=models.DurationField()
+                    )
+                )
+            )
+
+            if not queryset:
+                logger.warning("No approved leave records found")
+                return df
+
+            leave_df = pd.DataFrame.from_records(queryset)
+            logger.debug(f"Loaded {len(leave_df)} leave records")
+            print(leave_df)
+
+            # Convert timedelta to integer days
+            leave_df['paid_leave_days'] = leave_df['paid_leave_days'].apply(lambda x: x.days if pd.notnull(x) else 0)
+            leave_df['unpaid_leave_days'] = leave_df['unpaid_leave_days'].apply(lambda x: x.days if pd.notnull(x) else 0)
+
+            # Ensure matching keys are strings
+            leave_df['employee__registration_number'] = leave_df['employee__registration_number'].astype(str)
+            df['registration_number'] = df['registration_number'].astype(str)
+
+            # Merge with main DataFrame
+            merged_df = pd.merge(
+                df,
+                leave_df,
+                how="left",
+                left_on="registration_number",
+                right_on="employee__registration_number"
+            )
+
+            # Fill missing leave values with 0
+            merged_df['paid_leave_days'] = merged_df['paid_leave_days'].fillna(0).astype(int)
+            merged_df['unpaid_leave_days'] = merged_df['unpaid_leave_days'].fillna(0).astype(int)
+
+            # Drop merge artifacts
+            result_df = merged_df.drop(columns=['employee__registration_number'], errors='ignore')
+            logger.debug("Leave merge completed successfully")
+            return result_df
+
+        except Exception as e:
+            logger.error(f"Failed to merge leave records: {str(e)}", exc_info=True)
+            raise
+
+
     def _merge_with_native_attendance(self, df: pd.DataFrame) -> pd.DataFrame:
         """Merge with internal attendance records."""
         logger.info("Merging with native attendance records")
@@ -129,9 +201,9 @@ class PayrollProcessor:
                 Attendance.objects.filter(
                     checked_at__date__range=(self.payroll.start_dt, self.payroll.end_dt),
                     count__gte=2
-                ).filter(sub_organization=self.payroll.sub_organization)
-                .attended()
-                .values("employee__registration_number")
+                ).filter(
+                    sub_organization=self.payroll.sub_organization
+                ).attended().values("employee__registration_number")
                 .annotate(attendance=models.Count("employee__registration_number"))
             )
 
@@ -240,7 +312,7 @@ class PayrollProcessor:
                 return
 
             paid_employees = [PaidEmployee(**{
-                "sub_organization": self.payroll.sub_organization,
+                "sub_organization": getattr(self.payroll, "sub_organization", None),
                 **record
             }) for record in df.to_dict("records")]
             logger.debug(f"Prepared {len(paid_employees)} paid employee records")
