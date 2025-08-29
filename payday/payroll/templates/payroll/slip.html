@@ -188,7 +188,7 @@
                 </header>
                 <!-- Employee Info -->
                 <section class="row mb-3" aria-label="{% trans 'Employee Information' %}">
-                    <div class="col">
+                    <div class="col-12">
                         <dl class="row mb-0">
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.full_name|title|default:"-" }}</dd>
@@ -222,7 +222,7 @@
                             {% endwith %}
                         </dl>
                     </div>
-                    <div class="col">
+                    <div class="col-12">
                         <dl class="row mb-0">
                             {% comment %}
                              <dt class="col-4">{% trans "Banque" %}</dt>
