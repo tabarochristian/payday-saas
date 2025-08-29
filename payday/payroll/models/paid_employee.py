@@ -87,6 +87,20 @@ class PaidEmployee(Employee):
 
         self.save()
 
+    def sum_of_earnings(self):
+        qs = self.itempaid_set.filter(type_of_item=1)
+        return qs.aggregate(
+            sum_of_amount_qp_employee=models.Sum('amount_qp_employee'),
+            sum_of_amount_qp_employer=models.Sum('amount_qp_employer')
+        )
+
+    def sum_of_deductions(self):
+        qs = self.itempaid_set.filter(type_of_item=-1)
+        return qs.aggregate(
+            sum_of_amount_qp_employee=models.Sum('amount_qp_employee'),
+            sum_of_amount_qp_employer=models.Sum('amount_qp_employer')
+        )
+
     class Meta:
         verbose_name = _('employé rémunéré')
         verbose_name_plural = _('employés rémunéré')

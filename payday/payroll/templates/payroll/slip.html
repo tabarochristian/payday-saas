@@ -55,7 +55,7 @@
             font-size: 11pt;
         }
         .net-pay {
-            font-size: 14pt;
+            font-size: 12pt;
             font-weight: bold;
         }
         .signature-table {
@@ -79,6 +79,9 @@
         }
         .text-end-sm {
             text-align: end;
+        }
+        .text-xs {
+            font-size: 0.75rem !important;
         }
         @media print {
             body {
@@ -125,6 +128,9 @@
             .net-pay {
                 font-size: 12pt;
             }
+            .text-xs {
+                font-size: 0.75rem !important;
+            }
         }
         @media (max-width: 768px) {
             .col-6 {
@@ -133,6 +139,9 @@
             }
             .text-end-sm {
                 text-align: start;
+            }
+            .text-xs {
+                font-size: 0.75rem !important;
             }
         }
     </style>
@@ -143,39 +152,51 @@
             <div class="page-break" role="region" aria-label="{% trans 'Payslip' %}">
                 <!-- Header -->
                 <header class="row mb-3">
-                    <div class="col-6">
+                    <div class="col">
                         {% with obj.sub_organization_obj as sub_organization %}
-                            {% if sub_organization and sub_organization.logo %}
-                                <img src="{{ sub_organization.logo.url }}"
+                            {% if sub_organization %}
+
+                                {% if sub_organization.logo %}<img src="{{ sub_organization.logo.url }}"
                                      alt="{% blocktrans with name=sub_organization.name %}Logo de {{ name }}{% endblocktrans %}"
                                      class="organization-logo img-fluid mb-2"
-                                     loading="lazy">
+                                     loading="lazy">{% endif %}
+
+                                <dl class="row">
+                                    <dt class="col-3 text-xs">{% trans "N° CNSS Employeur" %}</dt>
+                                    <dd class="col-8 mb-0 text-xs">: {{ sub_organization.metadata.n_cnss|default:"-" }}</dd>
+
+                                    <dt class="col-3 text-xs">{% trans "N° NIF Employeur" %}</dt>
+                                    <dd class="col-8 mb-0 text-xs">: {{ sub_organization.metadata.n_nif|default:"-" }}</dd>
+
+                                    <dt class="col-3 text-xs">{% trans "RCCM" %}</dt>
+                                    <dd class="col-8 mb-0 text-xs">: {{ sub_organization.metadata.rccm|default:"-" }}</dd>
+
+                                    <dt class="col-3 text-xs">{% trans "Id Nat" %}</dt>
+                                    <dd class="col-8 mb-0 text-xs">: {{ sub_organization.metadata.id_nat|default:"-" }}</dd>
+                                </dl>
                             {% endif %}
                         {% endwith %}
-                        <h5 class="mb-0">{% trans "Fiche de paie" %}</h5>
+                        <h5 class="mb-0 mt-2 text-center fw-bold">{% trans "Fiche de paie" %}</h5>
                     </div>
-                    <div class="col-6 text-end no-print">
+                    {% comment %}<div class="col text-end no-print">
                         <small class="text-muted">
                             {% trans "Généré le" %}: {% now "d/m/Y H:i" %}
                         </small>
-                    </div>
+                    </div>{% endcomment %}
                 </header>
                 <!-- Employee Info -->
                 <section class="row mb-3" aria-label="{% trans 'Employee Information' %}">
                     <div class="col">
                         <dl class="row mb-0">
-                            <dt class="col-4">{% trans "Matricule" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.registration_number|default:"-" }}</dd>
                             <dt class="col-4">{% trans "Nom complet" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.full_name|title|default:"-" }}</dd>
-                            <dt class="col-4">{% trans "CNSS" %}</dt>
-                            <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:"-" }}</dd>
                             {% with designation=obj.employee.designation %}
                                 <dt class="col-4">{% trans "Fonction" %}</dt>
                                 <dd class="col-8 mb-0">:
                                     {% if designation %}{{ designation.name|title }}{% else %}-{% endif %}
                                 </dd>
                             {% endwith %}
+
                             {% with grade=obj.employee.grade|default:None %}
                                 {% with group=obj.employee.designation.group|default:None %}
                                     <dt class="col-4">{% trans "Grade/Catégorie" %}</dt>
@@ -184,17 +205,25 @@
                                     </dd>
                                 {% endwith %}
                             {% endwith %}
+
+                            <dt class="col-4">{% trans "Matricule" %}</dt>
+                            <dd class="col-8 mb-0">: {{ obj.employee.registration_number|default:"-" }}</dd>
+                            
+                            <dt class="col-4">{% trans "CNSS" %}</dt>
+                            <dd class="col-8 mb-0">: {{ obj.employee.social_security_number|default:"-" }}</dd>
+                            
                             {% with agreement=obj.employee.agreement %}
                                 <dt class="col-4">{% trans "Contrat" %}</dt>
                                 <dd class="col-8 mb-0">:
-                                    {% if agreement %}{{ agreement.name|title }}{% else %}-{% endif %}
+                                    {% if agreement %}{{ agreement.name|upper }}{% else %}-{% endif %}
                                 </dd>
                             {% endwith %}
                         </dl>
                     </div>
                     <div class="col">
                         <dl class="row mb-0">
-                            <dt class="col-4">{% trans "Banque" %}</dt>
+                            {% comment %}
+                             <dt class="col-4">{% trans "Banque" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payer_name|default:"-" }}</dd>
                             <dt class="col-4">{% trans "Compte" %}</dt>
                             <dd class="col-8 mb-0">: {{ obj.employee.payment_account|default:"-" }}</dd>
@@ -204,6 +233,7 @@
                                     {% if grade %}{{ grade.category }}{% else %}-{% endif %}
                                 </dd>
                             {% endwith %}
+                            {% endcomment %}
                             <dt class="col-4">{% trans "Taux appl." %}</dt>
                             <dd class="col-8 mb-0">:
                                 {{ obj.payroll.metadata.taux|default:_("non applicable") }}
@@ -218,13 +248,17 @@
                                     {% if branch %}{{ branch.name }}{% else %}-{% endif %}
                                 </dd>
                             {% endwith %}
+                            <dt class="col-3">{% trans "Période" %}</dt>
+                            <dd class="col-9 mb-0">
+                                : {{ obj.payroll.start_dt|date:"d/m/Y" }} – {{ obj.payroll.end_dt|date:"d/m/Y" }}
+                            </dd>
                         </dl>
                     </div>
                 </section>
                 <hr class="my-2">
                 <!-- Earnings & Deductions -->
                 {% with items=obj.itempaid_set.all %}
-                    <section class="row" aria-label="{% trans 'Earnings and Deductions' %}">
+                    <section class="-row" aria-label="{% trans 'Earnings and Deductions' %}">
                         <!-- Earnings -->
                         <div class="col">
                             <h6 class="mb-small">{% trans "Rémunérations" %}</h6>
@@ -250,6 +284,10 @@
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
+                                    <tr>
+                                        <td colspan="4" class="text-center fw-bold">Total brut</td>
+                                        <td class="text-end">{{ obj.sum_of_earnings.sum_of_amount_qp_employee|default:0|floatformat:2|intcomma }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -276,13 +314,17 @@
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
+                                    <tr>
+                                        <td colspan="2" class="text-center fw-bold">Total retenue employé (ouvrière)</td>
+                                        <td class="text-end">{{ obj.sum_of_deductions.sum_of_amount_qp_employee|default:0|floatformat:2|intcomma }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </section>
                 {% endwith %}
                 <!-- Totals -->
-                <section class="row mt-2" aria-label="{% trans 'Totals' %}">
+                <section class="mt-2" aria-label="{% trans 'Totals' %}">
                     <div class="col">
                         <dl class="row mb-0">
                             <dt class="col-4">{% trans "Plafond CNSS" %}</dt>
@@ -291,15 +333,17 @@
                             <dd class="col-8 mb-0">: {{ obj.taxable_gross|default:0|floatformat:2|intcomma }}</dd>
                         </dl>
                     </div>
-                    <div class="col text-end-sm">
+                    <div class="col text-end-sm mt-3">
                         <div class="net-pay">
-                            {% trans "NET A PAYER" %}:
+                            {% trans "NET À PAYER (Total Brut - Total retenue ouvriere)" %}:
                             <strong>{{ obj.net|default:0|floatformat:2|intcomma }}</strong>
                         </div>
                         <small class="text-muted">({{ obj.payroll.metadata.currency|default:'CDF' }})</small>
+
+                        <p>Pour acquit</p>
                     </div>
                 </section>
-                <hr class="my-3">
+                {% comment %}<hr class="my-3">
                 <!-- Footer Info -->
                 <section class="row mb-2" aria-label="{% trans 'Footer Information' %}">
                     <div class="col">
@@ -353,7 +397,7 @@
                             {% trans "Veuillez vérifier et signer à réception." %}
                         </small>
                     </div>
-                </section>
+                </section>{% endcomment %}
             </div>
         {% endfor %}
     {% endblock %}

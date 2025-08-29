@@ -45,12 +45,18 @@ def save_to_db(self, schema: str, sn: str, data: dict) -> None:
             status_map = {"reg": "connected", "unreg": "disconnected"}
             status = status_map.get(cmd, "disconnected")
 
-            _defaults = {
-                "status": status,
-                "name": data.get("sn", sn),
-            }
+            device, created = Device.objects.get_or_create(
+                sn=sn,
+                defaults={
+                    "status": status,
+                    "name": data.get("name", sn),
+                }
+            )
 
-            device, created = Device.objects.update_or_create(sn=sn, defaults=_defaults)
+            if not created:
+                device.status = status
+                device.save(update_fields=["status"])
+
             logger.info(f"✅ Device '{sn}' {'created' if created else 'updated'} with status '{status}'.")
 
         # Bulk log insert

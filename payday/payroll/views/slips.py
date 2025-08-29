@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.conf import settings
 from django.http import Http404
 from django.apps import apps
 from core.views import Read
@@ -61,7 +62,10 @@ class Slips(Read):
                 raise Http404(_("Aucun bulletin de paie trouvé avec ces filtres"))
 
             # PDF export branch
-            if doctype == "pdf":
+            if all([
+                doctype == "pdf",
+                not settings.DEBUG
+            ]):
                 gotenberg_url = "http://gotenberg:3000/forms/chromium/convert/html"
                 html_content = render_to_string(self.template_name, locals())
 
