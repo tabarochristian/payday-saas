@@ -2,6 +2,7 @@ from django.utils.translation import gettext as _
 from core.utils import upload_directory_file
 from crispy_forms.layout import Layout
 from core.models import Base, fields
+import mimetypes
 import base64
 
 class SubOrganization(Base):
@@ -26,10 +27,9 @@ class SubOrganization(Base):
 
         try:
             with self.logo.open('rb') as image_file:
-                image_bytes = image_file.read()
-                base64_str = base64.b64encode(image_bytes).decode('utf-8')
-                mime_type = self.logo.file.content_type
-                return f"data:{mime_type};base64,{base64_str}"
+                base64_str = base64.b64encode(image_file.read()).decode('utf-8')
+                mime_type, _ = mimetypes.guess_type(self.logo.name)
+                return f"data:{mime_type or 'image/png'};base64,{base64_str}"
         except Exception as e:
             # Optional: log the error or handle it gracefully
             return None
