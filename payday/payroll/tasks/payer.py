@@ -430,7 +430,9 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
 
     df_items = df_items[df_items.apply(_eval, axis=1)]
 
-    def safe_eval(expr, row, extra={}):
+    def safe_eval(expr, row, extra=None):
+        if extra is None:
+            extra = {}
         try:
             if not isinstance(expr, str):
                 logger.warning(f"Invalid formula type for employee {registration_number}, "
@@ -453,6 +455,11 @@ def process_employee_worker(args: Tuple[Dict, List], shared_data: Dict) -> Tuple
                     or context["payroll"]._metadata.get("taux") \
                     or 1
                 context["ipr_iere_usd"] = _ipr_iere_fast_usd(df_items, context["employee"], rate, context)
+
+            employee = context.get("employee", None)
+            if employee is not None:
+                logger.warning(employee)
+                logger.warning(getattr(employee, "grade", None))
 
             result = eval(expr, {"__builtins__": None}, context)
             result = float(result) if isinstance(result, (int, float, str)) else 0.0
