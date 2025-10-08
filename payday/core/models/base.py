@@ -18,23 +18,55 @@ from api.serializers import model_serializer_factory
 logger = logging.getLogger(__name__)
 
 
+# def get_sub_organization_choices() -> list[tuple[str, str]]:
+#     """Return cached suborganization choices as list of tuples."""
+#     cache_key = "suborganization_choices"
+#     choices = cache.get(cache_key)
+#     if choices:
+#         return choices
+
+#     try:
+#         SubOrg = apps.get_model("core", "SubOrganization")
+#         names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()
+#         choices = [(name, name) for name in names]
+#         cache.set(cache_key, choices, 3600)
+#         return choices
+#     except LookupError:
+#         logger.warning("SubOrganization model not found")
+#         return []
+
 def get_sub_organization_choices() -> list[tuple[str, str]]:
     """Return cached suborganization choices as list of tuples."""
     cache_key = "suborganization_choices"
     choices = cache.get(cache_key)
-    if choices:
+    if choices is not None:
         return choices
 
     try:
         SubOrg = apps.get_model("core", "SubOrganization")
+        
+        # Vérifier rapidement si on peut accéder à la table
+        # En capturant l'exception spécifique de table non existante
+        try:
+            # Test avec une requête simple
+            names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()[:1]
+            list(names)  # Force l'évaluation
+        except Exception as db_error:
+            logger.warning(f"Database not ready for SubOrganization: {db_error}")
+            return []
+        
+        # Si le test passe, faire la vraie requête
         names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()
         choices = [(name, name) for name in names]
         cache.set(cache_key, choices, 3600)
         return choices
+        
     except LookupError:
         logger.warning("SubOrganization model not found")
         return []
-
+    except Exception as e:
+        logger.warning(f"Unexpected error fetching suborganization choices: {e}")
+        return []
 
 class Status(models.TextChoices):
     PENDING = "PENDING", _("EN ATTENTE")

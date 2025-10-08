@@ -167,3 +167,15 @@ AttributeError: module 'random' has no attribute 'choie'. Did you mean: 'choice'
 2025-08-10 17:03:20,860 - INFO - seeder - Created 4 legal items
 2025-08-10 17:03:20,861 - INFO - seeder - Created 5 payslip elements
 2025-08-10 17:03:20,861 - INFO - seeder - Seeding completed
+2025-10-08 06:43:43,435 - INFO - seeder - Starting data seeding
+2025-10-08 06:43:43,442 - INFO - seeder - Created 4 grades
+2025-10-08 06:43:43,448 - INFO - seeder - Created 5 statuses
+2025-10-08 06:43:43,453 - INFO - seeder - Created 5 branches
+2025-10-08 06:43:43,459 - INFO - seeder - Created 5 agreements
+2025-10-08 06:43:43,465 - INFO - seeder - Created 5 directions
+2025-10-08 06:43:43,472 - INFO - seeder - Created 5 designations
+2025-10-08 06:43:43,520 - INFO - seeder - Created 50 employees
+2025-10-08 06:43:43,532 - INFO - seeder - Created 3 leave types
+2025-10-08 06:43:43,538 - INFO - seeder - Created 4 legal items
+2025-10-08 06:43:43,544 - INFO - seeder - Created 5 payslip elements
+2025-10-08 06:43:43,545 - INFO - seeder - Seeding completed
