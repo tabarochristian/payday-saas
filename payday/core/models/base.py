@@ -3,7 +3,6 @@ import pandas as pd
 from django.db import models
 from django.apps import apps
 from django.urls import reverse_lazy
-from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from django.contrib.contenttypes.models import ContentType
@@ -11,56 +10,20 @@ from django_currentuser.db.models import CurrentUserField
 from django.db.models.signals import post_save
 from crispy_forms.layout import Layout
 from core.models import fields
+
+from api.serializers import model_serializer_factory
 from core.models.managers import PaydayManager
 from core.utils import DictToObject
-from api.serializers import model_serializer_factory
 
 logger = logging.getLogger(__name__)
 
 
-# def get_sub_organization_choices() -> list[tuple[str, str]]:
-#     """Return cached suborganization choices as list of tuples."""
-#     cache_key = "suborganization_choices"
-#     choices = cache.get(cache_key)
-#     if choices:
-#         return choices
-
-#     try:
-#         SubOrg = apps.get_model("core", "SubOrganization")
-#         names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()
-#         choices = [(name, name) for name in names]
-#         cache.set(cache_key, choices, 3600)
-#         return choices
-#     except LookupError:
-#         logger.warning("SubOrganization model not found")
-#         return []
-
 def get_sub_organization_choices() -> list[tuple[str, str]]:
-    """Return cached suborganization choices as list of tuples."""
-    cache_key = "suborganization_choices"
-    choices = cache.get(cache_key)
-    if choices is not None:
-        return choices
-
+    """Return suborganization choices as list of tuples."""
     try:
-        SubOrg = apps.get_model("core", "SubOrganization")
-        
-        # Vérifier rapidement si on peut accéder à la table
-        # En capturant l'exception spécifique de table non existante
-        try:
-            # Test avec une requête simple
-            names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()[:1]
-            list(names)  # Force l'évaluation
-        except Exception as db_error:
-            logger.warning(f"Database not ready for SubOrganization: {db_error}")
-            return []
-        
-        # Si le test passe, faire la vraie requête
-        names = SubOrg.objects.order_by("name").values_list("name", flat=True).distinct()
-        choices = [(name, name) for name in names]
-        cache.set(cache_key, choices, 3600)
-        return choices
-        
+        model = apps.get_model("core", "SubOrganization")
+        names = model.objects.order_by("name").values_list("name", flat=True).distinct()
+        return [(name, name) for name in names]
     except LookupError:
         logger.warning("SubOrganization model not found")
         return []
@@ -200,7 +163,7 @@ class Base(models.Model):
         if all([
             not workflows.exists(),
             hasattr(self, "status"),
-            self.status != None,
+            self.status is not None,
             model_name != "payroll"
         ]):
             self.status = Status.APPROVED

@@ -1,5 +1,4 @@
 from django.utils.deprecation import MiddlewareMixin
-from django.core.cache import cache
 from django.conf import settings
 from django.apps import apps
 import logging
@@ -12,9 +11,6 @@ class SubOrganizationMiddleware(MiddlewareMixin):
     along with the selected one based on session data.
     """
 
-    CACHE_KEY = "all_suborganizations"
-    CACHE_TIMEOUT = getattr(settings, "SUBORG_CACHE_TIMEOUT", 300)  # 5 minutes
-
     def process_request(self, request):
         request.suborganizations = []
         request.suborganization = None
@@ -24,7 +20,7 @@ class SubOrganizationMiddleware(MiddlewareMixin):
         if not SubOrganization:
             return
 
-        # Get all suborgs (optionally cached)
+        # Get all suborgs directly from the database
         suborgs = self.get_all_suborganizations(SubOrganization)
         request.suborganizations = suborgs
 
@@ -41,21 +37,12 @@ class SubOrganizationMiddleware(MiddlewareMixin):
 
         request.suborganization = selected
 
-    def get_all_suborganizations(self, SubOrganization):
+    def get_all_suborganizations(self, model):
         """
-        Returns all SubOrganization instances, optionally from cache.
+        Returns all SubOrganization instances directly from the database.
         """
-        if settings.DEBUG:
-            return list(SubOrganization.objects.all())
-
-        cached = cache.get(self.CACHE_KEY)
-        if cached is not None:
-            return cached
-
         try:
-            suborgs = list(SubOrganization.objects.all())
-            cache.set(self.CACHE_KEY, suborgs, timeout=self.CACHE_TIMEOUT)
-            return suborgs
+            return list(model.objects.all())
         except Exception as e:
             logger.exception("Failed to load SubOrganizations")
             return []
