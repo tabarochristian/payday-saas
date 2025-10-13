@@ -19695,3 +19695,57 @@ Traceback (most recent call last):
     ).get("taken", timedelta(days=0)).days
                                       ^^^^
 AttributeError: 'NoneType' object has no attribute 'days'
+ERROR 2025-10-13 06:12:16,778 log Internal Server Error: /api/session
+Traceback (most recent call last):
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/api/views/set_session.py", line 26, in post
+    del request.session[key]
+        ~~~~~~~~~~~~~~~^^^^^
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 66, in __delitem__
+    del self._session[key]
+        ~~~~~~~~~~~~~^^^^^
+KeyError: 'sub_organization'
+ERROR 2025-10-13 06:12:20,019 log Internal Server Error: /api/session
+Traceback (most recent call last):
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/api/views/set_session.py", line 26, in post
+    del request.session[key]
+        ~~~~~~~~~~~~~~~^^^^^
+  File "/home/tcubaka/Projects/sycamore/payday-saas/payday/.venv/lib64/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 66, in __delitem__
+    del self._session[key]
+        ~~~~~~~~~~~~~^^^^^
+KeyError: 'sub_organization'

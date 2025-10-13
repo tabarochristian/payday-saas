@@ -6,8 +6,9 @@ class SetSessionView(APIView):
     def post(self, request):
         for key, value in request.data.items():
             # Attempt to interpret basic types safely
-            if value in ["null", "None"]:
-                request.session.pop(key, None)
+            _val = eval(value)
+            if _val == None and key in request.session:
+                del request.session[key]
             else:
                 request.session[key] = value
         return Response({"session": dict(request.session)}, status=status.HTTP_200_OK)
