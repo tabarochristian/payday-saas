@@ -54,7 +54,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         self.schema = kwargs['schema'].lower()
-        self.suborganization = kwargs['suborganization'] or None
+        self.suborganization = None #kwargs['suborganization']
 
         if not getattr(settings, 'DEBUG', True):
             set_schema(self.schema)
