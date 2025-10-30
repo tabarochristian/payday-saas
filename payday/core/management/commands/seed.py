@@ -54,7 +54,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         self.schema = kwargs['schema'].lower()
-        self.suborganization = (kwargs['suborganization'] or 'default').lower()
+        self.suborganization = kwargs['suborganization'] or None
 
         if not getattr(settings, 'DEBUG', True):
             set_schema(self.schema)
@@ -115,7 +115,8 @@ class Command(BaseCommand):
         model = self._get_model('employee', 'Grade')
         grades = ["directeur", "manager", "collaborateur", "subalterne"]
 
-        def compute_value(base, index): return base * ((4 - index) / 10) if index > 0 else base
+        def compute_value(base, index): 
+            return base * ((4 - index) / 10) if index > 0 else base
 
         instances = [
             model(
