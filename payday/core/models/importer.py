@@ -34,6 +34,7 @@ class Importer(Base):
         limit_choices_to={
             'app_label__in': [
                 'employee',
+                'leave'
             ],
         }
     )
