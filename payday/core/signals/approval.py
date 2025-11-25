@@ -18,7 +18,8 @@ def handle_approval(sender, instance, created, **kwargs):
     if not user.email:
         return
 
-    subject = _("Demande d'approbation en attente")
+    detail = getattr(instance.content_object, "name", "N/A")
+    subject = _(f"Demande d'approbation : {detail}")
     schema = TenantMiddleware.get_schema()
 
     url = f"http://{schema}.payday.cd" if schema else "http://payday.cd"
@@ -27,11 +28,17 @@ def handle_approval(sender, instance, created, **kwargs):
         'model': instance.content_type.model,
         'pk': instance.object_id
     })
+
     message = _(
         "{name},\n\n"
         "Une nouvelle demande nécessite votre approbation.\n"
         "Veuillez vous connecter à la plateforme pour approuver ou rejeter cette demande :\n\n"
         "{url}\n\n"
+        "Detail sur la demande: {detail}\n\n"
         "Merci."
-    ).format(name=user.email, url=approval_url)
+    ).format(
+        name=user.email, 
+        url=approval_url, 
+        detail=detail
+    )
     user.email_user(subject=subject, message=message)

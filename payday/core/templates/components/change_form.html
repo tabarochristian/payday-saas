@@ -3,19 +3,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% with alias=model_class|getattr:'_meta'|getattr:'model_name' verbose=model_class|getattr:'_meta'|getattr:'verbose_name' %}
+{% with alias=model_class|modelmeta:'model_name' verbose=model_class|modelmeta:'verbose_name' %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ext-language_tools.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>
-
-<style>
-    .delete-row {
-        display: none;
-    }
-    .modal-editor { 
-        height: 70vh; 
-    }
-</style>
 
 <{{ form.form_tag|default:'form' }} method="post" enctype="multipart/form-data" class="page-content" id="form-{{ alias }}">
     <div class="card">
@@ -29,8 +20,10 @@
 
                 {% for formset in formsets %}
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="tab" href="#{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
-                            {{ formset.model|getattr:'_meta'|getattr:'verbose_name_plural'|title }}
+                        <a class="nav-link"
+                           data-bs-toggle="tab"
+                           href="#{{ formset.model|modelmeta:'model_name' }}">
+                            {{ formset.model|modelmeta:'verbose_name_plural'|title }}
                         </a>
                     </li>
                 {% endfor %}
@@ -44,7 +37,7 @@
                 </div>
 
                 {% for formset in formsets %}
-                    <div class="tab-pane fade" id="{{ formset.model|getattr:'_meta'|getattr:'model_name' }}">
+                    <div class="tab-pane fade" id="{{ formset.model|modelmeta:'model_name' }}">
                         <div class="mt-2 pt-2" id="formset-{{ forloop.counter }}">
                             {{ formset.non_form_errors }}
                             {% crispy formset self.inline_formset_helper %}
@@ -53,7 +46,9 @@
                         {% if not formset.fk.unique %}
                             <script>
                                 document.addEventListener("DOMContentLoaded", function () {
-                                    $('#formset-{{ forloop.counter }} tbody tr').formset({ prefix: '{{ formset.prefix }}' });
+                                    $('#formset-{{ forloop.counter }} tbody tr').formset({
+                                        prefix: '{{ formset.prefix }}'
+                                    });
                                 });
                             </script>
                         {% endif %}
@@ -62,22 +57,25 @@
             </div>
         </div>
     </div>
-</{{ form.form_tagg|default:'form' }}>
+</{{ form.form_tag|default:'form' }}>
 
 {{ self.keywords|json_script:"keywords" }}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+
         document.querySelectorAll("input[type='hidden'][id$='-DELETE']").forEach(input => {
             input.type = "checkbox";
             input.classList.add("form-check-input");
         });
+
         $('select[readonly]').each(function () {
             $(this).select2();
             $(this).on('select2:opening', function (e) {
-                e.preventDefault(); // Prevents dropdown from opening
+                e.preventDefault();
             });
         });
+
     });
 </script>
 
@@ -87,30 +85,218 @@ $(function() {
     $("form[id^='form-']").each(function() {
         const $form = $(this);
 
-        $form.find("input, select, textarea, button").not(".no-readonly").each(function() {
-            const $field = $(this);
+        $form.find("input, select, textarea, button")
+             .not(".no-readonly")
+             .each(function() {
+                const $field = $(this);
 
-            if ($field.is(":hidden")) return;
+                if ($field.is(":hidden")) return;
 
-            const tag = this.tagName.toLowerCase();
-            const type = $field.attr("type");
-            const textTypes = ["text", "number", "email", "date", "time", "url", "search", "tel"];
+                const tag = this.tagName.toLowerCase();
+                const type = $field.attr("type");
+                const textTypes = ["text", "number", "email", "date", "time", "url", "search", "tel"];
 
-            if (tag === "textarea" || (tag === "input" && textTypes.includes(type))) {
-                $field.prop("readonly", true);
-            } else {
-                $field.prop("disabled", true);
-            }
+                if (tag === "textarea" || (tag === "input" && textTypes.includes(type)))
+                    $field.prop("readonly", true);
+                else
+                    $field.prop("disabled", true);
 
-            $field.addClass("bg-light text-muted");
+                $field.addClass("bg-light text-muted");
 
-            if (!$field.hasClass("form-control-plaintext")) {
-                $field.css("cursor", "not-allowed");
-            }
-        });
+                if (!$field.hasClass("form-control-plaintext"))
+                    $field.css("cursor", "not-allowed");
+            });
     });
 });
 </script>
 {% endif %}
+
+{% if request.user.is_superuser %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector("#div_id_sub_organization")?.classList.add("d-none");
+    });
+</script>
+{% endif %}
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    
+        // --- CONFIGURATION ---
+        const BASE_URL = "http://localhost:8000"; // Define your base API URL
+    
+        // --- DOM Elements ---
+        // Ensure you have jQuery for the event listeners ($)
+        const leaveTypeField = document.querySelector("select[name='type_of_leave']");
+        const employeeField = document.querySelector("select[name='employee']");
+        const messagesDiv = document.querySelector(".messages");
+    
+        // Create alert box container
+        const remainingAlert = document.createElement("div");
+        remainingAlert.id = "remaining-leave-info";
+        remainingAlert.style.display = "none";
+        // Use card-like appearance with shadow and radius
+        remainingAlert.classList.add("card", "shadow-sm", "mt-3");
+    
+        // Insert alert inside .messages
+        if (messagesDiv) messagesDiv.appendChild(remainingAlert);
+    
+        // ---- LOADING SPINNER HTML ----
+        function renderLoading() {
+            remainingAlert.className = "card shadow-sm mt-3 border-info";
+            remainingAlert.style.display = "block";
+    
+            remainingAlert.innerHTML = `
+                <div class="card-body text-info">
+                    <div class="d-flex align-items-center">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        <span>Fetching leave balance...</span>
+                    </div>
+                </div>
+            `;
+        }
+    
+        // ---- UPDATE ALERT WITH STYLED CONTENT (Improved Bootstrap Styling) ----
+        function renderData(totalDays, usedDays) {
+            const total = totalDays ?? 0;
+            const used = usedDays ?? 0;
+            const remaining = total - used;
+            const percentageUsed = total > 0 ? Math.round((used / total) * 100) : 0;
+    
+            // Determine styling based on remaining days
+            let alertClass = "border-success";
+            let progressBarClass = "bg-success";
+            let iconClass = "bi bi-calendar-check-fill";
+
+            if (remaining <= 0) {
+                alertClass = "border-danger";
+                progressBarClass = "bg-danger";
+                iconClass = "bi bi-exclamation-triangle-fill";
+            } else if (remaining <= 3) {
+                alertClass = "border-warning";
+                progressBarClass = "bg-warning";
+                iconClass = "bi bi-exclamation-circle-fill";
+            }
+            
+            // Set the primary styling classes
+            remainingAlert.className = `card shadow-sm mt-3 ${alertClass}`;
+            remainingAlert.style.display = "block";
+    
+            remainingAlert.innerHTML = `
+                <div class="card-header bg-white border-bottom ${alertClass.replace('border-', 'text-')}" style="padding: 0.75rem 1.25rem;">
+                    <h5 class="mb-0">
+                        <i class="${iconClass} me-2"></i> Synthèse du solde des congé
+                    </h5>
+                </div>
+    
+                <div class="card-body">
+                    <div class="row text-center mb-3 mt-3">
+                        <div class="col-4 border-end">
+                            <h6 class="text-muted mb-1">Total Available</h6>
+                            <p class="fs-4 mb-0 text-primary">${total}</p>
+                        </div>
+                        <div class="col-4 border-end">
+                            <h6 class="text-muted mb-1">Consommés</h6>
+                            <p class="fs-4 mb-0 text-secondary">${used}</p>
+                        </div>
+                        <div class="col-4">
+                            <h6 class="mb-1">Restants</h6>
+                            <p class="fs-4 mb-0 text-primary">${remaining}</p>
+                        </div>
+                    </div>
+    
+                    <h6 class="mt-3 mb-2">État: (${percentageUsed}%)</h6>
+                    <div class="progress" style="height: 25px;">
+                        <div 
+                            class="progress-bar ${progressBarClass}" 
+                            role="progressbar" 
+                            style="width: ${percentageUsed}%;" 
+                            aria-valuenow="${used}" 
+                            aria-valuemin="0" 
+                            aria-valuemax="${total}"
+                        >
+                            ${used} of ${total} Jours consommés
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Optional: If no days are remaining, add a stark warning footer
+            if (remaining <= 0) {
+                 remainingAlert.innerHTML += `
+                    <div class="card-footer bg-danger text-white text-center py-2">
+                        Warning: No remaining leave days for this type.
+                    </div>
+                 `;
+            }
+        }
+    
+        // ---- ERROR MESSAGE ----
+        function renderError() {
+            remainingAlert.className = "card shadow-sm mt-3 border-danger";
+            remainingAlert.style.display = "block";
+            remainingAlert.innerHTML = `
+                <div class="card-body text-danger">
+                    <i class="bi bi-x-circle-fill me-2"></i> Error: Unable to fetch leave balance. Please try again.
+                </div>
+            `;
+        }
+    
+        // ---- API CALL (Logic remains the same, only presentation changes) ----
+        async function fetchRemainingLeave() {
+            const employeeId = employeeField?.value; 
+            const leaveTypeId = leaveTypeField?.value;
+    
+            if (!employeeId || !leaveTypeId) {
+                remainingAlert.style.display = "none";
+                return;
+            }
+    
+            renderLoading();
+    
+            const usedDaysUrl = `${BASE_URL}/api/v1/aggregate/Sum/leave/leave/number_of_days?employee__pk=${employeeId}&type_of_leave__pk=${leaveTypeId}&status=APPROVED`;
+            const totalDaysUrl = `${BASE_URL}/api/v1/leave/typeofleave/${leaveTypeId}`;
+
+            try {
+                const [usedResponse, totalResponse] = await Promise.all([
+                    fetch(usedDaysUrl),
+                    fetch(totalDaysUrl)
+                ]);
+
+                if (!usedResponse.ok || !totalResponse.ok) {
+                    throw new Error("One or both API calls failed.");
+                }
+    
+                const [usedData, totalData] = await Promise.all([
+                    usedResponse.json(),
+                    totalResponse.json()
+                ]);
+                
+                const usedDays = usedData.result?.number_of_days__Sum || 0; 
+                const totalDays = totalData.max_duration || 0; 
+                
+                renderData(totalDays, usedDays);
+    
+            } catch (e) {
+                console.error("Fetch Error:", e);
+                renderError();
+            }
+        }
+    
+        // ---- EVENT LISTENERS ----
+        // Ensure you have jQuery loaded for these listeners to work, as the original code uses $()
+        $(employeeField).change(fetchRemainingLeave);
+        $(leaveTypeField).change(fetchRemainingLeave)
+    
+        // ---- INIT ----
+        fetchRemainingLeave();
+    
+    });
+</script>
+
+
+
 
 {% endwith %}

@@ -114,9 +114,11 @@ class Home(LoginRequiredMixin, View):
 
     def _get_payroll_chart_data(self):
         Payroll = apps.get_model('payroll', 'Payroll')
-        qs = Payroll.objects.values('name')\
-            .annotate(total=Sum('overall_net'))\
-            .order_by('-created_at')
+        qs = Payroll.objects.filter(
+            status='APPROVED'
+        ).values('name').annotate(
+            total=Sum('overall_net')
+        ).order_by('-created_at')
 
         return {
             'names': [entry['name'] for entry in qs],

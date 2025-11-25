@@ -101,3 +101,7 @@ def get_model_fields(model, attr):
 @register.filter
 def get_obj_pk(qs, pk):
     return qs.filter(pk=pk).first()
+
+@register.filter
+def modelmeta(model, attr):
+    return getattr(model._meta, attr, None)

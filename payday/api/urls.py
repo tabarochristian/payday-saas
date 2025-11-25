@@ -20,6 +20,16 @@ urlpatterns = [
         'delete': 'destroy'
     }), name='detail'),
 
+    path('v1/aggregate/<str:function>/<str:app>/<str:model>/<str:field>', 
+        Aggregate.as_view(), 
+        name="aggregate"
+    ),
+
+    path('v1/annotate/<str:function>/<str:app>/<str:model>/<str:field>', 
+        Annotate.as_view(), 
+        name="annotate"
+    ),
+
     path('sync/rollapp/employee', EmployeeSyncWithRollApp.as_view(),
          name='employee-sync-api'),
 

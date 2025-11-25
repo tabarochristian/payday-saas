@@ -72,8 +72,7 @@ INSTALLED_APPS = [
     
     "leave",
     "payroll",
-    "employee",
-    "easypay"
+    "employee"
 ]
 
 MIDDLEWARE = [

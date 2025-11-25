@@ -129,7 +129,9 @@ class Approval(Base):
         outstanding = Approval.objects.filter(
             content_type=self.content_type,
             object_id=self.object_id
-        ).exclude(status="APPROVED")
+        ).exclude(
+            status="APPROVED"
+        )
 
         if outstanding.exists():
             return

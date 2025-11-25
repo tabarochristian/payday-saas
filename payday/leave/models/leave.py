@@ -1,4 +1,5 @@
 from datetime import timedelta
+from tabnanny import verbose
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.layout import Layout, Column, Row
 from core.models import Base, fields
@@ -32,6 +33,7 @@ class Leave(Base):
         verbose_name=_("motif")
     )
 
+    number_of_days = fields.IntegerField(verbose_name=_("nombre de jour(s)"), default=0, editable=False)
     start_date = fields.DateField(verbose_name=_("date de début"))
     end_date = fields.DateField(verbose_name=_("date de fin"))
 
@@ -83,17 +85,6 @@ class Leave(Base):
             raise ValidationError(_("la durée minimale du congé est de {} jours.").format(
                 self.type_of_leave.min_duration))
 
-        # # Calculate total approved leave taken by the employee for this leave type
-        # total_taken_leave = Leave.objects.filter(
-        #     type_of_leave=self.type_of_leave,
-        #     employee=self.employee,
-        #     status=Status.APPROVED
-        # ).aggregate(
-        #     taken=models.Sum(
-        #         ExpressionWrapper(F("end_date") - F("start_date"), output_field=DurationField())
-        #     )
-        # ).get("taken", timedelta(days=0)).days
-
         taken = Leave.objects.filter(
             type_of_leave=self.type_of_leave,
             employee=self.employee,
@@ -117,3 +108,5 @@ class Leave(Base):
             if days_since_joining < self.type_of_leave.eligibility_after_days:
                 raise ValidationError(_("vous devez attendre {} jours après votre embauche pour demander ce type de congé.").format(
                     self.type_of_leave.eligibility_after_days))
+
+        self.number_of_days = self.duration

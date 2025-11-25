@@ -19749,3 +19749,261 @@ Traceback (most recent call last):
     del self._session[key]
         ~~~~~~~~~~~~~^^^^^
 KeyError: 'sub_organization'
+ERROR 2025-11-25 13:29:59,463 log Internal Server Error: /create/leave/leave
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 819, in __init__
+    self.literal = float(var)
+                   ~~~~~^^^^^
+ValueError: could not convert string to float: 'model_class._meta'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 835, in __init__
+    self.literal = mark_safe(unescape_string_literal(var))
+                             ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/text.py", line 446, in unescape_string_literal
+    raise ValueError("Not a string literal: %r" % s)
+ValueError: Not a string literal: 'model_class._meta'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 34, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/core/views/base/create.py", line 123, in get
+    return render(request, self.get_template_name(), locals())
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 199, in render
+    template = context.template.engine.select_template(template_name)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/engine.py", line 208, in select_template
+    return self.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/defaulttags.py", line 1531, in do_with
+    extra_context = token_kwargs(remaining_bits, parser, support_legacy=True)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 1119, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 605, in compile_filter
+    return FilterExpression(token, self)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 693, in __init__
+    var_obj = Variable(var)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/template/base.py", line 840, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Variables and attributes may not begin with underscores: 'model_class._meta'
+ERROR 2025-11-25 13:29:59,470 runserver [35;1mHTTP GET /create/leave/leave 500 [0.08, 127.0.0.1:65382][0m
+ERROR 2025-11-25 15:21:59,557 log Internal Server Error: /api/v1/leave/type_of_leave
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/apps/config.py", line 235, in get_model
+    return self.models[model_name.lower()]
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+KeyError: 'type_of_leave'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 38, in list
+    queryset = self.filter_queryset(self.get_queryset())
+                                    ~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/api/views/mixins/base.py", line 15, in get_queryset
+    model = self.get_model()
+  File "/Users/tabaro/GitHub/payday-saas/payday/api/views/mixins/base.py", line 12, in get_model
+    return apps.get_model(app, model_name=model)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/apps/registry.py", line 213, in get_model
+    return app_config.get_model(model_name, require_ready=require_ready)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/apps/config.py", line 237, in get_model
+    raise LookupError(
+        "App '%s' doesn't have a '%s' model." % (self.label, model_name)
+    )
+LookupError: App 'leave' doesn't have a 'type_of_leave' model.
+ERROR 2025-11-25 15:21:59,564 runserver [35;1mHTTP GET /api/v1/leave/type_of_leave 500 [0.06, 127.0.0.1:55192][0m
+ERROR 2025-11-25 15:22:08,052 log Internal Server Error: /api/v1/list/leave/typeofleave
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/apps/registry.py", line 158, in get_app_config
+    return self.app_configs[app_label]
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'list'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 54, in retrieve
+    instance = self.get_object()
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/rest_framework/generics.py", line 87, in get_object
+    queryset = self.filter_queryset(self.get_queryset())
+                                    ~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/api/views/mixins/base.py", line 15, in get_queryset
+    model = self.get_model()
+  File "/Users/tabaro/GitHub/payday-saas/payday/api/views/mixins/base.py", line 12, in get_model
+    return apps.get_model(app, model_name=model)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/apps/registry.py", line 208, in get_model
+    app_config = self.get_app_config(app_label)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/apps/registry.py", line 165, in get_app_config
+    raise LookupError(message)
+LookupError: No installed app with label 'list'.
+ERROR 2025-11-25 15:22:08,054 runserver [35;1mHTTP GET /api/v1/list/leave/typeofleave 500 [0.04, 127.0.0.1:55214][0m
