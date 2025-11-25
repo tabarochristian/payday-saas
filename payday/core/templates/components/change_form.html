@@ -125,7 +125,7 @@ $(function() {
     document.addEventListener("DOMContentLoaded", function () {
     
         // --- CONFIGURATION ---
-        const BASE_URL = "http://localhost:8000"; // Define your base API URL
+        const BASE_URL = window.location.origin; // Define your base API URL
     
         // --- DOM Elements ---
         // Ensure you have jQuery for the event listeners ($)
@@ -223,7 +223,7 @@ $(function() {
                 </div>
             `;
 
-            
+
             // Optional: If no days are remaining, add a stark warning footer
             if (remaining <= 0) {
                  remainingAlert.innerHTML += `
