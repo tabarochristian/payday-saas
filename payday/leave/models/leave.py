@@ -46,7 +46,7 @@ class Leave(Base):
     )
 
     list_display = ('id', 'employee', 'type_of_leave',
-                    'start_date', 'end_date', 'status')
+                    'start_date', 'end_date', 'number_of_days', 'status')
     layout = Layout(
         'employee',
         'type_of_leave',
@@ -68,7 +68,8 @@ class Leave(Base):
     @property
     def duration(self):
         """Calculates the leave duration"""
-        return (self.end_date - self.start_date).days
+        _duration = (self.end_date - self.start_date).days
+        return self.number_of_days or _duration
 
     def clean(self):
         """Validation for leave duration, employee eligibility, max usage, and future date restriction"""

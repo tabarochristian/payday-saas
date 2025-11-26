@@ -1,77 +1,119 @@
-{% load i18n %}
-{% load core %}
-{% load static %}
-{% load crispy_forms_tags %}
+{% load i18n core static crispy_forms_tags %}
 
 {% with alias=model_class|modelmeta:'model_name' verbose=model_class|modelmeta:'verbose_name' %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ext-language_tools.js" crossorigin="anonymous"></script>
+{# --- 1. Dependency Management: Keep scripts visible and use defer/async where possible --- #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ext-language_tools.js" crossorigin="anonymous" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>
 
+{# --- 2. Main Form Structure --- #}
 <{{ form.form_tag|default:'form' }} method="post" enctype="multipart/form-data" class="page-content" id="form-{{ alias }}">
-    <div class="card">
+    {% csrf_token %} {# Always include CSRF token inside the form tag #}
+    
+    <div class="card shadow-sm">
         <div class="card-body">
-            <ul class="nav nav-tabs" id="content-tab" role="tablist">
+            {# --- Tab Navigation --- #}
+            <ul class="nav nav-tabs mb-3" id="content-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#{{ alias }}">
-                        {{ verbose|title }}
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tab-main-{{ alias }}" role="tab" aria-controls="tab-main-{{ alias }}" aria-selected="true">
+                        <i class="bi bi-card-heading me-1"></i> {{ verbose|title }}
                     </a>
                 </li>
 
                 {% for formset in formsets %}
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link"
-                           data-bs-toggle="tab"
-                           href="#{{ formset.model|modelmeta:'model_name' }}">
-                            {{ formset.model|modelmeta:'verbose_name_plural'|title }}
-                        </a>
-                    </li>
+                    {% with formset_alias=formset.model|modelmeta:'model_name' %}
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link"
+                               data-bs-toggle="tab"
+                               href="#tab-{{ formset_alias }}"
+                               role="tab" 
+                               aria-controls="tab-{{ formset_alias }}" 
+                               aria-selected="false">
+                                <i class="bi bi-list-nested me-1"></i> {{ formset.model|modelmeta:'verbose_name_plural'|title }}
+                            </a>
+                        </li>
+                    {% endwith %}
                 {% endfor %}
             </ul>
 
+            {# --- Tab Content --- #}
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="{{ alias }}">
+                {# Main Form Tab #}
+                <div class="tab-pane fade show active" id="tab-main-{{ alias }}" role="tabpanel">
                     <div class="mt-2 pt-2">
                         {% crispy form %}
                     </div>
                 </div>
 
+                {# Formsets Tabs #}
                 {% for formset in formsets %}
-                    <div class="tab-pane fade" id="{{ formset.model|modelmeta:'model_name' }}">
-                        <div class="mt-2 pt-2" id="formset-{{ forloop.counter }}">
-                            {{ formset.non_form_errors }}
-                            {% crispy formset self.inline_formset_helper %}
-                        </div>
+                    {% with formset_alias=formset.model|modelmeta:'model_name' %}
+                        <div class="tab-pane fade" id="tab-{{ formset_alias }}" role="tabpanel">
+                            <div class="mt-2 pt-2" id="formset-container-{{ forloop.counter }}">
+                                {# Display non-field errors clearly #}
+                                {% if formset.non_form_errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>{% trans "Formset Errors:" %}</strong>
+                                        {{ formset.non_form_errors }}
+                                    </div>
+                                {% endif %}
+                                {% crispy formset self.inline_formset_helper %}
+                            </div>
 
-                        {% if not formset.fk.unique %}
-                            <script>
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    $('#formset-{{ forloop.counter }} tbody tr').formset({
-                                        prefix: '{{ formset.prefix }}'
+                            {# Formset JS Initialization #}
+                            {% if not formset.fk.unique %}
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        // Use the container ID for more specificity
+                                        $('#formset-container-{{ forloop.counter }} tbody tr').formset({
+                                            prefix: '{{ formset.prefix }}',
+                                            addCssClass: 'btn btn-sm btn-success',
+                                            deleteCssClass: 'btn btn-sm btn-danger'
+                                        });
                                     });
-                                });
-                            </script>
-                        {% endif %}
-                    </div>
+                                </script>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
                 {% endfor %}
             </div>
         </div>
     </div>
 </{{ form.form_tag|default:'form' }}>
 
-{{ self.keywords|json_script:"keywords" }}
+{# --- 3. JavaScript Data and General Utilities --- #}
+{{ self.keywords|json_script:"keywords-data" }}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
+        
+        // 3.1. Convert Hidden Delete Inputs to Checkboxes
         document.querySelectorAll("input[type='hidden'][id$='-DELETE']").forEach(input => {
+            // Change type from hidden to checkbox for user-friendly deletion control
             input.type = "checkbox";
-            input.classList.add("form-check-input");
+            input.classList.add("form-check-input", "ms-2");
+            
+            // Optional: Wrap the checkbox in a label for better clicking area
+            const label = document.createElement("label");
+            label.textContent = " {% trans 'Delete' %}";
+            label.classList.add("form-check-label", "text-danger", "fst-italic");
+            
+            input.parentNode.insertBefore(label, input.nextSibling); // Insert label after checkbox
+            label.prepend(input); // Move checkbox into label
         });
 
+        // 3.2. Initialize Select2 on Readonly Selects
         $('select[readonly]').each(function () {
-            $(this).select2();
-            $(this).on('select2:opening', function (e) {
+            const $select = $(this);
+            // Initialize Select2 if it hasn't been already
+            if (typeof $.fn.select2 === 'function' && !$select.data('select2')) {
+                $select.select2({
+                    // Optionally set minimum results for a cleaner readonly look
+                    minimumResultsForSearch: Infinity 
+                });
+            }
+            // Prevent opening the dropdown on click
+            $select.on('select2:opening', function (e) {
                 e.preventDefault();
             });
         });
@@ -79,86 +121,101 @@
     });
 </script>
 
+{# --- 4. Readonly Mode (If can_change is false) --- #}
 {% if not self.can_change %}
 <script>
-$(function() {
-    $("form[id^='form-']").each(function() {
-        const $form = $(this);
+    $(function() {
+        // Iterate over all forms that start with 'form-'
+        $("form[id^='form-']").each(function() {
+            const $form = $(this);
+            
+            $form.find("input, select, textarea, button, a") // Added 'a' (links) for completeness
+                 .not(".no-readonly, [type='hidden']") // Skip hidden fields and designated exceptions
+                 .each(function() {
+                    const $field = $(this);
+                    const tag = this.tagName.toLowerCase();
+                    const type = $field.attr("type");
+                    const textTypes = ["text", "number", "email", "date", "time", "url", "search", "tel"];
 
-        $form.find("input, select, textarea, button")
-             .not(".no-readonly")
-             .each(function() {
-                const $field = $(this);
+                    if (tag === "textarea" || (tag === "input" && textTypes.includes(type))) {
+                        $field.prop("readonly", true);
+                    } else if (tag === "select" || tag === "button" || (tag === "input" && (type === "checkbox" || type === "radio"))) {
+                        $field.prop("disabled", true);
+                    } else if (tag === "a") {
+                        // Optionally disable links/buttons that aren't form elements
+                        $field.addClass("disabled").attr("aria-disabled", "true");
+                    }
 
-                if ($field.is(":hidden")) return;
-
-                const tag = this.tagName.toLowerCase();
-                const type = $field.attr("type");
-                const textTypes = ["text", "number", "email", "date", "time", "url", "search", "tel"];
-
-                if (tag === "textarea" || (tag === "input" && textTypes.includes(type)))
-                    $field.prop("readonly", true);
-                else
-                    $field.prop("disabled", true);
-
-                $field.addClass("bg-light text-muted");
-
-                if (!$field.hasClass("form-control-plaintext"))
-                    $field.css("cursor", "not-allowed");
-            });
+                    // Apply styling
+                    $field.addClass("bg-light text-muted");
+                    if (!$field.hasClass("form-control-plaintext")) {
+                        $field.css("cursor", "not-allowed");
+                    }
+                });
+        });
     });
-});
 </script>
 {% endif %}
 
+{# --- 5. Superuser Specific Logic (Use safer JS access) --- #}
 {% if request.user.is_superuser %}
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        document.querySelector("#div_id_sub_organization")?.classList.add("d-none");
+        // Use a more specific selector if possible, or ensure it exists
+        const subOrgDiv = document.querySelector("#div_id_sub_organization");
+        if (subOrgDiv) {
+            subOrgDiv.classList.add("d-none");
+            // Also ensure associated labels are hidden if necessary
+            // subOrgDiv.previousElementSibling?.classList.add("d-none"); 
+        }
     });
 </script>
 {% endif %}
 
 
-
+{# --- 6. Model-Specific Logic: Leave Balance Calculation (Vastly Improved) --- #}
+{% if alias == "leave" %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     
         // --- CONFIGURATION ---
-        const BASE_URL = window.location.origin; // Define your base API URL
-    
+        // Best practice: Define your API endpoint logic in the view and pass it via json_script
+        // If not possible, define a clean base URL.
+        const BASE_URL = window.location.origin; 
+        // Example: Assume 'core:api_base' resolves to /api/v1/
+
         // --- DOM Elements ---
-        // Ensure you have jQuery for the event listeners ($)
         const leaveTypeField = document.querySelector("select[name='type_of_leave']");
         const employeeField = document.querySelector("select[name='employee']");
-        const messagesDiv = document.querySelector(".messages");
+        // Find the most appropriate place to display the info, e.g., before the first field.
+        const firstFieldDiv = document.querySelector(".page-content .card-body > .tab-content");
     
-        // Create alert box container
+        // Only proceed if required fields and insertion point exist
+        if (!leaveTypeField || !employeeField || !firstFieldDiv) return;
+
+        // Create alert box container (Card structure for better integration)
         const remainingAlert = document.createElement("div");
         remainingAlert.id = "remaining-leave-info";
+        remainingAlert.classList.add("card", "shadow-sm", "mt-3", "mb-3");
         remainingAlert.style.display = "none";
-        // Use card-like appearance with shadow and radius
-        remainingAlert.classList.add("card", "shadow-sm", "mt-3");
     
-        // Insert alert inside .messages
-        if (messagesDiv) messagesDiv.appendChild(remainingAlert);
+        // Insert alert into the tab content area (after tabs, before form)
+        firstFieldDiv.prepend(remainingAlert);
     
-        // ---- LOADING SPINNER HTML ----
+        // ---- RENDER STATES ----
+        
         function renderLoading() {
-            remainingAlert.className = "card shadow-sm mt-3 border-info";
             remainingAlert.style.display = "block";
-    
             remainingAlert.innerHTML = `
-                <div class="card-body text-info">
+                <div class="card-body bg-light text-info border-info" style="border-left: 5px solid;">
                     <div class="d-flex align-items-center">
                         <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                        <span>Fetching leave balance...</span>
+                        <span><i class="bi bi-hourglass"></i> {% translate "Fetching leave balance..." %}</span>
                     </div>
                 </div>
             `;
         }
     
-        // ---- UPDATE ALERT WITH STYLED CONTENT (Improved Bootstrap Styling) ----
         function renderData(totalDays, usedDays) {
             const total = totalDays ?? 0;
             const used = usedDays ?? 0;
@@ -166,86 +223,87 @@ $(function() {
             const percentageUsed = total > 0 ? Math.round((used / total) * 100) : 0;
     
             // Determine styling based on remaining days
-            let alertClass = "border-success";
-            let progressBarClass = "bg-success";
+            let headerBgClass = "bg-primary";
+            let progressBarClass = "bg-primary";
             let iconClass = "bi bi-calendar-check-fill";
+            let footerText = '';
+            let footerClass = '';
 
             if (remaining <= 0) {
-                alertClass = "border-danger";
+                headerBgClass = "bg-danger";
                 progressBarClass = "bg-danger";
-                iconClass = "bi bi-exclamation-triangle-fill";
+                iconClass = "bi bi-exclamation-octagon-fill";
+                footerText = '{% translate "Warning: No remaining leave days for this type." %}';
+                footerClass = 'bg-danger text-white';
             } else if (remaining <= 3) {
-                alertClass = "border-warning";
+                headerBgClass = "bg-warning";
                 progressBarClass = "bg-warning";
                 iconClass = "bi bi-exclamation-circle-fill";
             }
             
-            // Set the primary styling classes
-            remainingAlert.className = `card shadow-sm mt-3 ${alertClass}`;
+            // Set primary styling
             remainingAlert.style.display = "block";
     
-            remainingAlert.innerHTML = `
-                <div class="card-header bg-white border-bottom ${alertClass.replace('border-', 'text-')}" style="padding: 0.75rem 1.25rem;">
-                    <h5 class="mb-0">
-                        <i class="${iconClass} me-2"></i> Synthèse du solde des congé
+            let html = `
+                <div class="card-header ${headerBgClass} text-white py-2">
+                    <h5 class="mb-0 text-light">
+                        <i class="${iconClass} me-2"></i> {% translate "Synthèse du solde des congés" %}
                     </h5>
                 </div>
-    
-                <div class="card-body">
-                    <div class="row text-center mb-3 mt-3">
-                        <div class="col-4 border-end">
-                            <h6 class="text-muted mb-1">Total Available</h6>
+                <div class="card-body mt-4">
+                    <div class="row text-center mb-3">
+                        <div class="col-4">
+                            <h6 class="text-muted mb-1">{% translate "Total Available" %}</h6>
                             <p class="fs-4 mb-0 text-primary">${total}</p>
                         </div>
-                        <div class="col-4 border-end">
-                            <h6 class="text-muted mb-1">Consommés</h6>
+                        <div class="col-4 border-start border-end">
+                            <h6 class="text-muted mb-1">{% translate "Used" %}</h6>
                             <p class="fs-4 mb-0 text-secondary">${used}</p>
                         </div>
                         <div class="col-4">
-                            <h6 class="mb-1">Restants</h6>
-                            <p class="fs-4 mb-0 text-primary">${remaining}</p>
+                            <h6 class="mb-1 text-${remaining > 0 ? 'success' : 'danger'}">{% translate "Remaining" %}</h6>
+                            <p class="fs-4 mb-0 text-${remaining > 0 ? 'success' : 'danger'}">${remaining}</p>
                         </div>
                     </div>
     
-                    <h6 class="mt-3 mb-2">État: (${percentageUsed}%)</h6>
+                    <h6 class="mt-3 mb-2">{% translate "Status" %}: ${percentageUsed}% {% translate "used" %}</h6>
                     <div class="progress" style="height: 25px;">
                         <div 
-                            class="progress-bar ${progressBarClass}" 
+                            class="progress-bar ${progressBarClass} progress-bar-striped" 
                             role="progressbar" 
                             style="width: ${percentageUsed}%;" 
                             aria-valuenow="${used}" 
                             aria-valuemin="0" 
                             aria-valuemax="${total}"
                         >
-                            ${used} of ${total} Jours consommés
+                            ${used} {% translate "of" %} ${total} {% translate "Days Used" %}
                         </div>
                     </div>
                 </div>
             `;
-
-
-            // Optional: If no days are remaining, add a stark warning footer
-            if (remaining <= 0) {
-                 remainingAlert.innerHTML += `
-                    <div class="card-footer bg-danger text-white text-center py-2">
-                        Warning: No remaining leave days for this type.
+            
+            // Add a footer if there's a specific warning/status
+            if (footerText) {
+                html += `
+                    <div class="card-footer text-center ${footerClass}">
+                        ${footerText}
                     </div>
                  `;
             }
+            
+            remainingAlert.innerHTML = html;
         }
     
-        // ---- ERROR MESSAGE ----
-        function renderError() {
-            remainingAlert.className = "card shadow-sm mt-3 border-danger";
+        function renderError(message = '{% translate "Unable to fetch leave balance. Please check API configuration." %}') {
             remainingAlert.style.display = "block";
             remainingAlert.innerHTML = `
-                <div class="card-body text-danger">
-                    <i class="bi bi-x-circle-fill me-2"></i> Error: Unable to fetch leave balance. Please try again.
+                <div class="card-body bg-light text-danger border-danger" style="border-left: 5px solid;">
+                    <i class="bi bi-x-circle-fill me-2"></i> {% translate "Error" %}: ${message}
                 </div>
             `;
         }
     
-        // ---- API CALL (Logic remains the same, only presentation changes) ----
+        // ---- API CALL AND LOGIC ----
         async function fetchRemainingLeave() {
             const employeeId = employeeField?.value; 
             const leaveTypeId = leaveTypeField?.value;
@@ -256,18 +314,23 @@ $(function() {
             }
     
             renderLoading();
-    
-            const usedDaysUrl = `${BASE_URL}/api/v1/aggregate/Sum/leave/leave/number_of_days?employee__pk=${employeeId}&type_of_leave__pk=${leaveTypeId}&status=APPROVED`;
-            const totalDaysUrl = `${BASE_URL}/api/v1/leave/typeofleave/${leaveTypeId}`;
-
+            
+            // Constructing API URLs based on Django URL patterns (assuming /api/v1/ prefix)
+            
+            const usedDaysUrl = `{% url 'api:aggregate' 'Sum' 'leave' 'leave' 'number_of_days' %}?employee__pk=${employeeId}&type_of_leave__pk=${leaveTypeId}&status=APPROVED`;
+            const totalDaysUrl = '{% url 'api:detail' 'leave' 'typeofleave' 1 %}'.replace('1', leaveTypeId);
+            
             try {
                 const [usedResponse, totalResponse] = await Promise.all([
                     fetch(usedDaysUrl),
                     fetch(totalDaysUrl)
                 ]);
 
-                if (!usedResponse.ok || !totalResponse.ok) {
-                    throw new Error("One or both API calls failed.");
+                if (!usedResponse.ok) {
+                    throw new Error(`Used days API failed with status ${usedResponse.status}`);
+                }
+                if (!totalResponse.ok) {
+                    throw new Error(`Total days API failed with status ${totalResponse.status}`);
                 }
     
                 const [usedData, totalData] = await Promise.all([
@@ -275,29 +338,27 @@ $(function() {
                     totalResponse.json()
                 ]);
                 
+                // Safely extract data
                 const usedDays = usedData.result?.number_of_days__Sum || 0; 
+                // Assuming max_duration is the field for total days in the TypeOfLeave object
                 const totalDays = totalData.max_duration || 0; 
                 
                 renderData(totalDays, usedDays);
     
             } catch (e) {
                 console.error("Fetch Error:", e);
-                renderError();
+                renderError(e.message);
             }
         }
     
         // ---- EVENT LISTENERS ----
-        // Ensure you have jQuery loaded for these listeners to work, as the original code uses $()
-        $(employeeField).change(fetchRemainingLeave);
-        $(leaveTypeField).change(fetchRemainingLeave)
+        $(employeeField).on('change', fetchRemainingLeave);
+        $(leaveTypeField).on('change', fetchRemainingLeave);
     
-        // ---- INIT ----
+        // ---- INITIALIZATION ----
         fetchRemainingLeave();
-    
     });
 </script>
-
-
-
+{% endif %}
 
 {% endwith %}

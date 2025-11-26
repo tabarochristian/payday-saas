@@ -34,7 +34,7 @@ class Canvas(BaseViewMixin):
         '_metadata',
         
         # Employee excluded fields
-        'create_user_on_save'
+        'create_user_on_save',
         'devices',
         'photo',
     ]
@@ -103,8 +103,6 @@ class Canvas(BaseViewMixin):
         model_fields = {field.name: model_class._meta.get_field(field.name) for field in fields}
 
         # remove photo, file, m2m field in the model canvas
-
-        
         # Remove excluded fields from the dictionary.
         for excluded in self.EXCLUDED_FIELDS:
             model_fields.pop(excluded, None)
@@ -165,11 +163,19 @@ class Canvas(BaseViewMixin):
         if field.choices:
             # Handle choice fields
             sources = [choice[0] for choice in field.choices]
+
         elif self._is_single_relation_field(field):
-            # Handle related fields
-            sources = list(field.related_model.objects.all().values_list('name', flat=True))
+            # Handle related fields safely
+            fields = [f.name for f in field.related_model._meta.get_fields()]
+            related_model = field.related_model
+            key = next((item for item in fields if item in [
+                "name",
+                "registration_number"
+            ]), None)
+            sources = list(related_model.objects.values_list(key, flat=True))
         else:
             sources = []
+
 
         # If there are sources, write them to the hidden sheet
         if sources:

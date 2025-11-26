@@ -1,38 +1,38 @@
-{% load core %}
-{% load i18n %}
+{% load core i18n %}
 
 <div class="page-heading">
 
-    <!-- Main Header Card -->
     <div class="card mb-3">
         <div class="card-body">
             <div class="row align-items-center">
-                <!-- Title and Breadcrumb -->
-                <div class="col-4 text-start">
+                <div class="col-md-6 col-12 text-start">
                     <h3 class="m-0">
-                        {{ model_class|getattr:"_meta"|getattr:"verbose_name"|title }}
-                        {% if obj %} #{{ obj.pk }}{% endif %}
+                        {{ model_class|modelmeta:"verbose_name"|title }}
+                        {% if obj %} 
+                            <small class="text-muted">#{{ obj.pk }}</small>
+                        {% endif %}
                     </h3>
                     {% include 'components/breadcrumb.html' %}
                 </div>
 
-                <!-- Action Buttons and Document Dropdown -->
-                <div class="col text-end">
+                <div class="col-md-6 col-12 text-md-end text-start mt-3 mt-md-0">
                     <div class="btn-group" role="group">
-                        {# Show documents only if obj.status is approved and all approvals are approved #}
+                        
                         {% with documents=self.documents %}
-                            {% if self.is_approved and documents and self.kwargs.pk %}
+                            {% if self.is_approved and documents and obj.pk %}
                                 <button class="btn btn-primary dropdown-toggle"
                                         id="dropdownDocumentBtn"
                                         data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                    {% trans "Documents" %}
+                                    <i class="bi bi-file-earmark-text"></i> {% trans "Documents" %}
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownDocumentBtn">
                                     {% for document in documents %}
                                         <li>
-                                            <a class="dropdown-item" target="_blank"
-                                                href="{% url 'core:print' document.id app model_class|getattr:'_meta'|getattr:'model_name' 'pdf' %}?pk={{ obj.pk }}">
+                                            {% url 'core:print' document.id self.kwargs.app self.kwargs.model 'pdf' as print_url %}
+                                            <a class="dropdown-item" 
+                                               target="_blank"
+                                               href="{{ print_url }}?pk={{ obj.pk }}">
                                                 {{ document.name }}
                                             </a>
                                         </li>
@@ -41,7 +41,6 @@
                             {% endif %}
                         {% endwith %}
 
-                        <!-- Extra Action Buttons -->
                         {% for button in action_buttons %}
                             {{ button.render }}
                         {% endfor %}
@@ -51,73 +50,76 @@
         </div>
     </div>
 
-    <!-- Approval Section -->
     {% if obj and request.user in self.approval_users %}
         <div class="card mb-4 shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">{% trans "Processus d’approbation" %}</h5>
-                <span class="badge bg-light text-dark">#{{ obj.pk }}</span>
+            <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                <h5 class="mb-0 text-dark">
+                    <i class="bi bi-shield-lock"></i> {% trans "Processus d’approbation" %}
+                </h5>
+                <span class="badge bg-secondary">#{{ obj.pk }}</span>
             </div>
 
             <div class="card-body">
-                <!-- Approver List -->
-                <h6 class="text-muted mb-3">{% trans "Liste des validateurs" %}</h6>
+                <h6 class="text-muted mb-3 border-bottom pb-2">{% trans "Liste des validateurs" %}</h6>
                 <ul class="list-group mb-4">
                     {% for approval in self.approvals %}
+                        {% with status_class=approval.is_approved|yesno:'success,warning,secondary' %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ approval.user.get_full_name|default:approval.user.username }}
-                            <a href="{% url 'core:change' 'core' 'approval' self.approval.pk %}" class="text-decoration-none">
-                                <span class="badge p-2 ps-3 pe-3 
-                                    bg-{{ approval.is_approved|yesno:'light-success,light-warning' }}">
+                            <strong>
+                                {{ approval.user.get_full_name|default:approval.user.username }}
+                            </strong>
+                            <a href="{% url 'core:change' 'core' 'approval' approval.pk %}" class="text-decoration-none">
+                                <span class="badge p-2 ps-3 pe-3 bg-light-{{ status_class }} text-{{ status_class }}">
                                     #{{ approval.pk }} – {% trans approval.get_status_display %}
                                 </span>
                             </a>
                         </li>
+                        {% endwith %}
                     {% empty %}
-                        <li class="list-group-item text-muted">
+                        <li class="list-group-item text-muted text-center">
                             {% trans "Aucun validateur défini." %}
                         </li>
                     {% endfor %}
                 </ul>
 
                 {% with user_can_approve=self.user_can_approve approval=self.approval %}
-                    <!-- Approval Form or Messages -->
-                    {% if user_can_approve %}
-                        <form method="post" id="approval-form" action="{% url 'core:change' 'core' 'approval' approval.pk %}?next={{ request.path }}">
+                    {% if user_can_approve and approval %}
+                        <form method="post" id="approval-form" 
+                              action="{% url 'core:change' 'core' 'approval' approval.pk %}?next={{ request.path }}">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="comment-{{ obj.pk }}" class="form-label">
                                     {% trans "Commentaire (facultatif)" %}
                                 </label>
                                 <textarea class="form-control" id="comment-{{ obj.pk }}" name="comment" rows="3"
-                                    placeholder="{% trans 'Ajoutez un commentaire...' %}"></textarea>
+                                    placeholder="{% trans 'Ajoutez un commentaire...' %}"
+                                    aria-describedby="commentHelp"></textarea>
+                                <div id="commentHelp" class="form-text">
+                                    {% trans "Ce commentaire sera enregistré dans l'historique d'approbation." %}
+                                </div>
                             </div>
 
-                            <!-- Hidden Fields -->
-                            <input type="hidden" name="content_type" value="{{ self.approval.content_type.pk }}">
-                            <input type="hidden" name="sub_organization" value="{{ obj.sub_organization }}">
-                            <input type="hidden" name="id_workflow" value="{{ self.approval.workflow.pk }}">
-                            <input type="hidden" name="user" value="{{ request.user.pk }}">
+                            <input type="hidden" name="content_type" value="{{ approval.content_type.pk }}">
                             <input type="hidden" name="object_id" value="{{ obj.pk }}">
+                            <input type="hidden" name="sub_organization" value="{{ obj.sub_organization.pk }}">
+                            <input type="hidden" name="id_workflow" value="{{ approval.workflow.pk }}">
+                            <input type="hidden" name="user" value="{{ request.user.pk }}">
                             
 
-                            <div class="d-flex gap-2">
-                                <button type="submit" name="status" form="approval-form" value="APPROVED" class="btn btn-light-success">
-                                    ✅ {% trans "Approuver" %}
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="submit" name="status" form="approval-form" value="APPROVED" class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i> {% trans "Approuver" %}
                                 </button>
-                                <button type="submit" name="status" form="approval-form" value="REJECTED" class="btn btn-light-danger">
-                                    ❌ {% trans "Rejeter" %}
+                                <button type="submit" name="status" form="approval-form" value="REJECTED" class="btn btn-danger">
+                                    <i class="bi bi-x-circle"></i> {% trans "Rejeter" %}
                                 </button>
                             </div>
                         </form>
-                    {% comment %}{% elif request.user == obj.created_by %}
-                        <div class="alert alert-warning mt-3">
-                            ⚠ {% trans "Vous ne pouvez pas/plus approuver cette demande." %}
-                        </div>
                     {% else %}
+                        {# Display message if user cannot approve and it's not the creator's turn #}
                         <div class="alert alert-info mt-3">
-                            ℹ️ {% trans "Vous n’êtes pas autorisé à valider cette demande." %}
-                        </div>{% endcomment %}
+                            <i class="bi bi-info-circle"></i> {% trans "Cette demande n’attend pas votre validation pour le moment." %}
+                        </div>
                     {% endif %}
                 {% endwith %}
             </div>
@@ -125,34 +127,48 @@
     {% endif %}
 </div>
 
-<!-- JavaScript for print buttons -->
 <script>
-function openPrintPopup(linkElement) {
-    const $link = $(linkElement);
-    const actionUrl = $link.attr("href") || $link.data("action");
+    // Use an IIFE for scope safety
+    (function($) {
+        function openPrintPopup(linkElement) {
+            const $link = $(linkElement);
+            const actionUrl = $link.attr("href") || $link.data("action");
 
-    if (!actionUrl) {
-        console.error("No valid action URL found on the clicked element.");
-        return;
-    }
+            if (!actionUrl) {
+                console.error("No valid action URL found on the clicked element.");
+                return;
+            }
 
-    let printUrl = actionUrl;
+            let printUrl = actionUrl;
 
-    // Append selected IDs if available
-    if (typeof getSelectedRows === 'function') {
-        const selectedIds = getSelectedRows();
-        if (Array.isArray(selectedIds) && selectedIds.length > 0) {
-            const queryParam = `?pk__in=${encodeURIComponent(selectedIds.join(','))}`;
-            printUrl += actionUrl.includes('?') ? `&${queryParam.slice(1)}` : queryParam;
+            // 1. Check if the element is an action button (for list view context)
+            if ($link.hasClass('btn-list-action') && typeof getSelectedRows === 'function') {
+                const selectedIds = getSelectedRows();
+                
+                // If the user hasn't selected anything, fallback to single object (assuming this template is for single view)
+                if (Array.isArray(selectedIds) && selectedIds.length > 0) {
+                    const queryParam = `pk__in=${encodeURIComponent(selectedIds.join(','))}`;
+                    printUrl += actionUrl.includes('?') ? `&${queryParam}` : `?${queryParam}`;
+                } else {
+                    // If no rows selected, and it's a list action button, we do nothing or alert.
+                    // For a detail view, this case should not happen, but kept for list context.
+                    // You might want to display a toast here.
+                    console.warn("No rows selected for bulk action.");
+                    return; 
+                }
+            } else {
+                // 2. Standard link (like the document dropdown, which already has '?pk=...' in URL)
+                // We just follow the link. No need for modification.
+            }
+
+            window.location.href = printUrl;
         }
-    }
 
-    window.location.href = printUrl;
-}
+        // Delegated event handler for all action buttons
+        $(document).on("click", ".btn-list-action", function (event) {
+            event.preventDefault();
+            openPrintPopup(this);
+        });
 
-$(document).on("click", ".btn-list-action", function (event) {
-    event.preventDefault();
-    openPrintPopup(this);
-});
-
+    })(jQuery); // Assumes jQuery is available via $
 </script>

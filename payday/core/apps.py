@@ -11,7 +11,7 @@ class CoreConfig(AppConfig):
 
     def ready(self):
         """Method called when the app is ready."""
-        import core.signals  # Import signals to ensure they are registered
+        import core.receivers  # Import signals to ensure they are registered
         self.sync_preferences()
 
 

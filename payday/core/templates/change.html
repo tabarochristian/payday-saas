@@ -1,53 +1,85 @@
 {% extends 'base.html' %}
 
-{% load core %}
-{% load i18n %}
-{% load static %}
-{% load mathfilters %}
-{% load crispy_forms_filters %}
+{% load core i18n static mathfilters crispy_forms_filters %}
 
+{# 1. Remove unnecessary message block override. Let base.html handle messages normally. #}
+{% comment %}
 {% block messages %}
 {% endblock messages %}
+{% endcomment %}
 
 {% block content %}
 
-{% include 'components/change/heading.html' %}
+    {# 2. Header and Action Block (using the previously improved heading.html) #}
+    <div class="page-header mb-4">
+        {% include 'components/change/heading.html' %}
+    </div>
 
-<div class="messages">
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
+    {# 3. Standardized Django Messages Display #}
+    {# If 'base.html' doesn't handle messages, place them here using standard tags. #}
+    {% if messages %}
+        <div class="messages-container my-3">
+            {% for message in messages %}
+                {# Use tags with a fallback to ensure a good alert style #}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
+    {% endif %}
 
-<div class="page-content">
-    <section>
-        {% block header %}{% endblock header %}
+    <div class="page-content">
+        {# Use a block for content *before* the main form card for flexibility #}
+        {% block main_content_pre %}{% endblock main_content_pre %}
         
-        <div class="card">
+        <section class="main-form-section">
+            {% block header %}
+                {# Optional section for content/tabs above the form card, e.g., tabs #}
+            {% endblock header %}
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {# 4. Main Form Inclusion #}
+                    {% include 'components/change_form.html' %}
+                </div>
+            </div>
+        </section>
+
+        {# Use a block for content *after* the main form card #}
+        {% block main_content_post %}{% endblock main_content_post %}
+    </div>
+
+    {# 5. Footer/Side Content Block - Renamed for clarity and encapsulated #}
+    <div class="page-footer mt-4">
+        <div class="card shadow-sm">
             <div class="card-body">
-                {% include 'components/change_form.html' %}
-            </div>
-        </div>
-    </section>
-</div>
+                <h5 class="card-title text-primary border-bottom pb-2">
+                    <i class="bi bi-clock-history"></i> {% trans 'Activities' %} / {% trans 'Change History' %}
+                </h5>
 
-<div class="page-footer">
-    <div class="card">
-        <div class="card-body">
-            <div class="card-title">
-                <h4>{% trans 'Activities' %}</h4>
+                <div class="activity-log-list">
+                    {% if self.logs %}
+                        <ul class="list-group list-group-flush">
+                            {% for log in self.logs %}
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="me-auto">
+                                        {# Improved format for change message #}
+                                        {{ log.change_message|default:'No message recorded.' }}
+                                    </div>
+                                    <small class="text-muted ms-3 text-end">
+                                        {{ log.action_time }}
+                                    </small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted fst-italic">
+                            {% trans "No change history logs available for this object." %}
+                        </p>
+                    {% endif %}
+                </div>
             </div>
-
-            <ul>
-                {% for log in self.logs %}
-                    <li>{{ log.action_time }}: {{ log.change_message }}</li>
-                {% empty %}
-                    <li>No logs available.</li>
-                {% endfor %}
-            </ul>                      
         </div>
     </div>
-</div>
 {% endblock %}

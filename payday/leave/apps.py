@@ -8,3 +8,7 @@ class LeaveConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     verbose_name = _("conge")
     name = "leave"
+
+    def ready(self):
+        """Method called when the app is ready."""
+        import leave.receivers

@@ -149,33 +149,33 @@ class Create(BaseViewMixin):
             
             return render(request, self.get_template_name(), locals())
 
-        try:
+        #try:
             # Save main instance
-            instance = form.save()
-            
-            # Save inline formsets
-            for formset in formsets:
-                for obj in formset.save(commit=False):
-                    setattr(obj, formset.fk.name, instance)
-                    obj.save()
-                formset.save_m2m()
-
-            # Log addition
-            message = _('Ajout du/de {model} #{pk}').format(
-                model=model_class._meta.model_name, pk=instance.pk)
-            message = self.generate_change_message(instance, form.instance) or f"#Obj {instance.pk} created"
-            self.log(model_class, form, action=ADDITION, change_message=message)
-            messages.success(request, message)
-            
-            return redirect(self.next or reverse_lazy('core:list', kwargs={
-                'app': app,
-                'model': model_class._meta.model_name
-            }))
+        instance = form.save()
         
-        except Exception as e:
-            logger.error(f"Error creating {model_class._meta.model_name}: {str(e)}")
-            messages.error(request, _("Une erreur est survenue lors de la création."))
-            return redirect(self.next or reverse_lazy('core:list', kwargs={
-                'app': app,
-                'model': model_class._meta.model_name
-            }))
+        # Save inline formsets
+        for formset in formsets:
+            for obj in formset.save(commit=False):
+                setattr(obj, formset.fk.name, instance)
+                obj.save()
+            formset.save_m2m()
+
+        # Log addition
+        message = _('Ajout du/de {model} #{pk}').format(
+            model=model_class._meta.model_name, pk=instance.pk)
+        message = self.generate_change_message(instance, form.instance) or f"#Obj {instance.pk} created"
+        self.log(model_class, form, action=ADDITION, change_message=message)
+        messages.success(request, message)
+        
+        return redirect(self.next or reverse_lazy('core:list', kwargs={
+            'app': app,
+            'model': model_class._meta.model_name
+        }))
+        
+        #except Exception as e:
+        #    logger.error(f"Error creating {model_class._meta.model_name}: {str(e)}")
+        #    messages.error(request, _("Une erreur est survenue lors de la création."))
+        #    return redirect(self.next or reverse_lazy('core:list', kwargs={
+        #        'app': app,
+        #        'model': model_class._meta.model_name
+        #    }))
