@@ -42,7 +42,7 @@ certificatesResolvers:
       storage: "/letsencrypt/acme.json"
       caServer: "https://acme-v02.api.letsencrypt.org/directory"
       dnsChallenge:
-        provider: digitalocean
+        provider: cloudflare
         delayBeforeCheck: "30s"
         resolvers:
           - "1.1.1.1:53"
