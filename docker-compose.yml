@@ -334,9 +334,6 @@ services:
       - traefik-certs:/letsencrypt
     environment:
       - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
-      #- CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
-      #- CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
-      #- CF_API_TOKEN=${CF_API_TOKEN}
     depends_on:
       - wordpress
       - minio
