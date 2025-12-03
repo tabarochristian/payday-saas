@@ -261,7 +261,9 @@ class BaseViewMixin(View, LoginRequiredMixin, PermissionRequiredMixin):
             return get_user_model().objects.none()
 
         obj = self._get_object()
-        workflows = Workflow.objects.filter(content_type=self.content_type).prefetch_related('users')
+        workflows = Workflow.objects.filter(
+            content_type=self.content_type
+        ).prefetch_related('users')
 
         user_ids = set()
         for wf in workflows:
