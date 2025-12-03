@@ -108,6 +108,11 @@ class List(BaseViewMixin):
         filter_set = filter_set_class(request.GET, queryset=qs)
         qs = filter_set.hard_filter()
 
+        q = request.GET.get("q", "").strip()
+        if q:
+            qs = filter_set.search(qs, "q", q)
+
+
         # Apply ordering and pagination
         page_number = request.GET.get('page', 1)
         order_column = f'-{model_class._meta.pk.name}'
