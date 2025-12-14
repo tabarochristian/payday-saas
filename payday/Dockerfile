@@ -1,23 +1,26 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12.2-slim
+FROM python:3.12-slim
 
-# Install Git
-RUN apt-get update && apt-get install -y git
+# Install system dependencies for GeoDjango
+RUN apt-get update && apt-get install -y \
+    binutils \
+    libproj-dev \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    libspatialindex-dev \
+    git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory in the container
+# Set GDAL and GEOS paths (important for Python bindings)
+ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
+ENV GEOS_LIBRARY_PATH=/usr/lib/libgeos_c.so
+
 WORKDIR /app
 
-# Uninstall all currently installed packages
-RUN pip freeze | xargs pip uninstall -y
-
-# Clear pip cache
-RUN pip cache purge
-
-# Copy the requirements file into the container
+# Install Python dependencies
 COPY payday/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install --no-cache-dir --upgrade --force-reinstall -r requirements.txt
-
-# Copy the rest of the application code
+# Copy project
 COPY payday/ .
