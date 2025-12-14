@@ -1,8 +1,8 @@
 services:
   db:
     container_name: payday-db
-    image: postgres:16
-    #image:postgis/postgis:16-3.5
+    # image: postgres:16
+    image: postgis/postgis:16-3.5
     restart: unless-stopped
     env_file:
       - db.env
