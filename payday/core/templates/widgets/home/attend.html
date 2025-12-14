@@ -240,10 +240,11 @@ class AttendanceManager {
             enroll_id: this.USER_ENROLL_ID,
             mode: 10, // Web
             in_out: entryType,
-            event: 0, 
+            event: 0,
             latitude: lat,
             longitude: lon,
-        };
+            geofence_center: `POINT(${lon} ${lat})`
+        };        
 
         try {
             const response = await fetch(this.SUBMIT_URL, {

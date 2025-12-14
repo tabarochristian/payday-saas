@@ -1,3 +1,4 @@
+from django.contrib.gis.db import models as gis_models
 from django.utils.translation import gettext as _
 from django.db.models import UniqueConstraint
 from django.db import models
@@ -26,6 +27,15 @@ class Log(Base):
     verify_mode = models.IntegerField(_("Verify Mode"), blank=True, null=True)
     temperature = models.FloatField(_("Temperature"), blank=True, null=True)  # Optional for some devices
     image = models.TextField(_("Punch Image"), blank=True, null=True)  # Base64 encoded image
+
+    geofence_center = gis_models.PointField(
+        verbose_name=_("Centre de la Géofence"),
+        help_text=_("Coordonnées (Longitude, Latitude) du centre de la zone de pointage."),
+        geography=True,
+        default=None,
+        null=True,
+        blank=True # Added blank=True for consistency if null is allowed
+    )
 
     list_display = ('sn', 'timestamp', 'in_out', 'enroll_id', 'created_at')
     
