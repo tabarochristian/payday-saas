@@ -154,6 +154,8 @@ class Exporter(BaseViewMixin):
 
         # Build query dictionary from GET parameters (only include recognized fields).
         query_params = request.GET.dict()
+        query_params = {key: value.split(',') if '__in' in key else value 
+                        for key, value in query_params.items()}
         qs = qs.filter(**query_params)
 
         # Apply additional filtering using a filter set.
