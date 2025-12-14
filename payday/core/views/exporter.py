@@ -30,11 +30,11 @@ def remove_special_chars(value):
 class Exporter(BaseViewMixin):
     """
     A view that exports data from a given model to an Excel file.
-    
+
     This view uses a model's layout to determine which fields to export,
     applies filtering based on GET parameters, and generates a formatted
     Excel file with validation and data cleaning.
-    
+
     Attributes:
         action (list): List of allowed actions, e.g. ["view"].
         template_name (str): The template used for rendering the export form.
@@ -46,14 +46,14 @@ class Exporter(BaseViewMixin):
         """
         Retrieve the list of exportable fields from the model, excluding
         those defined in the Base model.
-        
+
         Returns:
             list: A list of field objects that are editable and not excluded.
         """
         model_class = self.model_class()
         excluded_fields = [field.name for field in Base._meta.fields]
         return [
-            field for field in model_class._meta.fields 
+            field for field in model_class._meta.fields
             if field.editable and field.name not in excluded_fields
         ]
 
@@ -61,11 +61,11 @@ class Exporter(BaseViewMixin):
         """
         Recursively determine the verbose name for a field which may
         reference a related model using '__' notation.
-        
+
         Args:
             model_class: The model class containing the field.
             field_name (str): The field name, possibly nested (using '__').
-        
+
         Returns:
             str: The verbose name of the field in lower case.
         """
@@ -79,11 +79,11 @@ class Exporter(BaseViewMixin):
     def get_field(self, model_class, field_name):
         """
         Retrieve the actual model field object from potentially nested field names.
-        
+
         Args:
             model_class: The model class.
             field_name (str): Field name, possibly nested using '__'.
-        
+
         Returns:
             Field: The model field.
         """
@@ -97,11 +97,11 @@ class Exporter(BaseViewMixin):
         """
         Return the verbose name of the model that corresponds to a given field.
         This is typically used for foreign key fields.
-        
+
         Args:
             model_class: The initial model class.
             field_name (str): The field name in '__' notation.
-            
+
         Returns:
             str: The verbose name (in lower case) of the related model.
         """
@@ -114,12 +114,12 @@ class Exporter(BaseViewMixin):
     def get(self, request, app, model):
         """
         Display the export form.
-        
+
         Args:
             request (HttpRequest): The incoming request.
             app (str): The application label.
             model (str): The model name.
-            
+
         Returns:
             HttpResponse: Rendered export form.
         """
@@ -131,12 +131,12 @@ class Exporter(BaseViewMixin):
         """
         Process the export form submission, filter/query data from the model,
         generate an Excel file using pandas and return it as an HTTP response.
-        
+
         Args:
             request (HttpRequest): The incoming request.
             app (str): Application label.
             model (str): Model name.
-        
+
         Returns:
             HttpResponse: A response with the Excel file attachment.
         """
@@ -154,8 +154,6 @@ class Exporter(BaseViewMixin):
 
         # Build query dictionary from GET parameters (only include recognized fields).
         query_params = request.GET.dict()
-        query_params = {key: value.split(',') if '__in' in key else value 
-                        for key, value in query_params.items()}
         qs = qs.filter(**query_params)
 
         # Apply additional filtering using a filter set.
@@ -164,14 +162,14 @@ class Exporter(BaseViewMixin):
 
         # Determine output fields from POST data excluding irrelevant keys.
         selected_fields = [
-            k for k, v in request.POST.dict().items() 
+            k for k, v in request.POST.dict().items()
             if k not in ['csrfmiddlewaretoken', 'groupBy']
         ]
         if not selected_fields:
             raise ValueError(_("Please select at least one field to export"))
         if group_by and group_by not in selected_fields:
             selected_fields.append(group_by)
-        
+
         # Retrieve data from the queryset.
         data = qs.values(*selected_fields)
 
@@ -199,7 +197,8 @@ class Exporter(BaseViewMixin):
             if group_by:
                 # If grouping is requested, write each group to its own sheet.
                 for group_name, group_df in df.groupby(header_mapping.get(group_by)):
-                    group_df.to_excel(writer, sheet_name=str(group_name), index=False)
+                    group_df.to_excel(writer, sheet_name=str(
+                        group_name), index=False)
             else:
                 df.to_excel(writer, index=False)
         return response
