@@ -50,6 +50,7 @@ class Device(Base):
     geofence_center = gis_models.PointField(
         verbose_name=_("Centre de la Géofence"),
         help_text=_("Coordonnées (Longitude, Latitude) du centre de la zone de pointage."),
+        geography=True,
         default=None,
         null=True,
         blank=True # Added blank=True for consistency if null is allowed
@@ -68,7 +69,7 @@ class Device(Base):
 
     list_display = ("id", "name", "sn", "status", "is_geofence_configured")
     layout = Layout("sn", "name", "geofence_center", "geofence_radius") # Added geofence fields to layout
-    list_filter = ("status", "is_active") # Added is_active to filter
+    list_filter = ("status",) # Added is_active to filter
 
     class Meta:
         verbose_name_plural = _("Terminaux")

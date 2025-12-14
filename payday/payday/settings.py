@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_bootstrap5",
     "django_json_widget",
+    "mapwidgets",
     
     "djmoney",
     "django_ace",
@@ -127,23 +128,17 @@ ASGI_APPLICATION = "payday.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASE_URL = 'sqlite:///db.sqlite3'
+DATABASE_URL = 'spatialite:///db.sqlite3'
 DATABASES = {'default': None}
 DEFAULT_SCHEMA = 'public'
 
 # Default database
 DATABASE_URL = os.getenv('DATABASE_URL', default=DATABASE_URL)
-MASTER_DATABASE_URL = os.getenv('MASTER_DATABASE_URL', default=DATABASE_URL)
+DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
 
-DATABASES['default'] = dj_database_url.parse(MASTER_DATABASE_URL)
 DATABASES['default']['CONN_MAX_AGE'] = int(os.getenv('CONN_MAX_AGE', 0))
 
-# Replica database
-SLAVE_DATABASE_URL = os.getenv('SLAVE_DATABASE_URL', default=None)
-if SLAVE_DATABASE_URL:
-    DATABASES['replica'] = dj_database_url.parse(SLAVE_DATABASE_URL)
-    # DATABASE_ROUTERS = ["payday.routers.MasterSlaveRouter"]
-    DATABASES['replica']['CONN_MAX_AGE'] = CONN_MAX_AGE
+SPATIALITE_LIBRARY_PATH = 'mod_spatialite'
 
 # Redis settings
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -442,3 +437,22 @@ if not DEBUG:
     X_FRAME_OPTIONS = os.getenv("X_FRAME_OPTIONS", "DENY")
     USE_X_FORWARDED_HOST = bool(int(os.getenv("USE_X_FORWARDED_HOST", "1")))
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
+
+MAPBOX_ACCESS_TOKEN = os.getenv("MAPBOX_ACCESS_TOKEN", "pk.eyJ1Ijoia2FkaXRhaiIsImEiOiJjbHFxbXVqaDYzbTBqMmlvMDZ0dWI5MDdiIn0.n2g5LRYLwomy54PExogsBQ")
+
+MAP_WIDGETS = {
+    "Mapbox": {
+        "accessToken": MAPBOX_ACCESS_TOKEN,
+        "PointField": {
+            "interactive": {
+                "mapOptions": {"zoom": 12, "center": (51.515618, -0.091998)},
+                "markerFitZoom": 14,
+                "GooglePlaceAutocompleteOptions": {
+                    "componentRestrictions": {"country": "cd"}
+                },
+            }
+        },
+    }
+}

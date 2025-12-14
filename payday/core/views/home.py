@@ -49,8 +49,21 @@ class Home(LoginRequiredMixin, View):
             'remaining_leaves': self._get_remaining_leaves(request),
             'statistics': self._get_employee_statistics(request),
             'payslips': self._get_current_year_payslips(request),
-            'payroll_data': self._get_payroll_chart_data()
+            'payroll_data': self._get_payroll_chart_data(),
+            'attendance': self._get_employee_attend(request)
         }
+
+    def _get_employee_attend(self, request):
+        from employee.models import Attendance
+        from django.utils import timezone
+        
+        today = timezone.now().today()
+        employee = request.user.employee
+        return Attendance.objects.filter(
+            employee=employee,
+            first_checked_at__date=today,
+            last_checked_at__date=today
+        ).first()
 
     def _get_employee_statistics(self, request):
         Employee = apps.get_model('employee', 'Employee')
@@ -130,6 +143,15 @@ class Home(LoginRequiredMixin, View):
         Define all widgets with metadata and rendered content.
         """
         return [
+            {
+                "title": _("Attendance"),
+                "content": render_to_string('widgets/home/attend.html', {
+                    'attendance': context['attendance']
+                }, request=request),
+                "permission": "payroll.view_paidemployee",
+                "column": "col-12",
+                "visible": self.request.user.employee.web_devices
+            },
             {
                 "title": _("Salary Statistics"),
                 "content": render_to_string('widgets/home/salary_statistics_chart.html', {

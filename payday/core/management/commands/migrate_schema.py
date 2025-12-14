@@ -87,7 +87,8 @@ class Command(MigrateCommand):
             with transaction.atomic(using=database):
                 with connection.cursor() as cursor:
                     # 1. Set the search path to the current schema for the current connection
-                    cursor.execute(f"SET search_path TO {current_schema};")
+                    cursor.execute(f"SET search_path TO {current_schema}, public;")
+
                     
                     # 2. Run the actual Django migrate command logic
                     try:

@@ -1,24 +1,3 @@
-// Define custom autocomplete keywords
-/* var keywords = [
-    { name: 'variable1', value: 'variable_1', meta: 'custom variable' },
-    { name: 'variable2', value: 'variable_2', meta: 'custom variable' },
-]; */
-
-
-// Create a custom completer
-var completers = {
-    getCompletions: function(editor, session, pos, prefix, callback) {
-        let keywords = JSON.parse(document.getElementById("keywords").textContent);
-        callback(null, keywords.map(function(keyword) {
-            return {
-                caption: keyword.name,
-                value: keyword.value,
-                meta: keyword.meta
-            };
-        }));
-    }
-};
-
 (function() {
     function getDocHeight() {
         var D = document;
@@ -39,6 +18,8 @@ var completers = {
     }
 
     function next(elem) {
+        // Credit to John Resig for this function
+        // taken from Pro JavaScript techniques
         do {
             elem = elem.nextSibling;
         } while (elem && elem.nodeType != 1);
@@ -46,106 +27,48 @@ var completers = {
     }
 
     function prev(elem) {
+        // Credit to John Resig for this function
+        // taken from Pro JavaScript techniques
         do {
             elem = elem.previousSibling;
         } while (elem && elem.nodeType != 1);
         return elem;
     }
 
-    function drawModal() {
-        // Create the modal div
-        var modal = document.createElement('div');
-        modal.className = 'modal fade';
-        modal.id = 'modal-editor';
-        modal.tabIndex = -1;
-        modal.setAttribute('aria-labelledby', 'modal-editor-label');
-        modal.setAttribute('aria-hidden', 'true');
-    
-        // Create the modal-dialog div
-        var modalDialog = document.createElement('div');
-        modalDialog.className = 'modal-dialog modal-lg';
-    
-        // Create the modal-content div
-        var modalContent = document.createElement('div');
-        modalContent.className = 'modal-content';
-    
-        // Create the modal-body div
-        var modalBody = document.createElement('div');
-        modalBody.className = 'modal-body modal-editor';
-        modalBody.id = 'modal-editor-body';
-    
-        // Append modal-body to modal-content
-        modalContent.appendChild(modalBody);
-    
-        // Append modal-content to modal-dialog
-        modalDialog.appendChild(modalContent);
-    
-        // Append modal-dialog to modal
-        modal.appendChild(modalDialog);
-    
-        // Append modal to body
-        document.body.appendChild(modal);
+    function redraw(element){
+        element = $(element);
+        var n = document.createTextNode(' ');
+        element.appendChild(n);
+        (function(){n.parentNode.removeChild(n)}).defer();
+        return element;
     }
-    
-    function destroyModal() {
-        var modal = document.getElementById('modal-editor');
-        if (modal == undefined) return;
-        modal.remove();
-    }
-    
-    function showModal(widget, main_block, editor) {
-        // Create a new editor container inside the modal
-        var newEditorDiv = document.createElement('div');
-        newEditorDiv.style.height = '100%';
 
-        drawModal();
-        $('#modal-editor-body').append(newEditorDiv);
-    
-        // Initialize the new editor with the same settings and data as the original editor
-        var newEditor = ace.edit(newEditorDiv);
-        newEditor.getSession().setValue(editor.getSession().getValue());
-    
-        // Apply the same options as the original editor
-        newEditor.setOptions({
-            mode: editor.getSession().getMode().$id,
-            theme: editor.getTheme(),
-            useWrapMode: editor.getSession().getUseWrapMode(),
-            minLines: editor.getOption("minLines"),
-            maxLines: editor.getOption("maxLines"),
-            showPrintMargin: editor.getShowPrintMargin(),
-            showInvisibles: editor.getShowInvisibles(),
-            tabSize: editor.getOption("tabSize"),
-            fontSize: editor.getOption("fontSize"),
-            readOnly: editor.getOption("readOnly"),
-            useSoftTabs: editor.getSession().getUseSoftTabs(),
-            showGutter: editor.getOption("showGutter"),
-            behavioursEnabled: editor.getOption("behavioursEnabled"),
-            useWorker: editor.getOption("useWorker"),
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: false
-        });
-        newEditor.completers = [completers];
-    
-        // Show the modal and fit the new editor to it
-        $('#modal-editor').modal('show').on('shown.bs.modal', () => newEditor.resize());
-    
-        // Move the edited data back to the original editor and clean up when the modal is closed
-        $('#modal-editor').on('hide.bs.modal', function () {
-            var content = newEditor.getSession().getValue();
-            editor.getSession().setValue(content);
-    
-            // Destroy the modal editor
-            newEditor.destroy();
-    
-            // Remove the new editor container from the DOM
-            newEditorDiv.remove();
+    function minimizeMaximize(widget, main_block, editor) {
+        if (window.fullscreen == true) {
+            main_block.className = 'django-ace-editor';
 
-            // Remove the modal
-            destroyModal();
-        });
+            widget.style.width = window.ace_widget.width + 'px';
+            widget.style.height = window.ace_widget.height + 'px';
+            widget.style.zIndex = 1;
+            window.fullscreen = false;
+        }
+        else {
+            window.ace_widget = {
+                'width': widget.offsetWidth,
+                'height': widget.offsetHeight,
+            }
+
+            main_block.className = 'django-ace-editor-fullscreen';
+
+            widget.style.height = getDocHeight() + 'px';
+            widget.style.width = getDocWidth() + 'px';
+            widget.style.zIndex = 999;
+
+            window.scrollTo(0, 0);
+            window.fullscreen = true;
+            editor.resize();
+        }
     }
-    
 
     function apply_widget(widget) {
         var div = widget.firstChild,
@@ -166,7 +89,7 @@ var completers = {
             useworker = widget.getAttribute('data-useworker'),
             toolbar = prev(widget);
 
-        // Initialize editor and attach to widget element (for use in formset:removed)
+        // initialize editor and attach to widget element (for use in formset:removed)
         var editor = widget.editor = ace.edit(div);
 
         var main_block = div.parentNode.parentNode;
@@ -174,20 +97,20 @@ var completers = {
             // Toolbar maximize/minimize button
             var min_max = toolbar.getElementsByClassName('django-ace-max_min');
             min_max[0].onclick = function() {
-                showModal(widget, main_block, editor);
+                minimizeMaximize(widget, main_block, editor);
                 return false;
             };
         }
 
-        // Load initial data
+        // load initial data
         editor.getSession().setValue(textarea.value);
 
-        // The editor is initially absolute positioned
+        // the editor is initially absolute positioned
         textarea.style.display = "none";
 
-        // Options
+        // options
         if (mode) {
-            var Mode = ace.require("ace/mode/" + mode).Mode;
+            var Mode = require("ace/mode/" + mode).Mode;
             editor.getSession().setMode(new Mode());
         }
         if (theme) {
@@ -230,35 +153,16 @@ var completers = {
             editor.setOption("useWorker", false);
         }
 
-        // Enable language tools
-        ace.require('ace/ext/language_tools');
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: false
-        });
-        editor.completers = [completers];
-
-        // Write data back to original textarea
+        // write data back to original textarea
         editor.getSession().on('change', function() {
             textarea.value = editor.getSession().getValue();
         });
 
         editor.commands.addCommand({
-            name: 'Show modal',
+            name: 'Full screen',
             bindKey: {win: 'Ctrl-F11',  mac: 'Command-F11'},
             exec: function(editor) {
-                showModal(widget, main_block, editor);
-                // minimizeMaximize(widget, main_block, editor);
-            },
-            readOnly: true // false if this command should not apply in readOnly mode
-        });
-
-        editor.commands.addCommand({
-            name: 'Modal',
-            bindKey: {win: 'Ctrl-M',  mac: 'Command-M'},
-            exec: function(editor) {
-                showModal(widget, main_block, editor);
+                minimizeMaximize(widget, main_block, editor);
             },
             readOnly: true // false if this command should not apply in readOnly mode
         });
@@ -284,17 +188,18 @@ var completers = {
         var widgets = document.getElementsByClassName('django-ace-widget');
 
         for (widget of widgets) {
-            // Skip the widget in the admin inline empty-form
+
+            // skip the widget in the admin inline empty-form
             if (is_empty_form(widget)) {
                 continue;
             }
 
-            // Skip already loaded widgets
+            // skip already loaded widgets
             if (!widget.classList.contains("loading")) {
                 continue;
             }
 
-            widget.className = "django-ace-widget"; // Remove `loading` class
+            widget.className = "django-ace-widget"; // remove `loading` class
 
             apply_widget(widget);
         }

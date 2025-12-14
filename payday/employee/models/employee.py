@@ -166,6 +166,13 @@ class Employee(BaseEmployee):
             'classes': 'btn btn-light-info',
             'tag': 'a',
         }]
+
+    @property
+    def web_devices(self):
+        return self.devices.all().filter(
+            geofence_center__isnull=False,
+            geofence_radius__isnull=False
+        )
     
     def create_user(self):
         if not self.email:

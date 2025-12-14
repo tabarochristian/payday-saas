@@ -17,7 +17,8 @@ class Log(Base):
         (0, _("Fingerprint")),
         (1, _("Card")),
         (2, _("Password")),
-        (8, _("Face"))
+        (8, _("Face")),
+        (10, _("Web")),
     ])
     in_out = models.IntegerField(_("Entry Type"), choices=[(0, _("In")), (1, _("Out"))])
     event = models.IntegerField(_("Event Type"))

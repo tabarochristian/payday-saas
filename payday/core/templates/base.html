@@ -25,8 +25,10 @@
         html { font-size: 10px; }
         .tox-promotion { display: none !important; }
         .errorlist { margin: 0; }
+        .mw-wrap{
+            width: 100% !important
+        }
     </style>
-
     {% block head_css %}{% endblock %}
 </head>
 <body>
@@ -214,7 +216,6 @@
     <script src="{% static 'assets/js/app.js' %}" defer></script>
 
     <!-- External JS -->
-    <script src="https://unpkg.com/htmx.org@1.6.1" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/dirrty@1.0.0/dist/jquery.dirrty.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>

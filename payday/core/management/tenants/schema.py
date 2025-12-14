@@ -26,6 +26,7 @@ class SchemaManager:
         """
         with connection.cursor() as cursor:
             cursor.execute(f'CREATE SCHEMA "{schema}"')
+            cursor.execute(f'CREATE EXTENSION IF NOT EXISTS postgis SCHEMA {schema}')
 
     @retry(
         stop=stop_after_attempt(3),

@@ -97,7 +97,6 @@ services:
       # Service Definition
       - "traefik.http.services.wordpress.loadbalancer.server.port=80"
 
-
   minio:
     container_name: payday-minio
     image: minio/minio:latest
