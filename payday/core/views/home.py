@@ -67,8 +67,7 @@ class Home(LoginRequiredMixin, View):
         try:
             employee = request.user.employee
         except AttributeError:
-            # Handle case where request.user doesn't have an employee profile
-            return {} 
+            employee = None
 
         # Sub-organization is often critical for HR/Payroll data isolation
         sub_organization = getattr(request, "suborganization", None)
@@ -79,7 +78,6 @@ class Home(LoginRequiredMixin, View):
             'payslips': self._get_current_year_payslips(request, sub_organization),
             'payroll_data': self._get_payroll_chart_data(),
             'attendance': self._get_employee_attend(employee),
-            # Pass common variables that widgets might need
             'employee': employee,
             'is_admin_or_staff': request.user.is_staff or request.user.is_superuser
         }
@@ -216,7 +214,7 @@ class Home(LoginRequiredMixin, View):
             {
                 "title": _("Attendance"),
                 "content": render_to_string('widgets/home/attend.html', {
-                    'attendance': context['attendance']
+                    'attendance': context.get('attendance', None)
                 }, request=request),
                 "permission": "payroll.view_paidemployee", # Check if this permission is appropriate for a basic attendance widget
                 "column": "col-12",
@@ -225,7 +223,7 @@ class Home(LoginRequiredMixin, View):
             {
                 "title": _("Salary Statistics"),
                 "content": render_to_string('widgets/home/salary_statistics_chart.html', {
-                    'payroll_data': context['payroll_data']
+                    'payroll_data': context.get('payroll_data', None)
                 }, request=request),
                 "permission": "payroll.view_paidemployee",
                 "column": "col-12",
@@ -234,7 +232,7 @@ class Home(LoginRequiredMixin, View):
             {
                 "title": _("Current Year Payslips"),
                 "content": render_to_string('widgets/home/current_year_payslips.html', {
-                    'payslips': context['payslips']
+                    'payslips': context.get('payslips', None)
                 }, request=request),
                 "permission": "payroll.view_paidemployee",
                 "column": "col-12 col-md-6 col-lg-4",
@@ -243,7 +241,7 @@ class Home(LoginRequiredMixin, View):
             {
                 "title": _("Employee Status Cards"),
                 "content": render_to_string('widgets/home/employee_status_cards.html', {
-                    'statistics': context['statistics']
+                    'statistics': context.get('statistics', None)
                 }, request=request),
                 "permission": "employee.view_employee",
                 "column": "col-12 col-md-6 col-lg-4",
