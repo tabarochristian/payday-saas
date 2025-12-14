@@ -317,7 +317,7 @@
             
             // Constructing API URLs based on Django URL patterns (assuming /api/v1/ prefix)
             
-            const usedDaysUrl = `{% url 'api:aggregate' 'Sum' 'leave' 'leave' 'number_of_days' %}?employee__pk=${employeeId}&type_of_leave__pk=${leaveTypeId}&status=APPROVED`;
+            const usedDaysUrl = `{% url 'api:aggregate' 'Sum' 'leave' 'leave' 'duration' %}?employee__pk=${employeeId}&type_of_leave__pk=${leaveTypeId}&status=APPROVED`;
             const totalDaysUrl = '{% url 'api:detail' 'leave' 'typeofleave' 1 %}'.replace('1', leaveTypeId);
             
             try {
@@ -339,7 +339,7 @@
                 ]);
                 
                 // Safely extract data
-                const usedDays = usedData.result?.number_of_days__Sum || 0; 
+                const usedDays = usedData.result?.duration__Sum || 0; 
                 // Assuming max_duration is the field for total days in the TypeOfLeave object
                 const totalDays = totalData.max_duration || 0; 
                 

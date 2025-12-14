@@ -24,6 +24,7 @@ class TenantMiddleware:
 
     def __call__(self, request):
         if getattr(settings, "DEBUG", False):
+            set_schema("kazi")
             return self.get_response(request)
 
         schema = self.extract_schema_from_host(request.get_host())

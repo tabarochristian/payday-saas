@@ -43,10 +43,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django.contrib.auth",
+    "django.contrib.gis",
+
     "health_check",
     "health_check.db",
     "health_check.cache",
     "health_check.storage",
+
     "dal",
     "dal_select2",
     "widget_tweaks",
@@ -58,6 +61,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_bootstrap5",
     "django_json_widget",
+    
     "djmoney",
     "django_ace",
     "corsheaders",

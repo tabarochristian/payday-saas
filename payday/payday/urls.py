@@ -20,6 +20,9 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.conf import settings
 
+from core.utils import set_schema
+set_schema("kazi")
+
 urlpatterns = [
     path('ht/', include('health_check.urls')),
     path('tinymce/', include('tinymce.urls')),
