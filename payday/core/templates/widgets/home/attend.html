@@ -149,9 +149,11 @@ class AttendanceManager {
         HOLDING: (s) => `Maintien (${s}s)`,
         SUBMITTING: "Localisation verrouillée. Soumission en cours...",
         COMPLETE: "Soumission terminée.",
-        NETWORK_ERROR: "Erreur réseau ou impossible d'atteindre le serveur.",
+        NETWORK_ERROR: "Erreur réseau ou impossible d'atteindre le serveur. Vérifiez votre connexion.",
         GEO_UNSUPPORTED: "La géolocalisation n'est pas supportée par votre navigateur.",
-        PERMISSION_DENIED: "Permission de localisation refusée. Veuillez l'activer.",
+        PERMISSION_DENIED: "Permission de localisation refusée. Veuillez l'activer dans les paramètres de votre navigateur.",
+        // NOUVEAU: Message générique pour les erreurs serveur
+        SERVER_ERROR_GENERIC: "Une erreur serveur inattendue est survenue. Code d'état: ", 
     };
 
     /** Met à jour le texte du bouton en fonction de l'état d'arrivée/départ */
@@ -213,11 +215,37 @@ class AttendanceManager {
                     if (error.code === 1) {
                         return reject(this.MESSAGES.PERMISSION_DENIED);
                     }
-                    return reject("Échec de la géolocalisation. Code d'erreur: " + error.code);
+                    // Amélioration du message d'erreur de géolocalisation
+                    return reject("Échec de la géolocalisation. Assurez-vous d'être dans une zone de couverture GPS. Code d'erreur: " + error.code);
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         });
+    }
+
+    /** Tente d'extraire le message d'erreur le plus pertinent de la réponse JSON du backend */
+    getErrorMessage(data) {
+        if (!data) return "Réponse serveur vide ou illisible.";
+        
+        // Cas 1: Message de succès ou erreur simple (comme votre `data.message` ou `data.error` existant)
+        if (data.message) return data.message;
+        if (data.error) return data.error;
+
+        // Cas 2: Erreurs de formulaire/validation (comme l'erreur de géofence dans votre exemple)
+        // Itérer sur les champs pour trouver le premier message d'erreur
+        for (const key in data) {
+            if (Array.isArray(data[key])) {
+                // Pour les listes d'erreurs (souvent le cas de DRF)
+                return data[key].join(' ');
+            }
+            if (typeof data[key] === 'string') {
+                // Pour une erreur simple de type "geofence": "Message..."
+                return data[key];
+            }
+        }
+
+        // Cas 3: Dernier recours si la structure est inconnue
+        return "Échec de la soumission. Détails d'erreur non décodables par le client.";
     }
 
     /** Soumet les données au backend Django */
@@ -230,8 +258,6 @@ class AttendanceManager {
         const isoTimestamp = now.toISOString();
 
         // LOGIQUE DE DÉTERMINATION DU TYPE D'ENTRÉE CORRIGÉE
-        // Si l'utilisateur est checked_in (true), le prochain pointage est OUT (1).
-        // Sinon, le prochain pointage est IN (0).
         const entryType = this.IS_CHECKED_IN ? 1 : 0; 
 
         const payload = {
@@ -243,7 +269,8 @@ class AttendanceManager {
             event: 0,
             latitude: lat,
             longitude: lon,
-            geofence_center: `POINT(${lon} ${lat})`
+            geofence_center: `POINT(${lon} ${lat})`,
+            sub_organization: '{{ request.user.employee.sub_organization }}'
         };        
 
         try {
@@ -256,20 +283,34 @@ class AttendanceManager {
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
+            // Tenter toujours de lire la réponse JSON, même en cas d'erreur HTTP
+            let data = {};
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                // Gérer le cas où la réponse n'est pas un JSON valide (rare mais possible)
+                if (!response.ok) {
+                    this.displayMessage('danger', this.MESSAGES.SERVER_ERROR_GENERIC + response.status + ". Réponse non-JSON.");
+                    return;
+                }
+            }
 
             if (response.ok) {
                 this.displayMessage('success', data.message || "Assiduité soumise avec succès !");
-                // OPTIONNEL: Mettre à jour l'état checked-in après le succès
+                // Mettre à jour l'état checked-in après le succès
                 this.IS_CHECKED_IN = !this.IS_CHECKED_IN; 
             } else {
-                this.displayMessage('danger', data.error || "Échec de la soumission dû à une erreur serveur.");
+                // Si la réponse n'est pas OK, extraire le message d'erreur spécifique
+                const errorMessage = this.getErrorMessage(data);
+                this.displayMessage('danger', `Échec du pointage : ${errorMessage}`);
             }
         } catch (error) {
+            // Cette erreur est généralement une erreur réseau (pas de connexion, CORS, etc.)
+            console.error('Erreur Fetch:', error);
             this.displayMessage('danger', this.MESSAGES.NETWORK_ERROR);
         } finally {
             this.resetButtonState();
-            this.updateButtonText(); // Mise à jour du texte du bouton après le reset
+            this.updateButtonText(); // Mise à jour du texte et de la couleur du bouton
         }
     }
 
@@ -310,6 +351,7 @@ class AttendanceManager {
             }, 1000);
 
         } catch (error) {
+            // L'erreur ici est liée à la géolocalisation (non supportée ou refusée)
             this.displayMessage('warning', error);
             this.resetButtonState();
             this.updateButtonText(); // Restaurer le texte correct après l'échec
@@ -331,13 +373,14 @@ document.addEventListener('DOMContentLoaded', () => {
             submitUrl: "{% url 'api:list' 'device' 'log' %}",
             delaySeconds: 5,
             csrfToken: csrfToken,
-            enrollId: {{ request.user.employee.registration_number|default:'null' }}, 
-            deviceSn: '{{ request.user.employee.web_devices.first.sn }}', 
+            // Assurez-vous que la valeur est un nombre valide pour éviter les erreurs JS.
+            enrollId: {{ request.user.employee.registration_number|default:'null'|safe }}, 
+            deviceSn: '{{ request.user.employee.web_devices.first.sn|default:'' }}', 
             isCheckedIn: isCheckedIn // Transmis à la classe
         });
     } else {
         console.error("ERREUR: Token CSRF non trouvé.");
-        document.getElementById('statusMessage').textContent = "Erreur de configuration (CSRF manquant).";
+        document.getElementById('statusMessage').textContent = "Erreur de configuration (CSRF manquant). Impossible de soumettre.";
     }
 });
 </script>
