@@ -1,0 +1,246 @@
+INFO 2026-01-05 16:27:06,080 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:32:02,949 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:33:47,324 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/payday/settings.py changed, reloading.
+INFO 2026-01-05 16:33:50,385 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+WARNING 2026-01-05 16:33:50,537 [core.middleware.tenant] tenant:23 LAGO_API_KEY not configured in settings.
+INFO 2026-01-05 16:34:33,574 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/payday/settings.py changed, reloading.
+INFO 2026-01-05 16:34:36,995 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:34:41,570 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/payday/settings.py changed, reloading.
+INFO 2026-01-05 16:34:43,923 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:51:03,827 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:51:30,273 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+WARNING 2026-01-05 16:51:34,218 [core.middleware.tenant] tenant:31 Invalid or missing schema from host: localhost:8000
+INFO 2026-01-05 16:51:34,221 [django.channels.server] runserver:174 [32mHTTP GET / 302 [0.01, 127.0.0.1:63487][0m
+INFO 2026-01-05 16:55:18,967 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 16:55:22,344 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:55:25,803 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 16:55:28,565 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:55:39,724 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 16:55:43,059 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:55:46,105 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 16:55:49,329 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 16:57:06,818 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+ERROR 2026-01-05 16:57:21,102 [django.request] log:248 Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/sentry_sdk/integrations/django/middleware.py", line 177, in __call__
+    return f(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 124, in __call__
+    if self.async_mode:
+       ^^^^^^^^^^^^^^^
+AttributeError: 'TenantMiddleware' object has no attribute 'async_mode'
+ERROR 2026-01-05 16:57:21,114 [django.channels.server] runserver:181 [35;1mHTTP GET / 500 [0.03, 127.0.0.1:64410][0m
+INFO 2026-01-05 16:58:53,061 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 16:58:56,699 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+ERROR 2026-01-05 16:59:00,311 [django.request] log:248 Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/sentry_sdk/integrations/django/middleware.py", line 177, in __call__
+    return f(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 124, in __call__
+    if self.async_mode:
+       ^^^^^^^^^^^^^^^
+AttributeError: 'TenantMiddleware' object has no attribute 'async_mode'
+ERROR 2026-01-05 16:59:00,313 [django.channels.server] runserver:181 [35;1mHTTP GET / 500 [0.02, 127.0.0.1:64541][0m
+INFO 2026-01-05 16:59:27,102 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+ERROR 2026-01-05 16:59:29,924 [django.request] log:248 Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/sentry_sdk/integrations/django/middleware.py", line 177, in __call__
+    return f(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 124, in __call__
+    if self.async_mode:
+       ^^^^^^^^^^^^^^^
+AttributeError: 'TenantMiddleware' object has no attribute 'async_mode'
+ERROR 2026-01-05 16:59:29,926 [django.channels.server] runserver:181 [35;1mHTTP GET / 500 [0.02, 127.0.0.1:64587][0m
+ERROR 2026-01-05 16:59:30,650 [django.request] log:248 Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/sentry_sdk/integrations/django/middleware.py", line 177, in __call__
+    return f(*args, **kwargs)
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 124, in __call__
+    if self.async_mode:
+       ^^^^^^^^^^^^^^^
+AttributeError: 'TenantMiddleware' object has no attribute 'async_mode'
+ERROR 2026-01-05 16:59:30,651 [django.channels.server] runserver:181 [35;1mHTTP GET / 500 [0.00, 127.0.0.1:64587][0m
+INFO 2026-01-05 17:00:49,137 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 17:00:53,569 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:01:02,271 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 17:01:05,275 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:01:08,803 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 17:01:11,288 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:01:14,835 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 17:01:17,950 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:01:19,577 [django.channels.server] runserver:174 [32mHTTP GET / 301 [0.01, 127.0.0.1:64679][0m
+INFO 2026-01-05 17:03:54,796 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:04:12,933 [django.channels.server] runserver:174 [32mHTTP GET / 301 [0.02, 127.0.0.1:64954][0m
+INFO 2026-01-05 17:04:28,955 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 17:04:34,813 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:04:36,263 [django.utils.autoreload] autoreload:266 /Users/tabaro/GitHub/payday-saas/payday/core/middleware/tenant.py changed, reloading.
+INFO 2026-01-05 17:04:38,367 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:04:52,813 [django.channels.server] runserver:174 [32mHTTP GET / 301 [0.02, 127.0.0.1:65002][0m
+INFO 2026-01-05 17:06:13,552 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:06:40,943 [django.channels.server] runserver:174 [32mHTTP GET / 302 [0.17, 127.0.0.1:65245][0m
+INFO 2026-01-05 17:06:40,985 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.03, 127.0.0.1:65245][0m
+INFO 2026-01-05 17:06:41,113 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/pages/auth.css 200 [0.01, 127.0.0.1:65246][0m
+INFO 2026-01-05 17:06:41,114 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/logo.png 200 [0.01, 127.0.0.1:65247][0m
+INFO 2026-01-05 17:06:41,115 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/main/app.css 200 [0.01, 127.0.0.1:65245][0m
+WARNING 2026-01-05 17:06:42,187 [django.request] log:248 Not Found: /static/assets/images/4853433.png
+WARNING 2026-01-05 17:06:42,188 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/images/4853433.png?45649b87e0b3f50bfa1372c6cdb4595f 404 [0.01, 127.0.0.1:65245][0m
+INFO 2026-01-05 17:06:42,249 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-700-normal.woff2?adfd120897fcd366e78e43a700ca8bfc 200 [0.01, 127.0.0.1:65245][0m
+INFO 2026-01-05 17:06:42,252 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-400-normal.woff2?b8644b6e04ecda1cf98bbb37f17d0ef3 200 [0.01, 127.0.0.1:65247][0m
+WARNING 2026-01-05 17:06:42,254 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2
+WARNING 2026-01-05 17:06:42,254 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 404 [0.02, 127.0.0.1:65246][0m
+INFO 2026-01-05 17:06:42,256 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.png 200 [0.00, 127.0.0.1:65248][0m
+WARNING 2026-01-05 17:06:42,260 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff
+WARNING 2026-01-05 17:06:42,260 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?e559bf06bc84fd9525e61ead369f2a7e 404 [0.00, 127.0.0.1:65248][0m
+INFO 2026-01-05 17:06:42,264 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.svg 200 [0.01, 127.0.0.1:65246][0m
+INFO 2026-01-05 17:06:50,822 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.02, 127.0.0.1:65308][0m
+INFO 2026-01-05 17:06:50,854 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/main/app.css 200 [0.01, 127.0.0.1:65308][0m
+INFO 2026-01-05 17:06:50,857 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/logo.png 200 [0.01, 127.0.0.1:65310][0m
+INFO 2026-01-05 17:06:50,857 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/pages/auth.css 200 [0.01, 127.0.0.1:65309][0m
+INFO 2026-01-05 17:06:51,869 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-700-normal.woff2?adfd120897fcd366e78e43a700ca8bfc 200 [0.02, 127.0.0.1:65310][0m
+INFO 2026-01-05 17:06:51,870 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-400-normal.woff2?b8644b6e04ecda1cf98bbb37f17d0ef3 200 [0.01, 127.0.0.1:65309][0m
+INFO 2026-01-05 17:06:51,871 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.png 200 [0.01, 127.0.0.1:65338][0m
+WARNING 2026-01-05 17:06:51,872 [django.request] log:248 Not Found: /static/assets/images/4853433.png
+WARNING 2026-01-05 17:06:51,872 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/images/4853433.png?45649b87e0b3f50bfa1372c6cdb4595f 404 [0.02, 127.0.0.1:65308][0m
+WARNING 2026-01-05 17:06:51,873 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2
+WARNING 2026-01-05 17:06:51,874 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 404 [0.01, 127.0.0.1:65337][0m
+INFO 2026-01-05 17:06:51,877 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.svg 200 [0.00, 127.0.0.1:65308][0m
+WARNING 2026-01-05 17:06:51,879 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff
+WARNING 2026-01-05 17:06:51,881 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?e559bf06bc84fd9525e61ead369f2a7e 404 [0.01, 127.0.0.1:65337][0m
+INFO 2026-01-05 17:08:05,807 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:08:07,865 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.04, 127.0.0.1:65527][0m
+INFO 2026-01-05 17:08:07,917 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/logo.png 200 [0.01, 127.0.0.1:65529][0m
+INFO 2026-01-05 17:08:07,918 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/main/app.css 200 [0.01, 127.0.0.1:65527][0m
+INFO 2026-01-05 17:08:07,919 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/pages/auth.css 200 [0.01, 127.0.0.1:65528][0m
+WARNING 2026-01-05 17:08:07,948 [django.request] log:248 Not Found: /static/assets/images/4853433.png
+WARNING 2026-01-05 17:08:07,949 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/images/4853433.png?45649b87e0b3f50bfa1372c6cdb4595f 404 [0.01, 127.0.0.1:65528][0m
+INFO 2026-01-05 17:08:07,959 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-700-normal.woff2?adfd120897fcd366e78e43a700ca8bfc 200 [0.00, 127.0.0.1:65528][0m
+INFO 2026-01-05 17:08:07,961 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-400-normal.woff2?b8644b6e04ecda1cf98bbb37f17d0ef3 200 [0.00, 127.0.0.1:65527][0m
+WARNING 2026-01-05 17:08:07,965 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2
+WARNING 2026-01-05 17:08:07,966 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 404 [0.01, 127.0.0.1:65529][0m
+WARNING 2026-01-05 17:08:07,973 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff
+WARNING 2026-01-05 17:08:07,973 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?e559bf06bc84fd9525e61ead369f2a7e 404 [0.00, 127.0.0.1:65529][0m
+INFO 2026-01-05 17:08:07,988 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.png 200 [0.00, 127.0.0.1:65529][0m
+INFO 2026-01-05 17:08:07,993 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.svg 200 [0.00, 127.0.0.1:65529][0m
+INFO 2026-01-05 17:09:53,501 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:09:55,429 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.05, 127.0.0.1:49248][0m
+INFO 2026-01-05 17:09:55,542 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/main/app.css 200 [0.01, 127.0.0.1:49248][0m
+INFO 2026-01-05 17:09:55,544 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/pages/auth.css 200 [0.01, 127.0.0.1:49249][0m
+INFO 2026-01-05 17:09:55,546 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/logo.png 200 [0.01, 127.0.0.1:49250][0m
+INFO 2026-01-05 17:09:55,568 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-400-normal.woff2?b8644b6e04ecda1cf98bbb37f17d0ef3 200 [0.01, 127.0.0.1:49249][0m
+INFO 2026-01-05 17:09:55,568 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-700-normal.woff2?adfd120897fcd366e78e43a700ca8bfc 200 [0.01, 127.0.0.1:49250][0m
+WARNING 2026-01-05 17:09:55,568 [django.request] log:248 Not Found: /static/assets/images/4853433.png
+WARNING 2026-01-05 17:09:55,569 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/images/4853433.png?45649b87e0b3f50bfa1372c6cdb4595f 404 [0.01, 127.0.0.1:49248][0m
+INFO 2026-01-05 17:09:55,586 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.png 200 [0.00, 127.0.0.1:49248][0m
+WARNING 2026-01-05 17:09:55,589 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2
+WARNING 2026-01-05 17:09:55,590 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 404 [0.01, 127.0.0.1:49250][0m
+WARNING 2026-01-05 17:09:55,595 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff
+INFO 2026-01-05 17:09:55,596 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.svg 200 [0.00, 127.0.0.1:49250][0m
+WARNING 2026-01-05 17:09:55,598 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?e559bf06bc84fd9525e61ead369f2a7e 404 [0.01, 127.0.0.1:49248][0m
+INFO 2026-01-05 17:09:56,555 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:49248][0m
+WARNING 2026-01-05 17:09:56,581 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2
+WARNING 2026-01-05 17:09:56,581 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 404 [0.00, 127.0.0.1:49248][0m
+WARNING 2026-01-05 17:09:56,584 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff
+WARNING 2026-01-05 17:09:56,585 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?e559bf06bc84fd9525e61ead369f2a7e 404 [0.00, 127.0.0.1:49248][0m
+WARNING 2026-01-05 17:10:42,696 [django.request] log:248 Not Found: /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2
+WARNING 2026-01-05 17:10:42,697 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2 404 [0.01, 127.0.0.1:49274][0m
+WARNING 2026-01-05 17:10:42,810 [django.request] log:248 Not Found: /favicon.ico
+WARNING 2026-01-05 17:10:42,811 [django.channels.server] runserver:176 [33mHTTP GET /favicon.ico 404 [0.01, 127.0.0.1:49274][0m
+INFO 2026-01-05 17:13:08,230 [django.utils.autoreload] autoreload:668 Watching for file changes with StatReloader
+INFO 2026-01-05 17:13:09,832 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2 200 [0.01, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:13:11,708 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.08, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:13:11,825 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.png 200 [0.01, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:13:11,836 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.svg 200 [0.00, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:13:12,440 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:13:12,467 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 200 [0.00, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:13:13,225 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:49485][0m
+INFO 2026-01-05 17:14:35,080 [django.channels.server] runserver:174 [32mHTTP GET / 302 [0.02, 127.0.0.1:49565][0m
+INFO 2026-01-05 17:14:35,104 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:49565][0m
+INFO 2026-01-05 17:14:36,024 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/main/app.css 200 [0.01, 127.0.0.1:49565][0m
+INFO 2026-01-05 17:14:36,026 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/pages/auth.css 200 [0.01, 127.0.0.1:49568][0m
+WARNING 2026-01-05 17:14:36,031 [django.request] log:248 Not Found: /static/assets/js/bootstrap.bundle.min.js
+WARNING 2026-01-05 17:14:36,031 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/js/bootstrap.bundle.min.js 404 [0.02, 127.0.0.1:49567][0m
+WARNING 2026-01-05 17:14:36,037 [django.request] log:248 Not Found: /static/assets/images/4853433.png
+WARNING 2026-01-05 17:14:36,037 [django.channels.server] runserver:176 [33mHTTP GET /static/assets/images/4853433.png?45649b87e0b3f50bfa1372c6cdb4595f 404 [0.00, 127.0.0.1:49567][0m
+INFO 2026-01-05 17:14:36,101 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-400-normal.woff2?b8644b6e04ecda1cf98bbb37f17d0ef3 200 [0.00, 127.0.0.1:49567][0m
+INFO 2026-01-05 17:14:36,208 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.png 200 [0.00, 127.0.0.1:49567][0m
+INFO 2026-01-05 17:15:06,964 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.02, 127.0.0.1:49622][0m
+INFO 2026-01-05 17:15:07,048 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/logo.png 200 [0.01, 127.0.0.1:49622][0m
+INFO 2026-01-05 17:15:07,053 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-700-normal.woff2?adfd120897fcd366e78e43a700ca8bfc 200 [0.01, 127.0.0.1:49624][0m
+INFO 2026-01-05 17:15:07,055 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e 200 [0.01, 127.0.0.1:49623][0m
+INFO 2026-01-05 17:15:07,105 [django.channels.server] runserver:168 [mHTTP GET /static/assets/images/logo/favicon.svg 200 [0.00, 127.0.0.1:49623][0m
+INFO 2026-01-05 17:15:41,847 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:49636][0m
+INFO 2026-01-05 17:15:41,895 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/css/main/app.css 304 [0.00, 127.0.0.1:49636][0m
+INFO 2026-01-05 17:15:41,899 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/css/pages/auth.css 304 [0.01, 127.0.0.1:49637][0m
+INFO 2026-01-05 17:15:41,929 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/favicon.png 304 [0.00, 127.0.0.1:49637][0m
+INFO 2026-01-05 17:15:42,810 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:49637][0m
+INFO 2026-01-05 17:16:16,397 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.02, 127.0.0.1:49681][0m
+INFO 2026-01-05 17:16:16,451 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/logo.png 304 [0.00, 127.0.0.1:49681][0m
+INFO 2026-01-05 17:16:17,802 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/favicon.svg 304 [0.00, 127.0.0.1:49681][0m
+INFO 2026-01-05 17:16:31,095 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.02, 127.0.0.1:49695][0m
+INFO 2026-01-05 17:17:05,284 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.02, 127.0.0.1:49835][0m
+INFO 2026-01-05 17:17:05,375 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/css/main/app.css 304 [0.00, 127.0.0.1:49835][0m
+INFO 2026-01-05 17:17:05,375 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/css/pages/auth.css 304 [0.00, 127.0.0.1:49836][0m
+INFO 2026-01-05 17:17:48,066 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.02, 127.0.0.1:49901][0m
+INFO 2026-01-05 17:17:48,181 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/logo.png 304 [0.00, 127.0.0.1:49901][0m
+INFO 2026-01-05 17:17:48,183 [django.channels.server] runserver:168 [mHTTP GET /static/assets/fonts/vendor/@fontsource/nunito/files/nunito-latin-600-normal.woff2?2b48b7fe12163661f95ab32aebeaed01 200 [0.00, 127.0.0.1:49902][0m
+INFO 2026-01-05 17:17:48,220 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/favicon.svg 304 [0.00, 127.0.0.1:49902][0m
+INFO 2026-01-05 17:17:50,253 [django.channels.server] runserver:168 [mHTTP GET /password_reset/ 200 [0.01, 127.0.0.1:49916][0m
+INFO 2026-01-05 17:19:26,833 [django.channels.server] runserver:168 [mHTTP GET /password_reset/ 200 [0.02, 127.0.0.1:50017][0m
+INFO 2026-01-05 17:19:26,943 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/css/pages/auth.css 304 [0.01, 127.0.0.1:50017][0m
+INFO 2026-01-05 17:19:26,943 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/css/main/app.css 304 [0.01, 127.0.0.1:50018][0m
+INFO 2026-01-05 17:19:26,945 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/logo.png 304 [0.01, 127.0.0.1:50019][0m
+INFO 2026-01-05 17:19:26,991 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/favicon.svg 304 [0.00, 127.0.0.1:50019][0m
+ERROR 2026-01-05 17:19:33,019 [django.contrib.auth] forms:426 Failed to send password reset email to 1
+Traceback (most recent call last):
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/contrib/auth/forms.py", line 424, in send_mail
+    email_message.send()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/mail/message.py", line 301, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+  File "/Users/tabaro/GitHub/payday-saas/payday/.venv/lib/python3.13/site-packages/django/core/mail/backends/smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.7/Frameworks/Python.framework/Versions/3.13/lib/python3.13/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.7/Frameworks/Python.framework/Versions/3.13/lib/python3.13/smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.7/Frameworks/Python.framework/Versions/3.13/lib/python3.13/smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.7/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "/opt/homebrew/Cellar/python@3.13/3.13.7/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+INFO 2026-01-05 17:19:33,032 [django.channels.server] runserver:174 [32mHTTP POST /password_reset/ 302 [0.16, 127.0.0.1:50023][0m
+INFO 2026-01-05 17:19:33,042 [django.channels.server] runserver:168 [mHTTP GET /password_reset/done/ 200 [0.00, 127.0.0.1:50023][0m
+INFO 2026-01-05 17:19:49,073 [django.channels.server] runserver:174 [32mHTTP GET / 302 [0.01, 127.0.0.1:50034][0m
+INFO 2026-01-05 17:19:49,087 [django.channels.server] runserver:168 [mHTTP GET /login/?next=/ 200 [0.01, 127.0.0.1:50034][0m
+INFO 2026-01-05 17:19:56,480 [django.channels.server] runserver:174 [32mHTTP POST /login/?next=/ 302 [0.20, 127.0.0.1:50053][0m
+INFO 2026-01-05 17:19:56,537 [django.channels.server] runserver:168 [mHTTP GET / 200 [0.05, 127.0.0.1:50053][0m
+INFO 2026-01-05 17:19:56,570 [django.channels.server] runserver:168 [mHTTP GET /static/assets/css/shared/iconly.css 200 [0.00, 127.0.0.1:50053][0m
+INFO 2026-01-05 17:19:56,572 [django.channels.server] runserver:168 [mHTTP GET /static/assets/js/jquery-3.7.0.min.js 200 [0.00, 127.0.0.1:50054][0m
+INFO 2026-01-05 17:19:57,528 [django.channels.server] runserver:168 [mHTTP GET /static/assets/js/bootstrap.js 200 [0.00, 127.0.0.1:50054][0m
+INFO 2026-01-05 17:19:57,540 [django.channels.server] runserver:168 [mHTTP GET /static/assets/js/app.js 200 [0.00, 127.0.0.1:50054][0m
+INFO 2026-01-05 17:19:57,965 [django.channels.server] runserver:168 [mHTTP GET /static/assets/js/init.js 200 [0.00, 127.0.0.1:50054][0m
+INFO 2026-01-05 17:19:58,837 [django.channels.server] runserver:172 [36mHTTP GET /static/assets/images/logo/favicon.png 304 [0.00, 127.0.0.1:50054][0m
+INFO 2026-01-05 17:19:59,713 [django.channels.server] runserver:168 [mHTTP GET / 200 [0.05, 127.0.0.1:50054][0m

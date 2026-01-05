@@ -1,65 +1,58 @@
 {% extends 'registration/base.html' %}
-
-{% load i18n %}
-{% load static %}
-{% load widget_tweaks %}
+{% load i18n static widget_tweaks %}
 
 {% block left_content %}
-    <style>
-      #auth #auth-left .auth-logo img {
-        height: 8rem;
-      }
-    </style>
-
-    {% static 'assets/images/logo/logo.png' as logo %}
-    <div class="auth-logo mb-4"><a href="#"><img src="{{ organization.logo.url|default:logo }}" style="height: 5rem !important;" alt="payday-logo"></a></div>
+    <div class="auth-logo mb-4">
+        <a href="/">
+            <img src="{{ organization.logo.url|default:'/static/assets/images/logo/logo.png' }}" 
+                 style="height: 3.5rem; width: auto;" alt="Logo">
+        </a>
+    </div>
     
-    <h1 class="auth-title fs-1">{% trans 'Se connecter' %}.</h1>
-    <p class="auth-subtitle mb-5">{% trans 'Se connecter avec les informations fournies' %}.</p>
+    <header class="mb-4">
+        <h1 class="auth-title fs-2 mb-1">{% trans 'Se connecter' %}</h1>
+        <p class="text-muted small">{% trans 'Accédez à votre tableau de bord PayDay' %}</p>
+    </header>
 
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
 
         {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-            <ul class='form-errors list-unstyled'>
-                {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+            <div class="alert alert-danger py-2 px-3 mb-3 small border-0 shadow-sm">
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+            </div>
         {% endif %}
 
         {% for field in form.visible_fields %}
-        <div class="form-group position-relative has-icon-left mb-4">
-              {% if form.is_bound %}
-                {% if field.errors %}
-                  {% render_field field class="form-control form-control-xl is-invalid" placeholder=field.name %}
-                  {% for error in field.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                {% else %}
-                  {% render_field field class="form-control form-control-xl" placeholder=field.name %}
-                {% endif %}
-              {% else %}
-                {% render_field field class="form-control form-control-xl" placeholder=field.label %}
-              {% endif %}
+            <div class="form-group position-relative has-icon-left mb-3">
+                {% render_field field class+="form-control form-control-lg"|add:field.errors|yesno:" is-invalid," placeholder=field.label %}
+                
                 <div class="form-control-icon">
-                    {% if field.name == 'username' %}
-                    <i class="bi bi-person"></i>
-                    {% elif field.name == 'password' %}
-                    <i class="bi bi-shield-lock"></i>
+                    {% if 'user' in field.name or 'email' in field.name %}
+                        <i class="bi bi-person"></i>
+                    {% elif 'password' in field.name %}
+                        <i class="bi bi-shield-lock"></i>
+                    {% else %}
+                        <i class="bi bi-pen"></i>
                     {% endif %}
                 </div>
-              {% if field.help_text %}
-                <small class="form-text text-muted">{{ field.help_text }}</small>
-              {% endif %}
-        </div>
-      {% endfor %}
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
-          {% trans 'Se connecter' %}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback small fw-bold">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm mt-3 py-2 fw-bold">
+            {% trans 'Se connecter' %}
         </button>
     </form>
-    <div class="text-center mt-5 text-lg fs-4">
-        <p><a class="font-bold" href="{% url 'password_reset' %}">{% trans 'Mot de passe oublié ?' %}</a>.</p>
-    </div>
+
+    <footer class="mt-4 text-center">
+        <a class="small text-decoration-none fw-semibold" href="{% url 'password_reset' %}">
+            {% trans 'Mot de passe oublié ?' %}
+        </a>
+    </footer>
 {% endblock %}

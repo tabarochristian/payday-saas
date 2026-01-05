@@ -362,6 +362,6 @@ services:
 volumes:
   wordpress_data:
   postgres_data:
+  traefik-certs:
   mariadb_data:
   minio_data:
-  traefik-certs:
