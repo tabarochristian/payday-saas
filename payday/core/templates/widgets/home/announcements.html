@@ -1,0 +1,10 @@
+{% load static i18n %}
+<div class="p-2">
+    {% if notice %}
+    <h6 class="fw-bold mb-1">{{ notice.title }}</h6>
+    <p class="small text-muted mb-2">{{ notice.content|truncatechars:100 }}</p>
+    <a href="{% url 'core:notice_detail' notice.id %}" class="small text-decoration-none">{% trans "Read more" %} →</a>
+    {% else %}
+    <p class="small text-muted italic">{% trans "No new announcements." %}</p>
+    {% endif %}
+</div>

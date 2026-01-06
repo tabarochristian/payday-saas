@@ -1,0 +1,45 @@
+{% load mathfilters static i18n %}
+
+<div class="list-group list-group-flush">
+    {% for item in leaves %}
+    <div class="list-group-item px-0 py-3 border-0">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <div>
+                <span class="d-block fw-bold text-primary">{{ item.name }}</span>
+                <small class="text-muted">
+                    {{ item.used|default:0 }} {% trans "jours consommés" %}
+                </small>
+            </div>
+            
+            <div class="text-end">
+                {% with remaining=item.max_duration|sub:item.used %}
+                <span class="badge rounded-pill px-3 
+                    {% if remaining <= 0 %}bg-danger{% elif remaining <= 3 %}bg-warning text-primary{% else %}bg-primary{% endif %} 
+                    bg-opacity-10 
+                    {% if remaining <= 0 %}text-danger{% elif remaining <= 3 %}text-warning{% else %}text-primary{% endif %}">
+                    {{ remaining|default:item.max_duration }} {% trans "restants" %}
+                </span>
+                {% endwith %}
+            </div>
+        </div>
+        
+        {% with remaining=item.max_duration|sub:item.used %}
+        <div class="progress mt-2" style="height: 6px;">
+            <div class="progress-bar 
+                 {% if remaining <= 0 %}bg-danger{% elif remaining <= 3 %}bg-warning{% else %}bg-primary{% endif %}" 
+                 role="progressbar"
+                 style="width: {{ item.used|div:item.max_duration|mul:100|floatformat:0 }}%;"
+                 aria-valuenow="{{ item.used }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="{{ item.max_duration }}">
+            </div>
+        </div>
+        {% endwith %}
+    </div>
+    {% empty %}
+    <div class="text-center py-4">
+        <i class="bi bi-calendar-x text-muted opacity-50 display-6"></i>
+        <p class="text-muted small mt-2">{% trans "Aucun type de congé défini." %}</p>
+    </div>
+    {% endfor %}
+</div>

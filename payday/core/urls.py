@@ -14,7 +14,7 @@ class LogoutView(views.LogoutView):
         return self.post(request, *args, **kwargs)
 
 urlpatterns = [
-    path('', Home.as_view(), name='home'),
+    path('', HomeView.as_view(), name='home'),
     path('logout', LogoutView.as_view(), name='logout'),
     path('password/change', PasswordChange.as_view(), name='password-change'),
 

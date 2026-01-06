@@ -1,386 +1,151 @@
-{% load static %}
-<style>
-/* ---------------------------------------------------------------------- */
-/* 1. CSS DÉDIÉ POUR LA PRODUCTION (Structure et Animations) */
-/* ---------------------------------------------------------------------- */
-.attendance-card-container {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    max-width: 900px;
-    margin: 50px auto;
-    border: 1px solid #dee2e6;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out;
-}
-.attendance-card-container:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-.last-attendance-panel {
-    flex: 1; 
-    padding: 15px;
-    background-color: #f1f6ff;
-    border-radius: 8px;
-}
-.submission-panel {
-    flex: 2; 
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-#submitAttendanceBtn {
-    min-height: 50px; 
-    transition: all 0.2s ease-out;
-    font-weight: bold;
-}
+{% load static i18n %}
 
-/* Animation de "Pulse" pour le bouton en attente */
-.btn-holding {
-    background-color: #ffc107 !important;
-    border-color: #ffc107 !important;
-    animation: pulse-hold 1.5s infinite;
-}
-@keyframes pulse-hold {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
-    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
-}
-
-/* Style du message d'état en cours */
-#statusMessage {
-    font-style: italic;
-    min-height: 20px; 
-}
-
-/* Style pour l'heure affichée */
-#serverTimeDisplay {
-    font-size: 1.5em;
-    font-weight: 600;
-    color: #007bff;
-    text-align: center;
-    margin-bottom: 10px;
-}
-</style>
-
-{% csrf_token %} 
-
-<div class="attendance-card-container">
-    
-    <div class="last-attendance-panel">
-        <h5 class="mb-3 text-primary">Dernière Période d'Assiduité</h5>
+<div class="row g-3 align-items-center">
+    <div class="col-sm-5 border-sm-end px-3">
+        <p class="text-muted small text-uppercase fw-bold mb-2">{% trans "Current Status" %}</p>
         
-        <p class="mb-1">
-            <strong>Date:</strong> 
-            <span id="last-date">{{ attendance.checked_at.date|default:"N/A" }}</span>
-        </p>
+        <div class="d-flex align-items-center mb-3">
+            <div class="rounded-circle me-2 {% if attendance.first_checked_at %}bg-success{% else %}bg-secondary{% endif %}" 
+                 style="width: 12px; height: 12px;"></div>
+            <h5 class="mb-0 fw-bold">
+                {% if attendance.first_checked_at %}{% trans "On Duty" %}{% else %}{% trans "Off Duty" %}{% endif %}
+            </h5>
+        </div>
 
-        <hr>
-        <p class="small text-muted">Données récupérées depuis le serveur.</p>
-        <p class="mb-1">
-            <strong>Arrivée:</strong> 
-            <span id="last-in">{{ attendance.first_checked_at|default:"N/A" }}</span>
-        </p>
-        <p class="mb-1">
-            <strong>Départ:</strong> 
-            <span id="last-out">{{ attendance.last_checked_at|default:"N/A" }}</span>
-        </p>
-        
-        <p class="mt-3">
-            <strong>État actuel:</strong> 
-            <span id="current-state" class="fw-bold text-{% if attendance.first_checked_at %}danger{% else %}success{% endif %}">
-                {% if attendance.first_checked_at %}Au travail{% else %}Absent{% endif %}
-            </span>
-        </p>
+        <div class="small">
+            <div class="d-flex justify-content-between border-bottom py-1">
+                <span class="text-muted">{% trans "In" %}:</span>
+                <span class="fw-bold">{{ attendance.first_checked_at|time:"H:i"|default:"--" }}</span>
+            </div>
+            <div class="d-flex justify-content-between py-1">
+                <span class="text-muted">{% trans "Out" %}:</span>
+                <span class="fw-bold">{{ attendance.last_checked_at|time:"H:i"|default:"--" }}</span>
+            </div>
+        </div>
     </div>
 
-    <div class="submission-panel">
-        <h5 class="text-primary">Soumettre une Nouvelle Assiduité</h5>
-        
-        <div id="serverTimeDisplay">Chargement de l'heure...</div>
+    <div class="col-sm-7 text-center border-start-sm">
+        <div id="digital-clock" class="h2 fw-bold mb-0 text-primary">00:00:00</div>
+        <p class="text-muted small mb-3">{% now "D, d M Y" %}</p>
 
-        <div id="messageContainer"></div>
+        <div id="ui-feedback" class="small mb-2" style="min-height: 20px;"></div>
 
-        <button id="submitAttendanceBtn" class="btn btn-success btn-lg">
-            Pointer l'Arrivée / le Départ
-        </button>
-
-        <p id="statusMessage" class="text-center text-muted small mt-2">
-            Cliquez sur le bouton pour commencer la vérification.
-        </p>
+        <div class="position-relative">
+            <button id="mainPunchBtn" class="btn btn-lg w-100 fw-bold py-3 shadow-sm border-0 position-relative overflow-hidden">
+                <span class="punch-label" style="z-index: 2; position: relative;">{% trans "Wait..." %}</span>
+                <div class="punch-progress position-absolute top-0 start-0 h-100 bg-dark opacity-10" 
+                     style="width: 0%; transition: width 0.1s linear; z-index: 1;"></div>
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-// ----------------------------------------------------------------------
-// 3. LOGIQUE JAVASCRIPT (Optimisée pour la Production)
-// ----------------------------------------------------------------------
-class AttendanceManager {
-    constructor(config) {
-        this.SUBMIT_URL = config.submitUrl;
-        this.DELAY_MS = config.delaySeconds * 1000;
-        this.DELAY_SECONDS = config.delaySeconds;
-        this.CSRF_TOKEN = config.csrfToken;
-        this.USER_ENROLL_ID = config.enrollId;
-        this.DEVICE_SN = config.deviceSn;
-        // NOUVEAU: Détermine l'état IN/OUT basé sur la variable du serveur
-        this.IS_CHECKED_IN = config.isCheckedIn; 
-
-        this.ATTENDANCE_BTN = document.getElementById('submitAttendanceBtn');
-        this.MESSAGE_CONTAINER = document.getElementById('messageContainer');
-        this.STATUS_MESSAGE = document.getElementById('statusMessage');
-        this.TIME_DISPLAY = document.getElementById('serverTimeDisplay');
-
-        this.countdownTimer = null;
-        this.timeUpdater = null;
-
-        this.initializeTimeDisplay();
-        this.updateButtonText();
-        this.ATTENDANCE_BTN.addEventListener('click', this.handleAttendanceClick.bind(this));
+class AttendanceEngine {
+    constructor(options) {
+        this.options = options;
+        this.btn = document.getElementById('mainPunchBtn');
+        this.bar = this.btn.querySelector('.punch-progress');
+        this.label = this.btn.querySelector('.punch-label');
+        this.clock = document.getElementById('digital-clock');
+        this.feedback = document.getElementById('ui-feedback');
+        this.isIn = options.isCheckedIn;
+        this.init();
     }
 
-    /** Traduction des messages d'état */
-    MESSAGES = {
-        INITIAL: "Cliquez sur le bouton pour commencer la vérification.",
-        REQUESTING: "Demande de permission de localisation...",
-        ACQUIRED: (s) => `Localisation acquise. Maintien pendant ${s} secondes...`,
-        HOLDING: (s) => `Maintien (${s}s)`,
-        SUBMITTING: "Localisation verrouillée. Soumission en cours...",
-        COMPLETE: "Soumission terminée.",
-        NETWORK_ERROR: "Erreur réseau ou impossible d'atteindre le serveur. Vérifiez votre connexion.",
-        GEO_UNSUPPORTED: "La géolocalisation n'est pas supportée par votre navigateur.",
-        PERMISSION_DENIED: "Permission de localisation refusée. Veuillez l'activer dans les paramètres de votre navigateur.",
-        // NOUVEAU: Message générique pour les erreurs serveur
-        SERVER_ERROR_GENERIC: "Une erreur serveur inattendue est survenue. Code d'état: ", 
-    };
-
-    /** Met à jour le texte du bouton en fonction de l'état d'arrivée/départ */
-    updateButtonText() {
-        const action = this.IS_CHECKED_IN ? "Pointer le DÉPART" : "Pointer l'ARRIVÉE";
-        this.ATTENDANCE_BTN.textContent = action;
-        
-        // Mettre à jour la couleur du bouton pour la clarté (Départ = Danger)
-        if (this.IS_CHECKED_IN) {
-            this.ATTENDANCE_BTN.classList.remove('btn-success');
-            this.ATTENDANCE_BTN.classList.add('btn-danger');
-        }
-    }
-    
-    /** Initialise l'affichage de l'heure locale de l'utilisateur */
-    initializeTimeDisplay() {
-        const updateTime = () => {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('fr-FR', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            });
-            const dateString = now.toLocaleDateString('fr-FR', { 
-                day: '2-digit', 
-                month: 'short', 
-                year: 'numeric' 
-            });
-            this.TIME_DISPLAY.textContent = `${dateString} ${timeString}`;
+    init() {
+        // Simple Clock
+        const updateClock = () => {
+            this.clock.textContent = new Date().toLocaleTimeString('fr-FR');
         };
-        updateTime();
-        this.timeUpdater = setInterval(updateTime, 1000);
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        this.render();
+        this.btn.onclick = () => this.handleAction();
     }
 
-    /** Affiche une alerte Bootstrap dans le conteneur */
-    displayMessage(type, message) {
-        this.MESSAGE_CONTAINER.innerHTML = `
-            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-            </div>
-        `;
+    render() {
+        // Using standard Bootstrap colors
+        this.btn.classList.remove('btn-success', 'btn-danger');
+        this.btn.classList.add(this.isIn ? 'btn-danger' : 'btn-success');
+        this.label.textContent = this.isIn ? "{% trans 'CLOCK OUT' %}" : "{% trans 'CLOCK IN' %}";
     }
 
-    /** Gère la demande de coordonnées via l'API Geolocation */
-    getCoordinates() {
-        return new Promise((resolve, reject) => {
-            if (!navigator.geolocation) {
-                return reject(this.MESSAGES.GEO_UNSUPPORTED);
-            }
-            this.STATUS_MESSAGE.textContent = this.MESSAGES.REQUESTING;
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => resolve({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }),
-                (error) => {
-                    if (error.code === 1) {
-                        return reject(this.MESSAGES.PERMISSION_DENIED);
-                    }
-                    // Amélioration du message d'erreur de géolocalisation
-                    return reject("Échec de la géolocalisation. Assurez-vous d'être dans une zone de couverture GPS. Code d'erreur: " + error.code);
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        });
-    }
-
-    /** Tente d'extraire le message d'erreur le plus pertinent de la réponse JSON du backend */
-    getErrorMessage(data) {
-        if (!data) return "Réponse serveur vide ou illisible.";
+    handleAction() {
+        this.btn.disabled = true;
+        this.feedback.innerHTML = `<div class="spinner-border spinner-border-sm text-primary"></div> Locating...`;
         
-        // Cas 1: Message de succès ou erreur simple (comme votre `data.message` ou `data.error` existant)
-        if (data.message) return data.message;
-        if (data.error) return data.error;
-
-        // Cas 2: Erreurs de formulaire/validation (comme l'erreur de géofence dans votre exemple)
-        // Itérer sur les champs pour trouver le premier message d'erreur
-        for (const key in data) {
-            if (Array.isArray(data[key])) {
-                // Pour les listes d'erreurs (souvent le cas de DRF)
-                return data[key].join(' ');
-            }
-            if (typeof data[key] === 'string') {
-                // Pour une erreur simple de type "geofence": "Message..."
-                return data[key];
-            }
-        }
-
-        // Cas 3: Dernier recours si la structure est inconnue
-        return "Échec de la soumission. Détails d'erreur non décodables par le client.";
+        navigator.geolocation.getCurrentPosition(
+            (pos) => this.runCountdown(pos.coords),
+            (err) => this.abort("{% trans 'Location Required' %}"),
+            { enableHighAccuracy: true }
+        );
     }
 
-    /** Soumet les données au backend Django */
-    async submitAttendance(lat, lon) {
-        this.ATTENDANCE_BTN.disabled = true;
-        this.ATTENDANCE_BTN.textContent = 'Soumission...';
-        this.STATUS_MESSAGE.textContent = this.MESSAGES.SUBMITTING;
+    runCountdown(coords) {
+        let count = 3;
+        this.bar.style.width = '0%';
         
-        const now = new Date();
-        const isoTimestamp = now.toISOString();
+        const timer = setInterval(() => {
+            const progress = ((3 - count) / 3) * 100;
+            this.bar.style.width = `${progress}%`;
+            this.label.textContent = `HOLD ${count}s...`;
+            
+            if (count <= 0) {
+                clearInterval(timer);
+                this.bar.style.width = '100%';
+                this.submit(coords);
+            }
+            count--;
+        }, 1000);
+    }
 
-        // LOGIQUE DE DÉTERMINATION DU TYPE D'ENTRÉE CORRIGÉE
-        const entryType = this.IS_CHECKED_IN ? 1 : 0; 
-
-        const payload = {
-            sn: this.DEVICE_SN,
-            timestamp: isoTimestamp,
-            enroll_id: this.USER_ENROLL_ID,
-            mode: 10, // Web
-            in_out: entryType,
-            event: 0,
-            latitude: lat,
-            longitude: lon,
-            geofence_center: `POINT(${lon} ${lat})`,
-            sub_organization: '{{ request.user.employee.sub_organization }}'
-        };        
-
+    async submit(coords) {
+        this.label.textContent = "{% trans 'SYNCING...' %}";
         try {
-            const response = await fetch(this.SUBMIT_URL, {
+            const res = await fetch(this.options.url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': this.CSRF_TOKEN
+                    'X-CSRFToken': this.options.csrf
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    in_out: this.isIn ? 1 : 0,
+                    latitude: coords.latitude,
+                    longitude: coords.longitude,
+                    sn: this.options.sn,
+                    enroll_id: this.options.enrollId,
+                    timestamp: new Date().toISOString()
+                })
             });
 
-            // Tenter toujours de lire la réponse JSON, même en cas d'erreur HTTP
-            let data = {};
-            try {
-                data = await response.json();
-            } catch (jsonError) {
-                // Gérer le cas où la réponse n'est pas un JSON valide (rare mais possible)
-                if (!response.ok) {
-                    this.displayMessage('danger', this.MESSAGES.SERVER_ERROR_GENERIC + response.status + ". Réponse non-JSON.");
-                    return;
-                }
-            }
-
-            if (response.ok) {
-                this.displayMessage('success', data.message || "Assiduité soumise avec succès !");
-                // Mettre à jour l'état checked-in après le succès
-                this.IS_CHECKED_IN = !this.IS_CHECKED_IN; 
+            if (res.ok) {
+                window.location.reload();
             } else {
-                // Si la réponse n'est pas OK, extraire le message d'erreur spécifique
-                const errorMessage = this.getErrorMessage(data);
-                this.displayMessage('danger', `Échec du pointage : ${errorMessage}`);
+                this.abort("{% trans 'Error' %}");
             }
-        } catch (error) {
-            // Cette erreur est généralement une erreur réseau (pas de connexion, CORS, etc.)
-            console.error('Erreur Fetch:', error);
-            this.displayMessage('danger', this.MESSAGES.NETWORK_ERROR);
-        } finally {
-            this.resetButtonState();
-            this.updateButtonText(); // Mise à jour du texte et de la couleur du bouton
+        } catch (e) {
+            this.abort("{% trans 'Network Error' %}");
         }
     }
 
-    /** Réinitialise l'état du bouton après soumission/erreur */
-    resetButtonState() {
-        this.ATTENDANCE_BTN.disabled = false;
-        this.ATTENDANCE_BTN.classList.remove('btn-holding');
-        this.ATTENDANCE_BTN.classList.remove('btn-warning');
-        this.STATUS_MESSAGE.textContent = this.MESSAGES.COMPLETE;
-        clearInterval(this.countdownTimer);
-    }
-
-    /** Gère le flux principal de l'assiduité */
-    async handleAttendanceClick() {
-        this.ATTENDANCE_BTN.disabled = true;
-        this.MESSAGE_CONTAINER.innerHTML = '';
-        
-        // Mettre à jour les classes pour l'animation HOLDING
-        this.ATTENDANCE_BTN.classList.remove('btn-success', 'btn-danger');
-        this.ATTENDANCE_BTN.classList.add('btn-warning', 'btn-holding');
-        
-        try {
-            const coordinates = await this.getCoordinates();
-            let secondsLeft = this.DELAY_SECONDS;
-            
-            this.STATUS_MESSAGE.textContent = this.MESSAGES.ACQUIRED(secondsLeft);
-            this.ATTENDANCE_BTN.textContent = this.MESSAGES.HOLDING(secondsLeft);
-            
-            this.countdownTimer = setInterval(() => {
-                secondsLeft--;
-                if (secondsLeft <= 0) {
-                    clearInterval(this.countdownTimer);
-                    this.submitAttendance(coordinates.latitude, coordinates.longitude);
-                } else {
-                    this.STATUS_MESSAGE.textContent = this.MESSAGES.ACQUIRED(secondsLeft);
-                    this.ATTENDANCE_BTN.textContent = this.MESSAGES.HOLDING(secondsLeft);
-                }
-            }, 1000);
-
-        } catch (error) {
-            // L'erreur ici est liée à la géolocalisation (non supportée ou refusée)
-            this.displayMessage('warning', error);
-            this.resetButtonState();
-            this.updateButtonText(); // Restaurer le texte correct après l'échec
-            this.STATUS_MESSAGE.textContent = this.MESSAGES.INITIAL;
-        }
+    abort(msg) {
+        this.feedback.className = "text-danger small fw-bold";
+        this.feedback.textContent = msg;
+        this.btn.disabled = false;
+        this.bar.style.width = '0%';
+        this.render();
     }
 }
 
-// Initialisation de la classe au chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-    
-    // Logique Django pour déterminer l'état d'arrivée/départ
-    // Si attendance.first_checked_at a une valeur, l'utilisateur est "checked in".
-    const isCheckedIn = !!'{{ attendance.first_checked_at }}'; 
-    
-    if (csrfToken) {
-        new AttendanceManager({
-            submitUrl: "{% url 'api:list' 'device' 'log' %}",
-            delaySeconds: 5,
-            csrfToken: csrfToken,
-            // Assurez-vous que la valeur est un nombre valide pour éviter les erreurs JS.
-            enrollId: {{ request.user.employee.registration_number|default:'null'|safe }}, 
-            deviceSn: '{{ request.user.employee.web_devices.first.sn|default:'' }}', 
-            isCheckedIn: isCheckedIn // Transmis à la classe
-        });
-    } else {
-        console.error("ERREUR: Token CSRF non trouvé.");
-        document.getElementById('statusMessage').textContent = "Erreur de configuration (CSRF manquant). Impossible de soumettre.";
-    }
+    new AttendanceEngine({
+        url: "{% url 'api:list' 'device' 'log' %}",
+        csrf: "{{ csrf_token }}",
+        sn: "{{ request.user.employee.web_devices.first.sn|default:'' }}",
+        enrollId: {{ request.user.employee.registration_number|default:0 }},
+        isCheckedIn: !!'{{ attendance.first_checked_at }}'
+    });
 });
 </script>

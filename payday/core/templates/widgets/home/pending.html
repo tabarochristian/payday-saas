@@ -1,0 +1,16 @@
+{% load static i18n %}
+<div class="list-group list-group-flush">
+    {% for leave in pending_leaves %}
+    <div class="list-group-item px-0 py-2 border-0 d-flex justify-content-between align-items-center">
+        <div class="text-truncate me-2">
+            <span class="d-block fw-bold small text-dark">{{ leave.employee.get_full_name }}</span>
+            <small class="text-muted">{{ leave.start_date|date:"d M" }} - {{ leave.type.name }}</small>
+        </div>
+        <a href="{% url 'leave:detail' leave.id %}" class="btn btn-sm btn-primary py-0 px-2 small">
+            {% trans "Review" %}
+        </a>
+    </div>
+    {% empty %}
+    <p class="text-muted small py-3 mb-0 text-center">{% trans "All caught up!" %}</p>
+    {% endfor %}
+</div>
