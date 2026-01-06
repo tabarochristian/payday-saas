@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
+    sub_organization = None 
 
     # ------------------------------------------------------------------
     # Public API
@@ -21,7 +22,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
         user = self.request.user
         employee = getattr(user, "employee", None)
-        sub_org = getattr(self.request, "suborganization", None)
+
+        sub_organization = getattr(self.request, "suborganization", None)
+        self.sub_organization = sub_organization
 
         today = timezone.localdate()
 
@@ -33,7 +36,8 @@ class HomeView(LoginRequiredMixin, TemplateView):
             "absent_today": self.get_absent_today(employee, today),
             "holidays": self.get_upcoming_holidays(today),
             "celebrations": self.get_celebrations(today),
-            "admin_stats": self.get_admin_metrics(user, sub_org),
+
+            "admin_stats": self.get_admin_metrics(user),
             "latest_notice": self.get_latest_notice(),
         }
 
@@ -51,7 +55,11 @@ class HomeView(LoginRequiredMixin, TemplateView):
         Attendance = apps.get_model("employee", "Attendance")
         return (
             Attendance.objects
-            .filter(employee=employee, first_checked_at__date=today)
+            .filter(
+                sub_organization=self.sub_organization,
+                employee=employee, 
+                first_checked_at__date=today
+            )
             .first()
         )
 
@@ -64,8 +72,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
         current_year = timezone.now().year
 
         return (
-            TypeOfLeave.objects
-            .annotate(
+            TypeOfLeave.objects.filter(
+                sub_organization=self.sub_organization
+            ).annotate(
                 used=Sum(
                     ExpressionWrapper(
                         F("leave__end_date") - F("leave__start_date") + timedelta(days=1),
@@ -88,8 +97,11 @@ class HomeView(LoginRequiredMixin, TemplateView):
         Leave = apps.get_model("leave", "Leave")
         return (
             Leave.objects
-            .filter(employee=employee, status="PENDING")
-            .select_related("employee")[:5]
+            .filter(
+                sub_organization = self.sub_organization,
+                employee=employee, 
+                status="PENDING"
+            ).select_related("employee")[:5]
         )
 
     def get_absent_today(self, employee, today):
@@ -103,6 +115,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
                 status="APPROVED",
                 start_date__lte=today,
                 end_date__gte=today,
+                sub_organization=self.sub_organization
             )
             .select_related("employee")
             .order_by("-start_date")[:6]
@@ -112,8 +125,10 @@ class HomeView(LoginRequiredMixin, TemplateView):
         Holiday = apps.get_model("leave", "Holiday")
         return (
             Holiday.objects
-            .filter(start_date__gte=today)
-            .order_by("start_date")[:3]
+            .filter(
+                start_date__gte=today, 
+                sub_organization=self.sub_organization
+            ).order_by("start_date")[:3]
         )
 
     def get_celebrations(self, today):
@@ -122,7 +137,8 @@ class HomeView(LoginRequiredMixin, TemplateView):
             Employee.objects
             .filter(
                 Q(date_of_birth__month=today.month)
-                | Q(date_of_join__month=today.month)
+                | Q(date_of_join__month=today.month),
+                sub_organization=self.sub_organization
             )
             .order_by("date_of_birth__day")[:5]
         )
@@ -131,15 +147,13 @@ class HomeView(LoginRequiredMixin, TemplateView):
         """Placeholder for announcements."""
         return None
 
-    def get_admin_metrics(self, user, sub_org):
+    def get_admin_metrics(self, user):
         if not user.is_staff and not user.is_superuser:
             return None
 
         Employee = apps.get_model("employee", "Employee")
-        qs = Employee.objects.for_user(user)
-
-        if sub_org:
-            qs = qs.filter(sub_organization=sub_org)
+        qs = Employee.objects.for_user(user)\
+            .filter(sub_organization=self.sub_organization)
 
         return qs.values("status__name").annotate(count=Count("id"))
 

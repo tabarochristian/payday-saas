@@ -21,7 +21,7 @@ class Leave(Base):
         on_delete=models.PROTECT,
         verbose_name=_("employé")
     )
-    type_of_leave = fields.ModelSelectField(
+    type_of_leave = fields.ForeignKey(
         "leave.typeofleave",
         on_delete=models.CASCADE,
         verbose_name=_("type de congé")

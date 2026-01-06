@@ -12,4 +12,5 @@ __pycache__/
 
 .env
 
+payday/logs/django.log
 django_error.log
