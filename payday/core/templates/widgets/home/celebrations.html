@@ -4,13 +4,13 @@
     <div class="list-group-item px-0 py-2 border-0 d-flex align-items-center">
         <div class="me-2 fs-5">🎂</div>
         <div class="flex-grow-1">
-            <span class="d-block fw-bold small text-dark">{{ emp.get_full_name }}</span>
+            <span class="d-block fw-bold small text-primary">{{ emp.full_name }}</span>
             <small class="text-muted">
-                {% if emp.birthday.month == today.month %}{% trans "Birthday" %}{% else %}{% trans "Work Anniversary" %}{% endif %}
+                {% if emp.date_of_birth.month == today.month %}{% trans "Birthday" %}{% else %}{% trans "Work Anniversary" %}{% endif %}
             </small>
         </div>
         <div class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill">
-            {{ emp.birthday|date:"d M" }}
+            {{ emp.date_of_birth|date:"d M" }}
         </div>
     </div>
     {% endfor %}

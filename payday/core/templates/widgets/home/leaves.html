@@ -28,8 +28,8 @@
             <div class="progress-bar 
                  {% if remaining <= 0 %}bg-danger{% elif remaining <= 3 %}bg-warning{% else %}bg-primary{% endif %}" 
                  role="progressbar"
-                 style="width: {{ item.used|div:item.max_duration|mul:100|floatformat:0 }}%;"
-                 aria-valuenow="{{ item.used }}" 
+                 style="width: {{ item.used.days|div:item.max_duration|mul:100|floatformat:0 }}%;"
+                 aria-valuenow="{{ item.used.days }}" 
                  aria-valuemin="0" 
                  aria-valuemax="{{ item.max_duration }}">
             </div>

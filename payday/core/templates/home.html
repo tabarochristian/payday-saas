@@ -3,27 +3,41 @@
 
 {% block content %}
 <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0 fw-bold">{% trans "Dashboard" %}</h2>
+        <button id="reset-layout" class="btn btn-sm btn-link text-muted text-decoration-none">
+            <i class="bi bi-arrow-counterclockwise"></i> {% trans "Reset Layout" %}
+        </button>
+    </div>
+
     <div id="widgets-grid" class="row g-4">
         {% for widget in widgets %}
-            <div class="{{ widget.column }}" data-id="{{ forloop.counter }}">
-                <div class="card h-100 shadow-sm border-light">
-                    <div class="card-header bg-white border-bottom-0 pt-3 d-flex align-items-center justify-content-between">
+            <div class="widget-container {{ widget.column|default:'col-md-6' }}" 
+                 data-id="{{ widget.id|default:forloop.counter }}">
+                
+                <div class="card h-100 shadow-sm border-0 widget-card">
+                    <div class="card-header bg-white border-0 pt-3 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="drag-handle text-muted me-2" style="cursor: grab;">
                                 <i class="bi bi-grip-vertical fs-5"></i>
                             </div>
-                            <h6 class="card-title mb-0 fw-bold text-uppercase small text-muted" style="letter-spacing: 0.5px;">
-                                {{ widget.title }}
-                            </h6>
+                            <span class="fw-bold small text-uppercase text-secondary">{{ widget.title }}</span>
                         </div>
                         
-                        {% if widget.url %}
-                        <a href="{{ widget.url }}" class="btn btn-link btn-sm text-decoration-none p-0">
-                            <i class="bi bi-arrow-up-right-square"></i>
-                        </a>
-                        {% endif %}
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
+                                <i class="bi bi-arrows-angle-expand"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                <li><a class="dropdown-item size-opt" href="#" data-size="col-md-3">25%</a></li>
+                                <li><a class="dropdown-item size-opt" href="#" data-size="col-md-4">30%</a></li>
+                                <li><a class="dropdown-item size-opt" href="#" data-size="col-md-6">50%</a></li>
+                                <li><a class="dropdown-item size-opt" href="#" data-size="col-md-8">60%</a></li>
+                                <li><a class="dropdown-item size-opt" href="#" data-size="col-md-9">75%</a></li>
+                                <li><a class="dropdown-item size-opt" href="#" data-size="col-md-12">100%</a></li>
+                            </ul>
+                        </div>
                     </div>
-
                     <div class="card-body">
                         {{ widget.content|safe }}
                     </div>
@@ -32,34 +46,101 @@
         {% endfor %}
     </div>
 </div>
+
+<style>
+    /* THE ANIMATION ENGINE */
+    .widget-container {
+        /* Transition all properties involved in Bootstrap grid sizing */
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        
+        /* Forces the browser to treat this as a layout object for smoother resizing */
+        will-change: width, flex, max-width;
+    }
+
+    /* Prevent content overflow during the "shrinking" phase of the animation */
+    .widget-card {
+        overflow: hidden;
+        height: 100%;
+        border-radius: 8px;
+    }
+
+    /* Remove the default 'flex: 0 0 auto' from Bootstrap if it interferes with transitions */
+    #widgets-grid .widget-container {
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+    /* Dragging styles */
+    .sortable-ghost {
+        opacity: 0.2;
+    }
+</style>
 {% endblock %}
 
 {% block custom_scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const grid = document.getElementById('widgets-grid');
-        new Sortable(grid, {
-            animation: 200,
-            handle: '.drag-handle',
-            onEnd: function () {
-                const order = Array.from(grid.children).map(el => el.getAttribute('data-id'));
-                localStorage.setItem('hrms-layout-v1', JSON.stringify(order));
-            },
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('widgets-grid');
+    const STORAGE_KEY = 'dashboard_v2_settings';
+
+    // Save order and width
+    const saveState = () => {
+        const state = Array.from(grid.querySelectorAll('.widget-container')).map(el => {
+            return {
+                id: el.getAttribute('data-id'),
+                w: Array.from(el.classList).find(c => c.startsWith('col-'))
+            };
         });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    };
 
-        const savedOrder = JSON.parse(localStorage.getItem('hrms-layout-v1'));
-        if (savedOrder) {
-            savedOrder.forEach(id => {
-                const item = grid.querySelector(`[data-id="${id}"]`);
-                if (item) grid.appendChild(item);
-            });
-        }
+    // Load state
+    const loadState = () => {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!data) return;
 
-        document.getElementById('reset-layout').onclick = () => {
-            localStorage.removeItem('hrms-layout-v1');
-            window.location.reload();
-        };
+        data.forEach(item => {
+            const el = grid.querySelector(`[data-id="${item.id}"]`);
+            if (el) {
+                const cleanClasses = Array.from(el.classList).filter(c => !c.startsWith('col-'));
+                el.className = [...cleanClasses, item.w].join(' ');
+                grid.appendChild(el);
+            }
+        });
+    };
+
+    // Initialize Drag & Drop
+    new Sortable(grid, {
+        handle: '.drag-handle',
+        animation: 300,
+        ghostClass: 'sortable-ghost',
+        onEnd: saveState
     });
+
+    // Handle Width Changes with Animation
+    grid.addEventListener('click', function(e) {
+        const btn = e.target.closest('.size-opt');
+        if (!btn) return;
+        e.preventDefault();
+
+        const container = btn.closest('.widget-container');
+        const newWidth = btn.getAttribute('data-size');
+
+        // By simply swapping the class, the 'transition: all' in CSS 
+        // will animate the width and flex-basis change.
+        const otherClasses = Array.from(container.classList).filter(c => !c.startsWith('col-'));
+        container.className = [...otherClasses, newWidth].join(' ');
+
+        saveState();
+    });
+
+    loadState();
+
+    document.getElementById('reset-layout').onclick = () => {
+        localStorage.removeItem(STORAGE_KEY);
+        window.location.reload();
+    };
+});
 </script>
 {% endblock %}

@@ -167,8 +167,14 @@ class Employee(BaseEmployee):
             'tag': 'a',
         }]
 
-    @property
-    def web_devices(self):
+
+    def web_attendance(self):
+        return self.devices.all().filter(
+            geofence_center__isnull=False,
+            geofence_radius__isnull=False
+        )
+
+    def device_attendance(self):
         return self.devices.all().filter(
             geofence_center__isnull=False,
             geofence_radius__isnull=False

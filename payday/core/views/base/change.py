@@ -84,13 +84,10 @@ class Change(BaseViewMixin):
 
     def can_change(self):
         obj = self._get_object()
-        return (
-            (self.request.user.is_staff or self.request.user.is_superuser)
-            and (
-                self.approvals().filter(user=self.request.user).exists()
-                or getattr(obj, "status", None) not in ["APPROVED", "REJECTED"]
-            )
-        )
+
+        is_staff = self.request.user.is_staff and self.approvals().filter(user=self.request.user).exists()
+        staff_can_approve = is_staff and getattr(obj, "status", None) not in ["APPROVED", "REJECTED"]
+        return self.request.user.is_superuser or staff_can_approve
 
     # ---------------------------------
     # Action Buttons
@@ -113,7 +110,7 @@ class Change(BaseViewMixin):
                 }) + f'?pk__in={pk}'
             )
         ]
-
+        
         if self.can_change():
             buttons.append(
                 Button(

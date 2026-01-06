@@ -1,206 +1,238 @@
-from django.db.models import Count, Sum, Q, F, ExpressionWrapper, DurationField
+from datetime import timedelta
+
+from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Sum, Q, F, ExpressionWrapper, DurationField
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView
 
-from django.utils import timezone
-from django.apps import apps
-
-from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
-from datetime import timedelta
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
 
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         user = self.request.user
-        
-        # Performance: Select related employee and user in one go
-        employee = getattr(user, 'employee', None)
+        employee = getattr(user, "employee", None)
         sub_org = getattr(self.request, "suborganization", None)
-        
-        # 1. Fetch data efficiently
-        data = {
-            'employee': employee,
-            'is_admin': user.is_staff or user.is_superuser,
-            'attendance': self._get_today_attendance(employee),
-            'leave_balances': self._get_optimized_leaves(employee),
-            'admin_stats': self._get_admin_metrics(user, sub_org)
+
+        today = timezone.localdate()
+
+        # Pre-fetch reusable datasets (prevents repeated DB hits)
+        cache = {
+            "attendance": self.get_today_attendance(employee, today),
+            "leave_balances": self.get_leave_balances(employee),
+            "pending_leaves": self.get_pending_leaves(employee),
+            "absent_today": self.get_absent_today(employee, today),
+            "holidays": self.get_upcoming_holidays(today),
+            "celebrations": self.get_celebrations(today),
+            "admin_stats": self.get_admin_metrics(user, sub_org),
+            "latest_notice": self.get_latest_notice(),
         }
 
-        # 2. Build the flexible Widget Grid
-        context['widgets'] = self._get_visible_widgets(data)
+        context["widgets"] = self.build_widgets(user, employee, cache)
         return context
 
-    def _get_today_attendance(self, employee):
-        if not employee: return None
-        Attendance = apps.get_model('employee', 'Attendance')
-        return Attendance.objects.filter(
-            employee=employee, 
-            first_checked_at__date=timezone.localdate()
-        ).first()
+    # ------------------------------------------------------------------
+    # Data Fetching (Queries Only)
+    # ------------------------------------------------------------------
 
-    def _get_optimized_leaves(self, employee):
-        """Database-level calculation for all leave types at once."""
-        if not employee: return []
-        TypeOfLeave = apps.get_model('leave', 'TypeOfLeave')
-        return TypeOfLeave.objects.annotate(
-            used=Sum(
-                ExpressionWrapper(
-                    F('leave__end_date') - F('leave__start_date') + timedelta(days=1),
-                    output_field=DurationField()
-                ),
-                filter=Q(
-                    leave__employee=employee,
-                    leave__start_date__year=timezone.now().year,
-                    leave__status='APPROVED'
+    def get_today_attendance(self, employee, today):
+        if not employee:
+            return None
+
+        Attendance = apps.get_model("employee", "Attendance")
+        return (
+            Attendance.objects
+            .filter(employee=employee, first_checked_at__date=today)
+            .first()
+        )
+
+    def get_leave_balances(self, employee):
+        """Aggregate leave usage per leave type for the current year."""
+        if not employee:
+            return []
+
+        TypeOfLeave = apps.get_model("leave", "TypeOfLeave")
+        current_year = timezone.now().year
+
+        return (
+            TypeOfLeave.objects
+            .annotate(
+                used=Sum(
+                    ExpressionWrapper(
+                        F("leave__end_date") - F("leave__start_date") + timedelta(days=1),
+                        output_field=DurationField(),
+                    ),
+                    filter=Q(
+                        leave__employee=employee,
+                        leave__start_date__year=current_year,
+                        leave__status="APPROVED",
+                    ),
                 )
             )
-        ).values('name', 'max_duration', 'used')
+            .values("name", "max_duration", "used")
+        )
 
-    def _get_upcoming_holidays(self):
-        # Assuming a 'core' or 'leave' app has a Holiday model
-        Holiday = apps.get_model('leave', 'Holiday')
-        return Holiday.objects.filter(
-            date__gte=timezone.localdate()
-        ).order_by('date')[:3]
+    def get_pending_leaves(self, employee):
+        if not employee:
+            return []
 
-    def _get_absent_today(self):
-        Leave = apps.get_model('leave', 'Leave')
-        return Leave.objects.filter(
-            start_date__lte=timezone.localdate(),
-            end_date__gte=timezone.localdate(),
-            status='APPROVED'
-        ).select_related('employee')[:6]
+        Leave = apps.get_model("leave", "Leave")
+        return (
+            Leave.objects
+            .filter(employee=employee, status="PENDING")
+            .select_related("employee")[:5]
+        )
 
-    def _get_celebrations(self):
-        Employee = apps.get_model('employee', 'Employee')
-        today = timezone.localdate()
-        # Birthdays or Anniversaries this month
-        return Employee.objects.filter(
-            Q(date_of_birth__month=today.month) | Q(date_of_join__month=today.month)
-        ).order_by('date_of_birth__day')[:5]
+    def get_absent_today(self, employee, today):
+        if not employee:
+            return []
 
-    def _get_pending_approvals(self, user):
-        Leave = apps.get_model('leave', 'Leave')
-        # Show only if user is a manager or admin
-        return Leave.objects.filter(status='PENDING').select_related('employee')[:5]
+        Leave = apps.get_model("leave", "Leave")
+        return (
+            Leave.objects
+            .filter(
+                status="APPROVED",
+                start_date__lte=today,
+                end_date__gte=today,
+            )
+            .select_related("employee")
+            .order_by("-start_date")[:6]
+        )
 
-    def _get_latest_notice(self):
-        return {}
+    def get_upcoming_holidays(self, today):
+        Holiday = apps.get_model("leave", "Holiday")
+        return (
+            Holiday.objects
+            .filter(start_date__gte=today)
+            .order_by("start_date")[:3]
+        )
 
-    def _get_admin_metrics(self, user, sub_org):
-        if not (user.is_staff or user.is_superuser): return None
-        Employee = apps.get_model('employee', 'Employee')
+    def get_celebrations(self, today):
+        Employee = apps.get_model("employee", "Employee")
+        return (
+            Employee.objects
+            .filter(
+                Q(date_of_birth__month=today.month)
+                | Q(date_of_join__month=today.month)
+            )
+            .order_by("date_of_birth__day")[:5]
+        )
+
+    def get_latest_notice(self):
+        """Placeholder for announcements."""
+        return None
+
+    def get_admin_metrics(self, user, sub_org):
+        if not user.is_staff and not user.is_superuser:
+            return None
+
+        Employee = apps.get_model("employee", "Employee")
         qs = Employee.objects.for_user(user)
-        if sub_org: qs = qs.filter(sub_organization=sub_org)
-        return qs.values('status__name').annotate(count=Count('id'))
 
-    def _get_visible_widgets(self, data):
-        """
-        The Layout Engine.
-        This allows you to control the UI purely from Python.
-        """
-        user = self.request.user
-        
-        # Definition of all possible widgets
-        all_widgets = [
+        if sub_org:
+            qs = qs.filter(sub_organization=sub_org)
+
+        return qs.values("status__name").annotate(count=Count("id"))
+
+    # ------------------------------------------------------------------
+    # Widget Engine
+    # ------------------------------------------------------------------
+
+    def build_widgets(self, user, employee, cache):
+        widgets = [
             {
-                "id": "attendance",
-                "title": "Clock In/Out",
+                "title": "Clock In / Out",
                 "template": "widgets/home/attend.html",
-                "ctx": {
-                    'attendance': data['attendance']
-                },
+                "context": {"attendance": cache["attendance"]},
                 "perm": "employee.view_attendance",
-                "col": "col-lg-12",  # Full width top bar
-                "visible": True if data['employee'] else False
+                "column": "col-lg-12",
+                "visible": bool(employee and employee.web_attendance().exists()),
             },
             {
-                "id": "pending_approvals",
                 "title": "Pending Requests",
                 "template": "widgets/home/pending.html",
-                "ctx": {
-                    'pending_leaves': self._get_pending_approvals(user)
-                },
-                "perm": "leave.change_leave", 
-                "col": "col-lg-8", # Main area for admins
-                "visible": data['is_admin']
+                "context": {"pending_leaves": cache["pending_leaves"]},
+                "perm": "leave.change_leave",
+                "column": "col-lg-8",
+                "visible": bool(cache["pending_leaves"]),
             },
             {
-                "id": "admin_stats",
-                "title": "Organization Health",
+                "title": "Organization Overview",
                 "template": "widgets/home/stats.html",
-                "ctx": {
-                    'stats': data['admin_stats']
-                },
+                "context": {"stats": cache["admin_stats"]},
                 "perm": "employee.view_employee",
-                "col": "col-lg-4", # Sidebar for admins
-                "visible": data['is_admin']
+                "column": "col-lg-4",
+                "visible": bool(cache["admin_stats"]),
             },
             {
-                "id": "leaves",
                 "title": "My Leave Balances",
                 "template": "widgets/home/leaves.html",
-                "ctx": {
-                    'leaves': data['leave_balances']
-                },
+                "context": {"leaves": cache["leave_balances"]},
                 "perm": "leave.view_leave",
-                "col": "col-lg-4",
-                "visible": True if data['employee'] else False
+                "column": "col-lg-4",
+                "visible": bool(employee),
             },
             {
-                "id": "team_availability",
                 "title": "Out of Office Today",
                 "template": "widgets/home/absent.html",
-                "ctx": {
-                    'absent_today': self._get_absent_today()
-                },
+                "context": {"absent_today": cache["absent_today"]},
                 "perm": "employee.view_employee",
-                "col": "col-lg-4",
-                "visible": True
+                "column": "col-lg-4",
+                "visible": bool(cache["absent_today"]),
             },
-            #{
-            #    "id": "holidays",
-            #    "title": "{% trans 'Upcoming Holidays' %}",
-            #    "template": "widgets/home/holidays.html",
-            #    "ctx": {'holidays': self._get_upcoming_holidays()},
-            #    "perm": "leave.view_holiday",
-            #    "col": "col-lg-4",
-            #    "visible": True
-            #},
             {
-                "id": "celebrations",
+                "title": "Upcoming Holidays",
+                "template": "widgets/home/holidays.html",
+                "context": {"holidays": cache["holidays"]},
+                "perm": "leave.view_holiday",
+                "column": "col-lg-4",
+                "visible": bool(cache["holidays"]),
+            },
+            {
                 "title": "Celebrations",
                 "template": "widgets/home/celebrations.html",
-                "ctx": {
-                    'celebrations': self._get_celebrations(), 
-                    'today': timezone.localdate()
+                "context": {
+                    "celebrations": cache["celebrations"],
+                    "today": timezone.localdate(),
                 },
                 "perm": "employee.view_employee",
-                "col": "col-lg-4",
-                "visible": True
+                "column": "col-lg-4",
+                "visible": bool(cache["celebrations"]),
             },
             {
-                "id": "company_news",
                 "title": "Announcements",
                 "template": "widgets/home/announcements.html",
-                "ctx": {
-                    'notice': self._get_latest_notice()
-                },
+                "context": {"notice": cache["latest_notice"]},
                 "perm": "core.view_notice",
-                "col": "col-lg-4",
-                "visible": True
-            }
+                "column": "col-lg-4",
+                "visible": bool(cache["latest_notice"]),
+            },
         ]
 
-        # Filter by visibility logic and Django permissions
         return [
-            {
-                "title": w["title"],
-                "column": w["col"],
-                "content": mark_safe(render_to_string(w["template"], w["ctx"], request=self.request))
-            }
-            for w in all_widgets if w["visible"] and user.has_perm(w["perm"])
+            self.render_widget(w)
+            for w in widgets
+            if w["visible"] and user.has_perm(w["perm"])
         ]
+
+    def render_widget(self, widget):
+        """Render a widget safely and consistently."""
+        html = render_to_string(
+            widget["template"],
+            widget["context"],
+            request=self.request,
+        )
+        return {
+            "title": widget["title"],
+            "column": widget["column"],
+            "content": mark_safe(html),
+        }

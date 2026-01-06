@@ -5,10 +5,8 @@ from django.db import models, transaction
 from django.utils.html import escapejs
 
 # Assuming these are your custom imports
-from core.models import fields, Base 
 from crispy_forms.layout import Layout
-import json
-
+from core.models import fields, Base 
 
 class DeviceStatus(models.TextChoices):
     """Defines the operational status of the physical device connection."""

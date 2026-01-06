@@ -2,9 +2,9 @@
 <div class="row g-2">
     {% for leave in absent_today %}
     <div class="col-6">
-        <div class="p-2 border rounded bg-light d-flex align-items-center">
+        <div class="p-2 border rounded bg-light-warning d-flex align-items-center">
             <div class="flex-grow-1 text-truncate">
-                <div class="fw-bold small text-dark">{{ leave.employee.first_name }}</div>
+                <div class="fw-bold small text-black">{{ leave.employee.full_name }}</div>
                 <div class="text-muted" style="font-size: 0.65rem;">{{ leave.type.name }}</div>
             </div>
         </div>
