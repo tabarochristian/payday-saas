@@ -14,3 +14,5 @@ __pycache__/
 
 payday/logs/django.log
 django_error.log
+
+django.log
