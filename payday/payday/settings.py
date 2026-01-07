@@ -165,6 +165,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = env("MEDIA_URL", default="/media/")
 MEDIA_ROOT = BASE_DIR / "media"
 
+MEDIAFILES_LOCATION = env("MEDIAFILES_LOCATION", default="media")
+
 # Unified storage backends
 STORAGES = {
     "default": {
