@@ -167,19 +167,50 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 MEDIAFILES_LOCATION = env("MEDIAFILES_LOCATION", default="media")
 
-# Unified storage backends
-STORAGES = {
-    "default": {
-        "BACKEND": env(
-            "DEFAULT_FILE_STORAGE", default="django.core.files.storage.FileSystemStorage"
-        ),
-    },
-    "staticfiles": {
-        "BACKEND": env(
-            "DEFAULT_FILE_STORAGE", default="whitenoise.storage.CompressedStaticFilesStorage"
-        ),
-    },
-}
+# # Unified storage backends
+# STORAGES = {
+#     "default": {
+#         "BACKEND": env(
+#             "DEFAULT_FILE_STORAGE", default="django.core.files.storage.FileSystemStorage"
+#         ),
+#     },
+#     "staticfiles": {
+#         "BACKEND": env(
+#             "DEFAULT_FILE_STORAGE", default="whitenoise.storage.CompressedStaticFilesStorage"
+#         ),
+#     },
+# }
+
+USE_S3 = env("USE_S3", default=False, cast=bool)
+
+if USE_S3:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        },
+    }
+
+    MEDIA_URL = env(
+        "MEDIA_URL",
+        default=f"https://{AWS_S3_CUSTOM_DOMAIN}/media/",
+    )
+
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        },
+    }
+
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+
 
 # S3-related settings (only used if storage backend is S3)
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
