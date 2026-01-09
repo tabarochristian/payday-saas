@@ -31,7 +31,7 @@ class Leave(Base):
     end_date = fields.DateField(verbose_name=_("date de fin"), db_index=True)
     
     # Standard field updated in save() for high-speed indexing/aggregation
-    duration = models.PositiveIntegerField(
+    duration = models.IntegerField(
         verbose_name=_("durée (jours)"),
         default=0,
         editable=False
