@@ -7,7 +7,8 @@ from django.db import OperationalError
 from django.http import HttpRequest
 from django.utils.deprecation import MiddlewareMixin
 
-from core.models import SubOrganization  # Adjust if model is elsewhere; fallback to dynamic lookup
+# Adjust if model is elsewhere; fallback to dynamic lookup
+from core.models import SubOrganization
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class SubOrganizationMiddleware(MiddlewareMixin):
     """
 
     CACHE_KEY = "suborganizations:all"
-    CACHE_TIMEOUT = 3600  # 1 hour; adjust via settings if needed
+    CACHE_TIMEOUT = 0  # 1 hour; adjust via settings if needed
 
     def __init__(self, get_response: Any = None):
         super().__init__(get_response)
@@ -41,7 +42,8 @@ class SubOrganizationMiddleware(MiddlewareMixin):
 
         model = self.get_suborg_model()
         if not model:
-            logger.warning("SubOrganization model unavailable – skipping suborg middleware")
+            logger.warning(
+                "SubOrganization model unavailable – skipping suborg middleware")
             return
 
         suborgs = self.get_all_suborganizations(model)
@@ -56,9 +58,11 @@ class SubOrganizationMiddleware(MiddlewareMixin):
         request.suborganization = selected
 
         if selected:
-            logger.debug(f"Selected SubOrganization: {selected.id} ({selected.name})")
+            logger.debug(
+                f"Selected SubOrganization: {selected.id} ({selected.name})")
         else:
-            logger.debug("No SubOrganization selected – falling back to first available")
+            logger.debug(
+                "No SubOrganization selected – falling back to first available")
             request.suborganization = suborgs[0]
 
     def get_suborg_model(self) -> Optional[Any]:
@@ -97,15 +101,18 @@ class SubOrganizationMiddleware(MiddlewareMixin):
             return cached
 
         try:
-            suborgs = list(model.objects.all().select_related())  # Optimize with select_related if needed
+            # Optimize with select_related if needed
+            suborgs = list(model.objects.all().select_related())
             cache.set(self.CACHE_KEY, suborgs, timeout=self.CACHE_TIMEOUT)
             logger.debug(f"Cached {len(suborgs)} SubOrganizations")
             return suborgs
         except OperationalError as e:
-            logger.exception(f"Database error while fetching SubOrganizations: {e}")
+            logger.exception(
+                f"Database error while fetching SubOrganizations: {e}")
             return []
         except Exception as e:
-            logger.exception(f"Unexpected error fetching SubOrganizations: {e}")
+            logger.exception(
+                f"Unexpected error fetching SubOrganizations: {e}")
             return []
 
     def select_suborganization(self, request: HttpRequest, suborgs: List[SubOrganization]) -> Optional[SubOrganization]:

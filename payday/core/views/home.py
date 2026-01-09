@@ -36,7 +36,6 @@ class HomeView(LoginRequiredMixin, TemplateView):
             "absent_today": self.get_absent_today(employee, today),
             "holidays": self.get_upcoming_holidays(today),
             "celebrations": self.get_celebrations(today),
-
             "admin_stats": self.get_admin_metrics(user),
             "latest_notice": self.get_latest_notice(),
         }

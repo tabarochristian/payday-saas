@@ -17,7 +17,7 @@ _thread_locals = threading.local()
 # Constants
 CACHE_TIMEOUT = getattr(settings, "TENANT_CACHE_TIMEOUT", 3600)  # 1 hour default
 LOCALHOST_HOSTS = {"localhost", "127.0.0.1"}
-DEFAULT_SCHEMA = "sycamore"  # Fallback schema for local/sqlite
+DEFAULT_SCHEMA = "kazi"  # Fallback schema for local/sqlite
 API_TIMEOUT = 5  # Seconds for API requests
 
 
