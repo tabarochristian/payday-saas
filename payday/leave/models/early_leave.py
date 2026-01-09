@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from django.core.exceptions import ValidationError
 from crispy_forms.layout import Layout, Column, Row
 from django.utils.translation import gettext_lazy as _
+from django_currentuser.db.models import CurrentUserField
 
 class EarlyLeave(Base):
     employee = fields.ModelSelectField(
@@ -16,13 +17,20 @@ class EarlyLeave(Base):
         default=now,
         verbose_name=_("date du départ anticipé")
     )
-    
+
     start_time = fields.TimeField(verbose_name=_("heure de début"))
     end_time = fields.TimeField(verbose_name=_("heure de fin"))
 
     reason = fields.TextField(blank=True, verbose_name=_("motif"))
 
-    list_display = ('id', 'employee', 'date', 'start_time', 'end_time', 'status')
+    created_by = CurrentUserField(
+        _("créé par"),
+        related_name="leave_leave_early_created_by_v2",
+        editable=False,
+    )
+
+    list_display = ('id', 'employee', 'date',
+                    'start_time', 'end_time', 'status')
     layout = Layout(
         'employee',
         'date',
@@ -48,7 +56,9 @@ class EarlyLeave(Base):
     def clean(self):
         """Validation to ensure request date is today or later"""
         if self.date < now().date():
-            raise ValidationError(_("vous ne pouvez pas demander un départ anticipé pour une date passée."))
+            raise ValidationError(
+                _("vous ne pouvez pas demander un départ anticipé pour une date passée."))
 
         if self.start_time >= self.end_time:
-            raise ValidationError(_("l'heure de début doit être antérieure à l'heure de fin."))
+            raise ValidationError(
+                _("l'heure de début doit être antérieure à l'heure de fin."))

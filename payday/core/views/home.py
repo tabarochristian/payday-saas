@@ -34,7 +34,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
             "leave_balances": self.get_leave_balances(employee),
             "pending_leaves": self.get_pending_leaves(employee),
             "absent_today": self.get_absent_today(employee, today),
-            "holidays": self.get_upcoming_holidays(today),
+            # "holidays": self.get_upcoming_holidays(today),
             "celebrations": self.get_celebrations(today),
 
             "admin_stats": self.get_admin_metrics(user),
@@ -121,15 +121,15 @@ class HomeView(LoginRequiredMixin, TemplateView):
             .order_by("-start_date")[:6]
         )
 
-    def get_upcoming_holidays(self, today):
-        Holiday = apps.get_model("leave", "Holiday")
-        return (
-            Holiday.objects
-            .filter(
-                start_date__gte=today, 
-                sub_organization=self.sub_organization
-            ).order_by("start_date")[:3]
-        )
+    # def get_upcoming_holidays(self, today):
+    #     Holiday = apps.get_model("leave", "holiday")
+    #     return (
+    #         Holiday.objects
+    #         .filter(
+    #             start_date__gte=today, 
+    #             sub_organization=self.sub_organization
+    #         ).order_by("start_date")[:3]
+    #     )
 
     def get_celebrations(self, today):
         Employee = apps.get_model("employee", "Employee")
@@ -203,14 +203,14 @@ class HomeView(LoginRequiredMixin, TemplateView):
                 "column": "col-lg-4",
                 "visible": bool(cache["absent_today"]),
             },
-            {
-                "title": "Upcoming Holidays",
-                "template": "widgets/home/holidays.html",
-                "context": {"holidays": cache["holidays"]},
-                "perm": "leave.view_holiday",
-                "column": "col-lg-4",
-                "visible": bool(cache["holidays"]),
-            },
+            # {
+            #     "title": "Upcoming Holidays",
+            #     "template": "widgets/home/holidays.html",
+            #     "context": {"holidays": cache["holidays"]},
+            #     "perm": "leave.view_holiday",
+            #     "column": "col-lg-4",
+            #     "visible": bool(cache["holidays"]),
+            # },
             {
                 "title": "Celebrations",
                 "template": "widgets/home/celebrations.html",
